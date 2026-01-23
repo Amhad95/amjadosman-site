@@ -1,71 +1,87 @@
 
 
-# Swap ASCII Shapes Between Pages
+# Add KnotAnimation to AI Tools Page
 
-## Current State
+## Summary
 
-| Page | Component | Shape |
-|------|-----------|-------|
-| Home (`/`) | `CyberGlobeHeader` | Monolith (cube) |
-| Software (`/software`) | `NeuralLattice` | Torus lattice |
-
-## After Swap
-
-| Page | Component | Shape |
-|------|-----------|-------|
-| Home (`/`) | `NeuralLattice` | Torus lattice |
-| Software (`/software`) | `CyberGlobeHeader` | Monolith (cube) |
+Add a new trefoil knot ASCII animation to the Tools page hero, matching the style of the existing animations (NeuralLattice and CyberGlobeHeader).
 
 ---
 
-## Files to Modify
+## Files to Create/Modify
 
-### 1. `src/pages/Index.tsx`
+| File | Action |
+|------|--------|
+| `src/components/ui/knot-animation.tsx` | **Create** - New trefoil knot component |
+| `src/pages/Tools.tsx` | **Modify** - Add KnotAnimation to hero |
 
-**Change import:**
+---
+
+## Implementation Details
+
+### 1. Create `src/components/ui/knot-animation.tsx`
+
+Create the component using the provided code with these adjustments for consistency:
+
+**Styling updates to match project patterns:**
+- Use same font sizes as other animations: `text-[8px] sm:text-[10px] md:text-[12px]`
+- Add strong glow effect: `textShadow: 0 0 8px color, 0 0 16px color`
+- Add `mint` to color palette (project's theme color: `#00FFD9`)
+- Wrap in container div with `flex items-center justify-center`
+
+**Performance optimization:**
+- Convert from `setInterval` to `requestAnimationFrame` for smoother animation
+- Use direct DOM updates via `preRef.current` instead of React state (matching NeuralLattice pattern)
+
+**Props:**
+- `color?: boolean` - Enable multi-color segments (default: false for single mint color)
+- `speedA?: number` - X-axis rotation speed (default: 0.04)
+- `speedB?: number` - Y-axis rotation speed (default: 0.02)
+
+### 2. Update `src/pages/Tools.tsx`
+
+Add the KnotAnimation to the Hero:
+
 ```tsx
-// Remove
-import { CyberGlobeHeader } from '@/components/shared/CyberGlobeHeader';
+import { KnotAnimation } from '@/components/ui/knot-animation';
 
-// Add
-import { NeuralLattice } from '@/components/shared/NeuralLattice';
-```
-
-**Change Hero rightElement:**
-```tsx
-// From
-rightElement={<CyberGlobeHeader color="mint" speed={0.8} />}
-
-// To
-rightElement={<NeuralLattice color="mint" speed={0.8} />}
-```
-
-### 2. `src/pages/Software.tsx`
-
-**Change import:**
-```tsx
-// Remove
-import { NeuralLattice } from '@/components/shared/NeuralLattice';
-
-// Add
-import { CyberGlobeHeader } from '@/components/shared/CyberGlobeHeader';
-```
-
-**Change Hero rightElement:**
-```tsx
-// From
-rightElement={<NeuralLattice color="mint" speed={0.8} />}
-
-// To
-rightElement={<CyberGlobeHeader color="mint" speed={0.8} />}
+<Hero
+  headline={tools.hero.headline}
+  subheadline={tools.hero.subheadline}
+  primaryCta={tools.hero.primaryCta}
+  secondaryCta={tools.hero.secondaryCta}
+  plate="emerald"
+  rightElement={<KnotAnimation speedA={0.03} speedB={0.015} />}
+/>
 ```
 
 ---
 
-## Result
+## Visual Result
 
-- **Home page** will show the rotating torus wireframe with pulsing core
-- **Software page** will show the rotating cube/monolith with pulsing core
+The Tools page will display:
+- Rotating 3D trefoil knot (mathematical knot shape)
+- Mint-colored ASCII characters with glow effect
+- Smooth animation at ~60fps using requestAnimationFrame
+- Same character size as Home/Software animations (8-12px responsive)
 
-Both keep the same mint color and 0.8 speed settings.
+---
+
+## Technical Notes
+
+**Trefoil Knot Geometry:**
+The knot is defined parametrically:
+- x = sin(u) + 2sin(2u)
+- y = cos(u) - 2cos(2u)
+- z = -sin(3u)
+
+This creates the classic three-crossing knot shape, rendered as a tube with proper surface normals for lighting.
+
+**Animation Distribution:**
+
+| Page | Shape | Animation |
+|------|-------|-----------|
+| Home (`/`) | NeuralLattice | Torus wireframe |
+| Software (`/software`) | CyberGlobeHeader | Monolith cube |
+| Tools (`/tools`) | KnotAnimation | Trefoil knot |
 
