@@ -83,9 +83,9 @@ export const Hero: React.FC<HeroProps> = ({
             )}
           </div>
 
-          {/* Right: Animation (hidden on mobile) */}
+          {/* Right: Animation - visible on all screens */}
           {rightElement && (
-            <div className="hidden lg:block lg:flex-shrink-0">
+            <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0">
               {rightElement}
             </div>
           )}
