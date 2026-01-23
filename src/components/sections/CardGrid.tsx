@@ -38,10 +38,10 @@ export const CardGrid: React.FC<CardGridProps> = ({
       )}
     >
       {items.map((item, index) => (
-        <Card key={index} variant={variant} featured={item.featured}>
+        <Card key={index} variant={variant} featured={item.featured} staggerIndex={index}>
           {item.icon && (
             <CardIcon>
-              <item.icon size={24} />
+              <item.icon size={28} className="text-mint" />
             </CardIcon>
           )}
           <CardTitle>{item.title}</CardTitle>

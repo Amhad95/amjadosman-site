@@ -31,9 +31,9 @@ const Index = () => {
       {/* What We Deliver */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.whatWeDeliver.headline} />
+          <SectionHeader headline={home.whatWeDeliver.headline} accentLine />
           <CardGrid items={home.whatWeDeliver.cards} columns={3} />
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center animate-fade-in-up stagger-5">
             <SecondaryButton href={home.whatWeDeliver.cta.href}>
               {home.whatWeDeliver.cta.label}
             </SecondaryButton>
@@ -44,11 +44,14 @@ const Index = () => {
       {/* Outcomes */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.outcomes.headline} />
+          <SectionHeader headline={home.outcomes.headline} accentLine />
           <ul className="space-y-4 max-w-2xl">
             {home.outcomes.items.map((item, index) => (
-              <li key={index} className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-mint flex-shrink-0 mt-2" />
+              <li 
+                key={index} 
+                className={`flex items-start gap-3 animate-fade-in-up stagger-${Math.min(index + 1, 5)}`}
+              >
+                <span className="w-3 h-3 rounded-full bg-gradient-to-br from-mint to-mint/60 flex-shrink-0 mt-1.5 shadow-sm shadow-mint/20" />
                 <span className="text-body-lg text-foreground">{item}</span>
               </li>
             ))}
@@ -59,9 +62,9 @@ const Index = () => {
       {/* How We Work */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.howWeWork.headline} />
+          <SectionHeader headline={home.howWeWork.headline} accentLine />
           <Steps steps={home.howWeWork.steps} />
-          <div className="mt-12 text-center">
+          <div className="mt-12 text-center animate-fade-in-up stagger-5">
             <SecondaryButton href={home.howWeWork.cta.href}>
               {home.howWeWork.cta.label}
             </SecondaryButton>
@@ -72,7 +75,7 @@ const Index = () => {
       {/* Proof Tiles */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.proofTiles.headline} />
+          <SectionHeader headline={home.proofTiles.headline} accentLine />
           <ProofTiles
             tiles={home.proofTiles.tiles.map((tile) => ({
               ...tile,
@@ -80,7 +83,7 @@ const Index = () => {
               href: '/work',
             }))}
           />
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center animate-fade-in-up stagger-5">
             <SecondaryButton href={home.proofTiles.cta.href}>
               {home.proofTiles.cta.label}
             </SecondaryButton>
@@ -94,9 +97,10 @@ const Index = () => {
           <SectionHeader
             headline={home.aiTools.headline}
             subheadline={home.aiTools.subheadline}
+            accentLine
           />
           <ToolList tools={home.aiTools.tools} variant="preview" />
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center animate-fade-in-up stagger-4">
             <PrimaryButton href={home.aiTools.cta.href}>
               {home.aiTools.cta.label}
             </PrimaryButton>
