@@ -7,7 +7,6 @@ interface CardProps {
   hover?: boolean;
   featured?: boolean;
   variant?: 'default' | 'elevated' | 'glass';
-  staggerIndex?: number;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -16,16 +15,15 @@ export const Card: React.FC<CardProps> = ({
   hover = true,
   featured = false,
   variant = 'default',
-  staggerIndex,
 }) => {
-  const baseStyles = 'rounded-2xl transition-all duration-300 relative overflow-hidden group';
+  const baseStyles = 'rounded-2xl transition-all duration-200';
   
   const variantStyles = {
     default: cn(
       'bg-gradient-to-br from-card to-muted/30',
       'border border-ink/8',
       'shadow-sm',
-      hover && 'hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5 hover:-translate-y-1'
+      hover && 'hover:border-ink/20 hover:shadow-lg hover:shadow-ink/5 hover:-translate-y-0.5'
     ),
     elevated: cn(
       'bg-card',
@@ -40,9 +38,7 @@ export const Card: React.FC<CardProps> = ({
     ),
   };
 
-  const featuredStyles = featured && 'border-l-4 border-l-mint';
-
-  const staggerClass = staggerIndex !== undefined ? `stagger-${Math.min(staggerIndex + 1, 5)}` : '';
+  const featuredStyles = featured && 'border-l-4 border-l-mint relative overflow-hidden';
 
   return (
     <div
@@ -51,14 +47,9 @@ export const Card: React.FC<CardProps> = ({
         variantStyles[variant],
         featuredStyles,
         'p-8 md:p-10',
-        'animate-fade-in-up',
-        staggerClass,
         className
       )}
     >
-      {/* Decorative gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-mint/0 via-transparent to-lavender/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-      
       {featured && (
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-mint/10 to-transparent pointer-events-none" />
       )}
@@ -101,8 +92,8 @@ interface CardIconProps {
 
 export const CardIcon: React.FC<CardIconProps> = ({ children, className }) => (
   <div className={cn(
-    'w-14 h-14 rounded-xl bg-gradient-to-br from-mint/20 to-lavender/10 flex items-center justify-center mb-5',
-    'text-foreground group-hover:scale-110 transition-transform duration-300',
+    'w-12 h-12 rounded-xl bg-gradient-to-br from-mint/20 to-mint/5 flex items-center justify-center mb-4',
+    'text-foreground',
     className
   )}>
     {children}

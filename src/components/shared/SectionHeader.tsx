@@ -7,7 +7,6 @@ interface SectionHeaderProps {
   className?: string;
   align?: 'left' | 'center';
   variant?: 'poster' | 'interface';
-  accentLine?: boolean;
 }
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
@@ -15,23 +14,16 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   subheadline,
   className,
   align = 'left',
-  variant = 'poster',
-  accentLine = false,
+  variant = 'interface',
 }) => {
   return (
     <div
       className={cn(
-        'mb-8 md:mb-12 animate-fade-in-up',
+        'mb-8 md:mb-12',
         align === 'center' && 'text-center',
         className
       )}
     >
-      {accentLine && (
-        <div className={cn(
-          "w-16 h-1 bg-gradient-to-r from-mint to-lavender rounded-full mb-6",
-          align === 'center' && 'mx-auto'
-        )} />
-      )}
       <h2
         className={cn(
           'font-serif',

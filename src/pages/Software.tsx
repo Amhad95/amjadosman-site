@@ -26,26 +26,21 @@ const Software = () => {
       {/* Core Modules */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={software.modules.headline} accentLine />
+          <SectionHeader headline={software.modules.headline} />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {software.modules.items.map((module, index) => (
               <div
                 key={index}
-                className={`group relative bg-card rounded-2xl p-6 md:p-8 border border-ink/10 hover:border-ink/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-${Math.min(index + 1, 4)}`}
+                className="bg-card rounded-2xl p-6 md:p-8 border border-ink/10"
               >
-                {/* Decorative gradient */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-mint/10 to-transparent pointer-events-none" />
-                
-                <h3 className="font-serif text-heading-md text-foreground mb-4 relative">
+                <h3 className="font-serif text-xl text-foreground mb-4">
                   {module.title}
                 </h3>
-                <ul className="space-y-2 relative">
+                <ul className="space-y-2">
                   {module.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <div className="w-5 h-5 rounded-full bg-mint/10 flex items-center justify-center flex-shrink-0">
-                        <Check size={12} className="text-mint" />
-                      </div>
+                      <Check size={16} className="text-mint flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -57,7 +52,7 @@ const Software = () => {
             ))}
           </div>
           
-          <p className="text-body-md text-muted-foreground italic animate-fade-in-up stagger-5">
+          <p className="text-body-md text-muted-foreground italic">
             {software.modules.keyLine}
           </p>
         </div>
@@ -66,16 +61,11 @@ const Software = () => {
       {/* Differentiator */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={software.differentiator.headline} accentLine />
+          <SectionHeader headline={software.differentiator.headline} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
             {software.differentiator.points.map((point, index) => (
-              <div 
-                key={index} 
-                className={`flex items-start gap-3 animate-fade-in-up stagger-${Math.min(index + 1, 4)}`}
-              >
-                <div className="w-6 h-6 rounded-full bg-mint/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Check size={14} className="text-mint" />
-                </div>
+              <div key={index} className="flex items-start gap-3">
+                <Check size={20} className="text-mint flex-shrink-0 mt-0.5" />
                 <span className="text-body-md text-foreground">{point}</span>
               </div>
             ))}
