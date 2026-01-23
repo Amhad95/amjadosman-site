@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 const W = 60; 
 const H = 32; 
-const RAMP = "@#%*+=-:. ";
+const RAMP = " .:-=+*#";
 
 const COLOR_MAP: Record<string, string> = {
   cyan: "#22d3ee",
@@ -48,7 +48,7 @@ export const CyberGlobeHeader: React.FC<CyberGlobeHeaderProps> = ({
       light.x /= mag; light.y /= mag; light.z /= mag;
 
       const cubeSize = 12;
-      const step = 0.7;
+      const step = 0.85;
 
       const drawPoint = (px: number, py: number, pz: number, isEdge = false, isCore = false) => {
         let tx = px * cZ - py * sZ;
@@ -128,12 +128,12 @@ export const CyberGlobeHeader: React.FC<CyberGlobeHeaderProps> = ({
   const themeColor = COLOR_MAP[color] || COLOR_MAP.cyan;
 
   return (
-    <div className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[450px] h-[200px] sm:h-[240px] lg:h-[280px] flex items-center justify-center overflow-visible">
+    <div className="w-full max-w-full h-[180px] sm:h-[200px] lg:h-[220px] flex items-center justify-center overflow-hidden">
       <pre
-        className="text-[5px] leading-[1.0] font-mono select-none whitespace-pre transform scale-[1.8] sm:scale-[2.2] md:scale-[2.5] lg:scale-[2.8] origin-center"
+        className="text-[4px] leading-[1.0] font-mono select-none whitespace-pre transform scale-[1.35] sm:scale-[1.5] md:scale-[1.65] lg:scale-[1.8] origin-center"
         style={{ 
           color: themeColor,
-          textShadow: `0 0 2px ${themeColor}60, 0 0 4px ${themeColor}40`
+          textShadow: `0 0 1px ${themeColor}80, 0 0 2px ${themeColor}40`
         }}
       >
         {frame.join("\n")}
