@@ -26,27 +26,31 @@ const Services = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <div className="space-y-16">
-            {services.tracks.map((track) => (
+            {services.tracks.map((track, trackIndex) => (
               <div key={track.id} id={track.id} className="scroll-mt-24">
                 <SectionHeader
                   headline={track.title}
                   subheadline={track.description}
+                  accentLine
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {track.items.map((item, index) => (
                     <div
                       key={index}
-                      className="bg-gradient-to-br from-card to-muted/30 rounded-2xl p-8 border border-ink/8 shadow-sm hover:border-ink/15 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
+                      className={`group relative bg-gradient-to-br from-card to-muted/30 rounded-2xl p-8 border border-ink/8 shadow-sm hover:border-ink/15 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-${Math.min(index + 1, 4)}`}
                     >
-                      <h3 className="font-serif text-lg text-foreground mb-2">
+                      {/* Decorative gradient */}
+                      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-lavender/10 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
+                      
+                      <h3 className="font-serif text-lg text-foreground mb-2 relative">
                         {item.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <p className="text-sm text-muted-foreground mb-4 relative">
                         {item.description}
                       </p>
                       <Link
                         to={`/pricing#${track.id}`}
-                        className="inline-flex items-center gap-1 text-sm font-medium text-lavender hover:text-lavender/80 transition-colors"
+                        className="inline-flex items-center gap-1 text-sm font-medium text-lavender hover:text-lavender/80 transition-colors relative"
                       >
                         View pricing
                         <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
