@@ -4,6 +4,7 @@ import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
+import { NeuralLattice } from '@/components/shared/NeuralLattice';
 import { siteContent } from '@/lib/content';
 import { Check } from 'lucide-react';
 
@@ -19,6 +20,7 @@ const Software = () => {
         primaryCta={software.hero.primaryCta}
         secondaryCta={software.hero.secondaryCta}
         plate="astral"
+        rightElement={<NeuralLattice color="mint" speed={0.8} />}
       />
 
       {/* Core Modules */}

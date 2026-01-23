@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 
-const DEFAULT_W = 80;
-const DEFAULT_H = 45;
-
+const W = 80;
+const H = 45;
 const RAMP =
   "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
 
@@ -16,249 +15,133 @@ const COLOR_MAP: Record<string, string> = {
   mint: "#00FFD9",
 };
 
-function clamp(n: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, n));
-}
-
-function normalize3(x: number, y: number, z: number): [number, number, number] {
-  const m = Math.hypot(x, y, z) || 1;
-  return [x / m, y / m, z / m];
-}
-
-function rotateXYZ(
-  x: number,
-  y: number,
-  z: number,
-  cX: number,
-  sX: number,
-  cY: number,
-  sY: number,
-  cZ: number,
-  sZ: number
-): [number, number, number] {
-  // Z
-  let tx = x * cZ - y * sZ;
-  let ty = x * sZ + y * cZ;
-  let tz = z;
-  // Y
-  const tx2 = tx * cY + tz * sY;
-  const tz2 = -tx * sY + tz * cY;
-  tx = tx2;
-  tz = tz2;
-  // X
-  const ty2 = ty * cX - tz * sX;
-  const tz3 = ty * sX + tz * cX;
-  ty = ty2;
-  tz = tz3;
-
-  return [tx, ty, tz];
-}
-
 interface CyberGlobeHeaderProps {
   speed?: number;
   color?: keyof typeof COLOR_MAP;
-  density?: number;
-  width?: number;
-  height?: number;
+  showCore?: boolean;
 }
 
 export const CyberGlobeHeader: React.FC<CyberGlobeHeaderProps> = ({
   speed = 1,
-  color = "cyan",
-  density = 1.2,
-  width = DEFAULT_W,
-  height = DEFAULT_H,
+  color = "mint",
+  showCore = true,
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
   const rafRef = useRef<number>(0);
-
-  // Rotation state (lives outside React renders)
-  const rotRef = useRef({ x: 0, y: 0, z: 0 });
-
-  // Live settings (so RAF loop doesn't restart)
-  const settingsRef = useRef({
-    speed: 1,
-    density: 1.2,
-    width: DEFAULT_W,
-    height: DEFAULT_H,
-  });
-
-  // Keep settings in refs when props change
-  useEffect(() => {
-    settingsRef.current.speed = clamp(Number(speed) || 1, 0.1, 6);
-  }, [speed]);
-
-  useEffect(() => {
-    settingsRef.current.density = clamp(Number(density) || 1.2, 0.5, 3);
-  }, [density]);
-
-  useEffect(() => {
-    settingsRef.current.width = clamp(Number(width) || DEFAULT_W, 40, 180);
-    settingsRef.current.height = clamp(Number(height) || DEFAULT_H, 20, 120);
-  }, [width, height]);
+  const rotationRef = useRef({ x: 0, y: 0, z: 0 });
 
   const themeColor = useMemo(() => {
-    return COLOR_MAP[color] || COLOR_MAP.cyan;
+    return COLOR_MAP[color] || COLOR_MAP.mint;
   }, [color]);
 
   useEffect(() => {
     const pre = preRef.current;
     if (!pre) return;
 
-    // Fixed light direction (normalize once)
-    const [lx, ly, lz] = normalize3(0, 1, -1);
-
     const render = () => {
-      const { speed: spd, density: dens, width: W, height: H } = settingsRef.current;
+      const zBuffer = new Float32Array(W * H).fill(0);
+      const charBuffer = new Array(W * H).fill(" ");
 
-      // Buffers
-      const zBuffer = new Float32Array(W * H);
-      // Initialize to -Infinity so any point draws
-      zBuffer.fill(-Infinity);
-      const charBuffer = new Array(W * H);
-      charBuffer.fill(" ");
+      const time = performance.now() * 0.001 * speed;
+      rotationRef.current.y += 0.015 * speed;
+      rotationRef.current.x += 0.01 * speed;
+      rotationRef.current.z += 0.005 * speed;
 
-      const time = performance.now() * 0.001 * spd;
+      const { x: rx, y: ry, z: rz } = rotationRef.current;
+      const cX = Math.cos(rx), sX = Math.sin(rx);
+      const cY = Math.cos(ry), sY = Math.sin(ry);
+      const cZ = Math.cos(rz), sZ = Math.sin(rz);
 
-      // Smooth multi-axis rotation
-      rotRef.current.y += 0.012 * spd;
-      rotRef.current.x += 0.008 * spd;
-      rotRef.current.z += 0.005 * spd;
+      const light = { x: 0.5, y: 1, z: -1 };
+      const mag = Math.sqrt(light.x ** 2 + light.y ** 2 + light.z ** 2);
+      light.x /= mag;
+      light.y /= mag;
+      light.z /= mag;
 
-      const { x: rx, y: ry, z: rz } = rotRef.current;
-      const cX = Math.cos(rx),
-        sX = Math.sin(rx);
-      const cY = Math.cos(ry),
-        sY = Math.sin(ry);
-      const cZ = Math.cos(rz),
-        sZ = Math.sin(rz);
+      const cubeSize = 12;
+      const step = 0.8;
 
-      const rampLast = RAMP.length - 1;
+      const drawPoint = (px: number, py: number, pz: number, charOverride: string | null = null, isCore = false) => {
+        // Rotations
+        let tx = px * cZ - py * sZ;
+        let ty = px * sZ + py * cZ;
+        px = tx;
+        py = ty;
+        tx = px * cY + pz * sY;
+        let tz = -px * sY + pz * cY;
+        px = tx;
+        pz = tz;
+        ty = py * cX - pz * sX;
+        tz = py * sX + pz * cX;
+        py = ty;
+        pz = tz;
 
-      const plot = (
-        x: number,
-        y: number,
-        z: number,
-        nx: number,
-        ny: number,
-        nz: number,
-        charOverride: string | null = null,
-        glow = false
-      ) => {
-        // Rotate position
-        const [rxp, ryp, rzp] = rotateXYZ(x, y, z, cX, sX, cY, sY, cZ, sZ);
+        // Projection
+        const ooz = 1 / (pz + 65);
+        const xp = Math.floor(W / 2 + px * ooz * 105);
+        const yp = Math.floor(H / 2 - py * ooz * 65);
 
-        // Rotate normal
-        const [rnx, rny, rnz] = rotateXYZ(nx, ny, nz, cX, sX, cY, sY, cZ, sZ);
-
-        // Perspective
-        const zCam = rzp + 60;
-        if (zCam <= 0.001) return;
-
-        const ooz = 1 / zCam;
-        const xp = (W / 2 + rxp * ooz * 110) | 0;
-        const yp = (H / 2 - ryp * ooz * 70) | 0;
-
-        if (xp < 0 || xp >= W || yp < 0 || yp >= H) return;
-
-        const idx = xp + yp * W;
-        if (ooz <= zBuffer[idx]) return;
-        zBuffer[idx] = ooz;
-
-        if (charOverride) {
-          charBuffer[idx] = charOverride;
-          return;
+        if (xp >= 0 && xp < W && yp >= 0 && yp < H) {
+          const idx = xp + yp * W;
+          if (ooz > zBuffer[idx]) {
+            zBuffer[idx] = ooz;
+            if (charOverride) {
+              charBuffer[idx] = charOverride;
+            } else {
+              const lum = Math.abs(px * light.x + py * light.y + pz * light.z) / 10;
+              const lIdx = Math.floor(Math.min(1, lum) * (RAMP.length - 1));
+              charBuffer[idx] = isCore ? "•" : RAMP[lIdx];
+            }
+          }
         }
-
-        // Lambertian-ish lighting
-        let lum = rnx * lx + rny * ly + rnz * lz;
-        lum = clamp(lum, 0, 1);
-
-        const shimmer = glow ? (Math.sin(time * 4) + 1) * 0.06 : 0;
-        const lIdx = (clamp(lum + shimmer, 0, 1) * rampLast) | 0;
-        charBuffer[idx] = RAMP[lIdx];
       };
 
-      // 1) Torus lattice
-      const ringRadius = 14;
-      const tubeRadius = 5;
-
-      // Density affects sampling; keep stable with clamp
-      const thetaStep = 0.08 / dens;
-      const phiStep = 0.15 / dens;
-      const latticePeriod = Math.PI / 4;
-      const latticeEps = 0.04;
-
-      for (let theta = 0; theta < Math.PI * 2; theta += thetaStep) {
-        const cT = Math.cos(theta);
-        const sT = Math.sin(theta);
-
-        for (let phi = 0; phi < Math.PI * 2; phi += phiStep) {
-          const cP = Math.cos(phi);
-          const sP = Math.sin(phi);
-
-          const latticeA = Math.abs(theta % latticePeriod) < latticeEps;
-          const latticeB = Math.abs(phi % latticePeriod) < latticeEps;
-          const isLattice = latticeA || latticeB;
-          if (!isLattice) continue;
-
-          const r = ringRadius + tubeRadius * cP;
-          const x = r * cT;
-          const y = r * sT;
-          const z = tubeRadius * sP;
-
-          // Torus surface normal (before rotation)
-          const nx = cP * cT;
-          const ny = cP * sT;
-          const nz = sP;
-
-          const isNode = latticeA && latticeB;
-          plot(x, y, z, nx, ny, nz, isNode ? "#" : null, false);
+      // Draw cube
+      for (let i = -cubeSize; i <= cubeSize; i += step) {
+        for (let j = -cubeSize; j <= cubeSize; j += step) {
+          if (Math.abs(i) === cubeSize || Math.abs(j) === cubeSize) {
+            drawPoint(i, cubeSize, j);
+            drawPoint(i, -cubeSize, j);
+          }
+          drawPoint(cubeSize, i, j);
+          drawPoint(-cubeSize, i, j);
         }
       }
 
-      // 2) Pulsing core (sphere)
-      const coreRadius = 3 + Math.sin(time * 3) * 0.8;
-      for (let p = 0; p <= Math.PI; p += 0.3) {
-        const sP = Math.sin(p);
-        const cP = Math.cos(p);
-
-        for (let t = 0; t < Math.PI * 2; t += 0.3) {
-          const cT = Math.cos(t);
-          const sT = Math.sin(t);
-
-          const cx = coreRadius * sP * cT;
-          const cy = coreRadius * sP * sT;
-          const cz = coreRadius * cP;
-
-          // Sphere normal (pointing outwards)
-          const [nx, ny, nz] = normalize3(cx, cy, cz);
-          plot(cx, cy, cz, nx, ny, nz, "•", true);
+      // Draw core
+      if (showCore) {
+        const coreRadius = 4.5 + Math.sin(time * 2) * 0.5;
+        for (let phi = 0; phi < Math.PI; phi += 0.3) {
+          for (let theta = 0; theta < 2 * Math.PI; theta += 0.3) {
+            const cx = coreRadius * Math.sin(phi) * Math.cos(theta);
+            const cy = coreRadius * Math.sin(phi) * Math.sin(theta);
+            const cz = coreRadius * Math.cos(phi);
+            drawPoint(cx, cy, cz, null, true);
+          }
         }
       }
 
-      // Write final frame
-      const out = new Array(H);
+      const lines: string[] = [];
       for (let i = 0; i < H; i++) {
-        out[i] = charBuffer.slice(i * W, (i + 1) * W).join("");
+        lines.push(charBuffer.slice(i * W, (i + 1) * W).join(""));
       }
-      pre.textContent = out.join("\n");
+      pre.textContent = lines.join("\n");
 
       rafRef.current = requestAnimationFrame(render);
     };
 
     rafRef.current = requestAnimationFrame(render);
     return () => cancelAnimationFrame(rafRef.current);
-  }, []);
+  }, [speed, showCore]);
 
   return (
     <div className="flex items-center justify-center">
       <pre
         ref={preRef}
-        className="text-[5px] sm:text-[6px] md:text-[7px] leading-[1.0] font-mono select-none whitespace-pre"
+        className="text-[8px] sm:text-[10px] md:text-[12px] leading-[1.0] font-mono select-none whitespace-pre"
         style={{
           color: themeColor,
-          textShadow: `0 0 6px ${themeColor}90, 0 0 12px ${themeColor}50`,
+          textShadow: `0 0 8px ${themeColor}90, 0 0 16px ${themeColor}50`,
         }}
       />
     </div>
