@@ -9,6 +9,7 @@ interface CTABandProps {
   primaryCta?: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
   variant?: 'light' | 'dark';
+  size?: 'default' | 'large';
   className?: string;
 }
 
@@ -18,22 +19,29 @@ export const CTABand: React.FC<CTABandProps> = ({
   primaryCta,
   secondaryCta,
   variant = 'light',
+  size = 'default',
   className,
 }) => {
   return (
     <section
       className={cn(
-        'py-12 md:py-16',
+        size === 'large' ? 'py-16 md:py-24' : 'py-12 md:py-16',
         variant === 'dark' ? 'bg-ink text-offwhite' : 'bg-muted',
         className
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
+        <div className={cn(
+          'flex flex-col gap-6',
+          size === 'large' 
+            ? 'md:flex-col items-start' 
+            : 'md:flex-row md:items-center md:justify-between'
+        )}>
+          <div className={size === 'large' ? 'max-w-2xl' : ''}>
             {headline && (
               <h2 className={cn(
-                'font-serif text-heading-md mb-2',
+                'font-serif mb-3',
+                size === 'large' ? 'text-heading-lg' : 'text-heading-md',
                 variant === 'dark' ? 'text-mint' : 'text-foreground'
               )}>
                 {headline}
@@ -41,7 +49,8 @@ export const CTABand: React.FC<CTABandProps> = ({
             )}
             {description && (
               <p className={cn(
-                'text-body-md max-w-xl',
+                'max-w-xl',
+                size === 'large' ? 'text-lg' : 'text-body-md',
                 variant === 'dark' ? 'text-offwhite/70' : 'text-muted-foreground'
               )}>
                 {description}
@@ -49,9 +58,12 @@ export const CTABand: React.FC<CTABandProps> = ({
             )}
           </div>
           
-          <div className="flex flex-wrap gap-4">
+          <div className={cn(
+            'flex flex-wrap gap-4',
+            size === 'large' && 'mt-4'
+          )}>
             {primaryCta && (
-              <PrimaryButton href={primaryCta.href}>
+              <PrimaryButton href={primaryCta.href} size={size === 'large' ? 'lg' : 'default'}>
                 {primaryCta.label}
               </PrimaryButton>
             )}
