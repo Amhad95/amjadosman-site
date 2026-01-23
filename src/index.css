@@ -137,23 +137,25 @@
     font-family: "Instrument Serif", Georgia, serif;
   }
 
-  .text-poster-xl {
-    font-size: clamp(3rem, 6vw, 5.25rem);
+.text-poster-xl {
+    font-size: clamp(3.5rem, 8vw, 6rem);
     line-height: 0.95;
+    letter-spacing: -0.02em;
   }
 
   .text-poster-lg {
-    font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+    font-size: clamp(2.75rem, 5vw, 4.5rem);
     line-height: 1.02;
+    letter-spacing: -0.01em;
   }
 
   .text-heading-lg {
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
     line-height: 1.05;
   }
 
   .text-heading-md {
-    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
     line-height: 1.15;
   }
 

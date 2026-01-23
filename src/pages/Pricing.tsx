@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layout } from '@/components/layout/Layout';
+import { Hero } from '@/components/sections/Hero';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { DecisionHelper } from '@/components/sections/DecisionHelper';
 import { IncludedStrip } from '@/components/sections/IncludedStrip';
@@ -28,18 +29,15 @@ const Pricing = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader
-            headline={pricing.hero.headline}
-            subheadline={pricing.hero.subheadline}
-            variant="poster"
-          />
-        </div>
-      </section>
+      <Hero
+        headline={pricing.hero.headline}
+        subheadline={pricing.hero.subheadline}
+        plate="navy"
+        primaryCta={{ label: 'Book a Call', href: '/book' }}
+      />
 
       {/* Decision Helper */}
-      <section className="pb-12 bg-background">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <DecisionHelper
             headline={pricing.decisionHelper.headline}
@@ -71,9 +69,11 @@ const Pricing = () => {
       {/* Final CTA */}
       <CTABand
         headline={pricing.finalCta.headline}
+        description="Book a short call and we will share a clear scope, timeline, and cost."
         primaryCta={pricing.finalCta.primaryCta}
         secondaryCta={pricing.finalCta.secondaryCta}
         variant="dark"
+        size="large"
       />
     </Layout>
   );
