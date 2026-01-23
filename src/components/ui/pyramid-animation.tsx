@@ -1,4 +1,15 @@
-import React, { useEffect, useRef } from "react";
+/**
+ * PyramidAnimation
+ *
+ * Props:
+ * - wireframe: show only edges if true, filled faces if false (default: false)
+ * - color: use colored faces if true, monochrome mint if false (default: false)
+ * - speed: rotation speed (default: 0.03)
+ * - axis: which axis to rotate ('x', 'y', 'z')
+ * - edges: show pyramid edges if true (default: true)
+ */
+
+import React, { useEffect, useState } from "react";
 
 const W = 80;
 const H = 40;
@@ -8,8 +19,17 @@ const MINT = "#00FFD9";
 // ASCII symbols per face
 const faceSymbol = ['@', '#', '$', '*'];
 
+// CSS colors for each face (used when color=true)
+const faceColor = [
+  '#e53935',  // red
+  '#43a047',  // green
+  '#fbc02d',  // yellow
+  '#1e88e5'   // blue
+];
+
 // Scale factor
 const SCALE = 2;
+// Desired constant distance for centroid
 const DESIRED_DIST = 4.5;
 
 // 5 vertices: apex + 4 base corners
@@ -26,16 +46,20 @@ const F: [number, number, number][] = [
   [0, 1, 2], [0, 2, 3], [0, 3, 4], [0, 4, 1]
 ];
 
-const DU = 0.015;
-const DV = 0.015;
+// Finer sampling for detail
+const DU = 0.01;
+const DV = 0.01;
 
 const EDGE_LIST = [
-  [0,1],[0,2],[0,3],[0,4],
-  [1,2],[2,3],[3,4],[4,1]
+  [0,1],[0,2],[0,3],[0,4], // apex to base
+  [1,2],[2,3],[3,4],[4,1] // base edges
 ];
 
+// Vector utilities
 const sub3 = (a: number[], b: number[]): number[] => [
-  a[0] - b[0], a[1] - b[1], a[2] - b[2]
+  a[0] - b[0],
+  a[1] - b[1],
+  a[2] - b[2]
 ];
 
 const cross3 = (a: number[], b: number[]): number[] => [
@@ -51,6 +75,7 @@ const norm3 = (v: number[]): number[] => {
 
 interface PyramidAnimationProps {
   wireframe?: boolean;
+  color?: boolean;
   speed?: number;
   axis?: 'x' | 'y' | 'z';
   edges?: boolean;
@@ -58,94 +83,99 @@ interface PyramidAnimationProps {
 
 export const PyramidAnimation: React.FC<PyramidAnimationProps> = ({
   wireframe = false,
+  color = false,
   speed = 0.03,
   axis = 'y',
   edges = true
 }) => {
-  const preRef = useRef<HTMLPreElement>(null);
-  const rafRef = useRef<number>(0);
-  const thetaRef = useRef(0);
+  const [frame, setFrame] = useState<React.ReactElement[]>([]);
+  const [theta, setTheta] = useState(0);
 
   useEffect(() => {
-    const pre = preRef.current;
-    if (!pre) return;
-
-    // Precompute face normals
-    const fnorm: number[][] = [];
-    for (let f = 0; f < 4; f++) {
-      const e1 = sub3(V[F[f][1]], V[F[f][0]]);
-      const e2 = sub3(V[F[f][2]], V[F[f][0]]);
-      fnorm.push(norm3(cross3(e1, e2)));
-    }
-
-    const light = norm3([0.0, 1.0, -1.0]);
-
-    // Compute model centroid
-    const centroidModel = [0, 0, 0];
-    for (let i = 0; i < 5; ++i) {
-      centroidModel[0] += V[i][0];
-      centroidModel[1] += V[i][1];
-      centroidModel[2] += V[i][2];
-    }
-    centroidModel[0] *= 0.2;
-    centroidModel[1] *= 0.2;
-    centroidModel[2] *= 0.2;
-
-    const X_SCALE = 36.0;
-    const Y_SCALE = 18.0;
-    const Y_OFFSET = -4;
-
-    const render = () => {
-      const screen: string[] = Array(W * H).fill(' ');
-      const zBuf: number[] = Array(W * H).fill(0);
-      const lumBuf: number[] = Array(W * H).fill(0);
+    const renderFrame = () => {
+      // Initialize buffers
       const faceBuf: number[] = Array(W * H).fill(-1);
+      const lumBuf: number[] = Array(W * H).fill(0);
+      const zBuf: number[] = Array(W * H).fill(0);
 
-      thetaRef.current += speed;
-      const theta = thetaRef.current;
+      // Compute model-space centroid
+      const centroidModel = [0, 0, 0];
+      for (let i = 0; i < 5; ++i) {
+        centroidModel[0] += V[i][0];
+        centroidModel[1] += V[i][1];
+        centroidModel[2] += V[i][2];
+      }
+      centroidModel[0] *= 0.2;
+      centroidModel[1] *= 0.2;
+      centroidModel[2] *= 0.2;
 
-      const c = Math.cos(theta);
-      const s = Math.sin(theta);
+      // Precompute face normals (model space)
+      const fnorm: number[][] = [];
+      for (let f = 0; f < 4; f++) {
+        const e1 = sub3(V[F[f][1]], V[F[f][0]]);
+        const e2 = sub3(V[F[f][2]], V[F[f][0]]);
+        fnorm.push(norm3(cross3(e1, e2)));
+      }
+
+      // Light direction
+      const light = norm3([0.0, 1.0, -1.0]);
+
+      // Compute rotation
+      let c = 1, s = 0;
+      if (axis === 'y') { c = Math.cos(theta); s = Math.sin(theta); }
+      else if (axis === 'x') { c = Math.cos(theta); s = Math.sin(theta); }
+      else if (axis === 'z') { c = Math.cos(theta); s = Math.sin(theta); }
 
       // Rotate centroid and compute offset
       const cz = -centroidModel[0] * s + centroidModel[2] * c;
       const offset = DESIRED_DIST - cz;
 
-      const rotate = (x: number, y: number, z: number): [number, number, number] => {
-        if (axis === 'y') return [x * c + z * s, y, -x * s + z * c];
-        if (axis === 'x') return [x, y * c - z * s, y * s + z * c];
-        return [x * c - y * s, x * s + y * c, z];
-      };
+      // Projection scaling for browser
+      const X_SCALE = 36.0;
+      const Y_SCALE = 18.0;
+      const Y_OFFSET = -4;
 
-      // Draw filled faces
+      // Draw faces
       if (!wireframe) {
         for (let f = 0; f < 4; f++) {
           for (let u = 0; u <= 1.0; u += DU) {
             for (let v = 0; u + v <= 1.0; v += DV) {
               const w = 1.0 - u - v;
+              // Model-space point
               const x = w * V[F[f][0]][0] + u * V[F[f][1]][0] + v * V[F[f][2]][0];
               const y = w * V[F[f][0]][1] + u * V[F[f][1]][1] + v * V[F[f][2]][1];
               const z = w * V[F[f][0]][2] + u * V[F[f][1]][2] + v * V[F[f][2]][2];
 
-              const [x2, y2, z2] = rotate(x, y, z);
-              const z2t = z2 + offset;
-              if (z2t <= 0) continue;
+              // Rotate
+              let x2 = x, y2 = y, z2 = z;
+              if (axis === 'y') { x2 = x * c + z * s; z2 = -x * s + z * c; }
+              else if (axis === 'x') { y2 = y * c - z * s; z2 = y * s + z * c; }
+              else if (axis === 'z') { x2 = x * c - y * s; y2 = x * s + y * c; }
 
-              const invz = 1.0 / z2t;
+              // Translate by offset
+              const z2Translated = z2 + offset;
+              if (z2Translated <= 0) continue;
+              const invz = 1.0 / z2Translated;
+
+              // Project to screen
               const px = Math.floor(W / 2 + X_SCALE * x2 * invz);
               const py = Math.floor(H / 2 - Y_SCALE * y2 * invz + Y_OFFSET);
-
               if (px < 0 || px >= W || py < 0 || py >= H) continue;
               const idx = px + py * W;
+
+              // Depth test
               if (invz <= zBuf[idx]) continue;
-
               zBuf[idx] = invz;
-              faceBuf[idx] = f;
 
-              // Rotate normal for lighting
-              const [nx, ny, nz] = rotate(fnorm[f][0], fnorm[f][1], fnorm[f][2]);
-              const L = Math.max(0, nx * light[0] + ny * light[1] + nz * light[2]);
+              // Rotate normal, compute lighting
+              let nx = fnorm[f][0], ny = fnorm[f][1], nz = fnorm[f][2];
+              if (axis === 'y') { nx = fnorm[f][0] * c + fnorm[f][2] * s; nz = -fnorm[f][0] * s + fnorm[f][2] * c; }
+              else if (axis === 'x') { ny = fnorm[f][1] * c - fnorm[f][2] * s; nz = fnorm[f][1] * s + fnorm[f][2] * c; }
+              else if (axis === 'z') { nx = fnorm[f][0] * c - fnorm[f][1] * s; ny = fnorm[f][0] * s + fnorm[f][1] * c; }
+              let L = nx * light[0] + ny * light[1] + nz * light[2];
+              if (L < 0) L = 0;
               lumBuf[idx] = L;
+              faceBuf[idx] = f;
             }
           }
         }
@@ -160,62 +190,76 @@ export const PyramidAnimation: React.FC<PyramidAnimationProps> = ({
             const x = x0 + (x1 - x0) * t;
             const y = y0 + (y1 - y0) * t;
             const z = z0 + (z1 - z0) * t;
-
-            const [x2, y2, z2] = rotate(x, y, z);
-            const z2t = z2 + offset;
-            if (z2t <= 0) continue;
-
-            const invz = 1.0 / z2t;
+            let x2 = x, y2 = y, z2 = z;
+            if (axis === 'y') { x2 = x * c + z * s; z2 = -x * s + z * c; }
+            else if (axis === 'x') { y2 = y * c - z * s; z2 = y * s + z * c; }
+            else if (axis === 'z') { x2 = x * c - y * s; y2 = x * s + y * c; }
+            const z2Translated = z2 + offset;
+            if (z2Translated <= 0) continue;
+            const invz = 1.0 / z2Translated;
             const px = Math.floor(W / 2 + X_SCALE * x2 * invz);
             const py = Math.floor(H / 2 - Y_SCALE * y2 * invz + Y_OFFSET);
-
             if (px < 0 || px >= W || py < 0 || py >= H) continue;
             const idx = px + py * W;
-
             if (invz > zBuf[idx]) {
               zBuf[idx] = invz + 1e-6;
-              faceBuf[idx] = -2;
+              faceBuf[idx] = -2; // special value for edge
             }
           }
         }
       }
 
-      // Build output with character shading
-      const ramp = " .-:=+*#@";
-      for (let i = 0; i < W * H; i++) {
-        const f = faceBuf[i];
-        if (f === -2) {
-          screen[i] = '+';
-        } else if (f >= 0) {
-          const L = lumBuf[i];
-          const ci = Math.floor(L * (ramp.length - 1));
-          screen[i] = ramp[Math.min(ci, ramp.length - 1)];
-        }
-      }
-
-      const lines: string[] = [];
+      // Render frame as JSX
+      const frameLines: React.ReactElement[] = [];
       for (let y = 0; y < H; y++) {
-        lines.push(screen.slice(y * W, (y + 1) * W).join(""));
+        const line: React.ReactElement[] = [];
+        for (let x = 0; x < W; x++) {
+          const i = x + y * W;
+          const f = faceBuf[i];
+          if (f === -2) {
+            line.push(<span key={x} style={{ color: MINT }}>+</span>);
+          } else if (f < 0) {
+            line.push(<span key={x}> </span>);
+          } else {
+            const L = lumBuf[i];
+            const colorVal = color ? faceColor[f] : MINT;
+            const opacity = 0.4 + L * 0.6;
+            line.push(
+              <span 
+                key={x} 
+                style={{ 
+                  color: colorVal,
+                  opacity
+                }}
+              >
+                {faceSymbol[f]}
+              </span>
+            );
+          }
+        }
+        frameLines.push(<div key={y}>{line}</div>);
       }
-      pre.textContent = lines.join("\n");
-
-      rafRef.current = requestAnimationFrame(render);
+      setFrame(frameLines);
     };
 
-    rafRef.current = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [speed, axis, wireframe, edges]);
+    const interval = setInterval(() => {
+      setTheta(prev => prev + speed);
+      renderFrame();
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [theta, wireframe, color, speed, axis, edges]);
 
   return (
     <div className="flex items-center justify-center">
       <pre
-        ref={preRef}
         className="text-[8px] sm:text-[10px] md:text-[12px] leading-[1.0] font-mono select-none whitespace-pre"
         style={{
-          color: MINT,
           textShadow: `0 0 8px ${MINT}90, 0 0 16px ${MINT}50`,
         }}
-      />
+      >
+        {frame}
+      </pre>
     </div>
   );
 };
