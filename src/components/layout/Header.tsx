@@ -4,7 +4,7 @@ import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { siteContent } from '@/lib/content';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
-import { Logo } from '@/components/shared/Logo';
+import logoSvg from '@/assets/logo.svg';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,9 +24,9 @@ export const Header: React.FC = () => {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 transition-all duration-300',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'bg-offwhite/95 backdrop-blur-sm border-b border-ink/10'
+          ? 'bg-ink/80 backdrop-blur-md border-b border-white/10'
           : 'bg-transparent'
       )}
     >
@@ -38,10 +38,10 @@ export const Header: React.FC = () => {
             className="hover:opacity-80 transition-opacity"
             aria-label="ADSI Home"
           >
-            <Logo 
-              variant="wordmark" 
-              colorScheme="ink" 
-              className="h-6 md:h-7 w-auto"
+            <img 
+              src={logoSvg}
+              alt="Applied Design & Strategy Institute" 
+              className="h-7 md:h-8 w-auto"
             />
           </Link>
 
@@ -54,8 +54,8 @@ export const Header: React.FC = () => {
                 className={cn(
                   'text-sm font-medium transition-colors',
                   location.pathname === item.href
-                    ? 'text-ink'
-                    : 'text-ink/70 hover:text-ink'
+                    ? 'text-offwhite'
+                    : 'text-offwhite/70 hover:text-offwhite'
                 )}
               >
                 {item.label}
@@ -72,7 +72,7 @@ export const Header: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 -mr-2 text-ink"
+            className="lg:hidden p-2 -mr-2 text-offwhite"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
@@ -82,7 +82,7 @@ export const Header: React.FC = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-ink/10 animate-fade-in">
+          <div className="lg:hidden py-4 border-t border-white/10 animate-fade-in bg-ink">
             <div className="flex flex-col gap-4">
               {navigation.primary.map((item) => (
                 <Link
@@ -91,8 +91,8 @@ export const Header: React.FC = () => {
                   className={cn(
                     'text-base font-medium py-2 transition-colors',
                     location.pathname === item.href
-                      ? 'text-ink'
-                      : 'text-ink/70 hover:text-ink'
+                      ? 'text-offwhite'
+                      : 'text-offwhite/70 hover:text-offwhite'
                   )}
                   onClick={() => setMobileMenuOpen(false)}
                 >
