@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
-import { CyberEuro } from '@/components/ui/cyber-euro';
+import { CyberPercentage } from '@/components/ui/cyber-percentage';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { DecisionHelper } from '@/components/sections/DecisionHelper';
 import { IncludedStrip } from '@/components/sections/IncludedStrip';
@@ -35,7 +35,7 @@ const Pricing = () => {
         subheadline={pricing.hero.subheadline}
         plate="navy"
         primaryCta={{ label: 'Book a Call', href: '/book' }}
-        rightElement={<CyberEuro speed={0.8} />}
+        rightElement={<CyberPercentage speed={0.8} />}
       />
 
       {/* Decision Helper */}
