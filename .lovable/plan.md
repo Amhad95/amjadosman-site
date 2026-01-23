@@ -1,90 +1,91 @@
 
 
-# Fix PyramidAnimation on Work Page
+# Add CyberEuro Animation to Pricing Page
 
-## Problem
+## Summary
 
-The current PyramidAnimation renders incorrectly - showing scattered dots instead of a proper 3D pyramid shape. The issue stems from the optimization approach using `textContent` which doesn't properly render the face filling algorithm.
-
-## Solution
-
-Replace the current `src/components/ui/pyramid-animation.tsx` with the user's working implementation, adjusted for project consistency:
+Add a new 3D ASCII Euro symbol animation to the Pricing page hero, adapting the provided component to match the project's performance patterns and styling conventions.
 
 ---
 
-## Files to Modify
+## Files to Create/Modify
 
 | File | Action |
 |------|--------|
-| `src/components/ui/pyramid-animation.tsx` | **Replace** - Use working version with project styling |
+| `src/components/ui/cyber-euro.tsx` | **Create** - New Euro symbol animation |
+| `src/pages/Pricing.tsx` | **Modify** - Add CyberEuro to hero |
 
 ---
 
 ## Implementation Details
 
-### Key Changes
+### 1. Create `src/components/ui/cyber-euro.tsx`
 
-1. **Use React state-based rendering** instead of direct DOM manipulation
-   - Use `useState` for frame and theta
-   - Use `setInterval` at 30ms (~33fps) for animation
-   - Render JSX elements with individual `<span>` elements per character
+Create the component using the provided code with these adjustments for consistency:
 
-2. **Keep finer face sampling** for proper fill
-   - `DU = 0.01` and `DV = 0.01` (finer than current 0.015)
+**Styling updates to match project patterns:**
+- Use same font sizes as other animations: `text-[8px] sm:text-[10px] md:text-[12px]`
+- Add `mint` to color palette (`#00FFD9`) as the default color
+- Apply mint glow effect: `textShadow: 0 0 8px color, 0 0 16px color`
+- Wrap in container div with `flex items-center justify-center`
 
-3. **Add color support with mint option**
-   - `color` prop: when `true` uses multi-color faces, when `false` uses mint (`#00FFD9`)
-   - Per-character coloring via styled spans
+**Performance optimization:**
+- Use direct DOM updates via `preRef.current.textContent` (matching KnotAnimation pattern)
+- Keep `requestAnimationFrame` loop as provided
+- Store rotation in `useRef` to avoid re-render dependencies
 
-4. **Apply project styling patterns**
-   - Font sizes: `text-[8px] sm:text-[10px] md:text-[12px]`
-   - Mint glow effect: `textShadow: 0 0 8px ${MINT}90, 0 0 16px ${MINT}50`
-   - Container: `flex items-center justify-center`
+**Props:**
+- `speed?: number` - Animation speed multiplier (default: 1)
+- `color?: keyof typeof COLOR_MAP` - Theme color (default: 'mint')
+- `density?: number` - Rendering density (default: 1.0)
 
-### Component Props
+**Key geometry:**
+- "C" curve forming the Euro symbol body (radius 14, thickness 3.5)
+- Two horizontal bars at y positions 2.5 and -2.5
+- Edge detection for enhanced definition
+- Pulse-shimmer lighting for dynamic appearance
+
+### 2. Update `src/pages/Pricing.tsx`
+
+Add the CyberEuro to the Hero:
 
 ```tsx
-interface PyramidAnimationProps {
-  wireframe?: boolean;  // Show only edges (default: false)
-  color?: boolean;      // Multi-color faces vs mint (default: false)
-  speed?: number;       // Rotation speed (default: 0.03)
-  axis?: 'x' | 'y' | 'z'; // Rotation axis (default: 'y')
-  edges?: boolean;      // Show edges (default: true)
-}
+import { CyberEuro } from '@/components/ui/cyber-euro';
+
+<Hero
+  headline={pricing.hero.headline}
+  subheadline={pricing.hero.subheadline}
+  plate="navy"
+  primaryCta={{ label: 'Book a Call', href: '/book' }}
+  rightElement={<CyberEuro speed={0.8} />}
+/>
 ```
 
-### Rendering Approach
+---
 
-The working version properly fills each triangular face by:
-- Iterating over barycentric coordinates (u, v, w) with fine step size
-- Applying 3D rotation based on selected axis
-- Using z-buffer for depth ordering
-- Computing per-face lighting from surface normals
-- Rendering each pixel as an individual `<span>` with appropriate color/style
+## Animation Distribution
+
+| Page | Shape | Component |
+|------|-------|-----------|
+| Home (`/`) | Torus wireframe | NeuralLattice |
+| Software (`/software`) | Monolith cube | CyberGlobeHeader |
+| Tools (`/tools`) | Trefoil knot | KnotAnimation |
+| Work (`/work`) | Pyramid | PyramidAnimation |
+| Pricing (`/pricing`) | Euro symbol | CyberEuro |
 
 ---
 
 ## Technical Notes
 
-**Why the current version fails:**
-- The `textContent` approach writes a plain text string
-- Characters are mapped from a brightness ramp (` .-:=+*#@`)
-- Face symbols and colors cannot be applied per-character
-- The sampling density may be too coarse for proper face coverage
+**Euro Symbol Geometry:**
+- Main body: "C" curve from angle 0.6 to 5.7 radians (open on the right)
+- Two horizontal bars crossing through the symbol
+- Volumetric depth rendering with z-buffer
+- Edge highlighting with `#` character
 
-**Why the user's version works:**
-- Uses JSX with individual `<span>` elements per character
-- Each character can have its own color and style
-- Uses face-specific symbols (`@`, `#`, `$`, `*`) to show different faces
-- Finer sampling (DU/DV = 0.01) ensures complete face coverage
-
----
-
-## Result
-
-The Work page will display a properly rendered rotating 3D pyramid with:
-- Filled triangular faces with shading
-- Visible edges marked with `+` character
-- Mint color theme (when `color={false}`)
-- Matching glow effect as other animations
+**Rendering Features:**
+- Pulse-shimmer lighting: `Math.sin(time * 4 + pz)` creates wave effect
+- Square-aspect projection: 80x45 canvas with adjusted scales
+- Character brightness ramp for depth perception
+- Rotation with subtle tilt oscillation
 
