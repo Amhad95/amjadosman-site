@@ -14,7 +14,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   subheadline,
   className,
   align = 'left',
-  variant = 'interface',
+  variant = 'poster',
 }) => {
   return (
     <div
