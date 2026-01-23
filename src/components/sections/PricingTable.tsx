@@ -55,7 +55,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
             {group.items.map((item, index) => (
               <div
                 key={index}
-                className="bg-card rounded-2xl p-6 border border-ink/10 hover:border-ink/20 transition-all"
+                className="bg-gradient-to-br from-card to-muted/30 rounded-2xl p-8 border border-ink/8 shadow-sm hover:border-ink/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
               >
                 <h3 className="font-serif text-xl text-foreground mb-2">
                   {item.title}

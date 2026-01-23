@@ -1,26 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { siteContent } from '@/lib/content';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
+import { Logo } from '@/components/shared/Logo';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { navigation } = siteContent;
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial state
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-offwhite/95 backdrop-blur-sm border-b border-ink/10">
+    <header
+      className={cn(
+        'sticky top-0 z-50 transition-all duration-300',
+        isScrolled
+          ? 'bg-offwhite/95 backdrop-blur-sm border-b border-ink/10'
+          : 'bg-transparent'
+      )}
+    >
       <nav className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link
             to="/"
-            className="font-serif text-2xl text-ink hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
             aria-label="ADSI Home"
           >
-            ADSI
+            <Logo 
+              variant="wordmark" 
+              colorScheme="ink" 
+              className="h-6 md:h-7 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
