@@ -5,6 +5,7 @@ import { ToolList } from '@/components/sections/ToolList';
 import { EmailCapture } from '@/components/sections/EmailCapture';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
+import { KnotAnimation } from '@/components/ui/knot-animation';
 import { siteContent } from '@/lib/content';
 
 const Tools = () => {
@@ -19,6 +20,7 @@ const Tools = () => {
         primaryCta={tools.hero.primaryCta}
         secondaryCta={tools.hero.secondaryCta}
         plate="emerald"
+        rightElement={<KnotAnimation speedA={0.03} speedB={0.015} />}
       />
 
       {/* Tool Listing */}
