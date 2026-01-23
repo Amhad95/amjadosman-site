@@ -128,12 +128,12 @@ export const CyberGlobeHeader: React.FC<CyberGlobeHeaderProps> = ({
   const themeColor = COLOR_MAP[color] || COLOR_MAP.cyan;
 
   return (
-    <div className="w-[280px] h-[180px] sm:w-[340px] sm:h-[220px] lg:w-[400px] lg:h-[260px] relative flex items-center justify-center overflow-hidden">
+    <div className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[450px] h-[200px] sm:h-[240px] lg:h-[280px] flex items-center justify-center overflow-visible">
       <pre
-        className="text-[9px] sm:text-[10px] md:text-[11px] lg:text-[12px] leading-[1.1] font-mono select-none whitespace-pre"
+        className="text-[5px] leading-[1.0] font-mono select-none whitespace-pre transform scale-[1.8] sm:scale-[2.2] md:scale-[2.5] lg:scale-[2.8] origin-center"
         style={{ 
           color: themeColor,
-          textShadow: `0 0 8px ${themeColor}50, 0 0 16px ${themeColor}30`
+          textShadow: `0 0 2px ${themeColor}60, 0 0 4px ${themeColor}40`
         }}
       >
         {frame.join("\n")}
