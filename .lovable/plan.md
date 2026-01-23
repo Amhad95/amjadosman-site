@@ -1,10 +1,10 @@
 
 
-# Add CyberEuro Animation to Pricing Page
+# Replace CyberEuro with CyberPercentage on Pricing Page
 
 ## Summary
 
-Add a new 3D ASCII Euro symbol animation to the Pricing page hero, adapting the provided component to match the project's performance patterns and styling conventions.
+Replace the Euro symbol animation with a Percentage symbol animation on the Pricing page hero. The percentage symbol features dual rings and a diagonal bar, creating a more fitting visual for a pricing/value page.
 
 ---
 
@@ -12,26 +12,27 @@ Add a new 3D ASCII Euro symbol animation to the Pricing page hero, adapting the 
 
 | File | Action |
 |------|--------|
-| `src/components/ui/cyber-euro.tsx` | **Create** - New Euro symbol animation |
-| `src/pages/Pricing.tsx` | **Modify** - Add CyberEuro to hero |
+| `src/components/ui/cyber-percentage.tsx` | **Create** - New percentage symbol animation |
+| `src/pages/Pricing.tsx` | **Modify** - Replace CyberEuro import with CyberPercentage |
+| `src/components/ui/cyber-euro.tsx` | **Delete** - Remove unused Euro animation |
 
 ---
 
 ## Implementation Details
 
-### 1. Create `src/components/ui/cyber-euro.tsx`
+### 1. Create `src/components/ui/cyber-percentage.tsx`
 
 Create the component using the provided code with these adjustments for consistency:
 
 **Styling updates to match project patterns:**
-- Use same font sizes as other animations: `text-[8px] sm:text-[10px] md:text-[12px]`
 - Add `mint` to color palette (`#00FFD9`) as the default color
-- Apply mint glow effect: `textShadow: 0 0 8px color, 0 0 16px color`
-- Wrap in container div with `flex items-center justify-center`
+- Use same font sizes: `text-[8px] sm:text-[10px] md:text-[12px]`
+- Apply mint glow effect via textShadow
+- Add TypeScript types for props
 
 **Performance optimization:**
-- Use direct DOM updates via `preRef.current.textContent` (matching KnotAnimation pattern)
-- Keep `requestAnimationFrame` loop as provided
+- Use direct DOM updates via `preRef.current.textContent` (matching other animations)
+- Keep `requestAnimationFrame` loop
 - Store rotation in `useRef` to avoid re-render dependencies
 
 **Props:**
@@ -40,30 +41,30 @@ Create the component using the provided code with these adjustments for consiste
 - `density?: number` - Rendering density (default: 1.0)
 
 **Key geometry:**
-- "C" curve forming the Euro symbol body (radius 14, thickness 3.5)
-- Two horizontal bars at y positions 2.5 and -2.5
-- Edge detection for enhanced definition
-- Pulse-shimmer lighting for dynamic appearance
+- Two hollow rings at diagonal positions (top-left and bottom-right)
+- Ring radius: 5, thickness: 2.5
+- Diagonal bar (slash) at 45-degree angle
+- Bar dimensions: length 32, height 2.5, thickness 2.5
 
 ### 2. Update `src/pages/Pricing.tsx`
 
-Add the CyberEuro to the Hero:
+Replace the CyberEuro import and usage:
 
 ```tsx
-import { CyberEuro } from '@/components/ui/cyber-euro';
+// Change import
+import { CyberPercentage } from '@/components/ui/cyber-percentage';
 
-<Hero
-  headline={pricing.hero.headline}
-  subheadline={pricing.hero.subheadline}
-  plate="navy"
-  primaryCta={{ label: 'Book a Call', href: '/book' }}
-  rightElement={<CyberEuro speed={0.8} />}
-/>
+// Update Hero rightElement
+rightElement={<CyberPercentage speed={0.8} />}
 ```
+
+### 3. Delete `src/components/ui/cyber-euro.tsx`
+
+Remove the unused Euro animation file.
 
 ---
 
-## Animation Distribution
+## Animation Distribution (Updated)
 
 | Page | Shape | Component |
 |------|-------|-----------|
@@ -71,21 +72,21 @@ import { CyberEuro } from '@/components/ui/cyber-euro';
 | Software (`/software`) | Monolith cube | CyberGlobeHeader |
 | Tools (`/tools`) | Trefoil knot | KnotAnimation |
 | Work (`/work`) | Pyramid | PyramidAnimation |
-| Pricing (`/pricing`) | Euro symbol | CyberEuro |
+| Pricing (`/pricing`) | Percentage symbol | CyberPercentage |
 
 ---
 
 ## Technical Notes
 
-**Euro Symbol Geometry:**
-- Main body: "C" curve from angle 0.6 to 5.7 radians (open on the right)
-- Two horizontal bars crossing through the symbol
-- Volumetric depth rendering with z-buffer
-- Edge highlighting with `#` character
+**Percentage Symbol Geometry:**
+- Two rings positioned diagonally (offset x: ±9, y: ±9)
+- Central diagonal slash at 45° angle
+- Multi-axis rotation for dynamic movement
+- Volumetric depth with z-buffer
 
 **Rendering Features:**
-- Pulse-shimmer lighting: `Math.sin(time * 4 + pz)` creates wave effect
-- Square-aspect projection: 80x45 canvas with adjusted scales
-- Character brightness ramp for depth perception
-- Rotation with subtle tilt oscillation
+- Pulse-shimmer lighting: `Math.sin(time * 5 + pz)` (faster than Euro)
+- Multi-axis rotation including slow z-axis spin
+- Stronger x-axis tilt oscillation (0.3 vs 0.2)
+- Edge highlighting with `#` character
 
