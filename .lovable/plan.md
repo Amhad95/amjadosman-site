@@ -1,104 +1,75 @@
 
-# Change Mint Button Text Color to Match Page Plate Color
+# Dynamic Header Button Color Based on Page
 
 ## The Problem
 
-Currently, all mint-colored buttons (like "Book a Call", "Request Software Access") have black text (`text-ink`). You want the button text to match the plate/header color of each page.
+The "Book Call" button in the navbar is hardcoded to use `textColor="violet"`, so it always shows violet text regardless of which page you're on. Unlike the Hero buttons which receive the `plate` prop from each page, the Header doesn't know which plate color the current page uses.
 
 ## The Solution
 
-Add a `textColor` prop to the `PrimaryButton` component that accepts plate color names, then update all usages to pass the appropriate plate color.
+Create a route-to-plate color mapping in the Header component and dynamically set the button's `textColor` based on the current route.
+
+---
+
+## Route to Plate Color Mapping
+
+| Route | Plate Color |
+|-------|-------------|
+| `/` | `violet` |
+| `/software` | `astral` |
+| `/services` | `navy` |
+| `/tools` | `emerald` |
+| `/pricing` | `navy` |
+| `/work` | `navy` |
+| `/about` | `emerald` |
+| `/process` | `violet` (fallback) |
+| `/resources` | `violet` (fallback) |
+| `/contact` | `violet` (fallback) |
+| `/book` | `violet` (fallback) |
 
 ---
 
 ## Changes Required
 
-### 1. Update PrimaryButton Component
+### File: `src/components/layout/Header.tsx`
 
-**File:** `src/components/shared/PrimaryButton.tsx`
+1. Add a mapping object that maps routes to plate colors
+2. Get the current plate color based on `location.pathname`
+3. Pass this dynamic color to the PrimaryButton's `textColor` prop
 
-Add a new `textColor` prop that maps to plate colors:
-
-```text
-New prop: textColor?: 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy' | 'ink'
-
-Text color mapping:
-- violet → text-plate-violet
-- navy → text-plate-navy  
-- astral → text-plate-astral
-- etc.
-- ink → text-ink (default, for backwards compatibility)
-```
-
-### 2. Update Hero Component
-
-**File:** `src/components/sections/Hero.tsx`
-
-Pass the `plate` prop through to `PrimaryButton` as `textColor`:
+**Implementation:**
 
 ```tsx
-<PrimaryButton href={primaryCta.href} textColor={plate}>
-  {primaryCta.label}
-</PrimaryButton>
-```
+// Add type and mapping at top of component
+type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
 
-### 3. Update All Page Usages
-
-Update buttons on colored sections to pass the matching plate color:
-
-| File | Section | Button | textColor |
-|------|---------|--------|-----------|
-| `src/pages/Software.tsx` | Pricing section (bg-plate-astral) | PrimaryButton | `astral` |
-| `src/pages/Index.tsx` | Pricing Teaser (bg-plate-navy) | PrimaryButton | `navy` |
-| `src/components/layout/Header.tsx` | Header CTA | PrimaryButton | `violet` (or make dynamic) |
-
-### 4. Update CTABand Component
-
-**File:** `src/components/sections/CTABand.tsx`
-
-For dark variant CTABands, add option to pass a plate color for button text.
-
----
-
-## Files to Modify
-
-| File | Change |
-|------|--------|
-| `src/components/shared/PrimaryButton.tsx` | Add `textColor` prop with plate color mapping |
-| `src/components/sections/Hero.tsx` | Pass `plate` to PrimaryButton as `textColor` |
-| `src/pages/Software.tsx` | Add `textColor="astral"` to pricing section button |
-| `src/pages/Index.tsx` | Add `textColor="navy"` to pricing teaser button |
-| `src/components/layout/Header.tsx` | Add `textColor="violet"` to header CTA |
-| `src/components/sections/CTABand.tsx` | Add optional `plateColor` prop to pass to buttons |
-
----
-
-## Technical Details
-
-### PrimaryButton textColor Implementation
-
-```tsx
-type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy' | 'ink';
-
-const textColorClasses: Record<PlateColor, string> = {
-  violet: 'text-plate-violet',
-  navy: 'text-plate-navy',
-  emerald: 'text-plate-emerald',
-  blue: 'text-plate-blue',
-  astral: 'text-plate-astral',
-  burgundy: 'text-plate-burgundy',
-  ink: 'text-ink',
+const routePlateMap: Record<string, PlateColor> = {
+  '/': 'violet',
+  '/software': 'astral',
+  '/services': 'navy',
+  '/tools': 'emerald',
+  '/pricing': 'navy',
+  '/work': 'navy',
+  '/about': 'emerald',
 };
 
-// In baseStyles:
-textColorClasses[textColor ?? 'ink']  // defaults to ink for backwards compatibility
+// Inside the component, derive the current plate color
+const currentPlate = routePlateMap[location.pathname] || 'violet';
+
+// Then use it in both PrimaryButton instances:
+<PrimaryButton href={navigation.cta.href} textColor={currentPlate}>
 ```
 
 ---
 
 ## Visual Result
 
-- **Software page** (plate-astral): Button text will be dark purple (astral)
-- **Home page** (plate-violet): Button text will be violet
-- **Home pricing teaser** (plate-navy): Button text will be navy blue
-- Buttons on light backgrounds can remain black (`ink`) for contrast
+- **Home page** (`/`): Button text is violet
+- **Software page** (`/software`): Button text is astral (dark purple)
+- **Services page** (`/services`): Button text is navy
+- **Tools page** (`/tools`): Button text is emerald
+- **Pricing/Work pages**: Button text is navy
+- **About page**: Button text is emerald
+- **Other pages**: Default to violet
+
+The button will now dynamically match each page's header/plate color.
