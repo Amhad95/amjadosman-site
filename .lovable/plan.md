@@ -1,37 +1,60 @@
 
+# Header Refinements: Mint Separator, Reduced Height, and Island Navbar
 
-# Increase Navbar-to-Header Clearance and Decrease Header Text Size
+## Overview
 
-## Changes Required
+Three enhancements to the header/navbar:
+1. Add a mint-colored line separator below the navbar
+2. Reduce the default header height
+3. Transform into a compact "island" navbar on scroll with only text links
 
-### 1. Hero.tsx - Add Top Padding for Navbar Clearance
+---
 
-Since the navbar is now fixed (overlays content), the hero content needs additional top padding to account for the navbar height and create visual breathing room.
+## Changes
 
-**Current**: The hero uses `items-end` to position content at the bottom, with `py-12 md:py-16 lg:py-24` padding.
+### 1. Mint Line Separator
 
-**Change**: Add explicit top padding to create clearance from the fixed navbar. The navbar is `h-20 md:h-28`, so adding `pt-28 md:pt-36` will create proper spacing.
+Add a horizontal mint-colored line at the bottom of the header (visible in default/non-scrolled state):
 
-```
-Before: py-12 md:py-16 lg:py-24
-After:  pt-28 md:pt-36 pb-12 md:pb-16 lg:pb-24
-```
-
-### 2. index.css - Reduce H1 (text-poster-xl) Size
-
-**Current scale**:
-```css
-.text-poster-xl {
-  font-size: clamp(3.5rem, 8vw, 6rem);  /* 56px to 96px */
-}
+```text
+Default state: border-b border-mint/40 (subtle mint line)
+Scrolled state: Remove this border (island navbar has its own styling)
 ```
 
-**New scale** (reduced by ~20%):
-```css
-.text-poster-xl {
-  font-size: clamp(2.75rem, 6vw, 4.5rem);  /* 44px to 72px */
-}
+### 2. Reduce Header Height
+
+Current height is `h-20 md:h-28` (80px / 112px). Reduce to a more compact size:
+
+```text
+Before: h-20 md:h-28
+After:  h-16 md:h-20  (64px / 80px)
 ```
+
+This also requires adjusting the Hero.tsx top padding from `pt-28 md:pt-36` to `pt-24 md:pt-28` to match.
+
+### 3. Island Navbar on Scroll
+
+When scrolled, the header transforms into a floating "island" centered navbar:
+
+**Structural Changes:**
+- When scrolled: Add horizontal margin/padding and max-width to create the island shape
+- Hide logo and CTA button (only show text links)
+- Add rounded corners for pill/island effect
+- Apply translucent glass effect with enhanced blur
+
+**Scrolled Island Styling:**
+```text
+Container: max-w-fit mx-auto px-6 py-2.5 rounded-full
+Background: bg-ink/60 backdrop-blur-xl
+Border: border border-white/15
+Shadow: shadow-lg shadow-black/10
+```
+
+**Content When Scrolled:**
+- Logo: Hidden
+- Nav links: Visible, centered
+- CTA button: Hidden
+- Only the text navigation links appear in the floating island
 
 ---
 
@@ -39,14 +62,70 @@ After:  pt-28 md:pt-36 pb-12 md:pb-16 lg:pb-24
 
 | File | Change |
 |------|--------|
-| `src/components/sections/Hero.tsx` | Change `py-*` to `pt-28 md:pt-36 pb-12 md:pb-16 lg:pb-24` for navbar clearance |
-| `src/index.css` | Reduce `.text-poster-xl` from `clamp(3.5rem, 8vw, 6rem)` to `clamp(2.75rem, 6vw, 4.5rem)` |
+| `src/components/layout/Header.tsx` | Add mint separator, reduce height, implement island navbar on scroll |
+| `src/components/sections/Hero.tsx` | Adjust top padding to match new header height |
+
+---
+
+## Technical Implementation
+
+### Header.tsx Structure
+
+```tsx
+<header className={cn(
+  'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+  isScrolled ? 'py-3' : ''  // Add padding when in island mode
+)}>
+  {/* Wrapper that becomes island on scroll */}
+  <nav className={cn(
+    'transition-all duration-300',
+    isScrolled
+      ? 'max-w-fit mx-auto px-6 py-2 rounded-full bg-ink/60 backdrop-blur-xl border border-white/15 shadow-lg'
+      : 'container mx-auto px-4 md:px-6 border-b border-mint/40'
+  )}>
+    {/* Default: Logo + Nav + CTA */}
+    {/* Scrolled: Only Nav links centered */}
+  </nav>
+</header>
+```
+
+### Conditional Content
+
+```tsx
+{/* Logo - hide when scrolled */}
+{!isScrolled && (
+  <Link to="/">
+    <img src={logoSvg} ... />
+  </Link>
+)}
+
+{/* Nav links - always visible, but centered when scrolled */}
+<div className={cn(
+  'hidden lg:flex items-center gap-6',
+  isScrolled && 'justify-center'
+)}>
+  {navigation.primary.map(...)}
+</div>
+
+{/* CTA - hide when scrolled */}
+{!isScrolled && (
+  <PrimaryButton>...</PrimaryButton>
+)}
+```
 
 ---
 
 ## Visual Result
 
-- Hero headline will be smaller and more refined
-- Content will start lower on the page, with proper clearance below the fixed navbar
-- The overall hero will feel more balanced with better proportions
+**Not Scrolled (at top of page):**
+- Full-width transparent header
+- Logo on left, nav links center-right, CTA on right
+- Mint horizontal line separator at bottom
+- Height: 64px mobile / 80px desktop
 
+**Scrolled (past threshold):**
+- Floating pill-shaped island centered at top
+- Only navigation text links visible
+- Translucent dark glass effect with blur
+- Subtle border and shadow for depth
+- No logo or CTA button
