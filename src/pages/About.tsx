@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
+import { CyberHeart } from '@/components/ui/cyber-heart';
 import { siteContent } from '@/lib/content';
 import { Check } from 'lucide-react';
 
@@ -9,7 +10,12 @@ const About = () => {
   const { about } = siteContent;
   return (
     <Layout>
-      <Hero headline={about.hero.headline} subheadline={about.hero.subheadline} plate="emerald" />
+      <Hero
+        headline={about.hero.headline}
+        subheadline={about.hero.subheadline}
+        plate="emerald"
+        rightElement={<CyberHeart speed={0.8} />}
+      />
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
           <p className="text-body-lg text-foreground mb-8">{about.content.intro}</p>
