@@ -9,6 +9,7 @@ interface PrimaryButtonProps {
   type?: 'button' | 'submit';
   className?: string;
   disabled?: boolean;
+  size?: 'default' | 'lg';
 }
 
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
@@ -18,13 +19,18 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   type = 'button',
   className,
   disabled = false,
+  size = 'default',
 }) => {
+  const sizeStyles = size === 'lg'
+    ? 'h-14 px-8 text-lg'
+    : 'h-12 md:h-[48px] px-5 md:px-6 text-base';
+
   const baseStyles = cn(
     'inline-flex items-center justify-center',
-    'h-12 md:h-[48px] px-5 md:px-6',
+    sizeStyles,
     'rounded-lg',
     'bg-mint text-ink',
-    'font-sans font-semibold text-base',
+    'font-sans font-semibold',
     'transition-all duration-200 ease-out',
     'hover:bg-mint/90',
     'focus:outline-none focus:ring-2 focus:ring-lavender focus:ring-offset-2',
