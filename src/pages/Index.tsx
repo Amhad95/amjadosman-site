@@ -9,7 +9,7 @@ import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
-import { CyberTesseract } from '@/components/ui/cyber-tesseract';
+import { NeuralLattice } from '@/components/shared/NeuralLattice';
 import { siteContent } from '@/lib/content';
 
 const Index = () => {
@@ -25,7 +25,7 @@ const Index = () => {
         primaryCta={home.hero.primaryCta}
         secondaryCta={home.hero.secondaryCta}
         plate="violet"
-        rightElement={<CyberTesseract speed={0.8} />}
+        rightElement={<NeuralLattice color="mint" speed={0.8} />}
       />
 
       {/* What We Deliver */}
