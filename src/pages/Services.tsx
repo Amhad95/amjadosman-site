@@ -3,6 +3,7 @@ import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
+import { CyberGyroscope } from '@/components/ui/cyber-gyroscope';
 import { siteContent } from '@/lib/content';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -18,6 +19,7 @@ const Services = () => {
         subheadline={services.hero.subheadline}
         primaryCta={services.hero.primaryCta}
         plate="navy"
+        rightElement={<CyberGyroscope speed={0.8} />}
       />
 
       {/* Service Tracks */}
