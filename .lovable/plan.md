@@ -1,10 +1,10 @@
 
 
-# Add KnotAnimation to AI Tools Page
+# Add PyramidAnimation to Work Page
 
 ## Summary
 
-Add a new trefoil knot ASCII animation to the Tools page hero, matching the style of the existing animations (NeuralLattice and CyberGlobeHeader).
+Add a new 3D pyramid ASCII animation to the Work page hero, following the same performance patterns as the existing animations (KnotAnimation, NeuralLattice, CyberGlobeHeader).
 
 ---
 
@@ -12,76 +12,79 @@ Add a new trefoil knot ASCII animation to the Tools page hero, matching the styl
 
 | File | Action |
 |------|--------|
-| `src/components/ui/knot-animation.tsx` | **Create** - New trefoil knot component |
-| `src/pages/Tools.tsx` | **Modify** - Add KnotAnimation to hero |
+| `src/components/ui/pyramid-animation.tsx` | **Create** - New pyramid component |
+| `src/pages/Work.tsx` | **Modify** - Add PyramidAnimation to hero |
 
 ---
 
 ## Implementation Details
 
-### 1. Create `src/components/ui/knot-animation.tsx`
+### 1. Create `src/components/ui/pyramid-animation.tsx`
 
 Create the component using the provided code with these adjustments for consistency:
 
 **Styling updates to match project patterns:**
 - Use same font sizes as other animations: `text-[8px] sm:text-[10px] md:text-[12px]`
-- Add strong glow effect: `textShadow: 0 0 8px color, 0 0 16px color`
-- Add `mint` to color palette (project's theme color: `#00FFD9`)
+- Add strong mint glow effect: `textShadow: 0 0 8px color, 0 0 16px color`
+- Add `mint` color option (#00FFD9) for monochrome mode
 - Wrap in container div with `flex items-center justify-center`
 
 **Performance optimization:**
 - Convert from `setInterval` to `requestAnimationFrame` for smoother animation
-- Use direct DOM updates via `preRef.current` instead of React state (matching NeuralLattice pattern)
+- Use direct DOM updates via `preRef.current.textContent` instead of React state
+- Store rotation angle in `useRef` to avoid re-render dependencies
 
 **Props:**
-- `color?: boolean` - Enable multi-color segments (default: false for single mint color)
-- `speedA?: number` - X-axis rotation speed (default: 0.04)
-- `speedB?: number` - Y-axis rotation speed (default: 0.02)
+- `wireframe?: boolean` - Show only edges (default: false)
+- `color?: boolean` - Use multi-color faces (default: false, uses mint)
+- `speed?: number` - Rotation speed (default: 0.03)
+- `axis?: 'x' | 'y' | 'z'` - Rotation axis (default: 'y')
+- `edges?: boolean` - Show pyramid edges (default: true)
 
-### 2. Update `src/pages/Tools.tsx`
+**Key geometry:**
+- 5 vertices: apex + 4 base corners
+- 4 triangular faces with distinct symbols (@, #, $, *)
+- 8 edges connecting vertices
 
-Add the KnotAnimation to the Hero:
+### 2. Update `src/pages/Work.tsx`
+
+Add the PyramidAnimation to the Hero:
 
 ```tsx
-import { KnotAnimation } from '@/components/ui/knot-animation';
+import { PyramidAnimation } from '@/components/ui/pyramid-animation';
 
 <Hero
-  headline={tools.hero.headline}
-  subheadline={tools.hero.subheadline}
-  primaryCta={tools.hero.primaryCta}
-  secondaryCta={tools.hero.secondaryCta}
-  plate="emerald"
-  rightElement={<KnotAnimation speedA={0.03} speedB={0.015} />}
+  headline={work.hero.headline}
+  subheadline={work.hero.subheadline}
+  plate="navy"
+  rightElement={<PyramidAnimation axis="y" speed={0.02} />}
 />
 ```
 
 ---
 
-## Visual Result
+## Animation Distribution
 
-The Tools page will display:
-- Rotating 3D trefoil knot (mathematical knot shape)
-- Mint-colored ASCII characters with glow effect
-- Smooth animation at ~60fps using requestAnimationFrame
-- Same character size as Home/Software animations (8-12px responsive)
+| Page | Shape | Component |
+|------|-------|-----------|
+| Home (`/`) | Torus wireframe | NeuralLattice |
+| Software (`/software`) | Monolith cube | CyberGlobeHeader |
+| Tools (`/tools`) | Trefoil knot | KnotAnimation |
+| Work (`/work`) | Pyramid | PyramidAnimation |
 
 ---
 
 ## Technical Notes
 
-**Trefoil Knot Geometry:**
-The knot is defined parametrically:
-- x = sin(u) + 2sin(2u)
-- y = cos(u) - 2cos(2u)
-- z = -sin(3u)
+**Pyramid Geometry:**
+- Apex at (0, SCALE, 0)
+- 4 base corners at (±SCALE, -SCALE, ±SCALE)
+- Each face rendered with barycentric sampling for filled appearance
+- Edges drawn with dense line sampling for crisp wireframe
 
-This creates the classic three-crossing knot shape, rendered as a tube with proper surface normals for lighting.
-
-**Animation Distribution:**
-
-| Page | Shape | Animation |
-|------|-------|-----------|
-| Home (`/`) | NeuralLattice | Torus wireframe |
-| Software (`/software`) | CyberGlobeHeader | Monolith cube |
-| Tools (`/tools`) | KnotAnimation | Trefoil knot |
+**Rendering Approach:**
+- Uses z-buffer for proper depth ordering
+- Per-face lighting based on surface normals
+- Character brightness ramp for shading
+- Edge pixels marked with `+` character
 
