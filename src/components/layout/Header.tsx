@@ -69,7 +69,7 @@ export const Header: React.FC = () => {
                 key={item.href}
                 to={item.href}
                 className={cn(
-                  'text-xs font-medium transition-colors',
+                  'text-sm font-semibold transition-colors',
                   location.pathname === item.href
                     ? 'text-offwhite'
                     : 'text-offwhite/70 hover:text-offwhite'
