@@ -3,6 +3,8 @@ import { cn } from '@/lib/utils';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
 
+type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy' | 'ink';
+
 interface CTABandProps {
   headline?: string;
   description?: string;
@@ -11,6 +13,7 @@ interface CTABandProps {
   variant?: 'light' | 'dark';
   size?: 'default' | 'large';
   className?: string;
+  plateColor?: PlateColor;
 }
 
 export const CTABand: React.FC<CTABandProps> = ({
@@ -21,6 +24,7 @@ export const CTABand: React.FC<CTABandProps> = ({
   variant = 'light',
   size = 'default',
   className,
+  plateColor,
 }) => {
   return (
     <section
@@ -63,7 +67,11 @@ export const CTABand: React.FC<CTABandProps> = ({
             size === 'large' && 'mt-4'
           )}>
             {primaryCta && (
-              <PrimaryButton href={primaryCta.href} size={size === 'large' ? 'lg' : 'default'}>
+              <PrimaryButton 
+                href={primaryCta.href} 
+                size={size === 'large' ? 'lg' : 'default'}
+                textColor={plateColor}
+              >
                 {primaryCta.label}
               </PrimaryButton>
             )}

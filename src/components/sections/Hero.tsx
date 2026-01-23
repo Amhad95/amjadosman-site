@@ -59,7 +59,7 @@ export const Hero: React.FC<HeroProps> = ({
           {(primaryCta || secondaryCta) && (
             <div className="flex flex-wrap gap-4 mb-8 md:mb-12">
               {primaryCta && (
-                <PrimaryButton href={primaryCta.href}>
+                <PrimaryButton href={primaryCta.href} textColor={plate}>
                   {primaryCta.label}
                 </PrimaryButton>
               )}

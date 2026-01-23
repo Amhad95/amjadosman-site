@@ -2,6 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
+type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy' | 'ink';
+
+const textColorClasses: Record<PlateColor, string> = {
+  violet: 'text-plate-violet',
+  navy: 'text-plate-navy',
+  emerald: 'text-plate-emerald',
+  blue: 'text-plate-blue',
+  astral: 'text-plate-astral',
+  burgundy: 'text-plate-burgundy',
+  ink: 'text-ink',
+};
+
 interface PrimaryButtonProps {
   children: React.ReactNode;
   href?: string;
@@ -10,6 +22,7 @@ interface PrimaryButtonProps {
   className?: string;
   disabled?: boolean;
   size?: 'default' | 'lg';
+  textColor?: PlateColor;
 }
 
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
@@ -20,6 +33,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   className,
   disabled = false,
   size = 'default',
+  textColor = 'ink',
 }) => {
   const sizeStyles = size === 'lg'
     ? 'h-14 px-8 text-lg'
@@ -29,7 +43,8 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     'inline-flex items-center justify-center',
     sizeStyles,
     'rounded-lg',
-    'bg-mint text-ink',
+    'bg-mint',
+    textColorClasses[textColor],
     'font-sans font-semibold',
     'transition-all duration-200 ease-out',
     'hover:bg-mint/90',
