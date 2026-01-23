@@ -1,44 +1,37 @@
 
 
-# Fix Header Transparency and Logo
+# Increase Navbar-to-Header Clearance and Decrease Header Text Size
 
-## Problem Summary
+## Changes Required
 
-The header currently:
-1. Uses `sticky` positioning, which pushes content down (creates a bar above hero)
-2. Uses the custom `<Logo>` component with generated SVG paths instead of the user's actual logo.svg
-3. Has dark text colors (`text-ink`) that won't be visible against dark plate backgrounds
+### 1. Hero.tsx - Add Top Padding for Navbar Clearance
 
-## Solution
+Since the navbar is now fixed (overlays content), the hero content needs additional top padding to account for the navbar height and create visual breathing room.
 
-### 1. Copy Logo SVG to Assets
+**Current**: The hero uses `items-end` to position content at the bottom, with `py-12 md:py-16 lg:py-24` padding.
 
-Copy the user-uploaded `logo.svg` (which is already mint #00ffd4 colored) to `src/assets/logo.svg`
+**Change**: Add explicit top padding to create clearance from the fixed navbar. The navbar is `h-20 md:h-28`, so adding `pt-28 md:pt-36` will create proper spacing.
 
-### 2. Update Header.tsx
+```
+Before: py-12 md:py-16 lg:py-24
+After:  pt-28 md:pt-36 pb-12 md:pb-16 lg:pb-24
+```
 
-**Position Changes:**
-- Change from `sticky` to `fixed top-0 left-0 right-0`
-- This makes the header overlay content instead of pushing it down
+### 2. index.css - Reduce H1 (text-poster-xl) Size
 
-**Background Behavior:**
-- Default (not scrolled): `bg-transparent`
-- Scrolled (past 20px): `bg-ink/80 backdrop-blur-md border-b border-white/10` (frosted dark glass)
+**Current scale**:
+```css
+.text-poster-xl {
+  font-size: clamp(3.5rem, 8vw, 6rem);  /* 56px to 96px */
+}
+```
 
-**Logo:**
-- Replace `<Logo>` component with direct `<img>` using the uploaded SVG
-- The mint color in the SVG works on all dark plate backgrounds
-
-**Nav Link Colors:**
-- Change from `text-ink/70` to `text-offwhite/70 hover:text-offwhite`
-- These light colors will be visible against dark hero backgrounds
-
-**Mobile Menu Button:**
-- Change from `text-ink` to `text-offwhite`
-
-**Mobile Menu Panel:**
-- Use `bg-ink` solid background for readability
-- Light text colors for links
+**New scale** (reduced by ~20%):
+```css
+.text-poster-xl {
+  font-size: clamp(2.75rem, 6vw, 4.5rem);  /* 44px to 72px */
+}
+```
 
 ---
 
@@ -46,59 +39,14 @@ Copy the user-uploaded `logo.svg` (which is already mint #00ffd4 colored) to `sr
 
 | File | Change |
 |------|--------|
-| `src/assets/logo.svg` | Copy from user upload (already mint colored) |
-| `src/components/layout/Header.tsx` | Fixed positioning, transparent/glass bg, use logo.svg image, light nav colors |
-
----
-
-## Technical Details
-
-### Header Classes
-
-```text
-Base (not scrolled):
-- fixed top-0 left-0 right-0 z-50
-- bg-transparent
-
-Scrolled (past 20px):
-- bg-ink/80 backdrop-blur-md
-- border-b border-white/10
-```
-
-### Logo Implementation
-
-```tsx
-import logoSvg from '@/assets/logo.svg';
-
-<img 
-  src={logoSvg}
-  alt="Applied Design & Strategy Institute" 
-  className="h-7 md:h-8 w-auto"
-/>
-```
-
-### Nav Link Colors
-
-```tsx
-// Desktop nav
-text-offwhite/70 hover:text-offwhite
-
-// Active state
-text-offwhite (fully opaque)
-
-// Mobile menu button
-text-offwhite
-
-// Mobile menu panel
-bg-ink with text-offwhite links
-```
+| `src/components/sections/Hero.tsx` | Change `py-*` to `pt-28 md:pt-36 pb-12 md:pb-16 lg:pb-24` for navbar clearance |
+| `src/index.css` | Reduce `.text-poster-xl` from `clamp(3.5rem, 8vw, 6rem)` to `clamp(2.75rem, 6vw, 4.5rem)` |
 
 ---
 
 ## Visual Result
 
-- Header will be invisible at top of page (transparent)
-- Mint logo visible against violet/navy/emerald/etc. hero backgrounds  
-- When user scrolls, header transitions to frosted dark glass effect
-- Navigation links remain readable in both states
+- Hero headline will be smaller and more refined
+- Content will start lower on the page, with proper clearance below the fixed navbar
+- The overall hero will feel more balanced with better proportions
 
