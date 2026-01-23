@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { siteContent } from '@/lib/content';
-import { Logo } from '@/components/shared/Logo';
+import logoSvg from '@/assets/logo.svg';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 
 export const Footer: React.FC = () => {
@@ -32,9 +32,9 @@ export const Footer: React.FC = () => {
           {/* Logo and tagline */}
           <div className="flex flex-col gap-6 max-w-sm">
             <Link to="/" className="inline-block">
-              <Logo 
-                variant="wordmark" 
-                colorScheme="offwhite" 
+              <img
+                src={logoSvg}
+                alt="Applied Design & Strategy Institute"
                 className="h-8 w-auto opacity-90 hover:opacity-100 transition-opacity"
               />
             </Link>
