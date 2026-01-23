@@ -1,39 +1,40 @@
 
 
-# Replace CyberEuro with CyberPercentage on Pricing Page
+# Replace PyramidAnimation with CyberPyramid on Work Page
 
 ## Summary
 
-Replace the Euro symbol animation with a Percentage symbol animation on the Pricing page hero. The percentage symbol features dual rings and a diagonal bar, creating a more fitting visual for a pricing/value page.
+Replace the current `PyramidAnimation` component with the new `CyberPyramid` component that uses a more performant rendering approach with direct DOM updates via `textContent` and features enhanced visuals including pulse-shimmer lighting and better edge detection.
 
 ---
 
-## Files to Create/Modify
+## Files to Modify
 
 | File | Action |
 |------|--------|
-| `src/components/ui/cyber-percentage.tsx` | **Create** - New percentage symbol animation |
-| `src/pages/Pricing.tsx` | **Modify** - Replace CyberEuro import with CyberPercentage |
-| `src/components/ui/cyber-euro.tsx` | **Delete** - Remove unused Euro animation |
+| `src/components/ui/cyber-pyramid.tsx` | **Create** - New pyramid animation component |
+| `src/pages/Work.tsx` | **Modify** - Replace PyramidAnimation with CyberPyramid |
+| `src/components/ui/pyramid-animation.tsx` | **Delete** - Remove old pyramid animation |
 
 ---
 
 ## Implementation Details
 
-### 1. Create `src/components/ui/cyber-percentage.tsx`
+### 1. Create `src/components/ui/cyber-pyramid.tsx`
 
-Create the component using the provided code with these adjustments for consistency:
+Create the component using the provided code with project styling adjustments:
 
-**Styling updates to match project patterns:**
+**Styling updates:**
 - Add `mint` to color palette (`#00FFD9`) as the default color
 - Use same font sizes: `text-[8px] sm:text-[10px] md:text-[12px]`
 - Apply mint glow effect via textShadow
 - Add TypeScript types for props
 
-**Performance optimization:**
-- Use direct DOM updates via `preRef.current.textContent` (matching other animations)
-- Keep `requestAnimationFrame` loop
-- Store rotation in `useRef` to avoid re-render dependencies
+**Performance features (from provided code):**
+- Uses `requestAnimationFrame` for smooth animation
+- Direct DOM updates via `preRef.current.textContent`
+- Z-buffer for proper depth occlusion
+- Rotation stored in `useRef` to avoid re-render dependencies
 
 **Props:**
 - `speed?: number` - Animation speed multiplier (default: 1)
@@ -41,26 +42,26 @@ Create the component using the provided code with these adjustments for consiste
 - `density?: number` - Rendering density (default: 1.0)
 
 **Key geometry:**
-- Two hollow rings at diagonal positions (top-left and bottom-right)
-- Ring radius: 5, thickness: 2.5
-- Diagonal bar (slash) at 45-degree angle
-- Bar dimensions: length 32, height 2.5, thickness 2.5
+- Apex at (0, size, 0) where size = 15
+- 4 base corners forming a square at y = -size
+- 4 triangular side faces connecting apex to base edges
+- Square base face
 
-### 2. Update `src/pages/Pricing.tsx`
+### 2. Update `src/pages/Work.tsx`
 
-Replace the CyberEuro import and usage:
+Replace the import and usage:
 
 ```tsx
 // Change import
-import { CyberPercentage } from '@/components/ui/cyber-percentage';
+import { CyberPyramid } from '@/components/ui/cyber-pyramid';
 
 // Update Hero rightElement
-rightElement={<CyberPercentage speed={0.8} />}
+rightElement={<CyberPyramid speed={0.8} />}
 ```
 
-### 3. Delete `src/components/ui/cyber-euro.tsx`
+### 3. Delete `src/components/ui/pyramid-animation.tsx`
 
-Remove the unused Euro animation file.
+Remove the old pyramid animation file as it will no longer be used.
 
 ---
 
@@ -71,22 +72,33 @@ Remove the unused Euro animation file.
 | Home (`/`) | Torus wireframe | NeuralLattice |
 | Software (`/software`) | Monolith cube | CyberGlobeHeader |
 | Tools (`/tools`) | Trefoil knot | KnotAnimation |
-| Work (`/work`) | Pyramid | PyramidAnimation |
+| Work (`/work`) | Pyramid | CyberPyramid |
 | Pricing (`/pricing`) | Percentage symbol | CyberPercentage |
 
 ---
 
 ## Technical Notes
 
-**Percentage Symbol Geometry:**
-- Two rings positioned diagonally (offset x: ±9, y: ±9)
-- Central diagonal slash at 45° angle
-- Multi-axis rotation for dynamic movement
-- Volumetric depth with z-buffer
+**Key Differences from Old Component:**
+
+| Feature | Old PyramidAnimation | New CyberPyramid |
+|---------|---------------------|------------------|
+| Rendering | JSX spans per character | Direct textContent |
+| Canvas | 80x40 | 80x45 |
+| Animation | setInterval (30ms) | requestAnimationFrame |
+| Rotation | Single axis | Multi-axis with tilt |
+| Size | SCALE = 2 | size = 15 |
+| Edges | Explicit edge list | Boundary detection |
+
+**Pyramid Geometry:**
+- 4 triangular faces meeting at apex
+- Square base rendered separately
+- Edge highlighting at face boundaries (a > 0.95, b > 0.98, c > 0.98)
+- Gentle tilt oscillation for dynamic appearance
 
 **Rendering Features:**
-- Pulse-shimmer lighting: `Math.sin(time * 5 + pz)` (faster than Euro)
-- Multi-axis rotation including slow z-axis spin
-- Stronger x-axis tilt oscillation (0.3 vs 0.2)
-- Edge highlighting with `#` character
+- Pulse-shimmer lighting: `Math.sin(time * 5 + pz)`
+- Character brightness ramp for shading
+- Z-buffer depth occlusion
+- Multi-axis rotation with subtle wobble
 
