@@ -1,112 +1,130 @@
 
-## Goal
-Make the ASCII cube fit inside its allocated area (no cropping, no overflowing past the page), while improving readability by changing the “building blocks” (characters/contrast/glow) rather than making the whole thing larger.
 
-## What’s going wrong (based on current code)
-- The cube is rendered on a **60×32 character grid**.
-- Even with a small base font (`text-[5px]`), the current **scale factors (1.8 → 2.8)** make the rendered block effectively ~540px+ wide on mobile/desktop.
-- The wrapper only reserves ~340–450px width, so the scaled `<pre>` can:
-  - overflow its wrapper (and sometimes the page), and/or
-  - appear “cropped” depending on ancestor layout/paint.
+# Fix ASCII Cube - Proper Centering and No Clipping
 
-## Fix strategy (do not increase absolute size)
-1. **Hard-cap the visual footprint** so it always stays within the wrapper width/height.
-2. **Increase legibility via contrast**, not size:
-   - make “non-edge” shading less dominant
-   - strengthen edges
-   - adjust glow to help visibility without increasing geometry size
+## Root Cause Identified
 
----
+Looking at your screenshot, the cube is:
+1. Pushed to the far right edge of its container (`lg:justify-end`)
+2. CSS transform scaling expands the element from its center, but the element itself is positioned at the right edge
+3. `overflow-hidden` on both Hero wrapper AND CyberGlobeHeader clips the right portion
 
-## Implementation plan
+## Solution
 
-### 1) Constrain the cube to never exceed its wrapper (primary fix)
-**File:** `src/components/shared/CyberGlobeHeader.tsx`
+**Remove all the scaling complexity.** Instead, simply render the ASCII at a size that fits naturally without transforms.
 
-**Change A — reduce base font and lower the scale**
-- Switch base font from `text-[5px]` to `text-[4px]` (smaller “canvas pixels”).
-- Reduce scaling to values that mathematically fit:
-  - Mobile wrapper max ~340px:
-    - width at 4px base ≈ 60×4 = 240px
-    - safe scale ≈ 1.35–1.4 (240×1.4 = 336px)
-  - Desktop wrapper max ~450px:
-    - safe scale ≈ 1.7–1.8 (240×1.8 = 432px)
+### Math for proper sizing
 
-Proposed responsive scale caps (example):
-- `scale-[1.35] sm:scale-[1.5] md:scale-[1.65] lg:scale-[1.8]`
+The ASCII grid is 60 characters wide by 32 lines tall.
 
-This keeps it inside the wrapper instead of spilling out.
+At `text-[4px]` with monospace:
+- Width: ~60 x 2.4px (char width) = ~144px
+- Height: ~32 x 4px = ~128px
 
-**Change B — make wrapper sizing match the content**
-- Keep `w-full` and `max-w-*`, but ensure the wrapper also has `max-w-full` (belt-and-suspenders).
-- Keep a predictable height, but ensure it’s sufficient for the scaled height:
-  - base height at 4px ≈ 32×4 = 128px
-  - at 1.8 scale => 230px
-  - so use something like `h-[220px] sm:h-[240px] lg:h-[260px]` (tuned to your layout)
+This is small but fits perfectly. No scaling needed - just increase the font slightly and remove transforms entirely.
 
-**Change C — prevent page overflow explicitly**
-- Add `max-w-full` on the wrapper and optionally `overflow-hidden` (only if needed).
-  - If we set `overflow-hidden`, we’ll also reduce glow blur so it doesn’t look clipped.
-  - If we keep `overflow-visible`, we rely on the new scale caps to prevent overflow.
+At `text-[6px]`:
+- Width: ~60 x 3.6px = ~216px
+- Height: ~32 x 6px = ~192px
 
-Decision for implementation:
-- Start with **overflow-hidden** + smaller glow (most robust for “no page boundary overflow”).
-- If you want glow to breathe outside slightly later, we can switch back to `overflow-visible` after we confirm it never exceeds width.
+Still fits within 300-400px container easily.
 
 ---
 
-### 2) Improve “visibility of building characters” without enlarging the cube (readability fix)
-**File:** `src/components/shared/CyberGlobeHeader.tsx`
+## Changes
 
-Right now, faces use `RAMP = "@#%*+=-:. "` which can still read as “tinted” because many points fill faces.
+### 1. CyberGlobeHeader.tsx - Remove transforms, use natural sizing
 
-We’ll change how faces are drawn so the cube reads more like a wireframe/defined shape:
+```tsx
+// Remove: transform scale-[...] origin-center
+// Remove: overflow-hidden (allow natural render)
 
-**Option implemented (recommended): edge-first rendering**
-- Keep edges as `#` (already there).
-- For non-edge points, reduce density:
-  - either draw fewer face points by increasing `step` slightly (e.g. 0.7 → 0.85 or 0.9)
-  - or gate face drawing by brightness threshold (only draw face char if lum > threshold)
-- Use a ramp that biases toward “blank” more aggressively, so faces don’t fill in as haze. Example:
-  - `const RAMP = " .:-=+*#"` (more whitespace early, fewer mid tones)
-- Keep core as `•`, but ensure it doesn’t dominate.
+<div className="flex items-center justify-center">
+  <pre
+    className="text-[6px] sm:text-[7px] md:text-[8px] leading-[1.0] font-mono select-none whitespace-pre"
+    style={{ 
+      color: themeColor,
+      textShadow: `0 0 4px ${themeColor}80, 0 0 8px ${themeColor}40`
+    }}
+  >
+    {frame.join("\n")}
+  </pre>
+</div>
+```
 
-This increases perceived shape clarity without increasing the overall footprint.
+Natural render sizes:
+- Mobile (6px): ~216px wide x 192px tall
+- Tablet (7px): ~252px wide x 224px tall
+- Desktop (8px): ~288px wide x 256px tall
 
----
+All fit within standard containers without clipping.
 
-### 3) Ensure Hero layout doesn’t accidentally create overflow
-**File:** `src/components/sections/Hero.tsx`
+### 2. Hero.tsx - Remove overflow-hidden, keep simple centering
 
-The hero currently centers the animation below text on mobile (good), but we’ll add one extra safeguard:
-- Ensure the animation container can’t exceed the section width:
-  - add `max-w-full` and possibly `overflow-hidden` at that container level too.
+```tsx
+{rightElement && (
+  <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0">
+    {rightElement}
+  </div>
+)}
+```
 
-This prevents any transform from causing horizontal scrollbars if something upstream changes later.
+Remove `max-w-full overflow-hidden` - not needed when content fits naturally.
 
----
+### 3. Improve character visibility
 
-## Testing checklist (what I’ll verify after implementation)
-- Mobile: no horizontal scroll, cube fully visible, centered below text, not clipped.
-- Tablet: same; cube remains within content column.
-- Desktop: cube remains within right column width and doesn’t push layout.
-- No “cropping”: the entire 60×32 frame is visible within the reserved height.
-- Cube readability: edges clearly visible; faces not washed/tinted.
-
----
-
-## Files to change
-1. `src/components/shared/CyberGlobeHeader.tsx`
-   - base font from 5px → 4px
-   - scale caps reduced (fit-to-wrapper math)
-   - wrapper sizing tuned to scaled height
-   - optional `overflow-hidden` for hard prevention of page overflow
-   - reduce face haze via step/threshold/ramp tweak
-2. `src/components/sections/Hero.tsx`
-   - add `max-w-full`/overflow safeguard on the rightElement wrapper (small defensive change)
+To make the characters more visible against the purple background:
+- Increase text-shadow glow radius (4px, 8px instead of 1px, 2px)
+- Keep the mint color for good contrast
 
 ---
 
-## Notes / trade-offs
-- This deliberately prioritizes “never overflow/crop” over “largest possible cube.”
-- If you later want a bigger cube on desktop only, we can increase **desktop wrapper max width** (not scale) so it grows without breaking page bounds.
+## Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/components/shared/CyberGlobeHeader.tsx` | Remove CSS transforms, use 6-8px font, remove overflow-hidden, increase glow |
+| `src/components/sections/Hero.tsx` | Remove overflow-hidden from rightElement wrapper |
+
+---
+
+## Technical Details
+
+### CyberGlobeHeader.tsx
+
+```tsx
+return (
+  <div className="flex items-center justify-center">
+    <pre
+      className="text-[6px] sm:text-[7px] md:text-[8px] leading-[1.0] font-mono select-none whitespace-pre"
+      style={{ 
+        color: themeColor,
+        textShadow: `0 0 4px ${themeColor}80, 0 0 8px ${themeColor}40`
+      }}
+    >
+      {frame.join("\n")}
+    </pre>
+  </div>
+);
+```
+
+### Hero.tsx
+
+```tsx
+{rightElement && (
+  <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0">
+    {rightElement}
+  </div>
+)}
+```
+
+---
+
+## Why This Works
+
+1. No CSS transforms = no centering/scaling mismatch
+2. Natural font sizing means content dimensions are predictable
+3. No `overflow-hidden` = no clipping
+4. Increased glow improves visibility against dark/colored backgrounds
+5. The cube will be smaller but fully visible and properly centered
+
