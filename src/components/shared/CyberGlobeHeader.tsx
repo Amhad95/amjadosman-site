@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 
-const W = 80; 
-const H = 45; 
-const RAMP = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+const W = 60; 
+const H = 32; 
+const RAMP = "@#%*+=-:. ";
 
 const COLOR_MAP: Record<string, string> = {
   cyan: "#22d3ee",
@@ -128,15 +128,16 @@ export const CyberGlobeHeader: React.FC<CyberGlobeHeaderProps> = ({
   const themeColor = COLOR_MAP[color] || COLOR_MAP.cyan;
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
-      <div className="relative">
-        <pre
-          className="text-[6px] md:text-[7px] lg:text-[8px] leading-[1.2] font-mono select-none"
-          style={{ color: themeColor }}
-        >
-          {frame.join("\n")}
-        </pre>
-      </div>
+    <div className="w-[280px] h-[180px] sm:w-[340px] sm:h-[220px] lg:w-[400px] lg:h-[260px] relative flex items-center justify-center overflow-hidden">
+      <pre
+        className="text-[9px] sm:text-[10px] md:text-[11px] lg:text-[12px] leading-[1.1] font-mono select-none whitespace-pre"
+        style={{ 
+          color: themeColor,
+          textShadow: `0 0 8px ${themeColor}50, 0 0 16px ${themeColor}30`
+        }}
+      >
+        {frame.join("\n")}
+      </pre>
     </div>
   );
 };
