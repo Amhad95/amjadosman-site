@@ -1,158 +1,112 @@
 
 
-# Fix 3D ASCII Cube Animation - Visibility and Responsiveness
+# Fix ASCII Cube Cropping - Proper Scaling Approach
 
-## Problems Identified
+## Root Cause
 
-| Issue | Current State | Root Cause |
-|-------|--------------|------------|
-| Barely visible / unclear | Muddy, tinted appearance | Font size too small (6-8px), too many faint shading characters |
-| Hidden on mobile | Completely removed on smaller screens | `hidden lg:block` class on container |
-| Doesn't match Gemini preview | Less defined, noisier | Shading ramp creates too many intermediate gray characters |
+The current approach has a mismatch:
+- Container: 280-400px wide
+- ASCII grid: 60 chars × 32 lines
+- Font at 9-12px = renders ~540-720px wide (60 chars × 9-12px)
+- Container clips the overflow
 
----
+## Solution
 
-## Solution Overview
-
-1. **Increase visibility** by using larger font sizes and reducing the shading complexity
-2. **Improve contrast** by using a shorter/simpler ASCII ramp with bolder characters
-3. **Show on all screens** by changing layout to stack (mobile) vs side-by-side (desktop)
+Instead of increasing font size (which scales the ASCII art beyond its container), we should:
+1. Keep a small base font size for crisp rendering
+2. Use CSS `transform: scale()` on the container to enlarge visually
+3. Remove the fixed container dimensions and let the `<pre>` define its natural size
+4. Scale the whole thing up proportionally
 
 ---
 
 ## Changes Required
 
-### 1. Update CyberGlobeHeader Component
+### File: `src/components/shared/CyberGlobeHeader.tsx`
 
-**File:** `src/components/shared/CyberGlobeHeader.tsx`
-
-**Changes:**
-- Increase font sizes significantly: `text-[10px] sm:text-[12px] md:text-[14px] lg:text-[12px]`
-- Simplify the ASCII ramp to use fewer, bolder characters for higher contrast
-- Add a subtle text-shadow/glow effect for the mint color
-- Reduce rendering dimensions or adjust projection for cleaner output
+**Strategy**: Render the ASCII at a small, crisp font size, then use CSS transform to scale the entire element up. This keeps proportions perfect and prevents cropping.
 
 ```tsx
-// Current (too faint)
-className="text-[6px] md:text-[7px] lg:text-[8px] leading-[1.2]"
+// Current (broken - font too large for container)
+<div className="w-[280px] h-[180px] ... overflow-hidden">
+  <pre className="text-[9px] sm:text-[10px] ...">
 
-// New (clearer, bolder)
-className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] leading-[1.15]"
+// Fixed approach - scale the container itself
+<div className="relative flex items-center justify-center">
+  <pre
+    className="text-[5px] leading-[1.0] font-mono select-none whitespace-pre 
+               transform scale-[1.8] sm:scale-[2.2] md:scale-[2.5] lg:scale-[2.8]
+               origin-center"
+    style={{ 
+      color: themeColor,
+      textShadow: `0 0 2px ${themeColor}60, 0 0 4px ${themeColor}40`
+    }}
+  >
+    {frame.join("\n")}
+  </pre>
+</div>
 ```
 
-**Shading ramp change:**
-```tsx
-// Current (70 characters - too many gradients)
-const RAMP = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+**Key changes**:
+| Aspect | Before | After |
+|--------|--------|-------|
+| Font size | 9-12px (too big) | 5px base (small, crisp) |
+| Scaling | None | CSS `transform: scale(1.8-2.8)` |
+| Container | Fixed dimensions + overflow clip | Flexible, no clip |
+| Glow | Large blur (8-16px) | Smaller blur scaled with transform |
 
-// New (shorter, higher contrast)
-const RAMP = "@#%*+=-:. ";
-```
-
-**Add glow effect:**
-```tsx
-style={{ 
-  color: themeColor,
-  textShadow: `0 0 10px ${themeColor}40, 0 0 20px ${themeColor}20`
-}}
-```
-
-### 2. Update Hero Component Layout
-
-**File:** `src/components/sections/Hero.tsx`
-
-**Changes:**
-- Remove `hidden lg:block` - show animation on all screen sizes
-- On mobile/tablet: stack animation below text content
-- On desktop (lg+): keep side-by-side layout
-
-```tsx
-// Current
-{rightElement && (
-  <div className="hidden lg:block lg:flex-shrink-0">
-    {rightElement}
-  </div>
-)}
-
-// New - visible on all screens, stacks on mobile
-{rightElement && (
-  <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0">
-    {rightElement}
-  </div>
-)}
-```
-
-### 3. Adjust Animation Sizing
-
-**File:** `src/components/shared/CyberGlobeHeader.tsx`
-
-Add responsive container sizing:
-
-```tsx
-// Wrapper with explicit sizing
-<div className="w-[320px] h-[200px] sm:w-[400px] sm:h-[240px] lg:w-[450px] lg:h-[280px] relative">
-```
-
----
-
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/shared/CyberGlobeHeader.tsx` | Larger fonts, simpler ramp, glow effect, explicit sizing |
-| `src/components/sections/Hero.tsx` | Remove hidden class, responsive stacking layout |
+**Why this works**:
+- The ASCII is rendered at its natural small size (60×32 chars at 5px = ~300px × 160px)
+- CSS transform scales the whole thing up proportionally
+- No cropping because we're not constraining with fixed dimensions
+- The visual size can be controlled precisely via the scale multiplier
 
 ---
 
 ## Technical Details
 
-### CyberGlobeHeader Updates
+### Responsive Scaling
 
 ```tsx
-// Simplified high-contrast ASCII ramp
-const RAMP = "@#%*+=-:. ";
+// Mobile (< 640px): scale 1.8x → ~540px × 290px visual
+// Tablet (640-767px): scale 2.2x → ~660px × 350px visual  
+// Medium (768-1023px): scale 2.5x → ~750px × 400px visual
+// Desktop (1024px+): scale 2.8x → ~840px × 450px visual
 
-// Larger, clearer text rendering
-<pre
-  className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] leading-[1.15] font-mono select-none whitespace-pre"
-  style={{ 
-    color: themeColor,
-    textShadow: `0 0 8px ${themeColor}50`
-  }}
->
+className="transform scale-[1.8] sm:scale-[2.2] md:scale-[2.5] lg:scale-[2.8] origin-center"
 ```
 
-### Hero Layout Updates
+### Wrapper for Layout Control
+
+Add an outer wrapper to control the space the element occupies in the layout:
 
 ```tsx
-// Flex container with responsive stacking
-<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-  {/* Left: Text content */}
-  <div className="max-w-4xl lg:max-w-2xl">
-    {/* ... existing content ... */}
-  </div>
-
-  {/* Right: Animation - visible on all screens */}
-  {rightElement && (
-    <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end">
-      {rightElement}
-    </div>
-  )}
-</div>
+<div className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[450px] 
+                h-[200px] sm:h-[240px] lg:h-[280px] 
+                flex items-center justify-center overflow-visible">
+  <pre className="... transform scale-[1.8] sm:scale-[2.2] ..." >
 ```
+
+This way:
+- The outer div reserves space in the layout
+- The inner `<pre>` can scale visually without being clipped
+- `overflow-visible` ensures no cropping
+
+---
+
+## Files to Modify
+
+| File | Change |
+|------|--------|
+| `src/components/shared/CyberGlobeHeader.tsx` | Replace font-size scaling with CSS transform scaling |
 
 ---
 
 ## Visual Result
 
-| Screen Size | Layout | Animation |
-|-------------|--------|-----------|
-| Mobile (< 640px) | Stacked, animation below text | Centered, ~320px wide |
-| Tablet (640-1023px) | Stacked, animation below text | Centered, ~400px wide |
-| Desktop (1024px+) | Side-by-side | Right-aligned, ~450px wide |
-
-- Clearer, bolder ASCII characters with higher contrast
-- Subtle mint glow effect for depth
-- Visible and centered on all screen sizes
-- More defined wireframe edges on the cube
+- Crisp, clear ASCII characters rendered at optimal small size
+- Scaled up smoothly via CSS transform (no pixelation)
+- Proper proportions maintained at all screen sizes
+- No cropping or overflow issues
+- Glow effect scales proportionally with the content
 
