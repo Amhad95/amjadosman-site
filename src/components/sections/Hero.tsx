@@ -85,7 +85,7 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Right: Animation - visible on all screens */}
           {rightElement && (
-            <div className="w-full max-w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0 overflow-hidden">
+            <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0">
               {rightElement}
             </div>
           )}
