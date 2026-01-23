@@ -112,7 +112,7 @@ const Index = () => {
             <p className="text-body-lg text-offwhite/80 mb-8">
               {home.pricingTeaser.description}
             </p>
-            <PrimaryButton href={home.pricingTeaser.cta.href}>
+            <PrimaryButton href={home.pricingTeaser.cta.href} textColor="navy">
               {home.pricingTeaser.cta.label}
             </PrimaryButton>
           </div>

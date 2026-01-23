@@ -77,7 +77,7 @@ const Software = () => {
           <div className="max-w-xl">
             <p className="text-lg text-mint mb-2">{software.pricing.note}</p>
             <p className="text-offwhite/70 mb-6">{software.pricing.setupNote}</p>
-            <PrimaryButton href={software.pricing.cta.href}>
+            <PrimaryButton href={software.pricing.cta.href} textColor="astral">
               {software.pricing.cta.label}
             </PrimaryButton>
           </div>

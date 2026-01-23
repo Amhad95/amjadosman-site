@@ -83,7 +83,7 @@ export const Header: React.FC = () => {
           {/* CTA Button - hide when scrolled */}
           {!isScrolled && (
             <div className="hidden lg:block">
-              <PrimaryButton href={navigation.cta.href}>
+              <PrimaryButton href={navigation.cta.href} textColor="violet">
                 {navigation.cta.label}
               </PrimaryButton>
             </div>
@@ -121,7 +121,7 @@ export const Header: React.FC = () => {
                 </Link>
               ))}
               <div className="pt-4">
-                <PrimaryButton href={navigation.cta.href} className="w-full">
+                <PrimaryButton href={navigation.cta.href} className="w-full" textColor="violet">
                   {navigation.cta.label}
                 </PrimaryButton>
               </div>
