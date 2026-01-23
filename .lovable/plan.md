@@ -1,102 +1,141 @@
 
 
-# Replace ASCII Cube with NeuralLattice (Torus)
+# Two ASCII Shapes + Better Character Visibility
 
-## Issues Identified
+## Summary
 
-1. **Wrong shape**: You shared a NeuralLattice (torus with lattice pattern + pulsing core), but the current code renders a cube
-2. **Canvas too small**: Current 60x32 grid clips the rotating shape. NeuralLattice uses 80x45 - larger canvas gives the rotating shape room to breathe
-3. **Poor character visibility**: Current uses a short ramp `" .:-=+*#"` with weak glow
-4. **Performance**: Current triggers React re-renders every frame. NeuralLattice uses direct DOM `textContent` updates
+Create two separate animation components with larger, more visible characters:
+1. **Home page** → Monolith (cube with pulsing core) - the shape you just shared
+2. **Software page** → NeuralLattice (torus with pulsing core) - the current shape
 
----
+## The Visibility Fix
 
-## Implementation
+The characters are barely visible because font sizes are too small:
 
-### File: `src/components/shared/CyberGlobeHeader.tsx`
+| Current | Proposed |
+|---------|----------|
+| `text-[5px] sm:text-[6px] md:text-[7px]` | `text-[8px] sm:text-[10px] md:text-[12px]` |
 
-Replace entirely with the NeuralLattice implementation you shared:
-
-**Key differences from current code:**
-
-| Aspect | Current (Cube) | New (NeuralLattice) |
-|--------|----------------|---------------------|
-| Shape | Rotating cube | Torus lattice + pulsing core sphere |
-| Canvas | 60 x 32 | 80 x 45 (larger = no clip) |
-| Character ramp | 8 chars | 70+ chars for smooth gradients |
-| Updates | React state (slow) | Direct DOM textContent (fast) |
-| Lighting | Basic | Proper Lambertian with surface normals |
-| Props | speed, color, showCore | speed, color, density, width, height |
-
-**Component changes:**
-- Larger canvas (80x45 default) gives rotating geometry room to move without clipping
-- Torus with lattice wireframe pattern (nodes marked with `#`)
-- Inner pulsing core sphere (marked with `•`)
-- Rich 70-character gradient ramp for smooth shading
-- Direct DOM updates via `preRef.current.textContent` instead of `setFrame()`
-- Props stored in refs so animation loop doesn't restart on prop changes
-
-**Styling changes:**
-- Responsive font: `text-[5px] sm:text-[6px] md:text-[7px]` (slightly smaller base since canvas is bigger)
-- Stronger glow: `textShadow: 0 0 6px ${color}90, 0 0 12px ${color}50`
-- Keep `mint` in color map for project consistency
+This nearly doubles the character size, making them clearly readable.
 
 ---
 
-## Visual Result
-
-```text
-Canvas sizing math:
-- 80 chars wide x 45 lines tall
-- At 5px font: ~240px x 225px (mobile)
-- At 7px font: ~336px x 315px (desktop)
-
-The torus radius (~14 units) + rotation means the shape
-needs canvas margin. 80x45 provides that breathing room.
-```
-
-The torus lattice will:
-- Show a wireframe "donut" pattern with grid lines
-- Have bright `#` nodes at intersections
-- Contain a pulsing `•` sphere in the center
-- Rotate smoothly on all 3 axes
-- Never clip because the canvas is sized for the geometry
-
----
-
-## Files to Modify
+## Files to Create/Modify
 
 | File | Action |
 |------|--------|
-| `src/components/shared/CyberGlobeHeader.tsx` | Replace with NeuralLattice implementation |
-
-No changes needed to Hero.tsx or Index.tsx - they already pass the right props.
+| `src/components/shared/NeuralLattice.tsx` | **Create** - Move current torus code here |
+| `src/components/shared/CyberGlobeHeader.tsx` | **Replace** - Use cube/monolith code you shared |
+| `src/pages/Software.tsx` | **Modify** - Add NeuralLattice to hero |
+| `src/pages/Index.tsx` | No changes needed (already uses CyberGlobeHeader) |
 
 ---
 
-## Technical Implementation
+## Implementation Details
+
+### 1. Create `NeuralLattice.tsx` (torus shape for Software)
+
+Move the current torus implementation to a new file. Keep everything the same except:
+- Increase font sizes: `text-[8px] sm:text-[10px] md:text-[12px]`
+- Stronger glow: `0 0 8px` and `0 0 16px` blur radius
+
+### 2. Replace `CyberGlobeHeader.tsx` (monolith for Home)
+
+Replace with your provided cube/monolith code with these adjustments:
+- Same larger font sizes: `text-[8px] sm:text-[10px] md:text-[12px]`
+- Same stronger glow
+- Add `mint` to COLOR_MAP for project consistency
+- Convert to TypeScript (add proper types)
+- Use direct DOM updates for performance (matching NeuralLattice pattern)
+
+### 3. Update `Software.tsx`
+
+Add the NeuralLattice animation to the hero section:
 
 ```tsx
-// Key structure of the new component
+import { NeuralLattice } from '@/components/shared/NeuralLattice';
 
-const DEFAULT_W = 80;  // Wider canvas
-const DEFAULT_H = 45;  // Taller canvas
+<Hero
+  headline={software.hero.headline}
+  subheadline={software.hero.subheadline}
+  primaryCta={software.hero.primaryCta}
+  secondaryCta={software.hero.secondaryCta}
+  plate="astral"
+  rightElement={<NeuralLattice color="mint" speed={0.8} />}
+/>
+```
 
-// Rich gradient ramp for smooth shading
-const RAMP = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+---
 
-// Direct DOM update (no React state)
-const preRef = useRef<HTMLPreElement>(null);
+## Visual Sizing Math
 
-// In render loop:
-pre.textContent = out.join("\n");  // Fast, no re-render
+With `text-[12px]` on desktop:
 
-// Torus geometry with lattice pattern
+**Monolith (80x45 canvas):**
+- Width: ~80 chars × 7.2px ≈ 576px
+- Height: ~45 lines × 12px ≈ 540px
+
+**NeuralLattice (80x45 canvas):**
+- Same dimensions
+
+Both fit comfortably in the hero layout (especially with the container being ~50% width on desktop).
+
+---
+
+## Key Code Changes
+
+### CyberGlobeHeader.tsx (Monolith)
+
+Key structure from your shared code:
+
+```tsx
+// Cube geometry
+const cubeSize = 12;
+const step = 0.8;
+
+// Draw cube faces
+for (let i = -cubeSize; i <= cubeSize; i += step) {
+  for (let j = -cubeSize; j <= cubeSize; j += step) {
+    if (Math.abs(i) === cubeSize || Math.abs(j) === cubeSize) {
+      drawPoint(i, cubeSize, j);
+      drawPoint(i, -cubeSize, j);
+    }
+    drawPoint(cubeSize, i, j);
+    drawPoint(-cubeSize, i, j);
+  }
+}
+
+// Pulsing core sphere inside
+const coreRadius = 4.5 + Math.sin(time * 2) * 0.5;
+```
+
+### NeuralLattice.tsx (Torus)
+
+Keeps the existing torus geometry:
+
+```tsx
+// Torus lattice
 const ringRadius = 14;
 const tubeRadius = 5;
-// Only draw points on lattice lines (not solid surface)
+const latticePeriod = Math.PI / 4;
 
-// Pulsing core sphere
-const coreRadius = 3 + Math.sin(time * 3) * 0.8;
+// Only draw on lattice lines (wireframe pattern)
+const isLattice = latticeA || latticeB;
+if (!isLattice) continue;
+
+// Nodes at intersections
+const isNode = latticeA && latticeB;
+plot(x, y, z, nx, ny, nz, isNode ? "#" : null, false);
 ```
+
+---
+
+## Result
+
+| Page | Shape | Description |
+|------|-------|-------------|
+| Home (`/`) | Monolith | Rotating cube with pulsing sphere core, mint color |
+| Software (`/software`) | NeuralLattice | Rotating torus wireframe with pulsing sphere core, mint color |
+
+Both shapes will have clearly visible characters at 8-12px font size with strong mint glow.
 
