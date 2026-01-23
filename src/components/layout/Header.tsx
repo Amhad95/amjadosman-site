@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
       )}
     >
       <nav className="container mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-20 md:h-28">
           {/* Logo */}
           <Link
             to="/"
@@ -41,7 +41,7 @@ export const Header: React.FC = () => {
             <img 
               src={logoSvg}
               alt="Applied Design & Strategy Institute" 
-              className="h-7 md:h-8 w-auto"
+              className="h-10 md:h-12 w-auto"
             />
           </Link>
 
@@ -52,7 +52,7 @@ export const Header: React.FC = () => {
                 key={item.href}
                 to={item.href}
                 className={cn(
-                  'text-sm font-medium transition-colors',
+                  'text-xs font-medium transition-colors',
                   location.pathname === item.href
                     ? 'text-offwhite'
                     : 'text-offwhite/70 hover:text-offwhite'
