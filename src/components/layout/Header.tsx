@@ -6,11 +6,25 @@ import { siteContent } from '@/lib/content';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import logoSvg from '@/assets/logo.svg';
 
+type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
+
+const routePlateMap: Record<string, PlateColor> = {
+  '/': 'violet',
+  '/software': 'astral',
+  '/services': 'navy',
+  '/tools': 'emerald',
+  '/pricing': 'navy',
+  '/work': 'navy',
+  '/about': 'emerald',
+};
+
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { navigation } = siteContent;
+  
+  const currentPlate = routePlateMap[location.pathname] || 'violet';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,8 +96,8 @@ export const Header: React.FC = () => {
 
           {/* CTA Button - hide when scrolled */}
           {!isScrolled && (
-            <div className="hidden lg:block">
-              <PrimaryButton href={navigation.cta.href} textColor="violet">
+          <div className="hidden lg:block">
+              <PrimaryButton href={navigation.cta.href} textColor={currentPlate}>
                 {navigation.cta.label}
               </PrimaryButton>
             </div>
@@ -121,7 +135,7 @@ export const Header: React.FC = () => {
                 </Link>
               ))}
               <div className="pt-4">
-                <PrimaryButton href={navigation.cta.href} className="w-full" textColor="violet">
+                <PrimaryButton href={navigation.cta.href} className="w-full" textColor={currentPlate}>
                   {navigation.cta.label}
                 </PrimaryButton>
               </div>
