@@ -1,130 +1,102 @@
 
 
-# Fix ASCII Cube - Proper Centering and No Clipping
+# Replace ASCII Cube with NeuralLattice (Torus)
 
-## Root Cause Identified
+## Issues Identified
 
-Looking at your screenshot, the cube is:
-1. Pushed to the far right edge of its container (`lg:justify-end`)
-2. CSS transform scaling expands the element from its center, but the element itself is positioned at the right edge
-3. `overflow-hidden` on both Hero wrapper AND CyberGlobeHeader clips the right portion
-
-## Solution
-
-**Remove all the scaling complexity.** Instead, simply render the ASCII at a size that fits naturally without transforms.
-
-### Math for proper sizing
-
-The ASCII grid is 60 characters wide by 32 lines tall.
-
-At `text-[4px]` with monospace:
-- Width: ~60 x 2.4px (char width) = ~144px
-- Height: ~32 x 4px = ~128px
-
-This is small but fits perfectly. No scaling needed - just increase the font slightly and remove transforms entirely.
-
-At `text-[6px]`:
-- Width: ~60 x 3.6px = ~216px
-- Height: ~32 x 6px = ~192px
-
-Still fits within 300-400px container easily.
+1. **Wrong shape**: You shared a NeuralLattice (torus with lattice pattern + pulsing core), but the current code renders a cube
+2. **Canvas too small**: Current 60x32 grid clips the rotating shape. NeuralLattice uses 80x45 - larger canvas gives the rotating shape room to breathe
+3. **Poor character visibility**: Current uses a short ramp `" .:-=+*#"` with weak glow
+4. **Performance**: Current triggers React re-renders every frame. NeuralLattice uses direct DOM `textContent` updates
 
 ---
 
-## Changes
+## Implementation
 
-### 1. CyberGlobeHeader.tsx - Remove transforms, use natural sizing
+### File: `src/components/shared/CyberGlobeHeader.tsx`
 
-```tsx
-// Remove: transform scale-[...] origin-center
-// Remove: overflow-hidden (allow natural render)
+Replace entirely with the NeuralLattice implementation you shared:
 
-<div className="flex items-center justify-center">
-  <pre
-    className="text-[6px] sm:text-[7px] md:text-[8px] leading-[1.0] font-mono select-none whitespace-pre"
-    style={{ 
-      color: themeColor,
-      textShadow: `0 0 4px ${themeColor}80, 0 0 8px ${themeColor}40`
-    }}
-  >
-    {frame.join("\n")}
-  </pre>
-</div>
+**Key differences from current code:**
+
+| Aspect | Current (Cube) | New (NeuralLattice) |
+|--------|----------------|---------------------|
+| Shape | Rotating cube | Torus lattice + pulsing core sphere |
+| Canvas | 60 x 32 | 80 x 45 (larger = no clip) |
+| Character ramp | 8 chars | 70+ chars for smooth gradients |
+| Updates | React state (slow) | Direct DOM textContent (fast) |
+| Lighting | Basic | Proper Lambertian with surface normals |
+| Props | speed, color, showCore | speed, color, density, width, height |
+
+**Component changes:**
+- Larger canvas (80x45 default) gives rotating geometry room to move without clipping
+- Torus with lattice wireframe pattern (nodes marked with `#`)
+- Inner pulsing core sphere (marked with `•`)
+- Rich 70-character gradient ramp for smooth shading
+- Direct DOM updates via `preRef.current.textContent` instead of `setFrame()`
+- Props stored in refs so animation loop doesn't restart on prop changes
+
+**Styling changes:**
+- Responsive font: `text-[5px] sm:text-[6px] md:text-[7px]` (slightly smaller base since canvas is bigger)
+- Stronger glow: `textShadow: 0 0 6px ${color}90, 0 0 12px ${color}50`
+- Keep `mint` in color map for project consistency
+
+---
+
+## Visual Result
+
+```text
+Canvas sizing math:
+- 80 chars wide x 45 lines tall
+- At 5px font: ~240px x 225px (mobile)
+- At 7px font: ~336px x 315px (desktop)
+
+The torus radius (~14 units) + rotation means the shape
+needs canvas margin. 80x45 provides that breathing room.
 ```
 
-Natural render sizes:
-- Mobile (6px): ~216px wide x 192px tall
-- Tablet (7px): ~252px wide x 224px tall
-- Desktop (8px): ~288px wide x 256px tall
-
-All fit within standard containers without clipping.
-
-### 2. Hero.tsx - Remove overflow-hidden, keep simple centering
-
-```tsx
-{rightElement && (
-  <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0">
-    {rightElement}
-  </div>
-)}
-```
-
-Remove `max-w-full overflow-hidden` - not needed when content fits naturally.
-
-### 3. Improve character visibility
-
-To make the characters more visible against the purple background:
-- Increase text-shadow glow radius (4px, 8px instead of 1px, 2px)
-- Keep the mint color for good contrast
+The torus lattice will:
+- Show a wireframe "donut" pattern with grid lines
+- Have bright `#` nodes at intersections
+- Contain a pulsing `•` sphere in the center
+- Rotate smoothly on all 3 axes
+- Never clip because the canvas is sized for the geometry
 
 ---
 
 ## Files to Modify
 
-| File | Changes |
-|------|---------|
-| `src/components/shared/CyberGlobeHeader.tsx` | Remove CSS transforms, use 6-8px font, remove overflow-hidden, increase glow |
-| `src/components/sections/Hero.tsx` | Remove overflow-hidden from rightElement wrapper |
+| File | Action |
+|------|--------|
+| `src/components/shared/CyberGlobeHeader.tsx` | Replace with NeuralLattice implementation |
+
+No changes needed to Hero.tsx or Index.tsx - they already pass the right props.
 
 ---
 
-## Technical Details
-
-### CyberGlobeHeader.tsx
+## Technical Implementation
 
 ```tsx
-return (
-  <div className="flex items-center justify-center">
-    <pre
-      className="text-[6px] sm:text-[7px] md:text-[8px] leading-[1.0] font-mono select-none whitespace-pre"
-      style={{ 
-        color: themeColor,
-        textShadow: `0 0 4px ${themeColor}80, 0 0 8px ${themeColor}40`
-      }}
-    >
-      {frame.join("\n")}
-    </pre>
-  </div>
-);
+// Key structure of the new component
+
+const DEFAULT_W = 80;  // Wider canvas
+const DEFAULT_H = 45;  // Taller canvas
+
+// Rich gradient ramp for smooth shading
+const RAMP = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+
+// Direct DOM update (no React state)
+const preRef = useRef<HTMLPreElement>(null);
+
+// In render loop:
+pre.textContent = out.join("\n");  // Fast, no re-render
+
+// Torus geometry with lattice pattern
+const ringRadius = 14;
+const tubeRadius = 5;
+// Only draw points on lattice lines (not solid surface)
+
+// Pulsing core sphere
+const coreRadius = 3 + Math.sin(time * 3) * 0.8;
 ```
-
-### Hero.tsx
-
-```tsx
-{rightElement && (
-  <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0">
-    {rightElement}
-  </div>
-)}
-```
-
----
-
-## Why This Works
-
-1. No CSS transforms = no centering/scaling mismatch
-2. Natural font sizing means content dimensions are predictable
-3. No `overflow-hidden` = no clipping
-4. Increased glow improves visibility against dark/colored backgrounds
-5. The cube will be smaller but fully visible and properly centered
 
