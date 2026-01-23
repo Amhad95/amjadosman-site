@@ -13,16 +13,16 @@ const COLOR_MAP: Record<string, string> = {
   amber: "#fbbf24",
   matrix: "#00ff41",
   blue: "#3b82f6",
-  gold: "#f59e0b"
+  violet: "#a78bfa"
 };
 
-interface CyberEuroProps {
+interface CyberPercentageProps {
   speed?: number;
   color?: keyof typeof COLOR_MAP;
   density?: number;
 }
 
-export const CyberEuro: React.FC<CyberEuroProps> = ({
+export const CyberPercentage: React.FC<CyberPercentageProps> = ({
   speed = 1,
   color = "mint",
   density = 1.0
@@ -42,10 +42,10 @@ export const CyberEuro: React.FC<CyberEuroProps> = ({
       
       const time = performance.now() * 0.001 * speed;
       
-      // Update rotation
+      // Multi-axis rotation
       rotationRef.current.y += 0.015 * speed;
-      rotationRef.current.x = Math.sin(time * 0.5) * 0.2;
-      rotationRef.current.z = Math.cos(time * 0.3) * 0.1;
+      rotationRef.current.x = Math.sin(time * 0.4) * 0.3;
+      rotationRef.current.z += 0.005 * speed;
 
       const { x: rx, y: ry, z: rz } = rotationRef.current;
       const cX = Math.cos(rx), sX = Math.sin(rx);
@@ -70,10 +70,10 @@ export const CyberEuro: React.FC<CyberEuroProps> = ({
         tz = py * sX + pz * cX;
         py = ty; pz = tz;
 
-        const dist = 60;
+        const dist = 65;
         const ooz = 1 / (pz + dist);
-        const xp = Math.floor(W / 2 + px * ooz * 105); 
-        const yp = Math.floor(H / 2 - py * ooz * 65);
+        const xp = Math.floor(W / 2 + px * ooz * 110); 
+        const yp = Math.floor(H / 2 - py * ooz * 68);
 
         if (xp >= 0 && xp < W && yp >= 0 && yp < H) {
           const idx = xp + yp * W;
@@ -84,7 +84,7 @@ export const CyberEuro: React.FC<CyberEuroProps> = ({
               charBuffer[idx] = "#";
             } else {
               const lum = Math.abs(px * light.x + py * light.y + pz * light.z) / 15;
-              const shimmer = (Math.sin(time * 4 + pz) + 1) * 0.08;
+              const shimmer = (Math.sin(time * 5 + pz) + 1) * 0.08;
               const lIdx = Math.floor(Math.min(1, lum + shimmer) * (RAMP.length - 1));
               charBuffer[idx] = RAMP[lIdx];
             }
@@ -92,37 +92,47 @@ export const CyberEuro: React.FC<CyberEuroProps> = ({
         }
       };
 
-      // Euro Construction Parameters
-      const radius = 14;
-      const thickness = 3.5;
-      const step = 0.5 / density;
+      const step = 0.6 / density;
 
-      // 1. Draw the "C" Curve
-      for (let u = 0.6; u < 5.7; u += step / 10) {
-        for (let v = -thickness; v < thickness; v += step) {
-          const x = radius * Math.cos(u);
-          const y = radius * Math.sin(u);
-          const z = v;
-          
-          const isEdge = Math.abs(v - (thickness - step)) < 0.1 || Math.abs(v + thickness) < 0.1;
-          drawPoint(x, y, z, isEdge);
-        }
-      }
+      // 1. Draw the two circles (hollow rings)
+      const ringRadius = 5;
+      const ringThickness = 2.5;
+      const ringOffsets = [
+        { x: -9, y: 9 },  // Top Left
+        { x: 9, y: -9 }   // Bottom Right
+      ];
 
-      // 2. Draw the two horizontal bars
-      const barThickness = 1.2;
-      const barPositionsY = [2.5, -2.5];
-
-      barPositionsY.forEach(barY => {
-        for (let bx = -radius - 2; bx < radius - 6; bx += step) {
-          for (let bz = -thickness; bz < thickness; bz += step) {
-            for (let by = barY - barThickness; by < barY + barThickness; by += step) {
-              const isEdge = Math.abs(bz - (thickness - step)) < 0.1 || Math.abs(bz + thickness) < 0.1;
-              drawPoint(bx, by, bz, isEdge);
-            }
+      ringOffsets.forEach(offset => {
+        for (let phi = 0; phi < 2 * Math.PI; phi += step) {
+          for (let v = -ringThickness; v < ringThickness; v += step) {
+            const x = offset.x + ringRadius * Math.cos(phi);
+            const y = offset.y + ringRadius * Math.sin(phi);
+            const z = v;
+            const isEdge = Math.abs(v - (ringThickness - step)) < 0.1 || Math.abs(v + ringThickness) < 0.1;
+            drawPoint(x, y, z, isEdge);
           }
         }
       });
+
+      // 2. Draw the diagonal bar (slash)
+      const barLength = 32;
+      const barHeight = 2.5;
+      const barThickness = 2.5;
+      
+      for (let l = -barLength/2; l < barLength/2; l += step) {
+        for (let h = -barHeight/2; h < barHeight/2; h += step) {
+          for (let t = -barThickness/2; t < barThickness/2; t += step) {
+            // Apply a 45-degree tilt to the bar coordinates before the global rotation
+            const angle = Math.PI / 4;
+            const bx = l * Math.cos(angle) - h * Math.sin(angle);
+            const by = l * Math.sin(angle) + h * Math.cos(angle);
+            const bz = t;
+            
+            const isEdge = Math.abs(t - (barThickness/2 - step)) < 0.1 || Math.abs(t + barThickness/2) < 0.1;
+            drawPoint(bx, by, bz, isEdge);
+          }
+        }
+      }
 
       const lines: string[] = [];
       for (let i = 0; i < H; i++) {
@@ -154,4 +164,4 @@ export const CyberEuro: React.FC<CyberEuroProps> = ({
   );
 };
 
-export default CyberEuro;
+export default CyberPercentage;
