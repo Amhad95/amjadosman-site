@@ -24,29 +24,46 @@ export const Header: React.FC = () => {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled
-          ? 'bg-ink/80 backdrop-blur-md border-b border-white/10'
-          : 'bg-transparent'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-200',
+        isScrolled ? 'py-3' : ''
       )}
     >
-      <nav className="container mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-20 md:h-28">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="hover:opacity-80 transition-opacity"
-            aria-label="ADSI Home"
-          >
-            <img 
-              src={logoSvg}
-              alt="Applied Design & Strategy Institute" 
-              className="h-10 md:h-12 w-auto"
-            />
-          </Link>
+      <nav
+        className={cn(
+          'transition-all duration-200',
+          isScrolled
+            ? 'max-w-fit mx-auto px-6 py-2.5 rounded-full bg-ink/60 backdrop-blur-xl border border-white/15 shadow-lg shadow-black/10'
+            : 'container mx-auto px-4 md:px-6 border-b border-mint/40'
+        )}
+      >
+        <div
+          className={cn(
+            'flex items-center',
+            isScrolled ? 'justify-center gap-6' : 'justify-between h-16 md:h-20'
+          )}
+        >
+          {/* Logo - hide when scrolled */}
+          {!isScrolled && (
+            <Link
+              to="/"
+              className="hover:opacity-80 transition-opacity"
+              aria-label="ADSI Home"
+            >
+              <img
+                src={logoSvg}
+                alt="Applied Design & Strategy Institute"
+                className="h-10 md:h-12 w-auto"
+              />
+            </Link>
+          )}
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div
+            className={cn(
+              'hidden lg:flex items-center gap-6',
+              isScrolled && 'justify-center'
+            )}
+          >
             {navigation.primary.map((item) => (
               <Link
                 key={item.href}
@@ -63,25 +80,29 @@ export const Header: React.FC = () => {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden lg:block">
-            <PrimaryButton href={navigation.cta.href}>
-              {navigation.cta.label}
-            </PrimaryButton>
-          </div>
+          {/* CTA Button - hide when scrolled */}
+          {!isScrolled && (
+            <div className="hidden lg:block">
+              <PrimaryButton href={navigation.cta.href}>
+                {navigation.cta.label}
+              </PrimaryButton>
+            </div>
+          )}
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2 -mr-2 text-offwhite"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile Menu Button - hide when scrolled */}
+          {!isScrolled && (
+            <button
+              className="lg:hidden p-2 -mr-2 text-offwhite"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
+        {mobileMenuOpen && !isScrolled && (
           <div className="lg:hidden py-4 border-t border-white/10 animate-fade-in bg-ink">
             <div className="flex flex-col gap-4">
               {navigation.primary.map((item) => (
@@ -100,10 +121,7 @@ export const Header: React.FC = () => {
                 </Link>
               ))}
               <div className="pt-4">
-                <PrimaryButton
-                  href={navigation.cta.href}
-                  className="w-full"
-                >
+                <PrimaryButton href={navigation.cta.href} className="w-full">
                   {navigation.cta.label}
                 </PrimaryButton>
               </div>

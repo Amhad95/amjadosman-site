@@ -41,7 +41,7 @@ export const Hero: React.FC<HeroProps> = ({
         className
       )}
     >
-      <div className="container mx-auto px-4 md:px-6 pt-28 md:pt-36 pb-12 md:pb-16 lg:pb-24">
+      <div className="container mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-24">
         <div className="max-w-4xl">
           {/* Headline */}
           <h1 className="font-serif text-poster-xl text-mint mb-6 md:mb-8">
