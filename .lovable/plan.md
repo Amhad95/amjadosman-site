@@ -1,90 +1,90 @@
 
 
-# Add PyramidAnimation to Work Page
+# Fix PyramidAnimation on Work Page
 
-## Summary
+## Problem
 
-Add a new 3D pyramid ASCII animation to the Work page hero, following the same performance patterns as the existing animations (KnotAnimation, NeuralLattice, CyberGlobeHeader).
+The current PyramidAnimation renders incorrectly - showing scattered dots instead of a proper 3D pyramid shape. The issue stems from the optimization approach using `textContent` which doesn't properly render the face filling algorithm.
+
+## Solution
+
+Replace the current `src/components/ui/pyramid-animation.tsx` with the user's working implementation, adjusted for project consistency:
 
 ---
 
-## Files to Create/Modify
+## Files to Modify
 
 | File | Action |
 |------|--------|
-| `src/components/ui/pyramid-animation.tsx` | **Create** - New pyramid component |
-| `src/pages/Work.tsx` | **Modify** - Add PyramidAnimation to hero |
+| `src/components/ui/pyramid-animation.tsx` | **Replace** - Use working version with project styling |
 
 ---
 
 ## Implementation Details
 
-### 1. Create `src/components/ui/pyramid-animation.tsx`
+### Key Changes
 
-Create the component using the provided code with these adjustments for consistency:
+1. **Use React state-based rendering** instead of direct DOM manipulation
+   - Use `useState` for frame and theta
+   - Use `setInterval` at 30ms (~33fps) for animation
+   - Render JSX elements with individual `<span>` elements per character
 
-**Styling updates to match project patterns:**
-- Use same font sizes as other animations: `text-[8px] sm:text-[10px] md:text-[12px]`
-- Add strong mint glow effect: `textShadow: 0 0 8px color, 0 0 16px color`
-- Add `mint` color option (#00FFD9) for monochrome mode
-- Wrap in container div with `flex items-center justify-center`
+2. **Keep finer face sampling** for proper fill
+   - `DU = 0.01` and `DV = 0.01` (finer than current 0.015)
 
-**Performance optimization:**
-- Convert from `setInterval` to `requestAnimationFrame` for smoother animation
-- Use direct DOM updates via `preRef.current.textContent` instead of React state
-- Store rotation angle in `useRef` to avoid re-render dependencies
+3. **Add color support with mint option**
+   - `color` prop: when `true` uses multi-color faces, when `false` uses mint (`#00FFD9`)
+   - Per-character coloring via styled spans
 
-**Props:**
-- `wireframe?: boolean` - Show only edges (default: false)
-- `color?: boolean` - Use multi-color faces (default: false, uses mint)
-- `speed?: number` - Rotation speed (default: 0.03)
-- `axis?: 'x' | 'y' | 'z'` - Rotation axis (default: 'y')
-- `edges?: boolean` - Show pyramid edges (default: true)
+4. **Apply project styling patterns**
+   - Font sizes: `text-[8px] sm:text-[10px] md:text-[12px]`
+   - Mint glow effect: `textShadow: 0 0 8px ${MINT}90, 0 0 16px ${MINT}50`
+   - Container: `flex items-center justify-center`
 
-**Key geometry:**
-- 5 vertices: apex + 4 base corners
-- 4 triangular faces with distinct symbols (@, #, $, *)
-- 8 edges connecting vertices
-
-### 2. Update `src/pages/Work.tsx`
-
-Add the PyramidAnimation to the Hero:
+### Component Props
 
 ```tsx
-import { PyramidAnimation } from '@/components/ui/pyramid-animation';
-
-<Hero
-  headline={work.hero.headline}
-  subheadline={work.hero.subheadline}
-  plate="navy"
-  rightElement={<PyramidAnimation axis="y" speed={0.02} />}
-/>
+interface PyramidAnimationProps {
+  wireframe?: boolean;  // Show only edges (default: false)
+  color?: boolean;      // Multi-color faces vs mint (default: false)
+  speed?: number;       // Rotation speed (default: 0.03)
+  axis?: 'x' | 'y' | 'z'; // Rotation axis (default: 'y')
+  edges?: boolean;      // Show edges (default: true)
+}
 ```
 
----
+### Rendering Approach
 
-## Animation Distribution
-
-| Page | Shape | Component |
-|------|-------|-----------|
-| Home (`/`) | Torus wireframe | NeuralLattice |
-| Software (`/software`) | Monolith cube | CyberGlobeHeader |
-| Tools (`/tools`) | Trefoil knot | KnotAnimation |
-| Work (`/work`) | Pyramid | PyramidAnimation |
+The working version properly fills each triangular face by:
+- Iterating over barycentric coordinates (u, v, w) with fine step size
+- Applying 3D rotation based on selected axis
+- Using z-buffer for depth ordering
+- Computing per-face lighting from surface normals
+- Rendering each pixel as an individual `<span>` with appropriate color/style
 
 ---
 
 ## Technical Notes
 
-**Pyramid Geometry:**
-- Apex at (0, SCALE, 0)
-- 4 base corners at (±SCALE, -SCALE, ±SCALE)
-- Each face rendered with barycentric sampling for filled appearance
-- Edges drawn with dense line sampling for crisp wireframe
+**Why the current version fails:**
+- The `textContent` approach writes a plain text string
+- Characters are mapped from a brightness ramp (` .-:=+*#@`)
+- Face symbols and colors cannot be applied per-character
+- The sampling density may be too coarse for proper face coverage
 
-**Rendering Approach:**
-- Uses z-buffer for proper depth ordering
-- Per-face lighting based on surface normals
-- Character brightness ramp for shading
-- Edge pixels marked with `+` character
+**Why the user's version works:**
+- Uses JSX with individual `<span>` elements per character
+- Each character can have its own color and style
+- Uses face-specific symbols (`@`, `#`, `$`, `*`) to show different faces
+- Finer sampling (DU/DV = 0.01) ensures complete face coverage
+
+---
+
+## Result
+
+The Work page will display a properly rendered rotating 3D pyramid with:
+- Filled triangular faces with shading
+- Visible edges marked with `+` character
+- Mint color theme (when `color={false}`)
+- Matching glow effect as other animations
 
