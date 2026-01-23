@@ -1,63 +1,44 @@
 
 
-# Fix Build Errors and Complete Design Refinements
+# Fix Header Transparency and Logo
 
-## Current State Summary
+## Problem Summary
 
-The previous implementation left several issues:
-1. **Build errors** - `size` prop used in Footer and CTABand but not defined in PrimaryButton
-2. **Header still using "ADSI" text** - Not using the Logo component with actual SVG wordmark
-3. **Header background is solid** - Missing scroll transparency effect
-4. **Cards remain basic** - Need enhanced styling with gradients and hover effects
+The header currently:
+1. Uses `sticky` positioning, which pushes content down (creates a bar above hero)
+2. Uses the custom `<Logo>` component with generated SVG paths instead of the user's actual logo.svg
+3. Has dark text colors (`text-ink`) that won't be visible against dark plate backgrounds
 
-The typography scales in index.css are actually correct now:
-- `text-heading-lg` (H2): `clamp(2.25rem, 4vw, 3.25rem)` - Good
-- `text-heading-md` (H3): `clamp(1.5rem, 2.5vw, 2rem)` - Good
+## Solution
 
----
+### 1. Copy Logo SVG to Assets
 
-## Fixes Required
+Copy the user-uploaded `logo.svg` (which is already mint #00ffd4 colored) to `src/assets/logo.svg`
 
-### 1. Add `size` prop to PrimaryButton.tsx
+### 2. Update Header.tsx
 
-Add the missing `size` prop to fix build errors:
+**Position Changes:**
+- Change from `sticky` to `fixed top-0 left-0 right-0`
+- This makes the header overlay content instead of pushing it down
 
-```
-interface PrimaryButtonProps {
-  size?: 'default' | 'lg';
-  // ... existing props
-}
-```
+**Background Behavior:**
+- Default (not scrolled): `bg-transparent`
+- Scrolled (past 20px): `bg-ink/80 backdrop-blur-md border-b border-white/10` (frosted dark glass)
 
-Apply different sizing based on the prop:
-- `default`: current sizing (h-12)
-- `lg`: larger size (h-14, larger padding, slightly larger text)
+**Logo:**
+- Replace `<Logo>` component with direct `<img>` using the uploaded SVG
+- The mint color in the SVG works on all dark plate backgrounds
 
-### 2. Update Header.tsx with Logo and Scroll Detection
+**Nav Link Colors:**
+- Change from `text-ink/70` to `text-offwhite/70 hover:text-offwhite`
+- These light colors will be visible against dark hero backgrounds
 
-Replace the "ADSI" text link with the actual Logo component:
-- Import and use `<Logo variant="wordmark" colorScheme="ink" />`
-- Add scroll state detection using `useEffect` and `useState`
-- When at top of page: transparent background
-- When scrolled (past 20px): offwhite background with blur and border
-- Smooth transition between states
+**Mobile Menu Button:**
+- Change from `text-ink` to `text-offwhite`
 
-### 3. Enhanced Card Styling
-
-Update Card.tsx with premium styling:
-- Gradient background: `bg-gradient-to-br from-white to-offwhite/50`
-- Increased padding: `p-8 md:p-10`
-- Better border: `border border-ink/8`
-- Subtle shadow: `shadow-sm`
-- Hover effects: scale transform, increased shadow, stronger border
-- Featured variant with accent border
-
-### 4. Apply Card Improvements Across Components
-
-Update components that use cards:
-- CardGrid.tsx
-- ToolList.tsx
-- PricingTable.tsx
+**Mobile Menu Panel:**
+- Use `bg-ink` solid background for readability
+- Light text colors for links
 
 ---
 
@@ -65,73 +46,59 @@ Update components that use cards:
 
 | File | Change |
 |------|--------|
-| `src/components/shared/PrimaryButton.tsx` | Add `size` prop with 'default' and 'lg' variants |
-| `src/components/layout/Header.tsx` | Use Logo component, add scroll detection for transparency |
-| `src/components/shared/Card.tsx` | Enhanced styling with gradients, shadows, hover states |
-| `src/components/sections/CardGrid.tsx` | Use enhanced Card styling |
-| `src/components/sections/ToolList.tsx` | Use enhanced Card styling |
-| `src/components/sections/PricingTable.tsx` | Use enhanced Card styling |
+| `src/assets/logo.svg` | Copy from user upload (already mint colored) |
+| `src/components/layout/Header.tsx` | Fixed positioning, transparent/glass bg, use logo.svg image, light nav colors |
 
 ---
 
 ## Technical Details
 
-### PrimaryButton Size Variants
+### Header Classes
 
-```
-size === 'lg'
-  ? 'h-14 px-8 text-lg'
-  : 'h-12 md:h-[48px] px-5 md:px-6 text-base'
-```
+```text
+Base (not scrolled):
+- fixed top-0 left-0 right-0 z-50
+- bg-transparent
 
-### Header Scroll Detection
-
-```
-const [isScrolled, setIsScrolled] = useState(false);
-
-useEffect(() => {
-  const handleScroll = () => {
-    setIsScrolled(window.scrollY > 20);
-  };
-  window.addEventListener('scroll', handleScroll);
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
+Scrolled (past 20px):
+- bg-ink/80 backdrop-blur-md
+- border-b border-white/10
 ```
 
-Header classes:
-- Not scrolled: `bg-transparent`
-- Scrolled: `bg-offwhite/95 backdrop-blur-sm border-b border-ink/10`
+### Logo Implementation
 
-### Card Enhanced Styles
+```tsx
+import logoSvg from '@/assets/logo.svg';
 
-Base:
-```
-bg-gradient-to-br from-white to-offwhite/50
-rounded-2xl
-p-8 md:p-10
-border border-ink/8
-shadow-sm
-transition-all duration-200
+<img 
+  src={logoSvg}
+  alt="Applied Design & Strategy Institute" 
+  className="h-7 md:h-8 w-auto"
+/>
 ```
 
-Hover:
-```
-hover:shadow-lg
-hover:border-ink/16
-hover:scale-[1.01]
-```
+### Nav Link Colors
 
-Featured variant:
-```
-border-l-4 border-l-mint
+```tsx
+// Desktop nav
+text-offwhite/70 hover:text-offwhite
+
+// Active state
+text-offwhite (fully opaque)
+
+// Mobile menu button
+text-offwhite
+
+// Mobile menu panel
+bg-ink with text-offwhite links
 ```
 
 ---
 
-## Implementation Order
+## Visual Result
 
-1. Fix PrimaryButton with size prop (resolves build errors)
-2. Update Header with Logo component and scroll behavior
-3. Enhance Card component styling
-4. Apply card improvements to CardGrid, ToolList, PricingTable
+- Header will be invisible at top of page (transparent)
+- Mint logo visible against violet/navy/emerald/etc. hero backgrounds  
+- When user scrolls, header transitions to frosted dark glass effect
+- Navigation links remain readable in both states
 
