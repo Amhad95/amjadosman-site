@@ -52,7 +52,7 @@ export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
             )}
           >
             {/* Animation Thumbnail */}
-            <div className="aspect-[16/9] relative overflow-hidden">
+            <div className="aspect-[16/9] relative overflow-hidden border-b-2 border-mint">
               <Animation color="mint" speed={0.8} />
             </div>
 
