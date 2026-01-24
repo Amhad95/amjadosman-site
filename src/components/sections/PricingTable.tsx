@@ -1,13 +1,15 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { Check, Palette, Globe, Presentation, FolderTree, FileText, UserPlus, LucideIcon } from 'lucide-react';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
+import { AnimatedIcon } from '@/components/shared/AnimatedIcon';
 
 interface PackageItem {
   title: string;
   whoFor: string;
   startingPrice: string;
   includes: string[];
+  icon?: LucideIcon;
 }
 
 interface PackageGroup {
@@ -33,6 +35,18 @@ interface PricingTableProps {
   className?: string;
 }
 
+// Icon mapping for package items by title keyword
+const getPackageIcon = (title: string): LucideIcon => {
+  const titleLower = title.toLowerCase();
+  if (titleLower.includes('brand')) return Palette;
+  if (titleLower.includes('website') || titleLower.includes('web')) return Globe;
+  if (titleLower.includes('sales') || titleLower.includes('materials')) return Presentation;
+  if (titleLower.includes('sharepoint')) return FolderTree;
+  if (titleLower.includes('sop')) return FileText;
+  if (titleLower.includes('onboarding')) return UserPlus;
+  return FileText;
+};
+
 export const PricingTable: React.FC<PricingTableProps> = ({
   groups,
   foundation,
@@ -52,30 +66,45 @@ export const PricingTable: React.FC<PricingTableProps> = ({
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {group.items.map((item, index) => (
-              <div
-                key={index}
-                className="bg-gradient-to-br from-card to-muted/30 rounded-2xl p-8 border border-ink/8 shadow-sm hover:border-ink/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-              >
-                <h3 className="font-serif text-xl text-foreground mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {item.whoFor}
-                </p>
-                <p className="text-lg font-semibold text-foreground mb-4">
-                  {item.startingPrice}
-                </p>
-                <ul className="space-y-2">
-                  {item.includes.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <Check size={16} className="text-mint flex-shrink-0 mt-0.5" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {group.items.map((item, index) => {
+              const ItemIcon = item.icon || getPackageIcon(item.title);
+              return (
+                <div
+                  key={index}
+                  className="bg-gradient-to-br from-card to-muted/30 rounded-2xl p-8 border border-ink/8 shadow-sm hover:border-ink/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center">
+                      <AnimatedIcon 
+                        icon={ItemIcon} 
+                        animation="pulse" 
+                        color="ink" 
+                        size={20} 
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-serif text-xl text-foreground">
+                        {item.title}
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {item.whoFor}
+                  </p>
+                  <p className="text-lg font-semibold text-foreground mb-4">
+                    {item.startingPrice}
+                  </p>
+                  <ul className="space-y-2">
+                    {item.includes.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <Check size={16} className="text-mint flex-shrink-0 mt-0.5" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         </section>
       ))}
