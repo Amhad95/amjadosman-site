@@ -137,7 +137,7 @@
     font-family: "Instrument Serif", Georgia, serif;
   }
 
-.text-poster-xl {
+  .text-poster-xl {
     font-size: clamp(2.75rem, 6vw, 4.5rem);
     line-height: 0.95;
     letter-spacing: -0.02em;
