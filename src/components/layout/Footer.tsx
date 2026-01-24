@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
       <div className="border-b border-offwhite/10">
         <div className="container mx-auto px-4 md:px-6 py-16 md:py-24">
           <div className="max-w-3xl">
-            <h2 className="font-serif text-heading-lg text-mint mb-4">
+            <h2 className="font-serif text-poster-lg text-mint mb-4">
               Ready to build systems that actually work?
             </h2>
             <p className="text-lg text-offwhite/70 mb-8 max-w-xl">
