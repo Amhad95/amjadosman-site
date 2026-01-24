@@ -1,38 +1,28 @@
 
 
-# Fix Section Headlines
+# Force Rebuild: Whitespace Change
 
-## The Problem
+## Purpose
 
-Headlines like "Get a useful output in minutes" are too small because `SectionHeader` defaults to `variant="interface"` (uses `text-heading-lg`) instead of `variant="poster"` (uses `text-poster-lg`).
+Trigger a fresh build to verify the headline fix (`variant = 'poster'`) is now correctly applied.
 
-## The Fix
+## Change
 
-One line change in `src/components/shared/SectionHeader.tsx`:
+| File | Action |
+|------|--------|
+| `src/components/shared/SectionHeader.tsx` | Add a trailing space after a comment or at end of a line |
 
-**Line 17**: Change default value from `'interface'` to `'poster'`
+## Implementation
+
+**Line 1**: Add a trailing space after the semicolon in the import statement:
 
 ```tsx
 // Before
-variant = 'interface',
+import React from 'react';
 
-// After  
-variant = 'poster',
+// After (with trailing space - invisible but triggers rebuild)
+import React from 'react'; 
 ```
 
-This makes all section headlines use the larger `text-poster-lg` size by default, matching the Pricing page's visual weight.
-
----
-
-## Files to Modify
-
-| File | Change |
-|------|--------|
-| `src/components/shared/SectionHeader.tsx` | Change default variant from `'interface'` to `'poster'` (line 17) |
-
----
-
-## Result
-
-All pages will now have consistent, large section headlines without any other changes needed.
+This is a zero-impact change that will force Vite to rebuild and serve fresh assets.
 
