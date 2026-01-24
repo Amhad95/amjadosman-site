@@ -1,36 +1,26 @@
 
+# Add Mint Line Separator Below Animations
 
-# Decrease Animation Thumbnail Height
-
-## Current State
-The animation thumbnail area uses `aspect-[4/3]` which creates a 4:3 ratio (height is 75% of width). This makes the animation area quite tall relative to the card content.
-
-## Solution
-Change the aspect ratio to make the thumbnail area shorter. Options:
-
-| Aspect Ratio | Height % of Width | Visual Effect |
-|--------------|-------------------|---------------|
-| `aspect-[4/3]` (current) | 75% | Tall, square-ish |
-| `aspect-[16/9]` | 56% | Widescreen, balanced |
-| `aspect-[2/1]` | 50% | Wide, compact |
-| `aspect-[5/2]` | 40% | Very wide, minimal |
-
-**Recommended: `aspect-[16/9]`** - This provides a good balance between showing enough animation and keeping the card compact.
+## Change Overview
+Add a mint-colored horizontal line at the bottom border of the animation thumbnail area to create a visual separation between the animation and the card content.
 
 ## File to Modify
 
 ### src/components/sections/ServiceCardGrid.tsx
 
-**Line 55 - Change:**
+**Line 55-57 - Update the animation thumbnail container:**
+
 ```tsx
-<div className="aspect-[4/3] relative overflow-hidden">
+{/* Animation Thumbnail */}
+<div className="aspect-[16/9] relative overflow-hidden border-b-2 border-mint">
+  <Animation color="mint" speed={0.8} />
+</div>
 ```
 
-**To:**
-```tsx
-<div className="aspect-[16/9] relative overflow-hidden">
-```
+## Technical Details
+- Adding `border-b-2` creates a 2px bottom border
+- Adding `border-mint` uses the mint accent color (#00FFD9) for the separator
+- This creates a clean visual separation between the dark animation area and the colored card content below
 
 ## Result
-The animation thumbnail will be noticeably shorter (56% of width instead of 75%), making the card content area more prominent relative to the animation.
-
+Each service card will have a thin mint-colored line separating the animation thumbnail from the title and description content, reinforcing the mint accent used throughout the site.
