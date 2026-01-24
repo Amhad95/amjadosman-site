@@ -45,7 +45,7 @@ export const CTABand: React.FC<CTABandProps> = ({
             {headline && (
               <h2 className={cn(
                 'font-serif mb-3',
-                size === 'large' ? 'text-heading-lg' : 'text-heading-md',
+                size === 'large' ? 'text-poster-lg' : 'text-heading-md',
                 variant === 'dark' ? 'text-mint' : 'text-foreground'
               )}>
                 {headline}
