@@ -31,6 +31,7 @@ const Services = () => {
                 <SectionHeader
                   headline={track.title}
                   subheadline={track.description}
+                  variant="poster"
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {track.items.map((item, index) => (

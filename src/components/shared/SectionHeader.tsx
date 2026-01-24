@@ -26,7 +26,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
     >
       <h2
         className={cn(
-          'font-serif',
+          'adsi-section-header font-serif',
           variant === 'poster' ? 'text-poster-lg' : 'text-heading-lg',
           'text-foreground mb-4'
         )}

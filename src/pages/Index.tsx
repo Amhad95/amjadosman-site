@@ -31,7 +31,7 @@ const Index = () => {
       {/* What We Deliver */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.whatWeDeliver.headline} />
+          <SectionHeader headline={home.whatWeDeliver.headline} variant="poster" />
           <CardGrid items={home.whatWeDeliver.cards} columns={3} />
           <div className="mt-8 text-center">
             <SecondaryButton href={home.whatWeDeliver.cta.href}>
@@ -44,7 +44,7 @@ const Index = () => {
       {/* Outcomes */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.outcomes.headline} />
+          <SectionHeader headline={home.outcomes.headline} variant="poster" />
           <ul className="space-y-4 max-w-2xl">
             {home.outcomes.items.map((item, index) => (
               <li key={index} className="flex items-start gap-3">
@@ -59,7 +59,7 @@ const Index = () => {
       {/* How We Work */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.howWeWork.headline} />
+          <SectionHeader headline={home.howWeWork.headline} variant="poster" />
           <Steps steps={home.howWeWork.steps} />
           <div className="mt-12 text-center">
             <SecondaryButton href={home.howWeWork.cta.href}>
@@ -72,7 +72,7 @@ const Index = () => {
       {/* Proof Tiles */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.proofTiles.headline} />
+          <SectionHeader headline={home.proofTiles.headline} variant="poster" />
           <ProofTiles
             tiles={home.proofTiles.tiles.map((tile) => ({
               ...tile,
@@ -94,6 +94,7 @@ const Index = () => {
           <SectionHeader
             headline={home.aiTools.headline}
             subheadline={home.aiTools.subheadline}
+            variant="poster"
           />
           <ToolList tools={home.aiTools.tools} variant="preview" />
           <div className="mt-8 text-center">
