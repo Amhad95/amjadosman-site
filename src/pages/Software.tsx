@@ -4,9 +4,18 @@ import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
+import { AnimatedIcon } from '@/components/shared/AnimatedIcon';
 import { CyberGlobeHeader } from '@/components/shared/CyberGlobeHeader';
 import { siteContent } from '@/lib/content';
-import { Check } from 'lucide-react';
+import { Check, Users, LayoutDashboard, FileStack, Puzzle, LucideIcon } from 'lucide-react';
+
+// Icon mapping for software modules
+const moduleIconMap: Record<string, LucideIcon> = {
+  'CRM (Core)': Users,
+  'Operations Workspace': LayoutDashboard,
+  'Document and Template Center': FileStack,
+  'Optional add-ons': Puzzle,
+};
 
 const Software = () => {
   const { software } = siteContent;
@@ -29,27 +38,40 @@ const Software = () => {
           <SectionHeader headline={software.modules.headline} />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {software.modules.items.map((module, index) => (
-              <div
-                key={index}
-                className="bg-card rounded-2xl p-6 md:p-8 border border-ink/10"
-              >
-                <h3 className="font-serif text-xl text-foreground mb-4">
-                  {module.title}
-                </h3>
-                <ul className="space-y-2">
-                  {module.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Check size={16} className="text-mint flex-shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                {module.note && (
-                  <p className="mt-4 text-sm text-lavender italic">{module.note}</p>
-                )}
-              </div>
-            ))}
+            {software.modules.items.map((module, index) => {
+              const ModuleIcon = moduleIconMap[module.title] || LayoutDashboard;
+              return (
+                <div
+                  key={index}
+                  className="bg-card rounded-2xl p-6 md:p-8 border border-ink/10"
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+                      <AnimatedIcon 
+                        icon={ModuleIcon} 
+                        animation="breathe" 
+                        color="ink" 
+                        size={24} 
+                      />
+                    </div>
+                    <h3 className="font-serif text-xl text-foreground pt-2">
+                      {module.title}
+                    </h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {module.features.map((feature, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Check size={16} className="text-mint flex-shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  {module.note && (
+                    <p className="mt-4 text-sm text-lavender italic">{module.note}</p>
+                  )}
+                </div>
+              );
+            })}
           </div>
           
           <p className="text-body-md text-muted-foreground italic">
