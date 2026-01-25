@@ -46,9 +46,19 @@ const defaultIllustrations: (keyof typeof illustrations)[] = [
   'chart',
 ];
 
+const plateClasses = {
+  violet: 'bg-plate-violet',
+  navy: 'bg-plate-navy',
+  emerald: 'bg-plate-emerald',
+  blue: 'bg-plate-blue',
+  astral: 'bg-plate-astral',
+  burgundy: 'bg-plate-burgundy',
+};
+
 export const ToolList: React.FC<ToolListProps> = ({
   tools,
   variant = 'preview',
+  plateColor = 'violet',
   className,
 }) => {
   // Preview variant: compact 3-column grid for homepage
@@ -66,8 +76,11 @@ export const ToolList: React.FC<ToolListProps> = ({
               className="group relative bg-card rounded-2xl border border-ink/10 hover:border-ink/20 transition-all duration-200 hover:shadow-lg overflow-hidden"
             >
               {/* Illustration thumbnail */}
-              <div className="aspect-[4/3] bg-muted/30 border-b border-ink/5 flex items-center justify-center p-6">
-                <div className="w-16 h-16 text-foreground/70 group-hover:text-foreground transition-colors">
+              <div className={cn(
+                "aspect-[4/3] border-b border-ink/5 flex items-center justify-center p-6",
+                plateClasses[plateColor]
+              )}>
+                <div className="w-16 h-16 text-mint">
                   <Illustration delay={index * 100} />
                 </div>
               </div>
@@ -77,9 +90,13 @@ export const ToolList: React.FC<ToolListProps> = ({
                 <h3 className="font-serif text-lg text-foreground mb-1">
                   {tool.title}
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
+                <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
                   {tool.description}
                 </p>
+                <span className="inline-flex items-center gap-1 text-sm font-medium text-ink group-hover:text-lavender transition-colors">
+                  Try this tool
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </span>
               </div>
             </Link>
           );
@@ -102,8 +119,11 @@ export const ToolList: React.FC<ToolListProps> = ({
             className="group relative bg-card rounded-2xl border border-ink/10 hover:border-ink/20 transition-all duration-200 hover:shadow-lg overflow-hidden flex flex-col"
           >
             {/* Illustration thumbnail */}
-            <div className="aspect-square bg-muted/30 border-b border-ink/5 flex items-center justify-center p-6">
-              <div className="w-14 h-14 md:w-16 md:h-16 text-foreground/70 group-hover:text-foreground transition-colors">
+            <div className={cn(
+              "aspect-square border-b border-ink/5 flex items-center justify-center p-6",
+              plateClasses[plateColor]
+            )}>
+              <div className="w-14 h-14 md:w-16 md:h-16 text-mint">
                 <Illustration delay={index * 80} />
               </div>
             </div>

@@ -23,7 +23,7 @@ export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
         const content = (
           <>
             {/* Image thumbnail */}
-            <div className="aspect-[16/9] bg-gradient-to-br from-muted to-muted/50 border-b border-ink/5 flex items-center justify-center overflow-hidden">
+            <div className="aspect-[4/3] bg-gradient-to-br from-muted to-muted/50 border-b border-ink/5 flex items-center justify-center overflow-hidden">
               {tile.thumbnail ? (
                 <img 
                   src={tile.thumbnail} 
@@ -39,11 +39,11 @@ export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
             </div>
             
             {/* Content */}
-            <div className="p-6 md:p-8">
-              <h3 className="font-serif text-xl text-foreground mb-2">
+            <div className="p-4 md:p-5">
+              <h3 className="font-serif text-lg text-foreground mb-1">
                 {tile.title}
               </h3>
-              <p className="text-body-md text-muted-foreground mb-4">
+              <p className="text-sm text-muted-foreground mb-3">
                 {tile.description}
               </p>
               {tile.cta && (
