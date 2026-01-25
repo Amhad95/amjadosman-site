@@ -10,9 +10,8 @@ const LineDocumentComponent: React.FC<LineDocumentProps> = ({ className, delay =
   return (
     <svg
       viewBox="0 0 64 64"
-      className={cn('w-full h-full text-foreground', className)}
+      className={cn('w-full h-full', className)}
       fill="none"
-      style={{ animationDelay: `${delay}ms` }}
     >
       {/* Document outline */}
       <path
@@ -22,7 +21,6 @@ const LineDocumentComponent: React.FC<LineDocumentProps> = ({ className, delay =
         strokeLinecap="round"
         strokeLinejoin="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay}ms` }}
       />
       {/* Folded corner */}
       <path
@@ -32,7 +30,6 @@ const LineDocumentComponent: React.FC<LineDocumentProps> = ({ className, delay =
         strokeLinecap="round"
         strokeLinejoin="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 200}ms` }}
       />
       {/* Text lines */}
       <path
@@ -41,7 +38,6 @@ const LineDocumentComponent: React.FC<LineDocumentProps> = ({ className, delay =
         strokeWidth="1.5"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 400}ms` }}
       />
       <path
         d="M24 36h20"
@@ -49,7 +45,6 @@ const LineDocumentComponent: React.FC<LineDocumentProps> = ({ className, delay =
         strokeWidth="1.5"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 500}ms` }}
       />
       <path
         d="M24 44h12"
@@ -57,7 +52,6 @@ const LineDocumentComponent: React.FC<LineDocumentProps> = ({ className, delay =
         strokeWidth="1.5"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 600}ms` }}
       />
     </svg>
   );

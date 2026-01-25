@@ -10,9 +10,8 @@ const LineDashboardComponent: React.FC<LineDashboardProps> = ({ className, delay
   return (
     <svg
       viewBox="0 0 64 64"
-      className={cn('w-full h-full text-foreground', className)}
+      className={cn('w-full h-full', className)}
       fill="none"
-      style={{ animationDelay: `${delay}ms` }}
     >
       {/* Outer frame */}
       <rect
@@ -24,7 +23,6 @@ const LineDashboardComponent: React.FC<LineDashboardProps> = ({ className, delay
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay}ms` }}
       />
       {/* Top bar */}
       <path
@@ -32,7 +30,6 @@ const LineDashboardComponent: React.FC<LineDashboardProps> = ({ className, delay
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 200}ms` }}
       />
       {/* Sidebar */}
       <path
@@ -40,7 +37,6 @@ const LineDashboardComponent: React.FC<LineDashboardProps> = ({ className, delay
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 300}ms` }}
       />
       {/* Content blocks */}
       <rect
@@ -52,7 +48,6 @@ const LineDashboardComponent: React.FC<LineDashboardProps> = ({ className, delay
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 450}ms` }}
       />
       <rect
         x="42"
@@ -63,7 +58,6 @@ const LineDashboardComponent: React.FC<LineDashboardProps> = ({ className, delay
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 500}ms` }}
       />
       <rect
         x="26"
@@ -74,12 +68,11 @@ const LineDashboardComponent: React.FC<LineDashboardProps> = ({ className, delay
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 600}ms` }}
       />
       {/* Sidebar dots */}
-      <circle cx="14" cy="26" r="2" stroke="currentColor" strokeWidth="1.5" className="animate-draw-line" style={{ animationDelay: `${delay + 400}ms` }} />
-      <circle cx="14" cy="34" r="2" stroke="currentColor" strokeWidth="1.5" className="animate-draw-line" style={{ animationDelay: `${delay + 450}ms` }} />
-      <circle cx="14" cy="42" r="2" stroke="currentColor" strokeWidth="1.5" className="animate-draw-line" style={{ animationDelay: `${delay + 500}ms` }} />
+      <circle cx="14" cy="26" r="2" stroke="currentColor" strokeWidth="1.5" className="animate-draw-line" />
+      <circle cx="14" cy="34" r="2" stroke="currentColor" strokeWidth="1.5" className="animate-draw-line" />
+      <circle cx="14" cy="42" r="2" stroke="currentColor" strokeWidth="1.5" className="animate-draw-line" />
     </svg>
   );
 };

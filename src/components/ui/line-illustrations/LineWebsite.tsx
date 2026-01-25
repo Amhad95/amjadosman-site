@@ -10,9 +10,8 @@ const LineWebsiteComponent: React.FC<LineWebsiteProps> = ({ className, delay = 0
   return (
     <svg
       viewBox="0 0 64 64"
-      className={cn('w-full h-full text-foreground', className)}
+      className={cn('w-full h-full', className)}
       fill="none"
-      style={{ animationDelay: `${delay}ms` }}
     >
       {/* Browser frame */}
       <rect
@@ -24,7 +23,6 @@ const LineWebsiteComponent: React.FC<LineWebsiteProps> = ({ className, delay = 0
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay}ms` }}
       />
       {/* URL bar */}
       <path
@@ -32,12 +30,11 @@ const LineWebsiteComponent: React.FC<LineWebsiteProps> = ({ className, delay = 0
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 200}ms` }}
       />
       {/* Browser dots */}
-      <circle cx="12" cy="15" r="1.5" stroke="currentColor" strokeWidth="1" className="animate-draw-line" style={{ animationDelay: `${delay + 150}ms` }} />
-      <circle cx="18" cy="15" r="1.5" stroke="currentColor" strokeWidth="1" className="animate-draw-line" style={{ animationDelay: `${delay + 175}ms` }} />
-      <circle cx="24" cy="15" r="1.5" stroke="currentColor" strokeWidth="1" className="animate-draw-line" style={{ animationDelay: `${delay + 200}ms` }} />
+      <circle cx="12" cy="15" r="1.5" stroke="currentColor" strokeWidth="1" className="animate-draw-line" />
+      <circle cx="18" cy="15" r="1.5" stroke="currentColor" strokeWidth="1" className="animate-draw-line" />
+      <circle cx="24" cy="15" r="1.5" stroke="currentColor" strokeWidth="1" className="animate-draw-line" />
       {/* Hero section */}
       <rect
         x="12"
@@ -48,7 +45,6 @@ const LineWebsiteComponent: React.FC<LineWebsiteProps> = ({ className, delay = 0
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 350}ms` }}
       />
       {/* CTA button */}
       <rect
@@ -60,7 +56,6 @@ const LineWebsiteComponent: React.FC<LineWebsiteProps> = ({ className, delay = 0
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 450}ms` }}
       />
       {/* Image placeholder */}
       <rect
@@ -72,7 +67,6 @@ const LineWebsiteComponent: React.FC<LineWebsiteProps> = ({ className, delay = 0
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 500}ms` }}
       />
       {/* Image X */}
       <path
@@ -81,7 +75,6 @@ const LineWebsiteComponent: React.FC<LineWebsiteProps> = ({ className, delay = 0
         strokeWidth="1"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 600}ms` }}
       />
     </svg>
   );
