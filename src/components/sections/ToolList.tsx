@@ -80,7 +80,7 @@ export const ToolList: React.FC<ToolListProps> = ({
                 "aspect-square border-b border-ink/5 flex items-center justify-center p-4",
                 plateClasses[plateColor]
               )}>
-                <div className="w-20 h-20 text-mint">
+                <div className="w-28 h-28 text-mint">
                   <Illustration delay={index * 100} />
                 </div>
               </div>
