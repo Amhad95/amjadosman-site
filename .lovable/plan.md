@@ -1,226 +1,187 @@
 
+# Fix Card Sizing and Tool Card Styling
 
-# Restructure AI Tools and Work/Portfolio Sections
+## Issues Identified
 
-## Understanding the Problem
+### 1. Work/Proof/Project Cards Too Large
+The ProofTiles component has oversized cards due to:
+- Large thumbnail aspect ratio (`aspect-[16/9]`)
+- Generous content padding (`p-6 md:p-8`)
 
-There are two conceptual misunderstandings in the current implementation:
+### 2. Tool Cards Styling Issues
+**Preview variant (Home page) problems:**
+- Missing "Try this tool" link that exists in the full variant
+- Illustration container uses grey (`bg-muted/30`) instead of plate color
+- Illustrations are dark (`text-foreground/70`) instead of mint
 
-### Issue 1: AI Tools
-**Current state**: AI Tools are presented like consulting services with small icon containers and "Want us to implement this?" CTAs
-**What they actually are**: Online tools (like iLovePDF) where users get immediate outputs - audits, drafts, reports. They're a library of AI-powered utilities, not projects for hire.
-
-### Issue 2: Work/Proof Section  
-**Current state**: Using animated line illustrations (tree, document, website, brand) as thumbnails
-**What they actually are**: Portfolio case studies that should have real project images/screenshots and link to detailed case study pages
+**Full variant (Tools page):**
+- Same styling issues - grey container, dark icons
 
 ---
 
-## Solution
+## Changes Summary
 
-### Part A: Redesign AI Tools (ToolList component)
-
-Transform the Tools page to match the iLovePDF pattern:
-- Grid of tool cards with animated line illustrations as visual icons
-- Each card is clickable and takes users directly to the tool
-- Remove "Want us to implement this?" CTAs
-- Add "Use this tool" or "Try now" action buttons
-
-**Data changes in `content.ts`:**
-```typescript
-tools: {
-  list: [
-    {
-      title: "SOP Draft Builder",
-      description: "Generate a structured SOP draft from a messy process description.",
-      outputs: ["Structured SOP draft", "Roles and responsibilities", ...],
-      illustration: "document", // Use line illustrations
-      href: "/tools/sop-builder", // Direct link to tool
-    },
-    // ...
-  ]
-}
-```
-
-**ToolList.tsx changes:**
-- Use the line illustrations (LineDocument, LineChart, etc.) as visual thumbnails
-- Display in a responsive grid (like iLovePDF: 5 columns on desktop, 2 on mobile)
-- Card structure: illustration icon + title + short description
-- Remove `implementLink` display
-- Add direct action CTA: "Try this tool →"
-
-### Part B: Redesign Work/Portfolio (ProofTiles component)
-
-Transform to a proper portfolio grid:
-- Support actual project thumbnail images (with placeholder for now)
-- Each tile links to a case study page
-- Remove line illustrations from this component
-
-**Data changes in `content.ts`:**
-```typescript
-work: {
-  tiles: [
-    {
-      title: "Sample SharePoint architecture walkthrough",
-      description: "Interactive tour of intranet structure...",
-      thumbnail: "/images/work/sharepoint-thumb.jpg", // Image path (placeholder for now)
-      href: "/work/sharepoint-case-study", // Link to case study
-      cta: "View case study",
-    },
-    // ...
-  ]
-}
-```
-
-**ProofTiles.tsx changes:**
-- Replace line illustrations with image placeholders
-- Use `bg-muted` or gradient as placeholder until real images are added
-- Add category/tag support for filtering (optional future enhancement)
-- Proper case study linking structure
+| Component | Issue | Fix |
+|-----------|-------|-----|
+| ProofTiles | Cards too big | Reduce thumbnail aspect to `4/3`, reduce padding to `p-4 md:p-5` |
+| ToolList (preview) | Missing "Try this tool" link | Add the link like in full variant |
+| ToolList (both) | Grey illustration container | Use `plateColor` prop for container background |
+| ToolList (both) | Dark icons | Change illustration wrapper to `text-mint` |
 
 ---
 
 ## Files to Modify
 
-### 1. `src/lib/content.ts`
-- Update `tools.list` items: add `illustration` field, add direct `href`, update descriptions
-- Update `work.tiles`: add `thumbnail` field, update `href` to case study routes
+### 1. ProofTiles.tsx
 
-### 2. `src/components/sections/ToolList.tsx`
-- Complete redesign to use line illustrations as thumbnails
-- Grid layout (3-4 columns on desktop)
-- Remove `implementLink` display
-- Add "Try this tool" or "Use tool" CTA
+**Reduce card size:**
 
-### 3. `src/components/sections/ProofTiles.tsx`
-- Replace line illustrations with image support
-- Add image placeholder styling
-- Update to proper portfolio card design
-
-### 4. `src/pages/Tools.tsx`
-- Update CTABand copy from "Want implementation help?" to something like "Need help with your project?"
-- Ensure the Tools page presents tools as self-serve utilities
-
----
-
-## Visual Comparison
-
-### Current AI Tools (incorrect)
-```text
-┌─────────────────────────────────────┐
-│ [Small Icon] SOP Draft Builder      │
-│              Description text...    │
-│              Want us to implement?→ │
-└─────────────────────────────────────┘
-```
-
-### New AI Tools (like iLovePDF)
-```text
-┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-│   ╭───╮      │ │   📊         │ │   🎨         │
-│   │📄│      │ │   ////       │ │   ◇ ◇        │
-│   ╰───╯      │ │   ▬▬▬       │ │   ∙ ∙        │
-│              │ │              │ │              │
-│ SOP Draft    │ │ Brand Audit  │ │ Page Critique│
-│ Builder      │ │              │ │              │
-│ Generate a...│ │ Get a...     │ │ Receive...   │
-│ [Try tool →] │ │ [Try tool →] │ │ [Try tool →] │
-└──────────────┘ └──────────────┘ └──────────────┘
-```
-
-### Current Work/Portfolio (incorrect)
-```text
-┌─────────────────┐ ┌─────────────────┐
-│ [Line Drawing]  │ │ [Line Drawing]  │
-│ ───╮╭───        │ │    ╱╲          │
-│    ╰╯           │ │   ╱──╲         │
-│ SharePoint...   │ │ SOP Pack...    │
-│ Description     │ │ Description    │
-└─────────────────┘ └─────────────────┘
-```
-
-### New Work/Portfolio (correct)
-```text
-┌─────────────────┐ ┌─────────────────┐
-│ ┌─────────────┐ │ │ ┌─────────────┐ │
-│ │   PROJECT   │ │ │ │   PROJECT   │ │
-│ │   IMAGE     │ │ │ │   IMAGE     │ │
-│ │  THUMBNAIL  │ │ │ │  THUMBNAIL  │ │
-│ └─────────────┘ │ │ └─────────────┘ │
-│ SharePoint...   │ │ SOP Pack...     │
-│ Description     │ │ Description     │
-│ View case study→│ │ View case study→│
-└─────────────────┘ └─────────────────┘
-```
-
----
-
-## Technical Details
-
-### ToolList Changes
-
-Add illustration mapping:
 ```tsx
-const toolIllustrations = {
-  document: LineDocument,
-  chart: LineChart,
-  brand: LineBrand,
-  website: LineWebsite,
-  gear: LineGear,
-  dashboard: LineDashboard,
-  tree: LineTree,
+// Change thumbnail aspect ratio
+<div className="aspect-[4/3] bg-gradient-to-br from-muted to-muted/50 ...">
+
+// Reduce content padding  
+<div className="p-4 md:p-5">
+  <h3 className="font-serif text-lg text-foreground mb-1">
+  <p className="text-sm text-muted-foreground mb-3">
+```
+
+### 2. ToolList.tsx
+
+**Add plateColor support and mint icons:**
+
+Update both variants to:
+1. Use `plateColor` prop for container background (with `plateClasses` mapping)
+2. Change illustration color from `text-foreground/70` to `text-mint`
+3. Add "Try this tool" link to preview variant
+
+**Preview variant changes (lines 62-86):**
+```tsx
+{/* Illustration thumbnail - add plate color background */}
+<div className={cn(
+  "aspect-[4/3] border-b border-ink/5 flex items-center justify-center p-6",
+  plateClasses[plateColor]
+)}>
+  <div className="w-16 h-16 text-mint">
+    <Illustration delay={index * 100} />
+  </div>
+</div>
+
+{/* Content - add the "Try this tool" link */}
+<div className="p-5">
+  <h3 className="font-serif text-lg text-foreground mb-1">
+    {tool.title}
+  </h3>
+  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+    {tool.description}
+  </p>
+  <span className="inline-flex items-center gap-1 text-sm font-medium text-ink group-hover:text-lavender transition-colors">
+    Try this tool
+    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+  </span>
+</div>
+```
+
+**Full variant changes (lines 104-108):**
+```tsx
+{/* Illustration thumbnail - add plate color background */}
+<div className={cn(
+  "aspect-square border-b border-ink/5 flex items-center justify-center p-6",
+  plateClasses[plateColor]
+)}>
+  <div className="w-14 h-14 md:w-16 md:h-16 text-mint">
+    <Illustration delay={index * 80} />
+  </div>
+</div>
+```
+
+**Add plateClasses mapping inside component:**
+```tsx
+const plateClasses = {
+  violet: 'bg-plate-violet',
+  navy: 'bg-plate-navy',
+  emerald: 'bg-plate-emerald',
+  blue: 'bg-plate-blue',
+  astral: 'bg-plate-astral',
+  burgundy: 'bg-plate-burgundy',
 };
 ```
 
-New card structure with illustration thumbnail:
-```tsx
-<div className="group bg-card rounded-2xl border hover:shadow-lg">
-  {/* Illustration area */}
-  <div className="aspect-[4/3] bg-muted/30 flex items-center justify-center p-6">
-    <div className="w-16 h-16">
-      <Illustration />
-    </div>
-  </div>
-  {/* Content */}
-  <div className="p-6">
-    <h3>{tool.title}</h3>
-    <p>{tool.description}</p>
-    <Link to={tool.href}>Try this tool →</Link>
-  </div>
-</div>
-```
+### 3. Index.tsx
 
-### ProofTiles Changes
-
-New image-based structure:
+**Pass plateColor to ToolList:**
 ```tsx
-<div className="group bg-card rounded-2xl overflow-hidden">
-  {/* Image thumbnail */}
-  <div className="aspect-[16/9] bg-gradient-to-br from-muted to-muted/50">
-    {tile.thumbnail ? (
-      <img src={tile.thumbnail} alt={tile.title} />
-    ) : (
-      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-        Project Preview
-      </div>
-    )}
-  </div>
-  {/* Content */}
-  <div className="p-6">
-    <h3>{tile.title}</h3>
-    <p>{tile.description}</p>
-    <Link to={tile.href}>View case study →</Link>
-  </div>
-</div>
+<ToolList 
+  tools={home.aiTools.tools.map(t => ({ title: t.title, description: t.description }))} 
+  variant="preview" 
+  plateColor="violet"
+/>
 ```
 
 ---
 
-## Result
+## Visual Result
 
-After these changes:
-- **AI Tools page** will function like iLovePDF - a library of self-serve tools users can use immediately
-- **Work/Portfolio page** will display project thumbnails leading to case studies
-- The animated line illustrations will be properly used for AI tool icons
-- Clear separation between "tools you use" and "work we've done"
+### Before (ProofTiles)
+```
+┌─────────────────────────────────────────┐
+│                                         │
+│         16:9 THUMBNAIL                  │
+│         (very wide)                     │
+│                                         │
+├─────────────────────────────────────────┤
+│                                         │
+│  Title                                  │
+│  Long description text...               │
+│  View sample →                          │
+│                                         │
+└─────────────────────────────────────────┘
+```
 
+### After (ProofTiles)
+```
+┌──────────────────────────┐
+│                          │
+│    4:3 THUMBNAIL         │
+│    (more compact)        │
+│                          │
+├──────────────────────────┤
+│ Title                    │
+│ Description...           │
+│ View sample →            │
+└──────────────────────────┘
+```
+
+### Before (ToolList)
+```
+┌──────────────┐
+│ [grey bg]    │
+│  dark icon   │
+│              │
+├──────────────┤
+│ Title        │
+│ Description  │
+│ (no link)    │  ← preview
+└──────────────┘
+```
+
+### After (ToolList)
+```
+┌──────────────┐
+│ [violet bg]  │
+│  mint icon   │
+│              │
+├──────────────┤
+│ Title        │
+│ Description  │
+│ Try tool →   │  ← both variants
+└──────────────┘
+```
+
+---
+
+## Technical Notes
+
+- The line illustrations use `currentColor` for their strokes, so wrapping them in `text-mint` will make them mint colored
+- The `plateColor` prop already exists in ToolList but wasn't being used for the illustration container
+- Both preview and full variants will now have consistent styling and the "Try this tool" link
