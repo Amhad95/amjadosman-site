@@ -64,6 +64,7 @@ const Pricing = () => {
           <PricingTable
             groups={packageGroups}
             foundation={pricing.packages.foundationBuild}
+            plateColor="navy"
           />
         </div>
       </section>

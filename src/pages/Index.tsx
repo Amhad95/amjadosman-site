@@ -96,7 +96,7 @@ const Index = () => {
             subheadline={home.aiTools.subheadline}
             variant="poster"
           />
-          <ToolList tools={home.aiTools.tools} variant="preview" />
+          <ToolList tools={home.aiTools.tools} variant="preview" plateColor="violet" />
           <div className="mt-8 text-center">
             <PrimaryButton href={home.aiTools.cta.href}>
               {home.aiTools.cta.label}

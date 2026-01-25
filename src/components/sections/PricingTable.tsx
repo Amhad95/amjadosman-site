@@ -32,8 +32,18 @@ interface FoundationPackage {
 interface PricingTableProps {
   groups: PackageGroup[];
   foundation?: FoundationPackage;
+  plateColor?: 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
   className?: string;
 }
+
+const plateClasses = {
+  violet: 'bg-plate-violet',
+  navy: 'bg-plate-navy',
+  emerald: 'bg-plate-emerald',
+  blue: 'bg-plate-blue',
+  astral: 'bg-plate-astral',
+  burgundy: 'bg-plate-burgundy',
+};
 
 // Icon mapping for package items by title keyword
 const getPackageIcon = (title: string): LucideIcon => {
@@ -50,6 +60,7 @@ const getPackageIcon = (title: string): LucideIcon => {
 export const PricingTable: React.FC<PricingTableProps> = ({
   groups,
   foundation,
+  plateColor = 'navy',
   className,
 }) => {
   return (
@@ -74,7 +85,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                   className="bg-gradient-to-br from-card to-muted/30 rounded-2xl p-8 border border-ink/8 shadow-sm hover:border-ink/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
                 >
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-plate-violet flex items-center justify-center">
+                    <div className={`flex-shrink-0 w-10 h-10 rounded-lg ${plateClasses[plateColor]} flex items-center justify-center`}>
                       <AnimatedIcon 
                         icon={ItemIcon} 
                         animation="pulse" 

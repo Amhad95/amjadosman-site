@@ -17,6 +17,7 @@ interface Tool {
 interface ToolListProps {
   tools: Tool[];
   variant?: 'preview' | 'full';
+  plateColor?: 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
   className?: string;
 }
 
@@ -26,9 +27,19 @@ const defaultToolIcons: LucideIcon[] = [
   MousePointerClick,
 ];
 
+const plateClasses = {
+  violet: 'bg-plate-violet',
+  navy: 'bg-plate-navy',
+  emerald: 'bg-plate-emerald',
+  blue: 'bg-plate-blue',
+  astral: 'bg-plate-astral',
+  burgundy: 'bg-plate-burgundy',
+};
+
 export const ToolList: React.FC<ToolListProps> = ({
   tools,
   variant = 'preview',
+  plateColor = 'emerald',
   className,
 }) => {
   if (variant === 'preview') {
@@ -39,7 +50,7 @@ export const ToolList: React.FC<ToolListProps> = ({
           return (
             <Card key={index} variant="elevated">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-plate-emerald flex items-center justify-center">
+                <div className={`flex-shrink-0 w-12 h-12 rounded-xl ${plateClasses[plateColor]} flex items-center justify-center`}>
                   <AnimatedIcon 
                     icon={ToolIcon} 
                     animation="breathe" 
@@ -68,7 +79,7 @@ export const ToolList: React.FC<ToolListProps> = ({
         return (
           <Card key={index} variant="elevated" className="p-8 md:p-10">
             <div className="flex items-start gap-5 mb-6">
-              <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-plate-blue flex items-center justify-center">
+              <div className={`flex-shrink-0 w-14 h-14 rounded-xl ${plateClasses[plateColor]} flex items-center justify-center`}>
                 <AnimatedIcon 
                   icon={ToolIcon} 
                   animation="breathe" 
