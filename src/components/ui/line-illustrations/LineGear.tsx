@@ -10,9 +10,8 @@ const LineGearComponent: React.FC<LineGearProps> = ({ className, delay = 0 }) =>
   return (
     <svg
       viewBox="0 0 64 64"
-      className={cn('w-full h-full text-foreground', className)}
+      className={cn('w-full h-full', className)}
       fill="none"
-      style={{ animationDelay: `${delay}ms` }}
     >
       {/* Outer gear teeth */}
       <path
@@ -21,7 +20,6 @@ const LineGearComponent: React.FC<LineGearProps> = ({ className, delay = 0 }) =>
         strokeWidth="2"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay}ms` }}
       />
       {/* Outer circle */}
       <circle
@@ -31,7 +29,6 @@ const LineGearComponent: React.FC<LineGearProps> = ({ className, delay = 0 }) =>
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 300}ms` }}
       />
       {/* Inner circle */}
       <circle
@@ -41,7 +38,6 @@ const LineGearComponent: React.FC<LineGearProps> = ({ className, delay = 0 }) =>
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 500}ms` }}
       />
     </svg>
   );

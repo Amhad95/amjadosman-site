@@ -10,9 +10,8 @@ const LineChartComponent: React.FC<LineChartProps> = ({ className, delay = 0 }) 
   return (
     <svg
       viewBox="0 0 64 64"
-      className={cn('w-full h-full text-foreground', className)}
+      className={cn('w-full h-full', className)}
       fill="none"
-      style={{ animationDelay: `${delay}ms` }}
     >
       {/* Axes */}
       <path
@@ -22,7 +21,6 @@ const LineChartComponent: React.FC<LineChartProps> = ({ className, delay = 0 }) 
         strokeLinecap="round"
         strokeLinejoin="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay}ms` }}
       />
       {/* Bar 1 */}
       <rect
@@ -33,7 +31,6 @@ const LineChartComponent: React.FC<LineChartProps> = ({ className, delay = 0 }) 
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 300}ms` }}
       />
       {/* Bar 2 */}
       <rect
@@ -44,7 +41,6 @@ const LineChartComponent: React.FC<LineChartProps> = ({ className, delay = 0 }) 
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 450}ms` }}
       />
       {/* Bar 3 */}
       <rect
@@ -55,7 +51,6 @@ const LineChartComponent: React.FC<LineChartProps> = ({ className, delay = 0 }) 
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 600}ms` }}
       />
     </svg>
   );

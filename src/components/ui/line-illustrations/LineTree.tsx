@@ -10,9 +10,8 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
   return (
     <svg
       viewBox="0 0 64 64"
-      className={cn('w-full h-full text-foreground', className)}
+      className={cn('w-full h-full', className)}
       fill="none"
-      style={{ animationDelay: `${delay}ms` }}
     >
       {/* Root folder */}
       <path
@@ -21,7 +20,6 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
         strokeWidth="1.5"
         strokeLinejoin="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay}ms` }}
       />
       {/* Trunk line */}
       <path
@@ -30,7 +28,6 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
         strokeWidth="1.5"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 200}ms` }}
       />
       {/* Branch 1 */}
       <path
@@ -39,7 +36,6 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
         strokeWidth="1.5"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 300}ms` }}
       />
       <rect
         x="26"
@@ -50,7 +46,6 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 350}ms` }}
       />
       {/* Branch 2 */}
       <path
@@ -59,7 +54,6 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
         strokeWidth="1.5"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 450}ms` }}
       />
       <rect
         x="26"
@@ -70,7 +64,6 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 500}ms` }}
       />
       {/* Branch 3 */}
       <path
@@ -79,7 +72,6 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
         strokeWidth="1.5"
         strokeLinecap="round"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 600}ms` }}
       />
       <rect
         x="26"
@@ -90,7 +82,6 @@ const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) =>
         stroke="currentColor"
         strokeWidth="1.5"
         className="animate-draw-line"
-        style={{ animationDelay: `${delay + 650}ms` }}
       />
     </svg>
   );
