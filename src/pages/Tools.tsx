@@ -26,16 +26,15 @@ const Tools = () => {
       {/* Tool Listing */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="Available tools" />
+          <SectionHeader headline="Available tools" subheadline="Select a tool to get started" />
           <ToolList
             tools={tools.list.map((tool) => ({
               title: tool.title,
-              outputs: tool.outputs,
-              whoFor: tool.whoFor,
-              implementLink: tool.implementLink,
+              description: tool.description,
+              illustration: tool.illustration,
+              href: tool.href,
             }))}
             variant="full"
-            plateColor="emerald"
           />
         </div>
       </section>
@@ -56,7 +55,8 @@ const Tools = () => {
 
       {/* Final CTA */}
       <CTABand
-        headline="Want implementation help?"
+        headline="Need help with your project?"
+        description="Our team can implement the outputs from these tools as part of a structured delivery."
         primaryCta={{ label: "Book a Call", href: "/book" }}
         secondaryCta={{ label: "View pricing", href: "/pricing" }}
         variant="dark"

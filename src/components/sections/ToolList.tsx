@@ -1,17 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { ArrowRight, FileText, Palette, MousePointerClick, LucideIcon } from 'lucide-react';
-import { Card, CardTitle } from '@/components/shared/Card';
-import { AnimatedIcon } from '@/components/shared/AnimatedIcon';
+import { ArrowRight } from 'lucide-react';
+import {
+  LineDocument,
+  LineChart,
+  LineBrand,
+  LineWebsite,
+  LineGear,
+  LineDashboard,
+  LineTree,
+} from '@/components/ui/line-illustrations';
 
 interface Tool {
   title: string;
   description?: string;
-  outputs?: string[];
-  whoFor?: string;
-  implementLink?: { label: string; href: string };
-  icon?: LucideIcon;
+  illustration?: 'document' | 'chart' | 'brand' | 'website' | 'gear' | 'dashboard' | 'tree';
+  href?: string;
 }
 
 interface ToolListProps {
@@ -21,110 +26,102 @@ interface ToolListProps {
   className?: string;
 }
 
-const defaultToolIcons: LucideIcon[] = [
-  FileText,
-  Palette,
-  MousePointerClick,
-];
-
-const plateClasses = {
-  violet: 'bg-plate-violet',
-  navy: 'bg-plate-navy',
-  emerald: 'bg-plate-emerald',
-  blue: 'bg-plate-blue',
-  astral: 'bg-plate-astral',
-  burgundy: 'bg-plate-burgundy',
+const illustrations = {
+  document: LineDocument,
+  chart: LineChart,
+  brand: LineBrand,
+  website: LineWebsite,
+  gear: LineGear,
+  dashboard: LineDashboard,
+  tree: LineTree,
 };
+
+// Default illustration mapping based on index
+const defaultIllustrations: (keyof typeof illustrations)[] = [
+  'document',
+  'brand',
+  'website',
+  'tree',
+  'dashboard',
+  'chart',
+];
 
 export const ToolList: React.FC<ToolListProps> = ({
   tools,
   variant = 'preview',
-  plateColor = 'emerald',
   className,
 }) => {
+  // Preview variant: compact 3-column grid for homepage
   if (variant === 'preview') {
     return (
-      <div className={cn('grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8', className)}>
-        {tools.map((tool, index) => {
-          const ToolIcon = tool.icon || defaultToolIcons[index] || FileText;
+      <div className={cn('grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6', className)}>
+        {tools.slice(0, 3).map((tool, index) => {
+          const illustrationType = tool.illustration || defaultIllustrations[index % defaultIllustrations.length];
+          const Illustration = illustrations[illustrationType];
+          
           return (
-            <Card key={index} variant="elevated">
-              <div className="flex items-start gap-4">
-                <div className={`flex-shrink-0 w-12 h-12 rounded-xl ${plateClasses[plateColor]} flex items-center justify-center`}>
-                  <AnimatedIcon 
-                    icon={ToolIcon} 
-                    animation="breathe" 
-                    color="mint" 
-                    size={24} 
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <CardTitle>{tool.title}</CardTitle>
-                  <p className="text-body-md text-muted-foreground leading-relaxed">
-                    {tool.description}
-                  </p>
+            <Link
+              key={tool.title}
+              to={tool.href || '/tools'}
+              className="group relative bg-card rounded-2xl border border-ink/10 hover:border-ink/20 transition-all duration-200 hover:shadow-lg overflow-hidden"
+            >
+              {/* Illustration thumbnail */}
+              <div className="aspect-[4/3] bg-muted/30 border-b border-ink/5 flex items-center justify-center p-6">
+                <div className="w-16 h-16 text-foreground/70 group-hover:text-foreground transition-colors">
+                  <Illustration delay={index * 100} />
                 </div>
               </div>
-            </Card>
+              
+              {/* Content */}
+              <div className="p-5">
+                <h3 className="font-serif text-lg text-foreground mb-1">
+                  {tool.title}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {tool.description}
+                </p>
+              </div>
+            </Link>
           );
         })}
       </div>
     );
   }
 
+  // Full variant: responsive grid for Tools page (like iLovePDF)
   return (
-    <div className={cn('space-y-8', className)} id="tools-list">
+    <div className={cn('grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6', className)} id="tools-list">
       {tools.map((tool, index) => {
-        const ToolIcon = tool.icon || defaultToolIcons[index] || FileText;
+        const illustrationType = tool.illustration || defaultIllustrations[index % defaultIllustrations.length];
+        const Illustration = illustrations[illustrationType];
+        
         return (
-          <Card key={index} variant="elevated" className="p-8 md:p-10">
-            <div className="flex items-start gap-5 mb-6">
-              <div className={`flex-shrink-0 w-14 h-14 rounded-xl ${plateClasses[plateColor]} flex items-center justify-center`}>
-                <AnimatedIcon 
-                  icon={ToolIcon} 
-                  animation="breathe" 
-                  color="mint" 
-                  size={28} 
-                />
+          <Link
+            key={tool.title}
+            to={tool.href || '#'}
+            className="group relative bg-card rounded-2xl border border-ink/10 hover:border-ink/20 transition-all duration-200 hover:shadow-lg overflow-hidden flex flex-col"
+          >
+            {/* Illustration thumbnail */}
+            <div className="aspect-square bg-muted/30 border-b border-ink/5 flex items-center justify-center p-6">
+              <div className="w-14 h-14 md:w-16 md:h-16 text-foreground/70 group-hover:text-foreground transition-colors">
+                <Illustration delay={index * 80} />
               </div>
-              <CardTitle accent className="text-heading-md flex-1">
-                {tool.title}
-              </CardTitle>
             </div>
             
-            {tool.outputs && tool.outputs.length > 0 && (
-              <div className="mb-6">
-                <h4 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide">
-                  Outputs
-                </h4>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {tool.outputs.map((output, i) => (
-                    <li key={i} className="flex items-center gap-3 text-sm text-muted-foreground">
-                      <span className="w-2 h-2 rounded-full bg-gradient-to-br from-mint to-mint/60 flex-shrink-0" />
-                      {output}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            
-            {tool.whoFor && (
-              <div className="mb-6 p-4 bg-muted/50 rounded-xl">
-                <h4 className="text-sm font-semibold text-foreground mb-1">Who it's for</h4>
-                <p className="text-sm text-muted-foreground">{tool.whoFor}</p>
-              </div>
-            )}
-            
-            {tool.implementLink && (
-              <Link
-                to={tool.implementLink.href}
-                className="inline-flex items-center gap-2 text-sm font-medium text-lavender hover:text-lavender/80 transition-colors group"
-              >
-                {tool.implementLink.label}
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            )}
-          </Card>
+            {/* Content */}
+            <div className="p-4 flex-1 flex flex-col">
+              <h3 className="font-serif text-base md:text-lg text-foreground mb-2">
+                {tool.title}
+              </h3>
+              <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">
+                {tool.description}
+              </p>
+              <span className="inline-flex items-center gap-1 text-xs md:text-sm font-medium text-ink group-hover:text-lavender transition-colors">
+                Try this tool
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </span>
+            </div>
+          </Link>
         );
       })}
     </div>
