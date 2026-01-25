@@ -64,7 +64,7 @@ export const ToolList: React.FC<ToolListProps> = ({
   // Preview variant: compact 3-column grid for homepage
   if (variant === 'preview') {
     return (
-      <div className={cn('grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6', className)}>
+      <div className={cn('grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6', className)}>
         {tools.slice(0, 3).map((tool, index) => {
           const illustrationType = tool.illustration || defaultIllustrations[index % defaultIllustrations.length];
           const Illustration = illustrations[illustrationType];
@@ -77,17 +77,17 @@ export const ToolList: React.FC<ToolListProps> = ({
             >
               {/* Illustration thumbnail */}
               <div className={cn(
-                "aspect-[4/3] border-b border-ink/5 flex items-center justify-center p-6",
+                "aspect-square border-b border-ink/5 flex items-center justify-center p-4",
                 plateClasses[plateColor]
               )}>
-                <div className="w-16 h-16 text-mint">
+                <div className="w-20 h-20 text-mint">
                   <Illustration delay={index * 100} />
                 </div>
               </div>
               
               {/* Content */}
-              <div className="p-5">
-                <h3 className="font-serif text-lg text-foreground mb-1">
+              <div className="p-4">
+                <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
                   {tool.title}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
@@ -120,17 +120,17 @@ export const ToolList: React.FC<ToolListProps> = ({
           >
             {/* Illustration thumbnail */}
             <div className={cn(
-              "aspect-square border-b border-ink/5 flex items-center justify-center p-6",
+              "aspect-square border-b border-ink/5 flex items-center justify-center p-4",
               plateClasses[plateColor]
             )}>
-              <div className="w-14 h-14 md:w-16 md:h-16 text-mint">
+              <div className="w-20 h-20 md:w-24 md:h-24 text-mint">
                 <Illustration delay={index * 80} />
               </div>
             </div>
             
             {/* Content */}
             <div className="p-4 flex-1 flex flex-col">
-              <h3 className="font-serif text-base md:text-lg text-foreground mb-2">
+              <h3 className="font-serif text-lg md:text-xl font-semibold text-foreground mb-2">
                 {tool.title}
               </h3>
               <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">

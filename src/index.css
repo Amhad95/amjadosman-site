@@ -235,18 +235,24 @@ html {
   animation: icon-glow 2s ease-in-out infinite;
 }
 
-/* SVG line drawing animation */
-@keyframes draw-line {
-  from {
+/* SVG line drawing animation - continuous loop */
+@keyframes draw-line-loop {
+  0% {
     stroke-dashoffset: 200;
   }
-  to {
+  40% {
     stroke-dashoffset: 0;
+  }
+  60% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -200;
   }
 }
 
 .animate-draw-line {
   stroke-dasharray: 200;
   stroke-dashoffset: 200;
-  animation: draw-line 0.8s ease-out both;
+  animation: draw-line-loop 3s ease-in-out infinite;
 }
