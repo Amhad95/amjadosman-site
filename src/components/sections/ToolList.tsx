@@ -55,10 +55,13 @@ const plateClasses = {
   burgundy: 'bg-plate-burgundy',
 };
 
+// Alternating colors for visual variety
+const alternatingColors: ('emerald' | 'violet')[] = ['emerald', 'violet'];
+
 export const ToolList: React.FC<ToolListProps> = ({
   tools,
   variant = 'preview',
-  plateColor = 'violet',
+  plateColor,
   className,
 }) => {
   // Preview variant: compact 3-column grid for homepage
@@ -68,6 +71,7 @@ export const ToolList: React.FC<ToolListProps> = ({
         {tools.slice(0, 3).map((tool, index) => {
           const illustrationType = tool.illustration || defaultIllustrations[index % defaultIllustrations.length];
           const Illustration = illustrations[illustrationType];
+          const cardColor = plateColor || alternatingColors[index % 2];
           
           return (
             <Link
@@ -78,9 +82,9 @@ export const ToolList: React.FC<ToolListProps> = ({
               {/* Illustration thumbnail */}
               <div className={cn(
                 "aspect-square border-b border-ink/5 flex items-center justify-center p-4",
-                plateClasses[plateColor]
+                plateClasses[cardColor]
               )}>
-                <div className="w-28 h-28 text-mint">
+              <div className="w-28 h-28 text-mint">
                   <Illustration delay={index * 100} />
                 </div>
               </div>
@@ -111,6 +115,7 @@ export const ToolList: React.FC<ToolListProps> = ({
       {tools.map((tool, index) => {
         const illustrationType = tool.illustration || defaultIllustrations[index % defaultIllustrations.length];
         const Illustration = illustrations[illustrationType];
+        const cardColor = plateColor || alternatingColors[index % 2];
         
         return (
           <Link
@@ -121,7 +126,7 @@ export const ToolList: React.FC<ToolListProps> = ({
             {/* Illustration thumbnail */}
             <div className={cn(
               "aspect-square border-b border-ink/5 flex items-center justify-center p-4",
-              plateClasses[plateColor]
+              plateClasses[cardColor]
             )}>
               <div className="w-20 h-20 md:w-24 md:h-24 text-mint">
                 <Illustration delay={index * 80} />
