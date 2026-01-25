@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface LineTreeProps {
@@ -6,7 +6,7 @@ interface LineTreeProps {
   delay?: number;
 }
 
-export const LineTree = memo<LineTreeProps>(({ className, delay = 0 }) => {
+const LineTreeComponent: React.FC<LineTreeProps> = ({ className, delay = 0 }) => {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -94,8 +94,7 @@ export const LineTree = memo<LineTreeProps>(({ className, delay = 0 }) => {
       />
     </svg>
   );
-});
+};
 
-LineTree.displayName = 'LineTree';
-
+export const LineTree = React.memo(LineTreeComponent);
 export default LineTree;
