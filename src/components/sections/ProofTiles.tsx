@@ -18,12 +18,12 @@ interface ProofTilesProps {
 
 export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
   return (
-    <div className={cn('grid grid-cols-1 md:grid-cols-2 gap-6', className)}>
+    <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6', className)}>
       {tiles.map((tile) => {
         const content = (
           <>
             {/* Image thumbnail */}
-            <div className="aspect-[4/3] bg-gradient-to-br from-muted to-muted/50 border-b border-ink/5 flex items-center justify-center overflow-hidden">
+            <div className="aspect-[3/2] bg-gradient-to-br from-muted to-muted/50 border-b border-ink/5 flex items-center justify-center overflow-hidden">
               {tile.thumbnail ? (
                 <img 
                   src={tile.thumbnail} 
@@ -39,8 +39,8 @@ export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
             </div>
             
             {/* Content */}
-            <div className="p-4 md:p-5">
-              <h3 className="font-serif text-lg text-foreground mb-1">
+            <div className="p-3 md:p-4">
+              <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
                 {tile.title}
               </h3>
               <p className="text-sm text-muted-foreground mb-3">

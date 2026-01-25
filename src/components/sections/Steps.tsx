@@ -53,7 +53,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, className }) => {
                 </div>
                 
                 {/* Content */}
-                <h3 className="font-serif text-xl text-foreground mb-2">
+                <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
                   {step.title}
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -91,7 +91,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, className }) => {
               
               {/* Content */}
               <div className="pb-6 pt-6">
-                <h3 className="font-serif text-lg text-foreground mb-1">
+                <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
                   {step.title}
                 </h3>
                 <p className="text-sm text-muted-foreground">

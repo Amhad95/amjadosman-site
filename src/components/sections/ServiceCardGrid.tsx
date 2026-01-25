@@ -58,7 +58,7 @@ export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
 
             {/* Content */}
             <div className="p-6 md:p-8">
-              <h3 className="font-serif text-heading-md text-mint mb-3">
+              <h3 className="font-serif text-heading-md font-semibold text-mint mb-3">
                 {item.title}
               </h3>
               <p className="text-body-md text-offwhite/80 leading-relaxed">
