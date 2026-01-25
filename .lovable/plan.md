@@ -1,98 +1,51 @@
 
-# Fix Mint Icon Colors and Animation Issues
 
-## Problems Identified
+# Update Social Sharing Images to Use Logo
 
-### 1. Icons Not Mint Colored
-**Root cause**: Each line illustration SVG has `className="text-foreground"` hardcoded on the `<svg>` element, which overrides the `text-mint` class applied to the parent wrapper.
+## Overview
 
-**Location**: All files in `src/components/ui/line-illustrations/`:
-- LineDocument.tsx (line 13): `className={cn('w-full h-full text-foreground', className)}`
-- LineChart.tsx, LineBrand.tsx, LineWebsite.tsx, LineGear.tsx, LineDashboard.tsx, LineTree.tsx (same pattern)
+Update the Open Graph and Twitter meta tags in `index.html` to use the same image as the favicon, ensuring WhatsApp and social media previews display your logo instead of the default image.
 
-### 2. Animation Delay/Inconsistent
-**Root cause**: 
-- The staggered `delay` prop creates delays of 80-100ms per card index, causing later cards to appear static for up to 500ms+
-- Animation only plays once on mount - if cards are scrolled into view after initial render, they may appear incomplete
-- The animation uses `forwards` fill mode, so if interrupted or delayed, elements can get stuck mid-animation
+## Current State
 
----
+| Meta Tag | Current Image |
+|----------|---------------|
+| `og:image` | `.../social-images/social-1769347266258-fb profile@3x.png` |
+| `twitter:image` | `.../social-images/social-1769347266258-fb profile@3x.png` |
+| `favicon` | `.../uploads/1769347141167-fdfd@3x copy.png` |
 
-## Solution
+## Changes
 
-### Part A: Fix Icon Color (All Line Illustrations)
+### File: `index.html`
 
-Remove `text-foreground` from the SVG className so it inherits from parent:
+**Lines 19-20** - Update both image meta tags:
 
-```tsx
-// Before (in each Line*.tsx)
-<svg className={cn('w-full h-full text-foreground', className)}>
+```html
+<!-- Before -->
+<meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/6Q6GCiPTpPNCgNUhK0gK0FsAXpG2/social-images/social-1769347266258-fb profile@3x.png">
+<meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/6Q6GCiPTpPNCgNUhK0gK0FsAXpG2/social-images/social-1769347266258-fb profile@3x.png">
 
-// After
-<svg className={cn('w-full h-full', className)}>
+<!-- After -->
+<meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/6Q6GCiPTpPNCgNUhK0gK0FsAXpG2/uploads/1769347141167-fdfd@3x copy.png">
+<meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/6Q6GCiPTpPNCgNUhK0gK0FsAXpG2/uploads/1769347141167-fdfd@3x copy.png">
 ```
-
-This allows the `text-mint` class on the wrapper div in ToolList to properly cascade to the SVG's `currentColor` strokes.
-
-### Part B: Fix Animation Timing
-
-1. **Remove staggered delays** - All icons animate together for consistent UX
-2. **Make animation faster** - Reduce from 1.2s to 0.8s for snappier feel
-3. **Add animation-fill-mode: both** to ensure proper state before/after
-
-**Files to update:**
-
-| File | Line | Change |
-|------|------|--------|
-| LineDocument.tsx | 13 | Remove `text-foreground` |
-| LineChart.tsx | 13 | Remove `text-foreground` |
-| LineBrand.tsx | 13 | Remove `text-foreground` |
-| LineWebsite.tsx | 13 | Remove `text-foreground` |
-| LineGear.tsx | 13 | Remove `text-foreground` |
-| LineDashboard.tsx | 13 | Remove `text-foreground` |
-| LineTree.tsx | 13 | Remove `text-foreground` |
-| index.css | 248-252 | Update animation timing |
-
----
-
-## Technical Changes
-
-### Line Illustrations (all 7 files)
-
-**Example for LineDocument.tsx:**
-```tsx
-// Line 11-16: Change SVG className
-<svg
-  viewBox="0 0 64 64"
-  className={cn('w-full h-full', className)}  // Remove text-foreground
-  fill="none"
->
-```
-
-Also remove the individual `style={{ animationDelay }}` from each path to eliminate staggered timing within a single icon.
-
-### CSS Animation (index.css)
-
-```css
-/* Line 248-252: Update animation */
-.animate-draw-line {
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
-  animation: draw-line 0.8s ease-out forwards;  /* Faster: 1.2s → 0.8s */
-}
-```
-
----
 
 ## Result
 
-| Before | After |
-|--------|-------|
-| Dark icons (text-foreground) | Mint icons (inherited from parent) |
-| Staggered animation (inconsistent) | Immediate animation (all at once) |
-| 1.2s animation (slow) | 0.8s animation (snappy) |
-| Delayed cards show incomplete | All icons animate properly |
+After this change, when your site URL is shared on:
+- WhatsApp
+- Facebook
+- Twitter/X
+- LinkedIn
+- Slack
+- Discord
 
-The tool cards will now display:
-- Mint colored animated line illustrations
-- Consistent, fast draw animation on all icons simultaneously
+...the preview will display your logo image instead of the default placeholder.
+
+## Note
+
+Social platforms cache images aggressively. After publishing, you may need to:
+1. Use Facebook's [Sharing Debugger](https://developers.facebook.com/tools/debug/) to refresh the cache
+2. Wait 24-48 hours for WhatsApp to pick up the new image
+3. Use Twitter's [Card Validator](https://cards-dev.twitter.com/validator) to refresh Twitter previews
+
