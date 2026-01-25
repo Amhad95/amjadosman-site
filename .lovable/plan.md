@@ -1,106 +1,110 @@
 
 
-# Fix Icon and Illustration Flickering Issues
+# Update Icon Container and Icon Colors
 
-## Problem Identified
+## Overview
 
-The icons and illustrations are flickering because:
+Change the small square icon containers from grey (`bg-muted/50`) to solid plate colors, and update the icons inside from black (`color="ink"`) to mint (`color="mint"`).
 
-1. **Pulse Animation Too Aggressive**: The `icon-pulse` animation fades icons to 50% opacity, making them appear to disappear
-2. **SVG Draw Animation Resets**: The stroke-draw animation restarts every time React re-renders the component, causing illustrations to flicker
+---
 
-## Solution
+## Changes Summary
 
-### Fix 1: Adjust Icon Animation Opacity
+| Component | Container Color | Icon Color |
+|-----------|-----------------|------------|
+| Services.tsx | `bg-plate-navy` | `mint` |
+| PricingTable.tsx | `bg-plate-violet` | `mint` |
+| ToolList.tsx (preview) | `bg-plate-emerald` | `mint` |
+| ToolList.tsx (full) | `bg-plate-blue` | `mint` |
+| Software.tsx | `bg-plate-astral` | `mint` |
 
-Modify the `icon-pulse` keyframe to use a subtler opacity change (0.7 instead of 0.5) so icons don't appear to vanish.
-
-**File: `src/index.css`**
-
-Change line 208-210:
-```css
-/* Before */
-@keyframes icon-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }  /* Too aggressive */
-}
-
-/* After */
-@keyframes icon-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }  /* Subtler effect */
-}
-```
-
-### Fix 2: Prevent SVG Animation Restart
-
-Add `animation-fill-mode: forwards` combined with a unique key based on content (not just index) to prevent the draw animation from restarting on re-renders.
-
-Also, use React's `useMemo` or stable keys to prevent unnecessary re-renders of the SVG illustrations.
-
-**File: `src/components/sections/ProofTiles.tsx`**
-
-Add a stable key based on the tile title instead of just the index:
-```tsx
-{tiles.map((tile, index) => {
-  // Use tile.title as part of the key for stability
-  const stableKey = `${tile.title}-${index}`;
-  return (
-    <div key={stableKey} ...>
-```
-
-### Fix 3: Memoize Icon Components
-
-Wrap the `AnimatedIcon` component with `React.memo` to prevent unnecessary re-renders:
-
-**File: `src/components/shared/AnimatedIcon.tsx`**
-
-```tsx
-export const AnimatedIcon: React.FC<AnimatedIconProps> = React.memo(({
-  icon: Icon,
-  animation = 'float',
-  ...
-}) => {
-  // existing code
-});
-```
-
-### Fix 4: Memoize Line Illustration Components
-
-Similarly, wrap each line illustration with `React.memo`:
-
-**Files: All line illustration components**
-- `src/components/ui/line-illustrations/LineDocument.tsx`
-- `src/components/ui/line-illustrations/LineChart.tsx`
-- `src/components/ui/line-illustrations/LineDashboard.tsx`
-- `src/components/ui/line-illustrations/LineTree.tsx`
-- `src/components/ui/line-illustrations/LineGear.tsx`
-- `src/components/ui/line-illustrations/LineBrand.tsx`
-- `src/components/ui/line-illustrations/LineWebsite.tsx`
-
-```tsx
-export const LineDocument: React.FC<LineDocumentProps> = React.memo(({ className, delay = 0 }) => {
-  // existing code
-});
-```
+---
 
 ## Files to Modify
 
-1. `src/index.css` - Adjust pulse animation opacity (0.5 → 0.8)
-2. `src/components/shared/AnimatedIcon.tsx` - Add React.memo wrapper
-3. `src/components/ui/line-illustrations/LineDocument.tsx` - Add React.memo
-4. `src/components/ui/line-illustrations/LineChart.tsx` - Add React.memo
-5. `src/components/ui/line-illustrations/LineDashboard.tsx` - Add React.memo
-6. `src/components/ui/line-illustrations/LineTree.tsx` - Add React.memo
-7. `src/components/ui/line-illustrations/LineGear.tsx` - Add React.memo
-8. `src/components/ui/line-illustrations/LineBrand.tsx` - Add React.memo
-9. `src/components/ui/line-illustrations/LineWebsite.tsx` - Add React.memo
-10. `src/components/sections/ProofTiles.tsx` - Use stable keys
+### 1. Services.tsx (line 61, 65)
+**Before:**
+```tsx
+<div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+  <AnimatedIcon icon={ItemIcon} animation="float" color="ink" size={24} />
+</div>
+```
 
-## Result
+**After:**
+```tsx
+<div className="w-12 h-12 rounded-xl bg-plate-navy flex items-center justify-center">
+  <AnimatedIcon icon={ItemIcon} animation="float" color="mint" size={24} />
+</div>
+```
 
-After these changes:
-- Icons will have a subtle pulse effect that doesn't make them appear to disappear
-- SVG illustrations will draw once and stay drawn, not restart on every re-render
-- Memoization will prevent unnecessary re-renders that cause animation restarts
+### 2. PricingTable.tsx (line 77, 81)
+**Before:**
+```tsx
+<div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center">
+  <AnimatedIcon icon={ItemIcon} animation="pulse" color="ink" size={20} />
+</div>
+```
+
+**After:**
+```tsx
+<div className="flex-shrink-0 w-10 h-10 rounded-lg bg-plate-violet flex items-center justify-center">
+  <AnimatedIcon icon={ItemIcon} animation="pulse" color="mint" size={20} />
+</div>
+```
+
+### 3. ToolList.tsx (lines 42, 46 and 71, 75)
+**Preview variant - Before:**
+```tsx
+<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+  <AnimatedIcon icon={ToolIcon} animation="breathe" color="ink" size={24} />
+</div>
+```
+
+**Preview variant - After:**
+```tsx
+<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-plate-emerald flex items-center justify-center">
+  <AnimatedIcon icon={ToolIcon} animation="breathe" color="mint" size={24} />
+</div>
+```
+
+**Full variant - Before:**
+```tsx
+<div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
+  <AnimatedIcon icon={ToolIcon} animation="breathe" color="ink" size={28} />
+</div>
+```
+
+**Full variant - After:**
+```tsx
+<div className="flex-shrink-0 w-14 h-14 rounded-xl bg-plate-blue flex items-center justify-center">
+  <AnimatedIcon icon={ToolIcon} animation="breathe" color="mint" size={28} />
+</div>
+```
+
+### 4. Software.tsx (line 49, 53)
+**Before:**
+```tsx
+<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+  <AnimatedIcon icon={ModuleIcon} animation="breathe" color="ink" size={24} />
+</div>
+```
+
+**After:**
+```tsx
+<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-plate-astral flex items-center justify-center">
+  <AnimatedIcon icon={ModuleIcon} animation="breathe" color="mint" size={24} />
+</div>
+```
+
+---
+
+## Visual Result
+
+The icon containers will now use the brand's plate color palette:
+- **Services page**: Navy blue containers with mint icons
+- **Pricing page**: Violet containers with mint icons  
+- **Tools section**: Emerald/Blue containers with mint icons
+- **Software page**: Astral purple containers with mint icons
+
+This creates visual consistency with the dark plate/mint accent system used elsewhere on the site.
 
