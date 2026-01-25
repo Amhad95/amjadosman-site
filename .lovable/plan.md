@@ -1,59 +1,54 @@
 
 
-# Fix Home Tool Cards: Bigger Icons + Green Background
+# Fix Alternating Colors on Tools Page
 
-## Issues Identified
+## Issue Identified
 
-1. **Background color mismatch**: Home page uses `plateColor="violet"` (purple), but user wants it to match the Tools page which uses `plateColor="emerald"` (green)
-2. **Icons too small**: Current icon size is `w-20 h-20` in preview variant, but needs to be larger to better fill the square container
+The Tools page (`src/pages/Tools.tsx`) is explicitly passing `plateColor="emerald"` on line 38, which overrides the alternating color logic in `ToolList.tsx`.
+
+The alternating logic uses: `const cardColor = plateColor || alternatingColors[index % 2]`
+
+When `plateColor="emerald"` is passed, it always evaluates to `"emerald"` and never falls through to the alternating logic.
 
 ---
 
-## Changes
+## Fix
 
-### 1. Index.tsx - Change plateColor to emerald
+### Tools.tsx - Remove plateColor prop
 
-**Line 99** - Update the ToolList call:
+**Line 38** - Remove the `plateColor="emerald"` prop:
 
 ```tsx
 // Before
-<ToolList tools={...} variant="preview" plateColor="violet" />
+<ToolList
+  tools={...}
+  variant="full"
+  plateColor="emerald"
+/>
 
 // After
-<ToolList tools={...} variant="preview" plateColor="emerald" />
+<ToolList
+  tools={...}
+  variant="full"
+/>
 ```
 
 ---
 
-### 2. ToolList.tsx - Increase icon size in preview variant
-
-**Line 83** - Increase icon container size:
-
-```tsx
-// Before
-<div className="w-20 h-20 text-mint">
-
-// After
-<div className="w-28 h-28 text-mint">
-```
-
-This increases from 80px to 112px, filling approximately 70% of the square container (which has p-4 padding on all sides).
-
----
-
-## Files Modified
+## File Modified
 
 | File | Change |
 |------|--------|
-| `src/pages/Index.tsx` | Change `plateColor="violet"` to `plateColor="emerald"` |
-| `src/components/sections/ToolList.tsx` | Increase preview icon size from `w-20 h-20` to `w-28 h-28` |
+| `src/pages/Tools.tsx` | Remove `plateColor="emerald"` from ToolList call |
 
 ---
 
-## Visual Result
+## Result
 
-| Before | After |
-|--------|-------|
-| Purple/violet background | Green/emerald background (matches Tools page) |
-| Icon size: 80px | Icon size: 112px (~40% larger) |
+Both Home and Tools pages will now show alternating green/purple (emerald/violet) backgrounds:
+- Card 1: Emerald (green)
+- Card 2: Violet (purple)
+- Card 3: Emerald (green)
+- Card 4: Violet (purple)
+- ...and so on
 
