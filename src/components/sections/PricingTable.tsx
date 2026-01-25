@@ -74,11 +74,11 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                   className="bg-gradient-to-br from-card to-muted/30 rounded-2xl p-8 border border-ink/8 shadow-sm hover:border-ink/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
                 >
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-plate-violet flex items-center justify-center">
                       <AnimatedIcon 
                         icon={ItemIcon} 
                         animation="pulse" 
-                        color="ink" 
+                        color="mint" 
                         size={20} 
                       />
                     </div>
