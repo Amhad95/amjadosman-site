@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface LineGearProps {
@@ -6,7 +6,7 @@ interface LineGearProps {
   delay?: number;
 }
 
-export const LineGear = memo<LineGearProps>(({ className, delay = 0 }) => {
+const LineGearComponent: React.FC<LineGearProps> = ({ className, delay = 0 }) => {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -45,8 +45,7 @@ export const LineGear = memo<LineGearProps>(({ className, delay = 0 }) => {
       />
     </svg>
   );
-});
+};
 
-LineGear.displayName = 'LineGear';
-
+export const LineGear = React.memo(LineGearComponent);
 export default LineGear;

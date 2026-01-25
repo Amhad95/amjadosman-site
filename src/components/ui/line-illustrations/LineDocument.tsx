@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface LineDocumentProps {
@@ -6,7 +6,7 @@ interface LineDocumentProps {
   delay?: number;
 }
 
-export const LineDocument = memo<LineDocumentProps>(({ className, delay = 0 }) => {
+const LineDocumentComponent: React.FC<LineDocumentProps> = ({ className, delay = 0 }) => {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -61,8 +61,7 @@ export const LineDocument = memo<LineDocumentProps>(({ className, delay = 0 }) =
       />
     </svg>
   );
-});
+};
 
-LineDocument.displayName = 'LineDocument';
-
+export const LineDocument = React.memo(LineDocumentComponent);
 export default LineDocument;
