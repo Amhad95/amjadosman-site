@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -10,7 +10,7 @@ interface AnimatedIconProps {
   className?: string;
 }
 
-export const AnimatedIcon: React.FC<AnimatedIconProps> = ({
+export const AnimatedIcon = memo<AnimatedIconProps>(({
   icon: Icon,
   animation = 'float',
   color = 'ink',
@@ -44,6 +44,8 @@ export const AnimatedIcon: React.FC<AnimatedIconProps> = ({
       <Icon size={size} strokeWidth={1.5} />
     </div>
   );
-};
+});
+
+AnimatedIcon.displayName = 'AnimatedIcon';
 
 export default AnimatedIcon;

@@ -206,7 +206,7 @@ html {
 
 @keyframes icon-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.8; }
 }
 
 @keyframes icon-breathe {

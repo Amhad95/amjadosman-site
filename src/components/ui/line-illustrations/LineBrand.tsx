@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface LineBrandProps {
@@ -6,7 +6,7 @@ interface LineBrandProps {
   delay?: number;
 }
 
-export const LineBrand: React.FC<LineBrandProps> = ({ className, delay = 0 }) => {
+export const LineBrand = memo<LineBrandProps>(({ className, delay = 0 }) => {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -38,6 +38,8 @@ export const LineBrand: React.FC<LineBrandProps> = ({ className, delay = 0 }) =>
       <circle cx="44" cy="44" r="6" stroke="currentColor" strokeWidth="1.5" className="animate-draw-line" style={{ animationDelay: `${delay + 700}ms` }} />
     </svg>
   );
-};
+});
+
+LineBrand.displayName = 'LineBrand';
 
 export default LineBrand;

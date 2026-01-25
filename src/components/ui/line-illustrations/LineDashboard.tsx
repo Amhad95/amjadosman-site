@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface LineDashboardProps {
@@ -6,7 +6,7 @@ interface LineDashboardProps {
   delay?: number;
 }
 
-export const LineDashboard: React.FC<LineDashboardProps> = ({ className, delay = 0 }) => {
+export const LineDashboard = memo<LineDashboardProps>(({ className, delay = 0 }) => {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -82,6 +82,8 @@ export const LineDashboard: React.FC<LineDashboardProps> = ({ className, delay =
       <circle cx="14" cy="42" r="2" stroke="currentColor" strokeWidth="1.5" className="animate-draw-line" style={{ animationDelay: `${delay + 500}ms` }} />
     </svg>
   );
-};
+});
+
+LineDashboard.displayName = 'LineDashboard';
 
 export default LineDashboard;

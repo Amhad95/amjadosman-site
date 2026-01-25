@@ -41,7 +41,7 @@ export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
         
         return (
           <div
-            key={index}
+            key={tile.title}
             className="group relative bg-card rounded-2xl border border-ink/10 hover:border-ink/20 transition-all duration-200 hover:shadow-lg overflow-hidden"
           >
             {/* Illustration thumbnail */}
