@@ -39,11 +39,11 @@ export const ToolList: React.FC<ToolListProps> = ({
           return (
             <Card key={index} variant="elevated">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-plate-emerald flex items-center justify-center">
                   <AnimatedIcon 
                     icon={ToolIcon} 
                     animation="breathe" 
-                    color="ink" 
+                    color="mint" 
                     size={24} 
                   />
                 </div>
@@ -68,11 +68,11 @@ export const ToolList: React.FC<ToolListProps> = ({
         return (
           <Card key={index} variant="elevated" className="p-8 md:p-10">
             <div className="flex items-start gap-5 mb-6">
-              <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
+              <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-plate-blue flex items-center justify-center">
                 <AnimatedIcon 
                   icon={ToolIcon} 
                   animation="breathe" 
-                  color="ink" 
+                  color="mint" 
                   size={28} 
                 />
               </div>

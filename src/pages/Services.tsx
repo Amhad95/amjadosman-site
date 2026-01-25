@@ -58,11 +58,11 @@ const Services = () => {
                         className="bg-gradient-to-br from-card to-muted/30 rounded-2xl p-8 border border-ink/8 shadow-sm hover:border-ink/15 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
                       >
                         <div className="mb-4">
-                          <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-xl bg-plate-navy flex items-center justify-center">
                             <AnimatedIcon 
                               icon={ItemIcon} 
                               animation="float" 
-                              color="ink" 
+                              color="mint" 
                               size={24} 
                             />
                           </div>

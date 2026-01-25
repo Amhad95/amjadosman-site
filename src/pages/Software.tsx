@@ -46,11 +46,11 @@ const Software = () => {
                   className="bg-card rounded-2xl p-6 md:p-8 border border-ink/10"
                 >
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-plate-astral flex items-center justify-center">
                       <AnimatedIcon 
                         icon={ModuleIcon} 
                         animation="breathe" 
-                        color="ink" 
+                        color="mint" 
                         size={24} 
                       />
                     </div>
