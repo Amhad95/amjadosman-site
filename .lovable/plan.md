@@ -1,110 +1,114 @@
 
+# Match Icon Container Colors to Page Header Colors
 
-# Update Icon Container and Icon Colors
+## Problem
 
-## Overview
+The icon container background colors are currently hardcoded in components and don't always match the page's header plate color:
 
-Change the small square icon containers from grey (`bg-muted/50`) to solid plate colors, and update the icons inside from black (`color="ink"`) to mint (`color="mint"`).
+| Page | Header Plate | Current Icon Container | Should Be |
+|------|-------------|----------------------|-----------|
+| Home (violet) | `violet` | `emerald` (ToolList) | `violet` |
+| Pricing (navy) | `navy` | `violet` (PricingTable) | `navy` |
+| Services (navy) | `navy` | `navy` | Correct |
+| Software (astral) | `astral` | `astral` | Correct |
+| Tools (emerald) | `emerald` | `emerald` | Correct |
 
----
+## Solution
 
-## Changes Summary
-
-| Component | Container Color | Icon Color |
-|-----------|-----------------|------------|
-| Services.tsx | `bg-plate-navy` | `mint` |
-| PricingTable.tsx | `bg-plate-violet` | `mint` |
-| ToolList.tsx (preview) | `bg-plate-emerald` | `mint` |
-| ToolList.tsx (full) | `bg-plate-blue` | `mint` |
-| Software.tsx | `bg-plate-astral` | `mint` |
+Add a `plateColor` prop to the relevant components so each page can specify the correct plate color for icon containers.
 
 ---
 
 ## Files to Modify
 
-### 1. Services.tsx (line 61, 65)
-**Before:**
+### 1. PricingTable.tsx
+
+Add a `plateColor` prop and use it for icon containers:
+
 ```tsx
-<div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
-  <AnimatedIcon icon={ItemIcon} animation="float" color="ink" size={24} />
-</div>
+interface PricingTableProps {
+  groups: PackageGroup[];
+  foundation?: FoundationPackage;
+  plateColor?: 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
+  className?: string;
+}
+
+// In the component, use dynamic class:
+const plateClasses = {
+  violet: 'bg-plate-violet',
+  navy: 'bg-plate-navy',
+  emerald: 'bg-plate-emerald',
+  blue: 'bg-plate-blue',
+  astral: 'bg-plate-astral',
+  burgundy: 'bg-plate-burgundy',
+};
+
+<div className={`flex-shrink-0 w-10 h-10 rounded-lg ${plateClasses[plateColor]} ...`}>
 ```
 
-**After:**
+### 2. ToolList.tsx
+
+Add a `plateColor` prop:
+
 ```tsx
-<div className="w-12 h-12 rounded-xl bg-plate-navy flex items-center justify-center">
-  <AnimatedIcon icon={ItemIcon} animation="float" color="mint" size={24} />
-</div>
+interface ToolListProps {
+  tools: Tool[];
+  variant?: 'preview' | 'full';
+  plateColor?: 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
+  className?: string;
+}
 ```
 
-### 2. PricingTable.tsx (line 77, 81)
-**Before:**
+### 3. Pricing.tsx
+
+Pass the correct plate color to match the header:
+
 ```tsx
-<div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center">
-  <AnimatedIcon icon={ItemIcon} animation="pulse" color="ink" size={20} />
-</div>
+<PricingTable
+  groups={packageGroups}
+  foundation={pricing.packages.foundationBuild}
+  plateColor="navy"  // Matches Hero plate="navy"
+/>
 ```
 
-**After:**
+### 4. Index.tsx (Home page)
+
+Pass the correct plate color to ToolList:
+
 ```tsx
-<div className="flex-shrink-0 w-10 h-10 rounded-lg bg-plate-violet flex items-center justify-center">
-  <AnimatedIcon icon={ItemIcon} animation="pulse" color="mint" size={20} />
-</div>
+<ToolList 
+  tools={home.aiTools.tools} 
+  variant="preview" 
+  plateColor="violet"  // Matches Hero plate="violet"
+/>
 ```
 
-### 3. ToolList.tsx (lines 42, 46 and 71, 75)
-**Preview variant - Before:**
-```tsx
-<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
-  <AnimatedIcon icon={ToolIcon} animation="breathe" color="ink" size={24} />
-</div>
-```
+### 5. Tools.tsx
 
-**Preview variant - After:**
-```tsx
-<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-plate-emerald flex items-center justify-center">
-  <AnimatedIcon icon={ToolIcon} animation="breathe" color="mint" size={24} />
-</div>
-```
+Update ToolList to use the correct plate color:
 
-**Full variant - Before:**
 ```tsx
-<div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-  <AnimatedIcon icon={ToolIcon} animation="breathe" color="ink" size={28} />
-</div>
-```
-
-**Full variant - After:**
-```tsx
-<div className="flex-shrink-0 w-14 h-14 rounded-xl bg-plate-blue flex items-center justify-center">
-  <AnimatedIcon icon={ToolIcon} animation="breathe" color="mint" size={28} />
-</div>
-```
-
-### 4. Software.tsx (line 49, 53)
-**Before:**
-```tsx
-<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
-  <AnimatedIcon icon={ModuleIcon} animation="breathe" color="ink" size={24} />
-</div>
-```
-
-**After:**
-```tsx
-<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-plate-astral flex items-center justify-center">
-  <AnimatedIcon icon={ModuleIcon} animation="breathe" color="mint" size={24} />
-</div>
+<ToolList 
+  tools={tools.toolsList} 
+  variant="full" 
+  plateColor="emerald"  // Matches Hero plate="emerald"
+/>
 ```
 
 ---
 
 ## Visual Result
 
-The icon containers will now use the brand's plate color palette:
-- **Services page**: Navy blue containers with mint icons
-- **Pricing page**: Violet containers with mint icons  
-- **Tools section**: Emerald/Blue containers with mint icons
-- **Software page**: Astral purple containers with mint icons
+After these changes, all icon containers will use the same plate color as the page's header:
 
-This creates visual consistency with the dark plate/mint accent system used elsewhere on the site.
+| Page | Header Color | Icon Container Color |
+|------|-------------|---------------------|
+| Home | Violet | Violet |
+| Pricing | Navy | Navy |
+| Services | Navy | Navy |
+| Software | Astral | Astral |
+| Tools | Emerald | Emerald |
+| Work | Navy | Navy |
+| About | Emerald | Emerald |
 
+This creates a cohesive visual identity where the branded plate colors flow consistently from the header into the content cards.
