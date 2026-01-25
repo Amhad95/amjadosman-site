@@ -35,6 +35,7 @@ const Tools = () => {
               implementLink: tool.implementLink,
             }))}
             variant="full"
+            plateColor="emerald"
           />
         </div>
       </section>
