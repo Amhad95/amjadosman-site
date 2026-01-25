@@ -14,8 +14,8 @@ const routePlateMap: Record<string, PlateColor> = {
   '/services': 'navy',
   '/tools': 'emerald',
   '/pricing': 'navy',
-  '/work': 'navy',
-  '/about': 'emerald',
+  '/work': 'blue',
+  '/about': 'burgundy',
 };
 
 export const Header: React.FC = () => {

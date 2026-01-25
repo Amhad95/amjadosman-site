@@ -13,7 +13,7 @@ const About = () => {
       <Hero
         headline={about.hero.headline}
         subheadline={about.hero.subheadline}
-        plate="emerald"
+        plate="burgundy"
         rightElement={<CyberHeart speed={0.8} />}
       />
       <section className="py-16 md:py-24 bg-background">
