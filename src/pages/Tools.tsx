@@ -35,6 +35,7 @@ const Tools = () => {
               href: tool.href,
             }))}
             variant="full"
+            plateColor="emerald"
           />
         </div>
       </section>
