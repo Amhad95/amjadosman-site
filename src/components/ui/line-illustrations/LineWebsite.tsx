@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface LineWebsiteProps {
@@ -6,7 +6,7 @@ interface LineWebsiteProps {
   delay?: number;
 }
 
-export const LineWebsite: React.FC<LineWebsiteProps> = ({ className, delay = 0 }) => {
+export const LineWebsite = memo<LineWebsiteProps>(({ className, delay = 0 }) => {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -85,6 +85,8 @@ export const LineWebsite: React.FC<LineWebsiteProps> = ({ className, delay = 0 }
       />
     </svg>
   );
-};
+});
+
+LineWebsite.displayName = 'LineWebsite';
 
 export default LineWebsite;

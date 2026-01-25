@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface LineChartProps {
@@ -6,7 +6,7 @@ interface LineChartProps {
   delay?: number;
 }
 
-export const LineChart: React.FC<LineChartProps> = ({ className, delay = 0 }) => {
+export const LineChart = memo<LineChartProps>(({ className, delay = 0 }) => {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -59,6 +59,8 @@ export const LineChart: React.FC<LineChartProps> = ({ className, delay = 0 }) =>
       />
     </svg>
   );
-};
+});
+
+LineChart.displayName = 'LineChart';
 
 export default LineChart;
