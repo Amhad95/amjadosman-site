@@ -4,94 +4,107 @@ import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
-import { AnimatedIcon } from '@/components/shared/AnimatedIcon';
+import { SuiteGrid } from '@/components/sections/SuiteGrid';
 import { CyberGlobeHeader } from '@/components/shared/CyberGlobeHeader';
-import { siteContent } from '@/lib/content';
-import { Check, Users, LayoutDashboard, FileStack, Puzzle, LucideIcon } from 'lucide-react';
+import { Check } from 'lucide-react';
 
-// Icon mapping for software modules
-const moduleIconMap: Record<string, LucideIcon> = {
-  'CRM (Core)': Users,
-  'Operations Workspace': LayoutDashboard,
-  'Document and Template Center': FileStack,
-  'Optional add-ons': Puzzle,
-};
+const suiteProducts = [
+  {
+    id: 'crm',
+    name: 'CRM',
+    oneLiner: 'Manage relationships, pipeline, and follow-up without chaos.',
+    outcomes: [
+      'Clear pipeline stages and ownership',
+      'Reliable follow-up and activity tracking',
+      'Simple reporting for decisions',
+    ],
+    cta: { label: 'View CRM', href: '/software/crm' },
+  },
+  {
+    id: 'accounting',
+    name: 'Accounting',
+    oneLiner: 'Invoicing, expenses, and basic finance visibility in a clean workflow.',
+    outcomes: [
+      'Faster invoicing and payment tracking',
+      'Cleaner expense capture and approvals',
+      'A dashboard that stays readable',
+    ],
+    cta: { label: 'View Accounting', href: '/software/accounting' },
+  },
+  {
+    id: 'inventory',
+    name: 'Inventory and Assets',
+    oneLiner: 'Track items and assets with controlled access and auditability.',
+    outcomes: [
+      'Know what exists and where it is',
+      'Reorder alerts and basic controls',
+      'Cleaner handovers and accountability',
+    ],
+    cta: { label: 'View Inventory', href: '/software/inventory' },
+  },
+  {
+    id: 'tasks',
+    name: 'Tasks and Work Management',
+    oneLiner: 'Plan work, assign ownership, and keep delivery visible.',
+    outcomes: [
+      'Clear assignments and deadlines',
+      'Fewer dropped tasks',
+      'Better coordination across teams',
+    ],
+    cta: { label: 'View Work Management', href: '/software/tasks' },
+  },
+];
+
+const foundationBullets = [
+  'Roles, permissions, and governance configured from day one',
+  'Templates, workflows, and approval steps set up to match how you operate',
+  'Data imported into a clean structure',
+  'Onboarding, documentation, and admin handover included',
+  'Ongoing admin support with controlled change requests',
+];
 
 const Software = () => {
-  const { software } = siteContent;
-
   return (
     <Layout>
       {/* Hero */}
       <Hero
-        headline={software.hero.headline}
-        subheadline={software.hero.subheadline}
-        primaryCta={software.hero.primaryCta}
-        secondaryCta={software.hero.secondaryCta}
+        headline="A focused suite of enterprise software, configured and managed for your team."
+        subheadline="ADSI provides a small set of high-usage cloud business softwares. Each one is provisioned, configured, and supported for you with governance, permissions, and clean onboarding."
+        primaryCta={{ label: "Request software access", href: "/book?intent=suite" }}
+        secondaryCta={{ label: "Book a Call", href: "/book" }}
         plate="astral"
         rightElement={<CyberGlobeHeader color="mint" speed={0.8} />}
       />
 
-      {/* Core Modules */}
+      {/* Suite Grid */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={software.modules.headline} />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {software.modules.items.map((module, index) => {
-              const ModuleIcon = moduleIconMap[module.title] || LayoutDashboard;
-              return (
-                <div
-                  key={index}
-                  className="bg-card rounded-2xl p-6 md:p-8 border border-ink/10"
-                >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-plate-astral flex items-center justify-center">
-                      <AnimatedIcon 
-                        icon={ModuleIcon} 
-                        animation="breathe" 
-                        color="mint" 
-                        size={24} 
-                      />
-                    </div>
-                    <h3 className="font-serif text-xl text-foreground pt-2">
-                      {module.title}
-                    </h3>
-                  </div>
-                  <ul className="space-y-2">
-                    {module.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Check size={16} className="text-mint flex-shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  {module.note && (
-                    <p className="mt-4 text-sm text-lavender italic">{module.note}</p>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          
-          <p className="text-body-md text-muted-foreground italic">
-            {software.modules.keyLine}
-          </p>
+          <SectionHeader headline="The Suite" />
+          <SuiteGrid products={suiteProducts} />
         </div>
       </section>
 
-      {/* Differentiator */}
+      {/* Shared Foundation */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={software.differentiator.headline} />
+          <SectionHeader headline="Configured for adoption, not just access." />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
-            {software.differentiator.points.map((point, index) => (
+            {foundationBullets.map((bullet, index) => (
               <div key={index} className="flex items-start gap-3">
                 <Check size={20} className="text-mint flex-shrink-0 mt-0.5" />
-                <span className="text-body-md text-foreground">{point}</span>
+                <span className="text-body-md text-foreground">{bullet}</span>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Expansion Note */}
+      <section className="py-12 md:py-16 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <p className="text-body-lg text-muted-foreground max-w-2xl">
+            We start with four core products and expand into industry-specific systems over time.
+          </p>
         </div>
       </section>
 
@@ -99,10 +112,14 @@ const Software = () => {
       <section className="py-16 md:py-24 bg-plate-astral">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-xl">
-            <p className="text-lg text-mint mb-2">{software.pricing.note}</p>
-            <p className="text-offwhite/70 mb-6">{software.pricing.setupNote}</p>
-            <PrimaryButton href={software.pricing.cta.href} textColor="astral">
-              {software.pricing.cta.label}
+            <p className="text-lg text-mint mb-2">
+              Software subscription starts from EUR 500 per month per product, depending on users and configuration.
+            </p>
+            <p className="text-offwhite/70 mb-6">
+              Setup is included in some packages or offered as a fixed onboarding fee.
+            </p>
+            <PrimaryButton href="/book?intent=suite-pricing" textColor="astral">
+              Get suite pricing
             </PrimaryButton>
           </div>
         </div>

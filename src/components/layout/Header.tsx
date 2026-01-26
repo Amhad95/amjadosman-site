@@ -11,6 +11,10 @@ type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy'
 const routePlateMap: Record<string, PlateColor> = {
   '/': 'violet',
   '/software': 'astral',
+  '/software/crm': 'astral',
+  '/software/accounting': 'astral',
+  '/software/inventory': 'astral',
+  '/software/tasks': 'astral',
   '/services': 'navy',
   '/tools': 'emerald',
   '/pricing': 'navy',

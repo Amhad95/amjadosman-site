@@ -6,6 +6,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
 import Software from "./pages/Software";
+import SoftwareCRM from "./pages/software/SoftwareCRM";
+import SoftwareAccounting from "./pages/software/SoftwareAccounting";
+import SoftwareInventory from "./pages/software/SoftwareInventory";
+import SoftwareTasks from "./pages/software/SoftwareTasks";
 import Tools from "./pages/Tools";
 import Work from "./pages/Work";
 import Pricing from "./pages/Pricing";
@@ -30,6 +34,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<Services />} />
           <Route path="/software" element={<Software />} />
+          <Route path="/software/crm" element={<SoftwareCRM />} />
+          <Route path="/software/accounting" element={<SoftwareAccounting />} />
+          <Route path="/software/inventory" element={<SoftwareInventory />} />
+          <Route path="/software/tasks" element={<SoftwareTasks />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/work" element={<Work />} />
           <Route path="/pricing" element={<Pricing />} />
