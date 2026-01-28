@@ -4,9 +4,12 @@ import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
-import { SuiteGrid } from '@/components/sections/SuiteGrid';
+import { PremiumSuiteGrid } from '@/components/sections/PremiumSuiteGrid';
+import { ComparisonTable } from '@/components/sections/ComparisonTable';
+import { SetupTimeline } from '@/components/sections/SetupTimeline';
 import { CyberGlobeHeader } from '@/components/shared/CyberGlobeHeader';
-import { Check } from 'lucide-react';
+import { Settings, FileCheck, Users, Headphones } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const suiteProducts = [
   {
@@ -14,53 +17,68 @@ const suiteProducts = [
     name: 'CRM',
     oneLiner: 'Manage relationships, pipeline, and follow-up without chaos.',
     outcomes: [
-      'Clear pipeline stages and ownership',
-      'Reliable follow-up and activity tracking',
-      'Simple reporting for decisions',
+      'Clear pipeline stages',
+      'Reliable follow-up',
+      'Simple reporting',
     ],
-    cta: { label: 'View CRM', href: '/software/crm' },
+    href: '/software/crm',
   },
   {
     id: 'accounting',
     name: 'Accounting',
     oneLiner: 'Invoicing, expenses, and basic finance visibility in a clean workflow.',
     outcomes: [
-      'Faster invoicing and payment tracking',
-      'Cleaner expense capture and approvals',
-      'A dashboard that stays readable',
+      'Faster invoicing',
+      'Cleaner expense capture',
+      'Readable dashboards',
     ],
-    cta: { label: 'View Accounting', href: '/software/accounting' },
+    href: '/software/accounting',
   },
   {
     id: 'inventory',
     name: 'Inventory and Assets',
     oneLiner: 'Track items and assets with controlled access and auditability.',
     outcomes: [
-      'Know what exists and where it is',
-      'Reorder alerts and basic controls',
-      'Cleaner handovers and accountability',
+      'Know what exists',
+      'Reorder alerts',
+      'Clear accountability',
     ],
-    cta: { label: 'View Inventory', href: '/software/inventory' },
+    href: '/software/inventory',
   },
   {
     id: 'tasks',
     name: 'Tasks and Work Management',
     oneLiner: 'Plan work, assign ownership, and keep delivery visible.',
     outcomes: [
-      'Clear assignments and deadlines',
+      'Clear assignments',
       'Fewer dropped tasks',
-      'Better coordination across teams',
+      'Better coordination',
     ],
-    cta: { label: 'View Work Management', href: '/software/tasks' },
+    href: '/software/tasks',
   },
 ];
 
-const foundationBullets = [
-  'Roles, permissions, and governance configured from day one',
-  'Templates, workflows, and approval steps set up to match how you operate',
-  'Data imported into a clean structure',
-  'Onboarding, documentation, and admin handover included',
-  'Ongoing admin support with controlled change requests',
+const foundationFeatures = [
+  {
+    icon: Users,
+    title: 'Roles and permissions',
+    description: 'Team structure, access levels, and approval chains set up from day one.',
+  },
+  {
+    icon: Settings,
+    title: 'Templates and workflows',
+    description: 'Pipeline stages, document formats, and automation rules configured.',
+  },
+  {
+    icon: FileCheck,
+    title: 'Data import',
+    description: 'Existing records migrated and validated in clean structure.',
+  },
+  {
+    icon: Headphones,
+    title: 'Ongoing admin support',
+    description: 'Controlled change requests and admin support included.',
+  },
 ];
 
 const Software = () => {
@@ -68,10 +86,10 @@ const Software = () => {
     <Layout>
       {/* Hero */}
       <Hero
-        headline="A focused suite of enterprise software, configured and managed for your team."
-        subheadline="ADSI provides a small set of high-usage cloud business softwares. Each one is provisioned, configured, and supported for you with governance, permissions, and clean onboarding."
+        headline="A focused enterprise suite, configured and managed for your team."
+        subheadline="Four cloud softwares, provisioned and configured with governance, permissions, templates, data import, training, and ongoing admin support."
         primaryCta={{ label: "Request software access", href: "/book?intent=suite" }}
-        secondaryCta={{ label: "Book a Call", href: "/book" }}
+        secondaryCta={{ label: "Book a call", href: "/book" }}
         plate="astral"
         rightElement={<CyberGlobeHeader color="mint" speed={0.8} />}
       />
@@ -79,28 +97,84 @@ const Software = () => {
       {/* Suite Grid */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="The Suite" />
-          <SuiteGrid products={suiteProducts} />
+          <SectionHeader 
+            headline="The Suite" 
+            subheadline="Four focused products. Each one configured for adoption, not just access."
+          />
+          <PremiumSuiteGrid products={suiteProducts} />
         </div>
       </section>
 
-      {/* Shared Foundation */}
+      {/* Compare at a Glance */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="Configured for adoption, not just access." />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
-            {foundationBullets.map((bullet, index) => (
-              <div key={index} className="flex items-start gap-3">
-                <Check size={20} className="text-mint flex-shrink-0 mt-0.5" />
-                <span className="text-body-md text-foreground">{bullet}</span>
+          <SectionHeader 
+            headline="Compare at a glance" 
+            subheadline="Understand where each product fits in your operations."
+          />
+          <ComparisonTable className="mt-8" />
+        </div>
+      </section>
+
+      {/* Configured for Adoption */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+            {/* Left: Copy + Feature Cards */}
+            <div>
+              <h2 className="font-serif text-heading-lg text-foreground mb-4">
+                Configured for adoption, not just access.
+              </h2>
+              <p className="text-body-lg text-muted-foreground mb-8 max-w-xl">
+                Every product in the suite is provisioned with your team structure, workflows, and governance in place.
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {foundationFeatures.map((feature) => {
+                  const Icon = feature.icon;
+                  return (
+                    <div
+                      key={feature.title}
+                      className={cn(
+                        'group p-5 rounded-xl',
+                        'bg-card border border-ink/10',
+                        'hover:border-mint/30 hover:shadow-lg hover:shadow-mint/5',
+                        'transition-all duration-300'
+                      )}
+                    >
+                      <div className={cn(
+                        'w-10 h-10 rounded-lg mb-3',
+                        'bg-plate-astral text-mint',
+                        'flex items-center justify-center',
+                        'group-hover:scale-110 transition-transform duration-300'
+                      )}>
+                        <Icon size={20} />
+                      </div>
+                      <h4 className="font-semibold text-foreground text-sm mb-1">
+                        {feature.title}
+                      </h4>
+                      <p className="text-xs text-muted-foreground">
+                        {feature.description}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
+            </div>
+
+            {/* Right: Animated Setup Timeline */}
+            <div className="bg-muted rounded-2xl p-6 md:p-8">
+              <h3 className="font-serif text-xl text-foreground mb-6">
+                Typical setup timeline
+              </h3>
+              <SetupTimeline />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Expansion Note */}
-      <section className="py-12 md:py-16 bg-background">
+      <section className="py-12 md:py-16 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <p className="text-body-lg text-muted-foreground max-w-2xl">
             We start with four core products and expand into industry-specific systems over time.
@@ -128,7 +202,7 @@ const Software = () => {
       {/* Final CTA */}
       <CTABand
         headline="Ready to get started?"
-        primaryCta={{ label: "Book a Call", href: "/book" }}
+        primaryCta={{ label: "Book a call", href: "/book" }}
         variant="dark"
       />
     </Layout>

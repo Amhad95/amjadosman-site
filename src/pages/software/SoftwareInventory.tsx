@@ -1,93 +1,195 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
-import { ProductSection } from '@/components/sections/ProductSection';
+import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
-import { VignetteContainer } from '@/components/shared/VignetteContainer';
+import { PersonaCards, defaultPersonas } from '@/components/sections/PersonaCards';
+import { OutcomeTiles } from '@/components/sections/OutcomeTiles';
+import { WorkflowStepper } from '@/components/sections/WorkflowStepper';
+import { RolesPermissionsMatrix } from '@/components/sections/RolesPermissionsMatrix';
+import { SetupSupportCards } from '@/components/sections/SetupSupportCards';
+import { TabbedProductPreview } from '@/components/ui/vignettes/TabbedProductPreview';
+import { MiniDashboard, defaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
+import { SupportRequestVignette } from '@/components/ui/vignettes/SupportRequestVignette';
+import { ConfigurationPreview, defaultConfigSteps } from '@/components/ui/vignettes/ConfigurationPreview';
 import { InventoryList } from '@/components/ui/vignettes/InventoryList';
 import { ReorderAlert } from '@/components/ui/vignettes/ReorderAlert';
+import {
+  InventoryItemsPreview,
+  InventoryLocationsPreview,
+  InventoryReorderPreview,
+  InventoryAssetPreview,
+} from '@/components/ui/vignettes/ProductPreviews';
 import { CyberPyramid } from '@/components/ui/cyber-pyramid';
+import { cn } from '@/lib/utils';
+
+const outcomes = [
+  {
+    headline: 'Know what exists and where it is',
+    description: 'Searchable records with location tracking and category filtering.',
+  },
+  {
+    headline: 'Reorder alerts and basic controls',
+    description: 'Threshold-based alerts before items run out.',
+  },
+  {
+    headline: 'Cleaner handovers and accountability',
+    description: 'Assignment history for equipment and assets.',
+  },
+  {
+    headline: 'Audit-ready records for assets and stock',
+    description: 'Clean documentation for compliance and reporting.',
+  },
+];
+
+const workflowSteps = [
+  {
+    id: 'configure',
+    title: 'Configure structure',
+    description: 'Locations, categories, and thresholds set up.',
+    content: <ConfigurationPreview steps={defaultConfigSteps.inventory} activeStep={0} />,
+  },
+  {
+    id: 'roles',
+    title: 'Assign roles and permissions',
+    description: 'Warehouse roles, access levels, and checkout rules defined.',
+    content: <ConfigurationPreview steps={defaultConfigSteps.inventory} activeStep={1} />,
+  },
+  {
+    id: 'import',
+    title: 'Import data',
+    description: 'Item records and stock levels imported and validated.',
+    content: <ConfigurationPreview steps={defaultConfigSteps.inventory} activeStep={2} />,
+  },
+  {
+    id: 'workflow',
+    title: 'Run day-to-day workflow',
+    description: 'Track stock, process reorders, manage checkouts.',
+    content: <ConfigurationPreview steps={defaultConfigSteps.inventory} activeStep={3} />,
+  },
+];
+
+const heroTabs = [
+  { id: 'items', label: 'Items', content: <InventoryItemsPreview /> },
+  { id: 'locations', label: 'Locations', content: <InventoryLocationsPreview /> },
+  { id: 'reorder', label: 'Reorder', content: <InventoryReorderPreview /> },
+  { id: 'assets', label: 'Assets', content: <InventoryAssetPreview /> },
+];
 
 const SoftwareInventory = () => {
+  const [activePersona, setActivePersona] = useState(0);
+
   return (
     <Layout>
-      {/* Hero */}
-      <Hero
-        headline="Inventory and asset tracking with controlled access."
-        subheadline="Know what exists, where it is, and who is accountable. Provisioned with your locations, categories, and reorder workflows."
-        primaryCta={{ label: "Request access", href: "/book?intent=inventory" }}
-        secondaryCta={{ label: "Book a Call", href: "/book" }}
-        plate="astral"
-        rightElement={<CyberPyramid color="mint" speed={0.8} />}
-      />
+      {/* Hero with Tabbed Preview */}
+      <section className="bg-plate-astral min-h-[80vh] flex items-end">
+        <div className="container mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left: Copy */}
+            <div>
+              <h1 className="font-serif text-poster-xl text-mint mb-6">
+                Inventory and asset tracking with controlled access.
+              </h1>
+              <p className="text-body-lg text-offwhite/80 mb-8">
+                Know what exists, where it is, and who is accountable. Provisioned with your locations, categories, and reorder workflows.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <PrimaryButton href="/book?intent=inventory" textColor="astral">
+                  Request access
+                </PrimaryButton>
+                <a
+                  href="/book"
+                  className="inline-flex items-center justify-center h-12 px-6 rounded-lg border border-mint/30 text-mint font-semibold hover:bg-mint/10 transition-colors"
+                >
+                  Book a call
+                </a>
+              </div>
+            </div>
 
-      {/* Who It's For */}
-      <ProductSection
-        headline="Who it's for"
-        bullets={[
-          "Teams tracking stock across spreadsheets and memory",
-          "Operations managers who need visibility across locations",
-          "IT and facilities teams managing asset assignments",
-        ]}
-        variant="light"
-      />
-
-      {/* Outcomes */}
-      <ProductSection
-        headline="Outcomes"
-        bullets={[
-          "Know what exists and where it is",
-          "Reorder alerts and basic controls",
-          "Cleaner handovers and accountability",
-          "Audit-ready records for assets and stock",
-        ]}
-        variant="muted"
-      />
-
-      {/* Key Workflows */}
-      <ProductSection
-        headline="Key workflows"
-        bullets={[
-          "Item and asset records with location tracking",
-          "Stock level monitoring with reorder alerts",
-          "Assignment and checkout workflows",
-          "Barcode and QR code support",
-          "Location and category filtering",
-          "Role-based access for warehouse and admin staff",
-        ]}
-        variant="light"
-      />
-
-      {/* Animated UI Vignettes */}
-      <section className="py-16 md:py-24 bg-plate-astral">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="font-serif text-poster-lg text-offwhite mb-8 md:mb-12">
-            See it in action
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <VignetteContainer label="Inventory list with filtering">
-              <InventoryList />
-            </VignetteContainer>
-            <VignetteContainer label="Reorder alerts and status">
-              <ReorderAlert />
-            </VignetteContainer>
+            {/* Right: Tabbed Preview */}
+            <div className="bg-ink/30 rounded-xl border border-mint/20 h-[280px] md:h-[320px]">
+              <TabbedProductPreview tabs={heroTabs} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Configuration and Onboarding */}
-      <ProductSection
-        headline="Configured for your team, not just activated"
-        bullets={[
-          "Locations, categories, and thresholds set up",
-          "Access roles configured for staff and managers",
-          "Existing inventory imported into clean structure",
-          "Onboarding, training, and documentation included",
-          "Ongoing admin support with controlled change requests",
-        ]}
-        variant="light"
-      />
+      {/* Who It's For - Persona Cards */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader headline="Who it's for" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            <PersonaCards
+              personas={defaultPersonas.inventory}
+              onPersonaSelect={setActivePersona}
+            />
+            <div className="bg-plate-astral rounded-xl border border-mint/20 p-6 min-h-[280px]">
+              {activePersona === 0 && <InventoryList />}
+              {activePersona === 1 && <ReorderAlert />}
+              {activePersona === 2 && <InventoryAssetPreview />}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Outcomes - Tiles + Mini Dashboard */}
+      <section className="py-16 md:py-24 bg-muted">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader headline="Outcomes" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <OutcomeTiles outcomes={outcomes} />
+            </div>
+            <div className="bg-plate-astral rounded-xl border border-mint/20 p-4">
+              <h4 className="text-xs font-semibold text-mint mb-4 uppercase tracking-wide">
+                Live Metrics Preview
+              </h4>
+              <MiniDashboard metrics={defaultMetrics.inventory} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Workflow Tour - Stepper */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader 
+            headline="How it works" 
+            subheadline="From configuration to daily operations—a clear path to adoption."
+          />
+          <WorkflowStepper steps={workflowSteps} className="mt-8" />
+        </div>
+      </section>
+
+      {/* Governance - Roles Matrix */}
+      <section className="py-16 md:py-24 bg-muted">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader 
+            headline="Governance built in" 
+            subheadline="Control who can add, move, checkout, and manage—without complexity."
+          />
+          <RolesPermissionsMatrix className="mt-8 max-w-4xl" />
+        </div>
+      </section>
+
+      {/* Setup and Support */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader 
+            headline="Configured for your team, not just activated" 
+            subheadline="Setup, onboarding, and ongoing support included."
+          />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+            <div className="lg:col-span-2">
+              <SetupSupportCards />
+            </div>
+            <div className="bg-plate-astral rounded-xl border border-mint/20 h-[280px]">
+              <SupportRequestVignette />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Pricing Note */}
       <section className="py-16 md:py-24 bg-muted">
@@ -110,6 +212,7 @@ const SoftwareInventory = () => {
       <CTABand
         headline="Ready to get started with Inventory?"
         primaryCta={{ label: "Request access", href: "/book?intent=inventory" }}
+        secondaryCta={{ label: "Book a call", href: "/book" }}
         variant="dark"
       />
     </Layout>
