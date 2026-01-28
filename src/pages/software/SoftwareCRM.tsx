@@ -1,93 +1,196 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
-import { ProductSection } from '@/components/sections/ProductSection';
+import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { VignetteContainer } from '@/components/shared/VignetteContainer';
+import { PersonaCards, defaultPersonas } from '@/components/sections/PersonaCards';
+import { OutcomeTiles } from '@/components/sections/OutcomeTiles';
+import { WorkflowStepper } from '@/components/sections/WorkflowStepper';
+import { RolesPermissionsMatrix } from '@/components/sections/RolesPermissionsMatrix';
+import { SetupSupportCards } from '@/components/sections/SetupSupportCards';
+import { TabbedProductPreview } from '@/components/ui/vignettes/TabbedProductPreview';
+import { MiniDashboard, defaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
+import { SupportRequestVignette } from '@/components/ui/vignettes/SupportRequestVignette';
+import { ConfigurationPreview, defaultConfigSteps } from '@/components/ui/vignettes/ConfigurationPreview';
 import { PipelineBoard } from '@/components/ui/vignettes/PipelineBoard';
 import { ContactTimeline } from '@/components/ui/vignettes/ContactTimeline';
+import {
+  CRMPipelinePreview,
+  CRMContactPreview,
+  CRMTasksPreview,
+  CRMReportsPreview,
+} from '@/components/ui/vignettes/ProductPreviews';
 import { CyberHeart } from '@/components/ui/cyber-heart';
+import { cn } from '@/lib/utils';
+
+const outcomes = [
+  {
+    headline: 'Clear pipeline stages and ownership',
+    description: 'Every deal has a stage, an owner, and a clear next action.',
+  },
+  {
+    headline: 'Reliable follow-up and activity tracking',
+    description: 'No more lost threads—every interaction logged automatically.',
+  },
+  {
+    headline: 'Simple reporting for decisions',
+    description: 'Dashboards that show pipeline value and team activity.',
+  },
+  {
+    headline: 'Clean handover when roles change',
+    description: 'Complete history travels with contacts and deals.',
+  },
+];
+
+const workflowSteps = [
+  {
+    id: 'configure',
+    title: 'Configure structure',
+    description: 'Pipeline stages, custom fields, and deal values set up.',
+    content: <ConfigurationPreview steps={defaultConfigSteps.crm} activeStep={0} />,
+  },
+  {
+    id: 'roles',
+    title: 'Assign roles and permissions',
+    description: 'Team visibility rules and approval chains defined.',
+    content: <ConfigurationPreview steps={defaultConfigSteps.crm} activeStep={1} />,
+  },
+  {
+    id: 'import',
+    title: 'Import data',
+    description: 'Existing contacts and deals migrated cleanly.',
+    content: <ConfigurationPreview steps={defaultConfigSteps.crm} activeStep={2} />,
+  },
+  {
+    id: 'workflow',
+    title: 'Run day-to-day workflow',
+    description: 'Track deals, log activities, generate reports.',
+    content: <ConfigurationPreview steps={defaultConfigSteps.crm} activeStep={3} />,
+  },
+];
+
+const heroTabs = [
+  { id: 'pipeline', label: 'Pipeline', content: <CRMPipelinePreview /> },
+  { id: 'contact', label: 'Contact', content: <CRMContactPreview /> },
+  { id: 'tasks', label: 'Tasks', content: <CRMTasksPreview /> },
+  { id: 'reports', label: 'Reports', content: <CRMReportsPreview /> },
+];
 
 const SoftwareCRM = () => {
+  const [activePersona, setActivePersona] = useState(0);
+
   return (
     <Layout>
-      {/* Hero */}
-      <Hero
-        headline="CRM configured for how your team actually sells."
-        subheadline="A clean relationship management system provisioned with your pipeline stages, roles, and follow-up workflows. Not a platform you figure out alone."
-        primaryCta={{ label: "Request access", href: "/book?intent=crm" }}
-        secondaryCta={{ label: "Book a Call", href: "/book" }}
-        plate="astral"
-        rightElement={<CyberHeart color="mint" speed={1} />}
-      />
+      {/* Hero with Tabbed Preview */}
+      <section className="bg-plate-astral min-h-[80vh] flex items-end">
+        <div className="container mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left: Copy */}
+            <div>
+              <h1 className="font-serif text-poster-xl text-mint mb-6">
+                CRM configured for how your team actually sells.
+              </h1>
+              <p className="text-body-lg text-offwhite/80 mb-8">
+                A clean relationship management system provisioned with your pipeline stages, roles, and follow-up workflows. Not a platform you figure out alone.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <PrimaryButton href="/book?intent=crm" textColor="astral">
+                  Request access
+                </PrimaryButton>
+                <a
+                  href="/book"
+                  className="inline-flex items-center justify-center h-12 px-6 rounded-lg border border-mint/30 text-mint font-semibold hover:bg-mint/10 transition-colors"
+                >
+                  Book a call
+                </a>
+              </div>
+            </div>
 
-      {/* Who It's For */}
-      <ProductSection
-        headline="Who it's for"
-        bullets={[
-          "Teams tracking relationships across spreadsheets and inboxes",
-          "Sales leaders who need visibility without manual reporting",
-          "Operations teams managing client onboarding and renewals",
-        ]}
-        variant="light"
-      />
-
-      {/* Outcomes */}
-      <ProductSection
-        headline="Outcomes"
-        bullets={[
-          "Clear pipeline stages and ownership",
-          "Reliable follow-up and activity tracking",
-          "Simple reporting for decisions",
-          "Clean handover when roles change",
-        ]}
-        variant="muted"
-      />
-
-      {/* Key Workflows */}
-      <ProductSection
-        headline="Key workflows"
-        bullets={[
-          "Contact and company records with linked history",
-          "Pipeline board with stage automation",
-          "Task and reminder management",
-          "Email templates and activity logging",
-          "Reporting dashboards",
-          "Role-based access and permissions",
-        ]}
-        variant="light"
-      />
-
-      {/* Animated UI Vignettes */}
-      <section className="py-16 md:py-24 bg-plate-astral">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="font-serif text-poster-lg text-offwhite mb-8 md:mb-12">
-            See it in action
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <VignetteContainer label="Pipeline board with deal progression">
-              <PipelineBoard />
-            </VignetteContainer>
-            <VignetteContainer label="Contact profile with activity timeline">
-              <ContactTimeline />
-            </VignetteContainer>
+            {/* Right: Tabbed Preview */}
+            <div className="bg-ink/30 rounded-xl border border-mint/20 h-[280px] md:h-[320px]">
+              <TabbedProductPreview tabs={heroTabs} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Configuration and Onboarding */}
-      <ProductSection
-        headline="Configured for your team, not just activated"
-        bullets={[
-          "Roles and permissions set up for your structure",
-          "Pipeline stages and custom fields configured",
-          "Data imported from your current tools",
-          "Onboarding, training, and documentation included",
-          "Ongoing admin support with controlled change requests",
-        ]}
-        variant="light"
-      />
+      {/* Who It's For - Persona Cards */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader headline="Who it's for" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            <PersonaCards
+              personas={defaultPersonas.crm}
+              onPersonaSelect={setActivePersona}
+            />
+            <div className="bg-plate-astral rounded-xl border border-mint/20 p-6 min-h-[280px]">
+              {activePersona === 0 && <PipelineBoard />}
+              {activePersona === 1 && <CRMReportsPreview />}
+              {activePersona === 2 && <ContactTimeline />}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Outcomes - Tiles + Mini Dashboard */}
+      <section className="py-16 md:py-24 bg-muted">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader headline="Outcomes" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <OutcomeTiles outcomes={outcomes} />
+            </div>
+            <div className="bg-plate-astral rounded-xl border border-mint/20 p-4">
+              <h4 className="text-xs font-semibold text-mint mb-4 uppercase tracking-wide">
+                Live Metrics Preview
+              </h4>
+              <MiniDashboard metrics={defaultMetrics.crm} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Workflow Tour - Stepper */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader 
+            headline="How it works" 
+            subheadline="From configuration to daily operations—a clear path to adoption."
+          />
+          <WorkflowStepper steps={workflowSteps} className="mt-8" />
+        </div>
+      </section>
+
+      {/* Governance - Roles Matrix */}
+      <section className="py-16 md:py-24 bg-muted">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader 
+            headline="Governance built in" 
+            subheadline="Control who can see, edit, approve, and export—without complexity."
+          />
+          <RolesPermissionsMatrix className="mt-8 max-w-4xl" />
+        </div>
+      </section>
+
+      {/* Setup and Support */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader 
+            headline="Configured for your team, not just activated" 
+            subheadline="Setup, onboarding, and ongoing support included."
+          />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+            <div className="lg:col-span-2">
+              <SetupSupportCards />
+            </div>
+            <div className="bg-plate-astral rounded-xl border border-mint/20 h-[280px]">
+              <SupportRequestVignette />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Pricing Note */}
       <section className="py-16 md:py-24 bg-muted">
@@ -110,6 +213,7 @@ const SoftwareCRM = () => {
       <CTABand
         headline="Ready to get started with CRM?"
         primaryCta={{ label: "Request access", href: "/book?intent=crm" }}
+        secondaryCta={{ label: "Book a call", href: "/book" }}
         variant="dark"
       />
     </Layout>
