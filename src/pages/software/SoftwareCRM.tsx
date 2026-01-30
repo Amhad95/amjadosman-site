@@ -15,15 +15,16 @@ import { SetupSupportCards } from '@/components/sections/SetupSupportCards';
 import { TabbedProductPreview } from '@/components/ui/vignettes/TabbedProductPreview';
 import { MiniDashboard, defaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
 import { SupportRequestVignette } from '@/components/ui/vignettes/SupportRequestVignette';
-import { ConfigurationPreview, defaultConfigSteps } from '@/components/ui/vignettes/ConfigurationPreview';
+import { SettingsPanel, crmSettingsConfig } from '@/components/ui/vignettes/SettingsPanel';
+import { ImportMapper, crmImportMappings } from '@/components/ui/vignettes/ImportMapper';
+import {
+  PipelineBoardRealistic,
+  ContactsTableRealistic,
+  TasksListRealistic,
+  MiniReportsRealistic,
+} from '@/components/ui/vignettes/CRMPreviews';
 import { PipelineBoard } from '@/components/ui/vignettes/PipelineBoard';
 import { ContactTimeline } from '@/components/ui/vignettes/ContactTimeline';
-import {
-  CRMPipelinePreview,
-  CRMContactPreview,
-  CRMTasksPreview,
-  CRMReportsPreview,
-} from '@/components/ui/vignettes/ProductPreviews';
 import { CyberHeart } from '@/components/ui/cyber-heart';
 import {
   Users,
@@ -35,9 +36,6 @@ import {
   Shield,
   BarChart3,
   Mail,
-  Calendar,
-  Filter,
-  Bell,
 } from 'lucide-react';
 
 // Problem contrast items
@@ -118,40 +116,40 @@ const capabilities = [
   },
 ];
 
-// Workflow steps
+// Workflow steps with realistic previews
 const workflowSteps = [
   {
     id: 'configure',
     title: 'Configure structure',
     description: 'Pipeline stages, custom fields, and deal values set up.',
-    content: <ConfigurationPreview steps={defaultConfigSteps.crm} activeStep={0} />,
+    content: <SettingsPanel sections={crmSettingsConfig} activeSection={0} />,
   },
   {
     id: 'roles',
     title: 'Assign roles and permissions',
     description: 'Team visibility rules and approval chains defined.',
-    content: <ConfigurationPreview steps={defaultConfigSteps.crm} activeStep={1} />,
+    content: <SettingsPanel sections={crmSettingsConfig} activeSection={2} />,
   },
   {
     id: 'import',
     title: 'Import data',
     description: 'Existing contacts and deals migrated cleanly.',
-    content: <ConfigurationPreview steps={defaultConfigSteps.crm} activeStep={2} />,
+    content: <ImportMapper mappings={crmImportMappings} />,
   },
   {
     id: 'workflow',
     title: 'Run day-to-day workflow',
     description: 'Track deals, log activities, generate reports.',
-    content: <ConfigurationPreview steps={defaultConfigSteps.crm} activeStep={3} />,
+    content: <PipelineBoardRealistic />,
   },
 ];
 
-// Hero preview tabs
+// Hero preview tabs - now using realistic previews
 const heroTabs = [
-  { id: 'pipeline', label: 'Pipeline', content: <CRMPipelinePreview /> },
-  { id: 'contact', label: 'Contact', content: <CRMContactPreview /> },
-  { id: 'tasks', label: 'Tasks', content: <CRMTasksPreview /> },
-  { id: 'reports', label: 'Reports', content: <CRMReportsPreview /> },
+  { id: 'pipeline', label: 'Pipeline', content: <PipelineBoardRealistic /> },
+  { id: 'contacts', label: 'Contacts', content: <ContactsTableRealistic /> },
+  { id: 'tasks', label: 'Tasks', content: <TasksListRealistic /> },
+  { id: 'reports', label: 'Reports', content: <MiniReportsRealistic /> },
 ];
 
 const SoftwareCRM = () => {
@@ -171,7 +169,7 @@ const SoftwareCRM = () => {
         plate="astral"
       />
 
-      {/* 2. Product Preview Section */}
+      {/* 2. Product Preview Section - Realistic UI */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
@@ -181,8 +179,15 @@ const SoftwareCRM = () => {
           />
           <div className="mt-10 max-w-5xl mx-auto">
             <ProductPreviewFrame title="Meridian CRM" variant="browser">
-              <div className="h-[320px] md:h-[400px]">
-                <TabbedProductPreview tabs={heroTabs} />
+              <div className="h-[360px] md:h-[440px]">
+                <TabbedProductPreview 
+                  tabs={heroTabs} 
+                  searchPlaceholder="Search contacts, deals..."
+                  filters={[
+                    { label: 'Status', active: false },
+                    { label: 'Owner', active: false },
+                  ]}
+                />
               </div>
             </ProductPreviewFrame>
           </div>
@@ -203,7 +208,7 @@ const SoftwareCRM = () => {
             />
             <ProductPreviewFrame variant="card" className="min-h-[280px]">
               {activePersona === 0 && <PipelineBoard />}
-              {activePersona === 1 && <CRMReportsPreview />}
+              {activePersona === 1 && <MiniReportsRealistic />}
               {activePersona === 2 && <ContactTimeline />}
             </ProductPreviewFrame>
           </div>
@@ -257,7 +262,7 @@ const SoftwareCRM = () => {
         </div>
       </section>
 
-      {/* 7. Workflow Tour - Stepper */}
+      {/* 7. Workflow Tour - Stepper with Realistic Previews */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
@@ -275,7 +280,7 @@ const SoftwareCRM = () => {
             headline="Control who does what"
             subheadline="Roles, permissions, and approval chains built in from day one."
           />
-          <div className="mt-8 max-w-4xl">
+          <div className="mt-8 max-w-4xl mx-auto">
             <ProductPreviewFrame variant="card">
               <RolesPermissionsMatrix />
             </ProductPreviewFrame>

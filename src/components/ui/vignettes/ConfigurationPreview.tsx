@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { Check } from 'lucide-react';
 
 interface ConfigStep {
   title: string;
@@ -18,31 +19,36 @@ export const ConfigurationPreview: React.FC<ConfigurationPreviewProps> = ({
   className,
 }) => {
   return (
-    <div className={cn('w-full h-full flex flex-col', className)}>
+    <div className={cn('w-full h-full flex flex-col bg-white p-3', className)}>
       {/* Step header */}
-      <div className="text-xs font-semibold text-mint mb-3">
-        Step {activeStep + 1}: {steps[activeStep]?.title}
+      <div className="text-xs font-semibold text-gray-900 mb-3 flex items-center gap-2">
+        <span className="w-5 h-5 rounded-full bg-gray-900 text-white text-[10px] flex items-center justify-center font-medium">
+          {activeStep + 1}
+        </span>
+        {steps[activeStep]?.title}
       </div>
 
       {/* Content */}
-      <div className="flex-1 space-y-2">
+      <div className="flex-1 space-y-1.5">
         {steps[activeStep]?.items.map((item, i) => (
           <div
             key={i}
             className={cn(
-              'flex items-center gap-2 p-2 rounded-lg bg-ink/30',
-              'animate-fade-in',
-              i === 0 && 'border border-mint/30'
+              'flex items-center gap-2 p-2.5 rounded-lg',
+              'animate-fade-in bg-gray-50 border border-gray-200',
+              i === 0 && 'bg-white border-gray-300 shadow-sm'
             )}
             style={{ animationDelay: `${i * 100}ms` }}
           >
             <div className={cn(
-              'w-5 h-5 rounded flex items-center justify-center text-[10px]',
-              i === 0 ? 'bg-mint text-ink' : 'bg-ink/50 text-offwhite/50'
+              'w-5 h-5 rounded flex items-center justify-center text-[10px] font-medium',
+              i === 0 
+                ? 'bg-gray-900 text-white' 
+                : 'bg-gray-200 text-gray-500'
             )}>
-              {i + 1}
+              {i === 0 ? <Check size={10} /> : i + 1}
             </div>
-            <span className="text-[11px] text-offwhite">{item}</span>
+            <span className="text-[11px] text-gray-700">{item}</span>
           </div>
         ))}
       </div>
