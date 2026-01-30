@@ -26,17 +26,17 @@ export const OutcomeTiles: React.FC<OutcomeTilesProps> = ({ outcomes, className 
             key={index}
             className={cn(
               'group p-5 rounded-xl',
-              'bg-card border border-ink/10',
-              'hover:border-mint/30 hover:shadow-lg hover:shadow-mint/5',
+              'bg-card border border-gray-200',
+              'hover:border-gray-300 hover:shadow-lg',
               'transition-all duration-300'
             )}
           >
             <div className="flex items-start gap-4">
               <div className={cn(
                 'flex-shrink-0 w-10 h-10 rounded-lg',
-                'bg-mint/10 text-mint',
+                'bg-gray-100 text-gray-600',
                 'flex items-center justify-center',
-                'group-hover:bg-mint group-hover:text-ink',
+                'group-hover:bg-gray-900 group-hover:text-white',
                 'transition-colors duration-300'
               )}>
                 <Icon size={20} />
