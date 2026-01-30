@@ -1,266 +1,276 @@
 
 
-# Step 1: CRM Page Template and Structure
+# Step 2: UI Preview Component System + CRM Page Upgrades
 
 ## Overview
-This is the first of 7 steps in the Software section upgrade. Step 1 establishes the structural template that will be applied to all 4 product pages. We focus on CRM as the reference implementation.
+This step transforms the CRM page from "text + weak preview" to a believable software landing page by building a reusable UI preview component system with realistic, neutral-surface previews placed across multiple sections.
 
 ---
 
-## Key Problems Being Fixed in This Step
+## Key Problems Being Fixed
 
 | Problem | Fix |
 |---------|-----|
-| UI snippets in hero instead of ASCII animation | Move UI previews below hero; add CyberHeart ASCII to hero |
-| No product naming system | Introduce "Meridian" as CRM product name with TM |
-| Sections lack structure | Add headline + subheadline + supporting copy to every section |
-| Dark purple vignette backgrounds | Change to neutral (white/light gray) app-like surfaces |
-| Mint used as text on light backgrounds | Use mint only for buttons, badges, and accents |
+| Previews use dark purple (`bg-ink/40`, `bg-ink/30`) website-themed backgrounds | Switch to neutral app surfaces (`bg-white`, `bg-gray-50`) |
+| TabbedProductPreview uses `bg-ink/40` tab bar and `bg-ink/20` content | Redesign with neutral colors, mint only as accents |
+| Previews lack realism (no top bar, search, filters, pagination) | Add realistic UI chrome and data patterns |
+| Mint used as text on light backgrounds | Use mint only for buttons, badges, active states |
+| WorkflowStepper uses `bg-plate-astral` for preview container | Use `ProductPreviewFrame` with neutral background |
+| MiniDashboard uses `bg-ink/40` cards | Redesign with white/light gray surface |
+| SupportRequestVignette uses dark theme (`bg-ink/30`) | Redesign as neutral-surface UI |
 
 ---
 
-## Product Naming
+## Component Architecture
 
-| Product | Name | Format |
-|---------|------|--------|
-| CRM | Meridian | Meridian^TM for CRM |
-| Accounting | Ledger | (Step 6) |
-| Inventory | Stockroom | (Step 6) |
-| Tasks | Cadence | (Step 6) |
+### A. Upgrade Existing Components
+
+#### 1. TabbedProductPreview.tsx (Complete Rewrite)
+Transform from dark-themed to neutral-surface app preview:
+
+**Before:**
+- `bg-ink/40` tab bar
+- `bg-ink/20` content area
+- Mint text on dark backgrounds
+
+**After:**
+- White/light gray tab bar with subtle border
+- Clean white content area
+- Mint only for active tab indicator/border
+- Add top app bar with search, filters, user avatar
+- Proper app UI structure
+
+**New Structure:**
+```text
+┌─────────────────────────────────────────┐
+│ App Top Bar (search, filters, actions)  │
+├─────────────────────────────────────────┤
+│ Tab Navigation (neutral, mint active)   │
+├─────────────────────────────────────────┤
+│                                         │
+│        Content Area (white)             │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+#### 2. ProductPreviews.tsx - CRM Components (Complete Rewrite)
+All four CRM previews need neutral surfaces:
+
+**CRMPipelinePreview → PipelineBoardRealistic:**
+- White background kanban columns
+- Real company names, deal values, owner initials, last activity dates
+- Drag-and-drop visual feedback (hover states)
+- Column headers with counts
+- Card shadows and proper spacing
+
+**CRMContactPreview → ContactsTableRealistic:**
+- Full table with column headers (Name, Company, Status, Last Contact, Owner)
+- Search bar and filter chips
+- Status chips (Active, Qualified, New, Inactive)
+- Pagination (1-10 of 47)
+- Row hover states
+- Click to open drawer
+
+**CRMTasksPreview → TasksListRealistic:**
+- Toggle: "My tasks" / "Team"
+- Priority badges (High/Medium/Low)
+- Due dates with color coding (Overdue = red, Today = amber, Future = gray)
+- Assignee avatars
+- Checkbox completion animation
+
+**CRMReportsPreview → MiniReportsRealistic:**
+- 4 KPI cards: Open Deals, Won This Month, Pipeline Value, Avg. Close Time
+- Time range toggle (7d / 30d / 90d)
+- Simple bar chart or trend line
+- Trend indicators (up/down arrows)
+
+#### 3. MiniDashboard.tsx (Redesign)
+Currently uses `bg-ink/40` - needs neutral surface:
+- White cards with subtle shadows
+- Gray-700 text for values
+- Mint for positive trends, destructive for negative
+- Proper spacing and borders
+
+#### 4. SupportRequestVignette.tsx (Redesign)
+Currently dark-themed - needs neutral surface:
+- White background with gray-100 rows
+- Status badges with appropriate colors
+- Proper table/list structure
+- Subtle animations on status change
+
+#### 5. ConfigurationPreview.tsx (Redesign)
+Currently uses `bg-ink/30` items - needs neutral surface:
+- White/gray-50 step cards
+- Green checkmarks for completed
+- Gray numbered badges for pending
+- Mint highlight for active step
+
+#### 6. WorkflowStepper.tsx (Fix Preview Container)
+Currently uses `bg-plate-astral` - wrap content in ProductPreviewFrame:
+- Replace dark background with ProductPreviewFrame browser variant
+- Keep stepper UI on left unchanged
+- Preview content on right in neutral frame
 
 ---
 
-## New Page Structure
+### B. New Components to Create
 
-The CRM page will follow this section order (template for all products):
-
-```text
-1. Hero (plate-astral background)
-   - ASCII animation (CyberHeart)
-   - Product name with TM + descriptor
-   - Outcome-driven headline
-   - Supporting subheadline
-   - Primary CTA: "Request access"
-   - Secondary CTA: "How onboarding works"
-
-2. Product Preview Section (NEW - moved from hero)
-   - Tabbed preview with 4 views
-   - White/light gray app background
-   - Centered with max-width container
-
-3. Who It's For
-   - Headline + subheadline
-   - 3 persona cards (role, pain, payoff)
-   - Interactive side preview
-
-4. Problems It Replaces (NEW)
-   - "From X chaos to Y clarity" framing
-   - Before/after contrast cards
-
-5. Outcomes
-   - 4 outcome tiles
-   - Mini dashboard vignette
-
-6. Core Capabilities (NEW)
-   - 6-8 capabilities in card grid
-   - Grouped by category
-
-7. Workflow Tour
-   - Vertical stepper (4 steps)
-   - Large UI preview per step
-
-8. Governance and Controls
-   - Roles/permissions matrix
-   - Preset toggles (Simple/Strict)
-
-9. Onboarding and Configuration
-   - 3 setup cards
-   - Support request vignette
-
-10. Pricing + CTA Block
-    - Pricing note
-    - Strong dual-CTA
-```
-
----
-
-## File Changes
-
-### 1. SoftwareCRM.tsx (Complete Rewrite)
-
-The page will be restructured with:
-
-**Hero Section:**
-- Replace tabbed UI preview with CyberHeart ASCII animation
-- Add product name: "Meridian^TM" with descriptor "for CRM"
-- Headline: "Relationship management configured for adoption."
-- Subheadline: "A clean CRM system provisioned with your pipeline stages, roles, and follow-up workflows. Configuration and ongoing admin support included."
-- CTAs: "Request access" and "How onboarding works"
-
-**Product Preview Section (New):**
-- Full-width section below hero
-- Headline: "See the product"
-- Subheadline: "Pipeline tracking, contact management, task automation, and reporting in one clean interface."
-- TabbedProductPreview component (will be upgraded in Step 2)
-- Centered in a "browser window" style frame
-
-**Who It's For:**
-- Headline: "Built for teams who sell"
-- Subheadline: "Whether you're tracking deals, managing accounts, or coordinating handovers."
-- 3 persona cards with role/pain/payoff
-- Interactive preview that changes per persona
-
-**Problems It Replaces (New Section):**
-- Headline: "Replace the chaos"
-- Subheadline: "Move from scattered tools and manual tracking to structured operations."
-- 3-4 contrast cards showing "From X to Y" transformations
-
-**Outcomes:**
-- Add subheadline: "Measurable improvements from day one."
-- Keep existing tiles + dashboard layout
-
-**Core Capabilities (New Section):**
-- Headline: "What you can do"
-- Subheadline: "Core features configured for your team."
-- 6-8 capability cards with icons
-
-**Workflow Tour:**
-- Headline: "From configuration to operations"
-- Subheadline: "A clear path from setup to daily use."
-- Keep stepper, upgrade vignettes in Step 2
-
-**Governance:**
-- Headline: "Control who does what"
-- Subheadline: "Roles, permissions, and approval chains built in from day one."
-- Keep matrix with Simple/Strict toggle
-
-**Onboarding:**
-- Headline: "Configured for your team, not just activated"
-- Subheadline: "We handle provisioning, configuration, training, and ongoing admin support."
-- 3 cards + support vignette
-
-**Pricing + CTA:**
-- Standard pricing note
-- Strong CTA block with reassurance line
-
----
-
-### 2. New Shared Components
-
-#### A. ProductHero.tsx
-A specialized hero component for product pages:
-- ASCII animation on right (respects site design language)
-- Product name with TM styling
-- Descriptor line ("for CRM")
-- Standard CTA layout
-
+#### 1. AppTopBar.tsx
+Reusable app chrome for previews:
 ```text
 Props:
-- productName: string
-- productDescriptor: string
-- headline: string
-- subheadline: string
-- primaryCta: { label, href }
-- secondaryCta: { label, href }
-- asciiComponent: React.ReactNode
-- plate: PlateColor
+- searchPlaceholder?: string
+- filters?: string[]
+- showUser?: boolean
+- actions?: { label: string; icon: LucideIcon }[]
 ```
 
-#### B. ProductPreviewFrame.tsx
-A wrapper that frames UI previews like real software:
-- White/light gray background (not dark purple)
-- Optional browser chrome (dots, URL bar)
-- Centered with max-width
-- Shadow and border styling
-
+Layout:
 ```text
-Props:
-- children: React.ReactNode
-- variant: 'browser' | 'card' | 'minimal'
-- className?: string
+┌──────────────────────────────────────────────────────────────┐
+│ [🔍 Search contacts...    ] [Filter ▼] [Status ▼]  [JD] [⚙️] │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-#### C. ProblemContrastCard.tsx
-"From X to Y" transformation cards:
-- Before state (muted, crossed out)
-- After state (highlighted)
-- Icon and short description
-
+#### 2. DataTable.tsx
+Reusable realistic table component:
 ```text
 Props:
-- before: string
-- after: string
-- icon: LucideIcon
+- columns: { key: string; label: string; width?: string }[]
+- data: Record<string, any>[]
+- searchPlaceholder?: string
+- filters?: { label: string; active?: boolean }[]
+- pagination?: { current: number; total: number; perPage: number }
+- onRowClick?: (row) => void
+- selectedRow?: string
 ```
 
-#### D. CapabilityCard.tsx
-Compact feature cards:
-- Icon
-- Title
-- One-line description
+Features:
+- Column headers with sort indicators
+- Row hover states
+- Row selection
+- Status chip rendering
+- Pagination controls
+- Filter chips above table
 
+#### 3. DetailDrawer.tsx
+Slide-in panel for detail views:
 ```text
 Props:
-- icon: LucideIcon
+- isOpen: boolean
+- onClose: () => void
 - title: string
-- description: string
+- children: React.ReactNode
 ```
 
----
+Features:
+- Slides in from right within preview frame
+- Header with close button
+- Scrollable content area
+- Activity timeline support
+- Tags/badges section
 
-### 3. Hero.tsx Updates
-
-Add support for product pages with:
-- Product name + TM badge styling
-- Descriptor line styling
-- Ensure ASCII animation positions correctly
-
----
-
-### 4. Color/Contrast Fixes
-
-In all vignettes and previews:
-- Change `bg-plate-astral` containers to `bg-white` or `bg-gray-50`
-- Change `text-mint` on light backgrounds to `text-foreground` or darker
-- Use mint only for:
-  - Buttons and button-like elements
-  - Status badges and chips
-  - Active state indicators
-  - Small accent elements
-
----
-
-## Visual Structure Comparison
-
-### Before (Current)
+#### 4. StatusChip.tsx
+Reusable status badge:
 ```text
-Hero:
-  [Left: Text]     [Right: Dark UI Preview]
-
-Sections:
-  [Headline only]
-  [Content with mint text on light]
+Props:
+- status: 'active' | 'qualified' | 'new' | 'inactive' | 'pending' | 'approved' | 'overdue'
+- size?: 'sm' | 'md'
 ```
 
-### After (Step 1)
+Color mapping:
+- active/qualified: green-100/green-700
+- new: blue-100/blue-700
+- pending: amber-100/amber-700
+- inactive: gray-100/gray-600
+- approved: mint-based
+- overdue: red-100/red-700
+
+#### 5. SettingsPanel.tsx
+For workflow configuration steps:
 ```text
-Hero:
-  [Left: Product Name + TM]
-  [Left: for CRM descriptor]
-  [Left: Headline]
-  [Left: Subheadline]     [Right: ASCII Animation]
-  [Left: CTAs]
-
-Product Preview Section:
-  [Headline + Subheadline]
-  [Centered White/Gray UI Preview in Browser Frame]
-
-Other Sections:
-  [Headline]
-  [Subheadline/Explainer]
-  [Short copy or bullets]
-  [Visual component on neutral background]
+Props:
+- sections: { title: string; items: { label: string; value?: string; type: 'toggle' | 'select' | 'text' }[] }[]
+- activeSection?: number
 ```
+
+#### 6. ImportMapperPreview.tsx
+For data import step in workflow:
+```text
+Props:
+- sourceColumns: string[]
+- targetColumns: string[]
+- mappings: { source: string; target: string }[]
+```
+
+Visual: Two-column mapping with connection lines
+
+---
+
+## Preview Placement on CRM Page (Minimum 3 Sections)
+
+### Section 1: Product Preview (Near Top)
+**Current:** TabbedProductPreview with dark theme
+**After:** Upgraded TabbedProductPreview in ProductPreviewFrame
+
+Tabs:
+- Pipeline → PipelineBoardRealistic
+- Contacts → ContactsTableRealistic (with DetailDrawer on row click)
+- Tasks → TasksListRealistic
+- Reports → MiniReportsRealistic
+
+### Section 2: Workflow Tour
+**Current:** WorkflowStepper with `bg-plate-astral` preview
+**After:** WorkflowStepper with ProductPreviewFrame, step-specific previews
+
+Step previews:
+- Configure → SettingsPanel (pipeline stages, custom fields)
+- Roles → RolesPermissionsMatrix (simplified version)
+- Import → ImportMapperPreview
+- Operate → PipelineBoardRealistic or ContactsTableRealistic
+
+### Section 3: Governance Section
+**Current:** RolesPermissionsMatrix wrapped in ProductPreviewFrame (card variant)
+**After:** Center the preview, ensure it uses max-width container
+
+Keep current implementation but:
+- Ensure centered with `mx-auto max-w-4xl`
+- Verify mint usage is correct (buttons only)
+
+### Section 4: Support/Admin Section (Enhancement)
+**Current:** SupportRequestVignette with dark theme
+**After:** Redesigned SupportRequestVignette with neutral surface
+
+Show change request lifecycle:
+- New → In Review → Approved → Shipped
+
+---
+
+## Color and Contrast Rules (Enforced)
+
+### Mint Usage
+| Allowed | Not Allowed |
+|---------|-------------|
+| Button backgrounds | Body text on light |
+| Active tab indicator | Borders on light-gray backgrounds |
+| Status badges (approved/success) | Icons on mint-tinted backgrounds |
+| Toggle/switch active state | Full-width backgrounds |
+| Hover accent on interactive elements | |
+
+### Neutral Surfaces
+| Element | Background | Text |
+|---------|------------|------|
+| Preview container | white, gray-50 | gray-900 |
+| Table rows | white, gray-50 alternating | gray-700 |
+| Cards | white | gray-900 (heading), gray-600 (body) |
+| Badges | {color}-100 | {color}-700 |
+| Borders | gray-200 | - |
+
+### Animation Rules
+- All animated previews must use `useReducedMotion` hook
+- When reduced motion preferred: show static state, no intervals
+- Subtle transitions only: opacity, transform, color
+- No parallax, bounce, or heavy motion
 
 ---
 
@@ -268,10 +278,13 @@ Other Sections:
 
 | File | Purpose |
 |------|---------|
-| `src/components/sections/ProductHero.tsx` | Product page hero with ASCII + product name |
-| `src/components/shared/ProductPreviewFrame.tsx` | Neutral-background UI wrapper |
-| `src/components/sections/ProblemContrast.tsx` | "From chaos to clarity" cards |
-| `src/components/sections/CapabilityGrid.tsx` | Feature capability cards |
+| `src/components/ui/vignettes/AppTopBar.tsx` | App chrome header |
+| `src/components/ui/vignettes/DataTable.tsx` | Realistic data table |
+| `src/components/ui/vignettes/DetailDrawer.tsx` | Slide-in detail panel |
+| `src/components/ui/vignettes/StatusChip.tsx` | Reusable status badges |
+| `src/components/ui/vignettes/SettingsPanel.tsx` | Configuration settings UI |
+| `src/components/ui/vignettes/ImportMapper.tsx` | Data import mapping UI |
+| `src/components/ui/vignettes/CRMPreviews.tsx` | All CRM-specific realistic previews |
 
 ---
 
@@ -279,42 +292,89 @@ Other Sections:
 
 | File | Changes |
 |------|---------|
-| `src/pages/software/SoftwareCRM.tsx` | Complete restructure per new template |
-| `src/components/shared/SectionHeader.tsx` | Ensure subheadline support |
+| `src/components/ui/vignettes/TabbedProductPreview.tsx` | Complete redesign to neutral surface |
+| `src/components/ui/vignettes/MiniDashboard.tsx` | Switch to neutral surface |
+| `src/components/ui/vignettes/SupportRequestVignette.tsx` | Switch to neutral surface |
+| `src/components/ui/vignettes/ConfigurationPreview.tsx` | Switch to neutral surface |
+| `src/components/sections/WorkflowStepper.tsx` | Wrap preview in ProductPreviewFrame |
+| `src/pages/software/SoftwareCRM.tsx` | Update to use new realistic previews |
 
 ---
 
-## Typography and Copy Guidelines
+## Detailed Component Specifications
 
-### Section Structure
-Every section must include:
-1. **Headline** - Serif font, heading-lg or poster-lg
-2. **Subheadline** - Sans-serif, body-lg, muted-foreground, 1-2 sentences
-3. **Content** - Visual component or structured cards
+### CRMPipelineBoardRealistic
+```text
+Columns: Lead, Qualified, Proposal, Negotiation, Won
+Each column:
+  - Header with count badge
+  - White background, gray-200 border
+  - Drop shadow on hover
+  
+Each card:
+  - Company name (font-medium, gray-900)
+  - Deal value ($12,000 - $50,000)
+  - Owner initials in circle avatar
+  - Last activity (2d ago, 5h ago)
+  - Status dot (green = active, amber = stale)
+  - Subtle border, white background
+  - Hover: elevate with shadow, show "drag" cursor
+```
 
-### Mint Usage Rules (Enforced)
-- **Allowed**: Buttons, badges, icons on dark backgrounds, active states
-- **Not Allowed**: Body text on light backgrounds, borders on light backgrounds, icons on mint-tinted backgrounds
+### CRMContactsTableRealistic
+```text
+Columns: Name, Company, Status, Last Contact, Owner
+Data rows (5-7 visible):
+  - Sarah Johnson, Acme Corp, Active, 2 days ago, JD
+  - Michael Chen, TechStart, Qualified, 1 week ago, SK
+  - etc.
+
+Features:
+  - Search bar: "Search contacts..."
+  - Filter chips: All | Active | Qualified | New
+  - Hover: row highlight, pointer cursor
+  - Click: open DetailDrawer with contact info
+  - Pagination: "Showing 1-10 of 47 contacts"
+```
+
+### CRMDetailDrawer
+```text
+Header:
+  - Avatar + Name + Company
+  - Close button
+
+Sections:
+  - Contact Info (email, phone, role)
+  - Linked Deals (2-3 items)
+  - Activity Timeline (3-4 items)
+  - Tags/Labels
+  
+Animation:
+  - Slide in from right
+  - Backdrop opacity fade
+  - Respect reduced motion
+```
 
 ---
 
-## Acceptance Criteria for Step 1
+## Acceptance Criteria for Step 2
 
-1. CRM page hero uses ASCII animation (CyberHeart), not UI preview
-2. Product name "Meridian^TM for CRM" appears prominently
-3. UI previews moved to dedicated section below hero
-4. Every section has headline + subheadline + supporting copy
-5. No mint text on light backgrounds
-6. New "Problems It Replaces" section added
-7. New "Core Capabilities" section added
-8. All UI vignette containers use white/light gray backgrounds (not dark purple)
-9. Copy focuses on configuration/onboarding (no custom development language)
+1. All CRM previews use neutral surfaces (white/gray-50), not dark purple
+2. TabbedProductPreview redesigned with app top bar and neutral tabs
+3. At least 3 distinct preview sections on CRM page
+4. ContactsTable supports row click → DetailDrawer interaction
+5. Workflow stepper previews wrapped in ProductPreviewFrame
+6. MiniDashboard and SupportRequestVignette use neutral surfaces
+7. Mint used only as accent (buttons, active states, success badges)
+8. All animations respect prefers-reduced-motion
+9. Previews are centered with proper max-width containers
+10. Realistic data patterns (no lorem ipsum)
 
 ---
 
 ## What's NOT in This Step
-- UI preview component upgrades (Step 2)
-- Product naming for other products (Step 6)
-- Other product page updates (Step 6)
-- Suite grid improvements (Step 5)
+- Changes to other product pages (Accounting, Inventory, Tasks)
+- Changes to /software suite hub page
+- Product naming for other products
+- Global site changes
 
