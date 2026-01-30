@@ -49,11 +49,11 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ metrics, className
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up':
-        return <TrendingUp size={10} className="text-mint" />;
+        return <TrendingUp size={10} className="text-emerald-600" />;
       case 'down':
-        return <TrendingDown size={10} className="text-magenta" />;
+        return <TrendingDown size={10} className="text-red-500" />;
       default:
-        return <Minus size={10} className="text-muted-foreground" />;
+        return <Minus size={10} className="text-gray-400" />;
     }
   };
 
@@ -63,18 +63,18 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ metrics, className
         <div
           key={metric.label}
           className={cn(
-            'bg-ink/40 rounded-lg p-3 border border-mint/10',
+            'bg-white rounded-lg p-3 border border-gray-200 shadow-sm',
             'transition-all duration-300',
-            animatingIndex === index && 'scale-105 border-mint/40'
+            animatingIndex === index && 'scale-105 border-gray-300 shadow-md'
           )}
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[9px] uppercase tracking-wide text-offwhite/50">
+            <span className="text-[9px] uppercase tracking-wide text-gray-500 font-medium">
               {metric.label}
             </span>
             {getTrendIcon(metric.trend)}
           </div>
-          <div className="text-lg font-bold text-offwhite">
+          <div className="text-lg font-bold text-gray-900">
             {metric.value}{metric.suffix || ''}
           </div>
         </div>

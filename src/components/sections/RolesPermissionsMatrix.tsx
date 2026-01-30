@@ -27,22 +27,29 @@ const permissionMatrix: PermissionMatrix = {
   },
 };
 
+const roleColors = {
+  Admin: 'bg-emerald-500',
+  Manager: 'bg-blue-500',
+  Staff: 'bg-amber-500',
+  Viewer: 'bg-gray-400',
+};
+
 export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ className }) => {
   const [preset, setPreset] = useState<Preset>('simple');
 
   return (
-    <div className={cn('', className)}>
+    <div className={cn('bg-white p-4', className)}>
       {/* Preset toggle */}
       <div className="flex items-center gap-4 mb-6">
-        <span className="text-sm font-medium text-muted-foreground">Governance preset:</span>
-        <div className="flex rounded-lg overflow-hidden border border-ink/10">
+        <span className="text-sm font-medium text-gray-500">Governance preset:</span>
+        <div className="flex rounded-lg overflow-hidden border border-gray-200">
           <button
             onClick={() => setPreset('simple')}
             className={cn(
               'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors',
               preset === 'simple'
-                ? 'bg-mint text-ink'
-                : 'bg-card text-muted-foreground hover:bg-muted'
+                ? 'bg-gray-900 text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50'
             )}
           >
             <Shield size={16} />
@@ -53,8 +60,8 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
             className={cn(
               'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors',
               preset === 'strict'
-                ? 'bg-mint text-ink'
-                : 'bg-card text-muted-foreground hover:bg-muted'
+                ? 'bg-gray-900 text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50'
             )}
           >
             <ShieldCheck size={16} />
@@ -64,12 +71,12 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
       </div>
 
       {/* Matrix */}
-      <div className="bg-card rounded-xl border border-ink/10 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Header */}
-        <div className="grid grid-cols-5 bg-muted">
-          <div className="p-4 text-sm font-semibold text-foreground">Role</div>
+        <div className="grid grid-cols-5 bg-gray-50 border-b border-gray-200">
+          <div className="p-4 text-sm font-semibold text-gray-700">Role</div>
           {actions.map((action) => (
-            <div key={action} className="p-4 text-sm font-semibold text-foreground text-center">
+            <div key={action} className="p-4 text-sm font-semibold text-gray-700 text-center">
               {action}
             </div>
           ))}
@@ -80,17 +87,14 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
           <div
             key={role}
             className={cn(
-              'grid grid-cols-5',
-              rowIndex % 2 === 0 ? 'bg-card' : 'bg-muted/30'
+              'grid grid-cols-5 transition-colors',
+              rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
             )}
           >
-            <div className="p-4 text-sm font-medium text-foreground flex items-center gap-2">
+            <div className="p-4 text-sm font-medium text-gray-800 flex items-center gap-2">
               <div className={cn(
                 'w-2 h-2 rounded-full',
-                role === 'Admin' && 'bg-mint',
-                role === 'Manager' && 'bg-lavender',
-                role === 'Staff' && 'bg-plate-blue',
-                role === 'Viewer' && 'bg-muted-foreground'
+                roleColors[role as keyof typeof roleColors]
               )} />
               {role}
             </div>
@@ -104,8 +108,8 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
                     'w-8 h-8 rounded-full flex items-center justify-center',
                     'transition-all duration-300',
                     hasPermission
-                      ? 'bg-mint/20 text-mint'
-                      : 'bg-ink/5 text-ink/20'
+                      ? 'bg-emerald-100 text-emerald-600'
+                      : 'bg-gray-100 text-gray-300'
                   )}
                 >
                   {hasPermission ? <Check size={16} /> : <X size={16} />}

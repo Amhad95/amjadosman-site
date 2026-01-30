@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { MessageSquare, Check, Clock, Send } from 'lucide-react';
+import { MessageSquare, Check, Clock, Send, ChevronRight } from 'lucide-react';
 
 interface SupportRequest {
   id: string;
@@ -18,10 +18,34 @@ const initialRequests: SupportRequest[] = [
 ];
 
 const statusConfig = {
-  new: { label: 'New', color: 'bg-lavender/20 text-lavender', icon: MessageSquare },
-  'in-review': { label: 'In Review', color: 'bg-plate-blue/30 text-plate-blue', icon: Clock },
-  approved: { label: 'Approved', color: 'bg-mint/20 text-mint', icon: Check },
-  shipped: { label: 'Shipped', color: 'bg-mint text-ink', icon: Send },
+  new: { 
+    label: 'New', 
+    bg: 'bg-blue-100', 
+    text: 'text-blue-700', 
+    iconBg: 'bg-blue-100',
+    icon: MessageSquare 
+  },
+  'in-review': { 
+    label: 'In Review', 
+    bg: 'bg-amber-100', 
+    text: 'text-amber-700', 
+    iconBg: 'bg-amber-100',
+    icon: Clock 
+  },
+  approved: { 
+    label: 'Approved', 
+    bg: 'bg-emerald-100', 
+    text: 'text-emerald-700', 
+    iconBg: 'bg-emerald-100',
+    icon: Check 
+  },
+  shipped: { 
+    label: 'Shipped', 
+    bg: 'bg-gray-900', 
+    text: 'text-white', 
+    iconBg: 'bg-gray-900',
+    icon: Send 
+  },
 };
 
 export const SupportRequestVignette: React.FC<{ className?: string }> = ({ className }) => {
@@ -65,15 +89,15 @@ export const SupportRequestVignette: React.FC<{ className?: string }> = ({ class
   }, [reducedMotion]);
 
   return (
-    <div className={cn('w-full h-full flex flex-col', className)}>
+    <div className={cn('w-full h-full flex flex-col bg-white', className)}>
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-mint/10">
-        <span className="text-xs font-semibold text-mint">Admin Requests</span>
-        <span className="text-[10px] text-offwhite/50">4 total</span>
+      <div className="flex items-center justify-between px-3 py-2.5 border-b border-gray-200 bg-gray-50">
+        <span className="text-xs font-semibold text-gray-700">Admin Requests</span>
+        <span className="text-[10px] text-gray-500">4 total</span>
       </div>
 
       {/* List */}
-      <div className="flex-1 overflow-hidden p-2 space-y-2">
+      <div className="flex-1 overflow-hidden p-2 space-y-1.5">
         {requests.map((request) => {
           const config = statusConfig[request.status];
           const Icon = config.icon;
@@ -83,29 +107,31 @@ export const SupportRequestVignette: React.FC<{ className?: string }> = ({ class
             <div
               key={request.id}
               className={cn(
-                'flex items-center gap-3 p-2 rounded-lg',
-                'bg-ink/30 border border-mint/10',
-                'transition-all duration-400',
-                isAnimating && 'scale-[1.02] shadow-lg shadow-mint/20'
+                'flex items-center gap-3 p-2.5 rounded-lg',
+                'bg-white border border-gray-200',
+                'transition-all duration-300',
+                isAnimating && 'scale-[1.02] shadow-md border-gray-300'
               )}
             >
               <div className={cn(
                 'flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center',
                 'transition-all duration-300',
-                config.color
+                config.iconBg,
+                config.text
               )}>
                 <Icon size={12} />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-[11px] font-medium text-offwhite truncate">
+                <div className="text-[11px] font-medium text-gray-800 truncate">
                   {request.title}
                 </div>
-                <div className="text-[9px] text-offwhite/50">{request.time}</div>
+                <div className="text-[9px] text-gray-500">{request.time}</div>
               </div>
               <span className={cn(
                 'px-2 py-0.5 rounded-full text-[9px] font-semibold',
                 'transition-all duration-300',
-                config.color
+                config.bg,
+                config.text
               )}>
                 {config.label}
               </span>
