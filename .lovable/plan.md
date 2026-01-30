@@ -1,380 +1,185 @@
 
 
-# Step 2: UI Preview Component System + CRM Page Upgrades
+# CRM Page Contrast & Credibility Fix Plan
 
-## Overview
-This step transforms the CRM page from "text + weak preview" to a believable software landing page by building a reusable UI preview component system with realistic, neutral-surface previews placed across multiple sections.
+## Issues Identified
 
----
+### A. Mint Usage Violations (Must Fix)
 
-## Key Problems Being Fixed
+| Component | Location | Issue |
+|-----------|----------|-------|
+| **OutcomeTiles** | Line 37 | `bg-mint/10 text-mint` - mint icon on light mint background |
+| **OutcomeTiles** | Line 29 | `hover:border-mint/30 hover:shadow-mint/5` - mint border on light card |
+| **PersonaCards** | Line 45-46 | `bg-mint/10 border-mint shadow-mint/10` - mint borders and shadows on light surface |
+| **PersonaCards** | Line 51 | `bg-mint` indicator bar - acceptable as small indicator |
+| **PersonaCards** | Line 77 | `text-mint` for "Payoff:" label - mint text on light background |
+| **CapabilityGrid** | Line 49 | `text-mint` icon on `bg-plate-astral` - acceptable (dark bg) |
+| **ProblemContrast** | Line 40 | `text-mint` icon on `bg-plate-astral` - acceptable (dark bg) |
 
-| Problem | Fix |
-|---------|-----|
-| Previews use dark purple (`bg-ink/40`, `bg-ink/30`) website-themed backgrounds | Switch to neutral app surfaces (`bg-white`, `bg-gray-50`) |
-| TabbedProductPreview uses `bg-ink/40` tab bar and `bg-ink/20` content | Redesign with neutral colors, mint only as accents |
-| Previews lack realism (no top bar, search, filters, pagination) | Add realistic UI chrome and data patterns |
-| Mint used as text on light backgrounds | Use mint only for buttons, badges, active states |
-| WorkflowStepper uses `bg-plate-astral` for preview container | Use `ProductPreviewFrame` with neutral background |
-| MiniDashboard uses `bg-ink/40` cards | Redesign with white/light gray surface |
-| SupportRequestVignette uses dark theme (`bg-ink/30`) | Redesign as neutral-surface UI |
+### B. Icon Contrast Issues
 
----
+| Component | Location | Issue |
+|-----------|----------|-------|
+| **OutcomeTiles** | Icons | Mint icons on light mint-tinted backgrounds - invisible |
+| **PersonaCards** | Inactive state | Good (muted-foreground), but active uses mint on mint |
 
-## Component Architecture
+### C. Section Titles Too Generic
 
-### A. Upgrade Existing Components
-
-#### 1. TabbedProductPreview.tsx (Complete Rewrite)
-Transform from dark-themed to neutral-surface app preview:
-
-**Before:**
-- `bg-ink/40` tab bar
-- `bg-ink/20` content area
-- Mint text on dark backgrounds
-
-**After:**
-- White/light gray tab bar with subtle border
-- Clean white content area
-- Mint only for active tab indicator/border
-- Add top app bar with search, filters, user avatar
-- Proper app UI structure
-
-**New Structure:**
-```text
-┌─────────────────────────────────────────┐
-│ App Top Bar (search, filters, actions)  │
-├─────────────────────────────────────────┤
-│ Tab Navigation (neutral, mint active)   │
-├─────────────────────────────────────────┤
-│                                         │
-│        Content Area (white)             │
-│                                         │
-└─────────────────────────────────────────┘
-```
-
-#### 2. ProductPreviews.tsx - CRM Components (Complete Rewrite)
-All four CRM previews need neutral surfaces:
-
-**CRMPipelinePreview → PipelineBoardRealistic:**
-- White background kanban columns
-- Real company names, deal values, owner initials, last activity dates
-- Drag-and-drop visual feedback (hover states)
-- Column headers with counts
-- Card shadows and proper spacing
-
-**CRMContactPreview → ContactsTableRealistic:**
-- Full table with column headers (Name, Company, Status, Last Contact, Owner)
-- Search bar and filter chips
-- Status chips (Active, Qualified, New, Inactive)
-- Pagination (1-10 of 47)
-- Row hover states
-- Click to open drawer
-
-**CRMTasksPreview → TasksListRealistic:**
-- Toggle: "My tasks" / "Team"
-- Priority badges (High/Medium/Low)
-- Due dates with color coding (Overdue = red, Today = amber, Future = gray)
-- Assignee avatars
-- Checkbox completion animation
-
-**CRMReportsPreview → MiniReportsRealistic:**
-- 4 KPI cards: Open Deals, Won This Month, Pipeline Value, Avg. Close Time
-- Time range toggle (7d / 30d / 90d)
-- Simple bar chart or trend line
-- Trend indicators (up/down arrows)
-
-#### 3. MiniDashboard.tsx (Redesign)
-Currently uses `bg-ink/40` - needs neutral surface:
-- White cards with subtle shadows
-- Gray-700 text for values
-- Mint for positive trends, destructive for negative
-- Proper spacing and borders
-
-#### 4. SupportRequestVignette.tsx (Redesign)
-Currently dark-themed - needs neutral surface:
-- White background with gray-100 rows
-- Status badges with appropriate colors
-- Proper table/list structure
-- Subtle animations on status change
-
-#### 5. ConfigurationPreview.tsx (Redesign)
-Currently uses `bg-ink/30` items - needs neutral surface:
-- White/gray-50 step cards
-- Green checkmarks for completed
-- Gray numbered badges for pending
-- Mint highlight for active step
-
-#### 6. WorkflowStepper.tsx (Fix Preview Container)
-Currently uses `bg-plate-astral` - wrap content in ProductPreviewFrame:
-- Replace dark background with ProductPreviewFrame browser variant
-- Keep stepper UI on left unchanged
-- Preview content on right in neutral frame
-
----
-
-### B. New Components to Create
-
-#### 1. AppTopBar.tsx
-Reusable app chrome for previews:
-```text
-Props:
-- searchPlaceholder?: string
-- filters?: string[]
-- showUser?: boolean
-- actions?: { label: string; icon: LucideIcon }[]
-```
-
-Layout:
-```text
-┌──────────────────────────────────────────────────────────────┐
-│ [🔍 Search contacts...    ] [Filter ▼] [Status ▼]  [JD] [⚙️] │
-└──────────────────────────────────────────────────────────────┘
-```
-
-#### 2. DataTable.tsx
-Reusable realistic table component:
-```text
-Props:
-- columns: { key: string; label: string; width?: string }[]
-- data: Record<string, any>[]
-- searchPlaceholder?: string
-- filters?: { label: string; active?: boolean }[]
-- pagination?: { current: number; total: number; perPage: number }
-- onRowClick?: (row) => void
-- selectedRow?: string
-```
-
-Features:
-- Column headers with sort indicators
-- Row hover states
-- Row selection
-- Status chip rendering
-- Pagination controls
-- Filter chips above table
-
-#### 3. DetailDrawer.tsx
-Slide-in panel for detail views:
-```text
-Props:
-- isOpen: boolean
-- onClose: () => void
-- title: string
-- children: React.ReactNode
-```
-
-Features:
-- Slides in from right within preview frame
-- Header with close button
-- Scrollable content area
-- Activity timeline support
-- Tags/badges section
-
-#### 4. StatusChip.tsx
-Reusable status badge:
-```text
-Props:
-- status: 'active' | 'qualified' | 'new' | 'inactive' | 'pending' | 'approved' | 'overdue'
-- size?: 'sm' | 'md'
-```
-
-Color mapping:
-- active/qualified: green-100/green-700
-- new: blue-100/blue-700
-- pending: amber-100/amber-700
-- inactive: gray-100/gray-600
-- approved: mint-based
-- overdue: red-100/red-700
-
-#### 5. SettingsPanel.tsx
-For workflow configuration steps:
-```text
-Props:
-- sections: { title: string; items: { label: string; value?: string; type: 'toggle' | 'select' | 'text' }[] }[]
-- activeSection?: number
-```
-
-#### 6. ImportMapperPreview.tsx
-For data import step in workflow:
-```text
-Props:
-- sourceColumns: string[]
-- targetColumns: string[]
-- mappings: { source: string; target: string }[]
-```
-
-Visual: Two-column mapping with connection lines
-
----
-
-## Preview Placement on CRM Page (Minimum 3 Sections)
-
-### Section 1: Product Preview (Near Top)
-**Current:** TabbedProductPreview with dark theme
-**After:** Upgraded TabbedProductPreview in ProductPreviewFrame
-
-Tabs:
-- Pipeline → PipelineBoardRealistic
-- Contacts → ContactsTableRealistic (with DetailDrawer on row click)
-- Tasks → TasksListRealistic
-- Reports → MiniReportsRealistic
-
-### Section 2: Workflow Tour
-**Current:** WorkflowStepper with `bg-plate-astral` preview
-**After:** WorkflowStepper with ProductPreviewFrame, step-specific previews
-
-Step previews:
-- Configure → SettingsPanel (pipeline stages, custom fields)
-- Roles → RolesPermissionsMatrix (simplified version)
-- Import → ImportMapperPreview
-- Operate → PipelineBoardRealistic or ContactsTableRealistic
-
-### Section 3: Governance Section
-**Current:** RolesPermissionsMatrix wrapped in ProductPreviewFrame (card variant)
-**After:** Center the preview, ensure it uses max-width container
-
-Keep current implementation but:
-- Ensure centered with `mx-auto max-w-4xl`
-- Verify mint usage is correct (buttons only)
-
-### Section 4: Support/Admin Section (Enhancement)
-**Current:** SupportRequestVignette with dark theme
-**After:** Redesigned SupportRequestVignette with neutral surface
-
-Show change request lifecycle:
-- New → In Review → Approved → Shipped
-
----
-
-## Color and Contrast Rules (Enforced)
-
-### Mint Usage
-| Allowed | Not Allowed |
-|---------|-------------|
-| Button backgrounds | Body text on light |
-| Active tab indicator | Borders on light-gray backgrounds |
-| Status badges (approved/success) | Icons on mint-tinted backgrounds |
-| Toggle/switch active state | Full-width backgrounds |
-| Hover accent on interactive elements | |
-
-### Neutral Surfaces
-| Element | Background | Text |
-|---------|------------|------|
-| Preview container | white, gray-50 | gray-900 |
-| Table rows | white, gray-50 alternating | gray-700 |
-| Cards | white | gray-900 (heading), gray-600 (body) |
-| Badges | {color}-100 | {color}-700 |
-| Borders | gray-200 | - |
-
-### Animation Rules
-- All animated previews must use `useReducedMotion` hook
-- When reduced motion preferred: show static state, no intervals
-- Subtle transitions only: opacity, transform, color
-- No parallax, bounce, or heavy motion
-
----
-
-## Files to Create
-
-| File | Purpose |
-|------|---------|
-| `src/components/ui/vignettes/AppTopBar.tsx` | App chrome header |
-| `src/components/ui/vignettes/DataTable.tsx` | Realistic data table |
-| `src/components/ui/vignettes/DetailDrawer.tsx` | Slide-in detail panel |
-| `src/components/ui/vignettes/StatusChip.tsx` | Reusable status badges |
-| `src/components/ui/vignettes/SettingsPanel.tsx` | Configuration settings UI |
-| `src/components/ui/vignettes/ImportMapper.tsx` | Data import mapping UI |
-| `src/components/ui/vignettes/CRMPreviews.tsx` | All CRM-specific realistic previews |
+| Current Title | Issue | Better Alternative |
+|---------------|-------|---------------------|
+| "See the product" | Literal, not marketing | "Meridian in action" |
+| "Built for teams who sell" | Acceptable | Keep |
+| "Replace the chaos" | Good | Keep |
+| "Outcomes" | Too generic | "What changes on day one" |
+| "What you can do" | Too generic | "Core capabilities" |
+| "From configuration to operations" | OK but wordy | "Your setup journey" |
+| "Control who does what" | Good | Keep |
+| "Configured for your team..." | Good | Keep |
+| "Live Metrics Preview" | Literal | "Activity snapshot" |
 
 ---
 
 ## Files to Modify
 
-| File | Changes |
-|------|---------|
-| `src/components/ui/vignettes/TabbedProductPreview.tsx` | Complete redesign to neutral surface |
-| `src/components/ui/vignettes/MiniDashboard.tsx` | Switch to neutral surface |
-| `src/components/ui/vignettes/SupportRequestVignette.tsx` | Switch to neutral surface |
-| `src/components/ui/vignettes/ConfigurationPreview.tsx` | Switch to neutral surface |
-| `src/components/sections/WorkflowStepper.tsx` | Wrap preview in ProductPreviewFrame |
-| `src/pages/software/SoftwareCRM.tsx` | Update to use new realistic previews |
+### 1. OutcomeTiles.tsx (src/components/sections/OutcomeTiles.tsx)
+**Changes:**
+- Replace `bg-mint/10 text-mint` with `bg-gray-100 text-gray-600` for icon container
+- Replace `hover:border-mint/30` with `hover:border-gray-300`
+- Replace `hover:shadow-mint/5` with standard shadow
+- On hover, change icon container to `bg-gray-900 text-white` (not mint)
+
+### 2. PersonaCards.tsx (src/components/sections/PersonaCards.tsx)
+**Changes:**
+- Replace active card `bg-mint/10 border-mint shadow-mint/10` with `bg-gray-100 border-gray-900 shadow-lg`
+- Replace `bg-mint` active indicator bar with `bg-gray-900`
+- Replace active icon container from `bg-mint text-ink` to `bg-gray-900 text-white`
+- Replace `text-mint` for "Payoff:" label with `text-emerald-600` (semantic color for positive)
+- Replace `text-magenta/80` for "Pain:" label with `text-red-600` (semantic color for negative)
+
+### 3. SoftwareCRM.tsx (src/pages/software/SoftwareCRM.tsx)
+**Changes - Section Headlines:**
+- Line 176: Change "See the product" → "Meridian in action"
+- Line 177: Keep subheadline but make it more specific
+- Line 235: Change "Outcomes" → "What changes on day one"
+- Line 243: Change "Live Metrics Preview" → "Activity snapshot"
+- Line 256: Change "What you can do" → "Core capabilities"
+- Line 269: Change "From configuration to operations" → "Your setup journey"
 
 ---
 
-## Detailed Component Specifications
+## Detailed Component Fixes
 
-### CRMPipelineBoardRealistic
-```text
-Columns: Lead, Qualified, Proposal, Negotiation, Won
-Each column:
-  - Header with count badge
-  - White background, gray-200 border
-  - Drop shadow on hover
+### OutcomeTiles.tsx - Full Fix
+
+```tsx
+// Current (problematic):
+<div className={cn(
+  'flex-shrink-0 w-10 h-10 rounded-lg',
+  'bg-mint/10 text-mint',  // ❌ Mint on light mint
+  'flex items-center justify-center',
+  'group-hover:bg-mint group-hover:text-ink',  // ❌ Changes to full mint bg
+)}>
+
+// Fixed:
+<div className={cn(
+  'flex-shrink-0 w-10 h-10 rounded-lg',
+  'bg-gray-100 text-gray-600',  // ✅ Neutral, readable
+  'flex items-center justify-center',
+  'group-hover:bg-gray-900 group-hover:text-white',  // ✅ High contrast on hover
+)}>
+```
+
+Also fix the card hover state:
+```tsx
+// Current:
+'hover:border-mint/30 hover:shadow-lg hover:shadow-mint/5'
+
+// Fixed:
+'hover:border-gray-300 hover:shadow-lg'
+```
+
+### PersonaCards.tsx - Full Fix
+
+```tsx
+// Active card state - Current:
+isActive
+  ? 'bg-mint/10 border-mint shadow-lg shadow-mint/10'  // ❌ Mint everywhere
   
-Each card:
-  - Company name (font-medium, gray-900)
-  - Deal value ($12,000 - $50,000)
-  - Owner initials in circle avatar
-  - Last activity (2d ago, 5h ago)
-  - Status dot (green = active, amber = stale)
-  - Subtle border, white background
-  - Hover: elevate with shadow, show "drag" cursor
-```
+// Fixed:
+isActive
+  ? 'bg-gray-50 border-gray-900 shadow-lg'  // ✅ Neutral with ink accent
 
-### CRMContactsTableRealistic
-```text
-Columns: Name, Company, Status, Last Contact, Owner
-Data rows (5-7 visible):
-  - Sarah Johnson, Acme Corp, Active, 2 days ago, JD
-  - Michael Chen, TechStart, Qualified, 1 week ago, SK
-  - etc.
+// Active indicator bar - Current:
+<div className="... bg-mint rounded-r-full" />  // ❌ Mint indicator
 
-Features:
-  - Search bar: "Search contacts..."
-  - Filter chips: All | Active | Qualified | New
-  - Hover: row highlight, pointer cursor
-  - Click: open DetailDrawer with contact info
-  - Pagination: "Showing 1-10 of 47 contacts"
-```
+// Fixed:
+<div className="... bg-gray-900 rounded-r-full" />  // ✅ Ink indicator
 
-### CRMDetailDrawer
-```text
-Header:
-  - Avatar + Name + Company
-  - Close button
+// Active icon container - Current:
+isActive ? 'bg-mint text-ink' : 'bg-muted text-muted-foreground'  // ❌
 
-Sections:
-  - Contact Info (email, phone, role)
-  - Linked Deals (2-3 items)
-  - Activity Timeline (3-4 items)
-  - Tags/Labels
-  
-Animation:
-  - Slide in from right
-  - Backdrop opacity fade
-  - Respect reduced motion
+// Fixed:
+isActive ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'  // ✅
+
+// Pain/Payoff labels - Current:
+<span className="text-magenta/80">Pain:</span>  // ❌ Low contrast
+<span className="text-mint">Payoff:</span>  // ❌ Mint on light
+
+// Fixed:
+<span className="text-red-600 font-medium">Pain:</span>  // ✅ Semantic negative
+<span className="text-emerald-600 font-medium">Payoff:</span>  // ✅ Semantic positive
 ```
 
 ---
 
-## Acceptance Criteria for Step 2
+## Section Title Updates
 
-1. All CRM previews use neutral surfaces (white/gray-50), not dark purple
-2. TabbedProductPreview redesigned with app top bar and neutral tabs
-3. At least 3 distinct preview sections on CRM page
-4. ContactsTable supports row click → DetailDrawer interaction
-5. Workflow stepper previews wrapped in ProductPreviewFrame
-6. MiniDashboard and SupportRequestVignette use neutral surfaces
-7. Mint used only as accent (buttons, active states, success badges)
-8. All animations respect prefers-reduced-motion
-9. Previews are centered with proper max-width containers
-10. Realistic data patterns (no lorem ipsum)
+### SoftwareCRM.tsx - Updated Headlines
+
+| Section | Current | New |
+|---------|---------|-----|
+| Product Preview | "See the product" | "Meridian in action" |
+| Product Preview subheadline | Keep but tighten | "Unified pipeline, contacts, tasks, and reporting." |
+| Outcomes | "Outcomes" | "What changes on day one" |
+| Outcomes subheadline | "Measurable improvements from day one." | "Clear, immediate value—not promises." |
+| Mini Dashboard label | "Live Metrics Preview" | "Activity snapshot" |
+| Capabilities | "What you can do" | "Core capabilities" |
+| Capabilities subheadline | "Core features configured for your team." | "Everything you need, configured and ready." |
+| Workflow | "From configuration to operations" | "Your setup journey" |
+| Workflow subheadline | "A clear path from setup to daily use." | "From first login to daily operations in four steps." |
 
 ---
 
-## What's NOT in This Step
-- Changes to other product pages (Accounting, Inventory, Tasks)
-- Changes to /software suite hub page
-- Product naming for other products
-- Global site changes
+## Color Rules Summary (For Reference)
+
+### Mint Allowed Uses
+- ✅ Primary button background with ink text
+- ✅ Small active tab underline (2px max)
+- ✅ Small badge dot paired with ink/dark text
+- ✅ Success indicator on dark backgrounds
+
+### Mint NOT Allowed
+- ❌ Text on light backgrounds
+- ❌ Borders on light cards/tables
+- ❌ Line icons on light surfaces
+- ❌ Tinted backgrounds (bg-mint/10, bg-mint/20)
+- ❌ Shadows (shadow-mint/x)
+
+### Icon Rules
+- Line icons: Use `text-gray-600` or `text-gray-500` on light surfaces
+- On hover: Use `text-gray-900` or `text-white` on dark container
+- On colored chips: Icon must be ink/white, not mint
+
+---
+
+## Acceptance Criteria
+
+1. ✅ No mint text on light backgrounds
+2. ✅ No mint borders on light cards
+3. ✅ No mint icons on light/mint-tinted backgrounds
+4. ✅ Icons use gray-600/gray-900 colors (readable)
+5. ✅ Section titles use professional marketing language
+6. ✅ Subheadlines are specific and value-focused
+7. ✅ Hover states use gray-900/white (not mint)
+8. ✅ Pain/Payoff labels use semantic colors (red/emerald)
 
