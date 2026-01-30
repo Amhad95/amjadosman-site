@@ -173,8 +173,8 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="See the product"
-            subheadline="Pipeline tracking, contact management, task automation, and reporting in one clean interface."
+            headline="Meridian in action"
+            subheadline="Unified pipeline, contacts, tasks, and reporting."
             align="center"
           />
           <div className="mt-10 max-w-5xl mx-auto">
@@ -232,8 +232,8 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Outcomes"
-            subheadline="Measurable improvements from day one."
+            headline="What changes on day one"
+            subheadline="Clear, immediate value—not promises."
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
             <div className="lg:col-span-2">
@@ -241,7 +241,7 @@ const SoftwareCRM = () => {
             </div>
             <ProductPreviewFrame variant="minimal" className="p-4">
               <h4 className="text-xs font-semibold text-foreground mb-4 uppercase tracking-wide">
-                Live Metrics Preview
+                Activity snapshot
               </h4>
               <MiniDashboard metrics={defaultMetrics.crm} />
             </ProductPreviewFrame>
@@ -253,8 +253,8 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="What you can do"
-            subheadline="Core features configured for your team."
+            headline="Core capabilities"
+            subheadline="Everything you need, configured and ready."
           />
           <div className="mt-8">
             <CapabilityGrid capabilities={capabilities} columns={3} />
@@ -266,8 +266,8 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="From configuration to operations"
-            subheadline="A clear path from setup to daily use."
+            headline="Your setup journey"
+            subheadline="From first login to daily operations in four steps."
           />
           <WorkflowStepper steps={workflowSteps} className="mt-8" />
         </div>

@@ -42,13 +42,13 @@ export const PersonaCards: React.FC<PersonaCardsProps> = ({
               'relative p-5 rounded-xl cursor-pointer',
               'border-2 transition-all duration-300',
               isActive
-                ? 'bg-mint/10 border-mint shadow-lg shadow-mint/10'
-                : 'bg-card border-ink/10 hover:border-mint/30 hover:bg-muted/50'
+                ? 'bg-gray-50 border-gray-900 shadow-lg'
+                : 'bg-card border-gray-200 hover:border-gray-300 hover:bg-gray-50'
             )}
           >
             {/* Active indicator */}
             {isActive && (
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-mint rounded-r-full" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gray-900 rounded-r-full" />
             )}
 
             <div className="flex items-start gap-4">
@@ -56,7 +56,7 @@ export const PersonaCards: React.FC<PersonaCardsProps> = ({
                 className={cn(
                   'flex-shrink-0 w-10 h-10 rounded-lg',
                   'flex items-center justify-center',
-                  isActive ? 'bg-mint text-ink' : 'bg-muted text-muted-foreground'
+                  isActive ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
                 )}
               >
                 <Icon size={20} />
@@ -70,10 +70,10 @@ export const PersonaCards: React.FC<PersonaCardsProps> = ({
                   {persona.title}
                 </h4>
                 <p className="text-sm text-muted-foreground mb-2">
-                  <span className="text-magenta/80">Pain:</span> {persona.pain}
+                  <span className="text-red-600 font-medium">Pain:</span> {persona.pain}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  <span className="text-mint">Payoff:</span> {persona.payoff}
+                  <span className="text-emerald-600 font-medium">Payoff:</span> {persona.payoff}
                 </p>
               </div>
             </div>
