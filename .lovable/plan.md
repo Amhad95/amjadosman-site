@@ -1,185 +1,67 @@
 
 
-# CRM Page Contrast & Credibility Fix Plan
+# Fix: Operations Lead Preview + Replace "Problem Contrast" Component
 
-## Issues Identified
+## Two issues to fix
 
-### A. Mint Usage Violations (Must Fix)
+### 1. ContactTimeline.tsx still uses old dark theme
+When clicking "Operations Lead" in the persona section, the ContactTimeline vignette renders with `bg-ink/40`, `text-mint`, `border-mint/10` -- the old website-themed style that was supposed to be removed in Step 2. It needs a complete rewrite to neutral surfaces matching the other previews.
 
-| Component | Location | Issue |
-|-----------|----------|-------|
-| **OutcomeTiles** | Line 37 | `bg-mint/10 text-mint` - mint icon on light mint background |
-| **OutcomeTiles** | Line 29 | `hover:border-mint/30 hover:shadow-mint/5` - mint border on light card |
-| **PersonaCards** | Line 45-46 | `bg-mint/10 border-mint shadow-mint/10` - mint borders and shadows on light surface |
-| **PersonaCards** | Line 51 | `bg-mint` indicator bar - acceptable as small indicator |
-| **PersonaCards** | Line 77 | `text-mint` for "Payoff:" label - mint text on light background |
-| **CapabilityGrid** | Line 49 | `text-mint` icon on `bg-plate-astral` - acceptable (dark bg) |
-| **ProblemContrast** | Line 40 | `text-mint` icon on `bg-plate-astral` - acceptable (dark bg) |
-
-### B. Icon Contrast Issues
-
-| Component | Location | Issue |
-|-----------|----------|-------|
-| **OutcomeTiles** | Icons | Mint icons on light mint-tinted backgrounds - invisible |
-| **PersonaCards** | Inactive state | Good (muted-foreground), but active uses mint on mint |
-
-### C. Section Titles Too Generic
-
-| Current Title | Issue | Better Alternative |
-|---------------|-------|---------------------|
-| "See the product" | Literal, not marketing | "Meridian in action" |
-| "Built for teams who sell" | Acceptable | Keep |
-| "Replace the chaos" | Good | Keep |
-| "Outcomes" | Too generic | "What changes on day one" |
-| "What you can do" | Too generic | "Core capabilities" |
-| "From configuration to operations" | OK but wordy | "Your setup journey" |
-| "Control who does what" | Good | Keep |
-| "Configured for your team..." | Good | Keep |
-| "Live Metrics Preview" | Literal | "Activity snapshot" |
+### 2. ProblemContrast component needs replacement
+The current "Replace the chaos" section uses mint for the arrow icon (`text-primary`) and "To" label on light backgrounds. Beyond fixing the color, the component itself is unsophisticated -- a simple before/after with a crude arrow divider. Replace it with a more polished design.
 
 ---
 
-## Files to Modify
+## Changes
 
-### 1. OutcomeTiles.tsx (src/components/sections/OutcomeTiles.tsx)
-**Changes:**
-- Replace `bg-mint/10 text-mint` with `bg-gray-100 text-gray-600` for icon container
-- Replace `hover:border-mint/30` with `hover:border-gray-300`
-- Replace `hover:shadow-mint/5` with standard shadow
-- On hover, change icon container to `bg-gray-900 text-white` (not mint)
+### A. Rewrite ContactTimeline.tsx to neutral surfaces
 
-### 2. PersonaCards.tsx (src/components/sections/PersonaCards.tsx)
-**Changes:**
-- Replace active card `bg-mint/10 border-mint shadow-mint/10` with `bg-gray-100 border-gray-900 shadow-lg`
-- Replace `bg-mint` active indicator bar with `bg-gray-900`
-- Replace active icon container from `bg-mint text-ink` to `bg-gray-900 text-white`
-- Replace `text-mint` for "Payoff:" label with `text-emerald-600` (semantic color for positive)
-- Replace `text-magenta/80` for "Pain:" label with `text-red-600` (semantic color for negative)
+Replace the old dark-themed component with a clean, neutral-surface contact detail preview:
 
-### 3. SoftwareCRM.tsx (src/pages/software/SoftwareCRM.tsx)
-**Changes - Section Headlines:**
-- Line 176: Change "See the product" → "Meridian in action"
-- Line 177: Keep subheadline but make it more specific
-- Line 235: Change "Outcomes" → "What changes on day one"
-- Line 243: Change "Live Metrics Preview" → "Activity snapshot"
-- Line 256: Change "What you can do" → "Core capabilities"
-- Line 269: Change "From configuration to operations" → "Your setup journey"
+- White background with gray borders (no `bg-ink`, no `border-mint`)
+- Contact card: gray-100 avatar circle with gray-600 initials, gray-900 name, gray-500 role/company
+- Deal value in gray-900 bold (not mint text)
+- Activity timeline items: gray-50 rows, gray-500 icons (not mint), gray-700 text
+- "Recent Activity" label in gray-500 uppercase (not mint)
+- Remove the animated slide-in effect (keep it static and clean)
 
----
+### B. Replace ProblemContrast.tsx with a sophisticated component
 
-## Detailed Component Fixes
+New design: A two-column layout showing "before" and "after" states side by side with a clean visual treatment.
 
-### OutcomeTiles.tsx - Full Fix
+**Structure per item (horizontal card):**
 
-```tsx
-// Current (problematic):
-<div className={cn(
-  'flex-shrink-0 w-10 h-10 rounded-lg',
-  'bg-mint/10 text-mint',  // ❌ Mint on light mint
-  'flex items-center justify-center',
-  'group-hover:bg-mint group-hover:text-ink',  // ❌ Changes to full mint bg
-)}>
-
-// Fixed:
-<div className={cn(
-  'flex-shrink-0 w-10 h-10 rounded-lg',
-  'bg-gray-100 text-gray-600',  // ✅ Neutral, readable
-  'flex items-center justify-center',
-  'group-hover:bg-gray-900 group-hover:text-white',  // ✅ High contrast on hover
-)}>
+```text
++--------------------------------------------------+
+|  [icon]  Before text (muted, struck)   -->   After text (bold, dark)  |
++--------------------------------------------------+
 ```
 
-Also fix the card hover state:
-```tsx
-// Current:
-'hover:border-mint/30 hover:shadow-lg hover:shadow-mint/5'
+Design details:
+- Each item is a horizontal card with a subtle left-to-right gradient (gray-100 to white)
+- Left side: icon in gray-100 circle with gray-600 color, "before" text in gray-400 with strikethrough
+- Center: a subtle horizontal line or chevron in gray-300 (not mint)
+- Right side: "after" text in gray-900 bold with a small emerald-500 dot indicator
+- No "From" / "To" labels (the visual treatment makes it obvious)
+- Hover: slight elevation, border darkens to gray-300
 
-// Fixed:
-'hover:border-gray-300 hover:shadow-lg'
-```
-
-### PersonaCards.tsx - Full Fix
-
-```tsx
-// Active card state - Current:
-isActive
-  ? 'bg-mint/10 border-mint shadow-lg shadow-mint/10'  // ❌ Mint everywhere
-  
-// Fixed:
-isActive
-  ? 'bg-gray-50 border-gray-900 shadow-lg'  // ✅ Neutral with ink accent
-
-// Active indicator bar - Current:
-<div className="... bg-mint rounded-r-full" />  // ❌ Mint indicator
-
-// Fixed:
-<div className="... bg-gray-900 rounded-r-full" />  // ✅ Ink indicator
-
-// Active icon container - Current:
-isActive ? 'bg-mint text-ink' : 'bg-muted text-muted-foreground'  // ❌
-
-// Fixed:
-isActive ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'  // ✅
-
-// Pain/Payoff labels - Current:
-<span className="text-magenta/80">Pain:</span>  // ❌ Low contrast
-<span className="text-mint">Payoff:</span>  // ❌ Mint on light
-
-// Fixed:
-<span className="text-red-600 font-medium">Pain:</span>  // ✅ Semantic negative
-<span className="text-emerald-600 font-medium">Payoff:</span>  // ✅ Semantic positive
-```
+### C. Update SoftwareCRM.tsx
+- No changes needed beyond the component updates (section headline "Replace the chaos" is good)
 
 ---
 
-## Section Title Updates
+## Files to modify
 
-### SoftwareCRM.tsx - Updated Headlines
+| File | Change |
+|------|--------|
+| `src/components/ui/vignettes/ContactTimeline.tsx` | Complete rewrite to neutral surfaces |
+| `src/components/sections/ProblemContrast.tsx` | Replace with sophisticated horizontal before/after cards |
 
-| Section | Current | New |
-|---------|---------|-----|
-| Product Preview | "See the product" | "Meridian in action" |
-| Product Preview subheadline | Keep but tighten | "Unified pipeline, contacts, tasks, and reporting." |
-| Outcomes | "Outcomes" | "What changes on day one" |
-| Outcomes subheadline | "Measurable improvements from day one." | "Clear, immediate value—not promises." |
-| Mini Dashboard label | "Live Metrics Preview" | "Activity snapshot" |
-| Capabilities | "What you can do" | "Core capabilities" |
-| Capabilities subheadline | "Core features configured for your team." | "Everything you need, configured and ready." |
-| Workflow | "From configuration to operations" | "Your setup journey" |
-| Workflow subheadline | "A clear path from setup to daily use." | "From first login to daily operations in four steps." |
+## Acceptance criteria
 
----
-
-## Color Rules Summary (For Reference)
-
-### Mint Allowed Uses
-- ✅ Primary button background with ink text
-- ✅ Small active tab underline (2px max)
-- ✅ Small badge dot paired with ink/dark text
-- ✅ Success indicator on dark backgrounds
-
-### Mint NOT Allowed
-- ❌ Text on light backgrounds
-- ❌ Borders on light cards/tables
-- ❌ Line icons on light surfaces
-- ❌ Tinted backgrounds (bg-mint/10, bg-mint/20)
-- ❌ Shadows (shadow-mint/x)
-
-### Icon Rules
-- Line icons: Use `text-gray-600` or `text-gray-500` on light surfaces
-- On hover: Use `text-gray-900` or `text-white` on dark container
-- On colored chips: Icon must be ink/white, not mint
-
----
-
-## Acceptance Criteria
-
-1. ✅ No mint text on light backgrounds
-2. ✅ No mint borders on light cards
-3. ✅ No mint icons on light/mint-tinted backgrounds
-4. ✅ Icons use gray-600/gray-900 colors (readable)
-5. ✅ Section titles use professional marketing language
-6. ✅ Subheadlines are specific and value-focused
-7. ✅ Hover states use gray-900/white (not mint)
-8. ✅ Pain/Payoff labels use semantic colors (red/emerald)
+1. Operations Lead preview uses white/gray-50 backgrounds, no mint text/borders/icons
+2. "Replace the chaos" cards have no mint on light surfaces
+3. Icons use gray-600 on light backgrounds
+4. New ProblemContrast design looks polished and professional
+5. No animated slide-in for ContactTimeline (static, clean layout)
 
