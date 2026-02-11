@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { User, Mail, Phone, Calendar } from 'lucide-react';
 
 const activities = [
@@ -9,6 +11,19 @@ const activities = [
 ];
 
 export const ContactTimeline: React.FC = () => {
+  const reducedMotion = useReducedMotion();
+  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    let index = 0;
+    const interval = setInterval(() => {
+      setHighlightedIndex(index);
+      index = (index + 1) % activities.length;
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [reducedMotion]);
+
   return (
     <div className="w-full h-full flex gap-3 p-3">
       {/* Contact Card */}
@@ -33,7 +48,12 @@ export const ContactTimeline: React.FC = () => {
           return (
             <div
               key={index}
-              className="flex items-start gap-2 p-2 rounded-md bg-gray-50 border border-gray-100"
+              className={cn(
+                'flex items-start gap-2 p-2 rounded-md border transition-all duration-300',
+                highlightedIndex === index
+                  ? 'bg-gray-100 border-gray-200 scale-[1.02]'
+                  : 'bg-gray-50 border-gray-100'
+              )}
             >
               <Icon size={12} className="text-gray-500 mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">

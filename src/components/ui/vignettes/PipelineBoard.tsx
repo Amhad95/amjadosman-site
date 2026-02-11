@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
@@ -23,9 +23,25 @@ const initialDeals: Deal[][] = [
 
 const columns = ['Qualified', 'Proposal', 'Closed'];
 
+// Flatten all deals into an ordered list for cycling
+const allDeals = initialDeals.flatMap((col, colIndex) =>
+  col.map((deal) => ({ ...deal, colIndex }))
+);
+
 export const PipelineBoard: React.FC = () => {
   const reducedMotion = useReducedMotion();
   const [deals] = useState(initialDeals);
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    let index = 0;
+    const interval = setInterval(() => {
+      setHighlightedId(allDeals[index].id);
+      index = (index + 1) % allDeals.length;
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [reducedMotion]);
 
   return (
     <div className="w-full h-full flex gap-2 p-3 bg-white">
@@ -40,7 +56,10 @@ export const PipelineBoard: React.FC = () => {
                 key={deal.id}
                 className={cn(
                   'bg-white rounded-md p-2 border border-gray-200 shadow-sm',
-                  'transition-all duration-300 hover:shadow-md cursor-pointer'
+                  'transition-all duration-300 cursor-pointer',
+                  highlightedId === deal.id
+                    ? 'scale-[1.04] shadow-md border-gray-300'
+                    : 'hover:shadow-md'
                 )}
               >
                 <div className="text-xs font-medium text-gray-800 truncate">

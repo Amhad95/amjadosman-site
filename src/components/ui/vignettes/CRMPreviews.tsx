@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { StatusChip } from './StatusChip';
@@ -7,6 +7,68 @@ import { DetailDrawer } from './DetailDrawer';
 import { TrendingUp, TrendingDown, Users, Target, DollarSign, Clock, Check } from 'lucide-react';
 
 // ============ PIPELINE BOARD ============
+
+interface DealCardProps {
+  company: string;
+  value: string;
+  owner: string;
+  lastActivity: string;
+  isActive: boolean;
+}
+
+const DealCard: React.FC<DealCardProps> = ({ company, value, owner, lastActivity, isActive }) => {
+  return (
+    <div className={cn(
+      'bg-white rounded-md p-2 border shadow-sm cursor-pointer',
+      'transition-all duration-200 hover:shadow-md hover:-translate-y-0.5',
+      isActive ? 'border-gray-200' : 'border-gray-100'
+    )}>
+      <div className="flex items-start justify-between mb-1">
+        <span className="text-[11px] font-medium text-gray-900 leading-tight">
+          {company}
+        </span>
+        <div className={cn(
+          'w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1',
+          isActive ? 'bg-emerald-400' : 'bg-gray-300'
+        )} />
+      </div>
+      <div className="text-[11px] font-semibold text-gray-700 mb-1.5">
+        {value}
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[9px] font-medium text-gray-500">
+          {owner}
+        </div>
+        <span className="text-[9px] text-gray-400">{lastActivity}</span>
+      </div>
+    </div>
+  );
+};
+
+interface PipelineColumnProps {
+  id: string;
+  label: string;
+  count: number;
+  deals: DealCardProps[];
+}
+
+const PipelineColumn: React.FC<PipelineColumnProps> = ({ id, label, count, deals }) => {
+  return (
+    <div className="flex-1 min-w-[140px] flex flex-col rounded-lg bg-gray-50">
+      <div className="flex items-center justify-between px-2 py-2 border-b border-gray-200">
+        <span className="text-[11px] font-semibold text-gray-700">{label}</span>
+        <span className="px-1.5 py-0.5 text-[10px] bg-gray-200 text-gray-600 rounded-full">
+          {count}
+        </span>
+      </div>
+      <div className="flex-1 p-1.5 space-y-1.5 overflow-y-auto">
+        {deals.map((deal, i) => (
+          <DealCard key={i} {...deal} />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 interface DealCard {
   id: string;
@@ -97,15 +159,12 @@ export const PipelineBoardRealistic: React.FC<{ className?: string }> = ({ class
             highlightedColumn === column.id ? 'bg-gray-100' : 'bg-gray-50'
           )}
         >
-          {/* Column header */}
           <div className="flex items-center justify-between px-2 py-2 border-b border-gray-200">
             <span className="text-[11px] font-semibold text-gray-700">{column.label}</span>
             <span className="px-1.5 py-0.5 text-[10px] bg-gray-200 text-gray-600 rounded-full">
               {column.count}
             </span>
           </div>
-
-          {/* Cards */}
           <div className="flex-1 p-1.5 space-y-1.5 overflow-y-auto">
             {column.deals.map((deal) => (
               <div
@@ -162,8 +221,27 @@ const contactColumns = [
 ];
 
 export const ContactsTableRealistic: React.FC<{ className?: string }> = ({ className }) => {
+  const reducedMotion = useReducedMotion();
   const [selectedContact, setSelectedContact] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto-cycle through rows
+  useEffect(() => {
+    if (reducedMotion || isHovered) return;
+    let index = 0;
+    const interval = setInterval(() => {
+      const contact = contactsData[index];
+      setSelectedContact(contact.id);
+      setDrawerOpen(true);
+      // Close drawer after 2s, then move to next
+      setTimeout(() => {
+        setDrawerOpen(false);
+      }, 2000);
+      index = (index + 1) % contactsData.length;
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [reducedMotion, isHovered]);
 
   const handleRowClick = (row: Record<string, any>) => {
     setSelectedContact(row.id);
@@ -173,7 +251,11 @@ export const ContactsTableRealistic: React.FC<{ className?: string }> = ({ class
   const selectedData = contactsData.find(c => c.id === selectedContact);
 
   return (
-    <div className={cn('relative h-full p-3 overflow-hidden', className)}>
+    <div
+      className={cn('relative h-full p-3 overflow-hidden', className)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <DataTable
         columns={contactColumns}
         data={contactsData}
@@ -239,6 +321,29 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
   const [tasks, setTasks] = useState(tasksData);
   const [filter, setFilter] = useState<'my' | 'team'>('my');
 
+  // Auto-check tasks one by one, then reset
+  useEffect(() => {
+    if (reducedMotion) return;
+    const uncheckedIds = tasksData.filter(t => !t.completed).map(t => t.id);
+    let index = 0;
+
+    const interval = setInterval(() => {
+      if (index < uncheckedIds.length) {
+        // Check one task
+        setTasks(prev => prev.map(t =>
+          t.id === uncheckedIds[index] ? { ...t, completed: true } : t
+        ));
+        index++;
+      } else {
+        // Reset all to original
+        setTasks(tasksData);
+        index = 0;
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [reducedMotion]);
+
   const toggleComplete = (id: string) => {
     setTasks(prev => prev.map(t => 
       t.id === id ? { ...t, completed: !t.completed } : t
@@ -276,7 +381,7 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
             key={task.id}
             className={cn(
               'flex items-center gap-3 p-2.5 bg-white rounded-lg border border-gray-200',
-              'transition-all duration-200 hover:border-gray-300',
+              'transition-all duration-300 hover:border-gray-300',
               task.completed && 'opacity-60'
             )}
           >
@@ -284,7 +389,7 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
               onClick={() => toggleComplete(task.id)}
               className={cn(
                 'w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0',
-                'transition-all duration-200',
+                'transition-all duration-300',
                 task.completed 
                   ? 'bg-emerald-500 border-emerald-500' 
                   : 'border-gray-300 hover:border-gray-400'
@@ -295,7 +400,7 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
             
             <div className="flex-1 min-w-0">
               <span className={cn(
-                'text-xs text-gray-800',
+                'text-xs text-gray-800 transition-all duration-300',
                 task.completed && 'line-through text-gray-500'
               )}>
                 {task.title}
@@ -343,10 +448,40 @@ const kpiData: KPICard[] = [
   { label: 'Avg. Close Time', value: '18d', trend: 'down', change: '-2d', icon: Clock },
 ];
 
-const chartData = [35, 48, 42, 58, 52, 68, 72, 65, 78, 82, 75, 88];
+const baseChartData = [35, 48, 42, 58, 52, 68, 72, 65, 78, 82, 75, 88];
 
 export const MiniReportsRealistic: React.FC<{ className?: string }> = ({ className }) => {
+  const reducedMotion = useReducedMotion();
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
+  const [barHeights, setBarHeights] = useState<number[]>(reducedMotion ? baseChartData : baseChartData.map(() => 0));
+  const [mounted, setMounted] = useState(false);
+
+  // Grow bars from zero on mount
+  useEffect(() => {
+    if (reducedMotion) {
+      setBarHeights(baseChartData);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setBarHeights(baseChartData);
+      setMounted(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [reducedMotion]);
+
+  // Periodically shift bar heights
+  useEffect(() => {
+    if (reducedMotion || !mounted) return;
+    const interval = setInterval(() => {
+      setBarHeights(prev =>
+        prev.map((v) => {
+          const delta = Math.floor(Math.random() * 16) - 8;
+          return Math.max(15, Math.min(95, v + delta));
+        })
+      );
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [reducedMotion, mounted]);
 
   return (
     <div className={cn('h-full flex flex-col p-3', className)}>
@@ -402,10 +537,10 @@ export const MiniReportsRealistic: React.FC<{ className?: string }> = ({ classNa
       <div className="flex-1 bg-white rounded-lg border border-gray-200 p-3">
         <div className="text-[10px] font-medium text-gray-500 mb-2">Pipeline Value Trend</div>
         <div className="h-full flex items-end gap-1">
-          {chartData.map((value, i) => (
+          {barHeights.map((value, i) => (
             <div
               key={i}
-              className="flex-1 bg-gray-200 rounded-t transition-all duration-200 hover:bg-gray-900"
+              className="flex-1 bg-gray-200 rounded-t transition-all duration-700 ease-out hover:bg-gray-900"
               style={{ height: `${value}%` }}
             />
           ))}
