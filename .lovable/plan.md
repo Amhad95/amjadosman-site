@@ -1,54 +1,91 @@
 
 
-# Animate CRM UI Vignettes
+# Fix: Restore click interactions and add hover-pause to all animated vignettes
 
 ## Problem
-All interactive UI previews on the CRM page are static -- they only respond to clicks. Since these are marketing previews (not actual apps), they should auto-animate to show off the product without requiring user interaction.
+The animation implementation broke user interactivity in two ways:
+1. Auto-animations override manual clicks (checking a task gets unchecked 3s later, toggling a preset gets flipped back)
+2. Several components lost their click handlers entirely (SettingsPanel toggles)
+3. Only 1 of 8 animated components pauses on hover -- the rest fight the user
 
-## Vignettes to animate
+## Root cause
+The `isHovered` state with `onMouseEnter`/`onMouseLeave` was only added to `ContactsTableRealistic`. All other components run intervals that override user state without any way to pause.
 
-### Already animated (no changes needed)
-- **PipelineBoardRealistic** -- column highlight cycles every 2.5s
-- **MiniDashboard** -- metric values update randomly every 2.5s
-- **SupportRequestVignette** -- status badges progress every 3s
-- **TabbedProductPreview** -- tabs auto-rotate every 4s
+## Fix: Add hover-pause to every animated component
 
-### Need animation added
-
-| Vignette | Animation | Interval |
-|----------|-----------|----------|
-| **PipelineBoard** (persona preview) | Highlight deal cards one by one with a subtle pulse/scale | 2s |
-| **ContactTimeline** (persona preview) | Highlight activity rows sequentially (top to bottom, loop) | 2s |
-| **ContactsTableRealistic** | Auto-select rows one by one (highlight row, briefly open detail drawer, close, next row) | 3.5s |
-| **TasksListRealistic** | Auto-check tasks one by one with a brief completed state, then reset | 3s |
-| **MiniReportsRealistic** | Animate chart bars growing in from zero on mount, then periodically shift bar heights | 3s |
-| **SettingsPanel** | Auto-toggle switches one by one on a cycle | 2.5s |
-| **ImportMapper** | Auto-match the unmatched "notes" field after a delay, showing the arrow turn green | 4s (one-shot then reset) |
-| **RolesPermissionsMatrix** | Auto-toggle between Simple and Strict presets | 5s |
-
-## Technical approach
-
-All animations follow the existing pattern:
-- Use `useReducedMotion()` hook -- skip all intervals if true
-- Use `useEffect` with `setInterval` or `setTimeout` for cycling
-- Use CSS `transition-all duration-300` for smooth state changes
-- Pause on hover (`isHovered` state via `onMouseEnter`/`onMouseLeave`) where the vignette supports interaction
+Every component that auto-animates needs:
+1. `isHovered` state
+2. `onMouseEnter`/`onMouseLeave` on the root div
+3. The interval skips when `isHovered` is true
+4. Manual click handlers preserved and working alongside animation
 
 ## Files to modify
 
-| File | Change |
-|------|--------|
-| `src/components/ui/vignettes/PipelineBoard.tsx` | Add auto-highlight cycling through deal cards |
-| `src/components/ui/vignettes/ContactTimeline.tsx` | Add sequential activity row highlighting |
-| `src/components/ui/vignettes/CRMPreviews.tsx` | Add auto-row-select to ContactsTableRealistic, auto-check to TasksListRealistic, animate chart bars in MiniReportsRealistic |
-| `src/components/ui/vignettes/SettingsPanel.tsx` | Add auto-toggle cycling for switches |
-| `src/components/ui/vignettes/ImportMapper.tsx` | Add auto-match animation for unmatched field |
-| `src/components/sections/RolesPermissionsMatrix.tsx` | Add auto-toggle between Simple/Strict presets |
+### `src/components/ui/vignettes/PipelineBoard.tsx`
+- Add `isHovered` state + mouse handlers on root div
+- Skip interval when hovered
+
+### `src/components/ui/vignettes/ContactTimeline.tsx`
+- Add `isHovered` state + mouse handlers on root div
+- Skip interval when hovered
+
+### `src/components/ui/vignettes/CRMPreviews.tsx`
+**TasksListRealistic:**
+- Add `isHovered` state + mouse handlers
+- Skip interval when hovered so manual checkbox clicks persist
+
+**MiniReportsRealistic:**
+- Add `isHovered` state + mouse handlers
+- Skip bar height shifts when hovered
+
+### `src/components/ui/vignettes/SettingsPanel.tsx`
+- Add `isHovered` state + mouse handlers
+- Skip interval when hovered
+- Add `onClick` handler to the toggle div so users can manually flip switches (this was completely missing)
+
+### `src/components/ui/vignettes/ImportMapper.tsx`
+- Add `isHovered` state + mouse handlers
+- Skip auto-match cycle when hovered
+
+### `src/components/sections/RolesPermissionsMatrix.tsx`
+- Add `isHovered` state + mouse handlers
+- Skip preset toggle when hovered so manual button clicks persist
+
+## Pattern (same for all)
+```
+const [isHovered, setIsHovered] = useState(false);
+
+useEffect(() => {
+  if (reducedMotion || isHovered) return;
+  // ... existing interval logic
+}, [reducedMotion, isHovered]);
+
+return (
+  <div
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+  >
+    ...
+  </div>
+);
+```
+
+## SettingsPanel toggle click fix
+Add an onClick handler to the toggle div:
+```
+<div
+  onClick={() => {
+    const key = `${activeSection}-${i}`;
+    setToggleStates(prev => ({ ...prev, [key]: !prev[key] }));
+  }}
+  className="cursor-pointer ..."
+>
+```
 
 ## Acceptance criteria
-1. All vignettes auto-animate without user interaction
-2. Animations pause when `prefers-reduced-motion` is active
-3. Animations are subtle (scale, opacity, highlight) not jarring
-4. Existing click interactions still work alongside auto-animation
-5. No performance issues from multiple concurrent intervals
-
+1. All 8 animated vignettes pause animation on hover
+2. SettingsPanel toggles are manually clickable
+3. TasksListRealistic checkboxes persist when clicked (animation paused on hover)
+4. RolesPermissionsMatrix preset buttons persist when clicked (animation paused on hover)
+5. Animations resume when mouse leaves the component
+6. No regression in existing animation behavior
