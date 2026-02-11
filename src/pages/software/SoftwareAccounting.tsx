@@ -20,11 +20,11 @@ import { ImportMapper, accountingImportMappings } from '@/components/ui/vignette
 import { InvoiceFlow } from '@/components/ui/vignettes/InvoiceFlow';
 import { PaymentDashboard } from '@/components/ui/vignettes/PaymentDashboard';
 import {
-  AccountingInvoicePreview,
-  AccountingExpensesPreview,
-  AccountingApprovalsPreview,
-  AccountingDashboardPreview,
-} from '@/components/ui/vignettes/ProductPreviews';
+  InvoiceDashboardRealistic,
+  ExpenseTrackerRealistic,
+  ApprovalsQueueRealistic,
+  FinanceDashboardRealistic,
+} from '@/components/ui/vignettes/AccountingPreviews';
 import { CyberPercentage } from '@/components/ui/cyber-percentage';
 import {
   FileSpreadsheet,
@@ -140,16 +140,16 @@ const workflowSteps = [
     id: 'workflow',
     title: 'Run day-to-day workflow',
     description: 'Create invoices, track payments, manage expenses.',
-    content: <AccountingInvoicePreview />,
+    content: <InvoiceDashboardRealistic />,
   },
 ];
 
 // Hero preview tabs
 const heroTabs = [
-  { id: 'invoice', label: 'Invoices', content: <AccountingInvoicePreview /> },
-  { id: 'expenses', label: 'Expenses', content: <AccountingExpensesPreview /> },
-  { id: 'approvals', label: 'Approvals', content: <AccountingApprovalsPreview /> },
-  { id: 'dashboard', label: 'Dashboard', content: <AccountingDashboardPreview /> },
+  { id: 'invoice', label: 'Invoices', content: <InvoiceDashboardRealistic /> },
+  { id: 'expenses', label: 'Expenses', content: <ExpenseTrackerRealistic /> },
+  { id: 'approvals', label: 'Approvals', content: <ApprovalsQueueRealistic /> },
+  { id: 'dashboard', label: 'Dashboard', content: <FinanceDashboardRealistic /> },
 ];
 
 const SoftwareAccounting = () => {
@@ -208,7 +208,7 @@ const SoftwareAccounting = () => {
             />
             <ProductPreviewFrame variant="card" className="min-h-[280px]">
               {activePersona === 0 && <InvoiceFlow />}
-              {activePersona === 1 && <AccountingExpensesPreview />}
+              {activePersona === 1 && <ExpenseTrackerRealistic />}
               {activePersona === 2 && <PaymentDashboard />}
             </ProductPreviewFrame>
           </div>

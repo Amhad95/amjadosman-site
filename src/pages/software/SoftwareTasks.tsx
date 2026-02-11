@@ -20,11 +20,11 @@ import { ImportMapper, tasksImportMappings } from '@/components/ui/vignettes/Imp
 import { TaskKanban } from '@/components/ui/vignettes/TaskKanban';
 import { ChecklistApproval } from '@/components/ui/vignettes/ChecklistApproval';
 import {
-  TasksBoardPreview,
-  TasksListPreview,
-  TasksApprovalsPreview,
-  TasksTimelinePreview,
-} from '@/components/ui/vignettes/ProductPreviews';
+  TaskBoardRealistic,
+  TaskListRealistic,
+  ApprovalsFlowRealistic,
+  TimelineRealistic,
+} from '@/components/ui/vignettes/TasksPreviews';
 import { CyberGyroscope } from '@/components/ui/cyber-gyroscope';
 import {
   Layout as LayoutIcon,
@@ -141,16 +141,16 @@ const workflowSteps = [
     id: 'workflow',
     title: 'Run day-to-day workflow',
     description: 'Assign tasks, track progress, complete deliverables.',
-    content: <TasksBoardPreview />,
+    content: <TaskBoardRealistic />,
   },
 ];
 
 // Hero preview tabs
 const heroTabs = [
-  { id: 'board', label: 'Board', content: <TasksBoardPreview /> },
-  { id: 'list', label: 'List', content: <TasksListPreview /> },
-  { id: 'approvals', label: 'Approvals', content: <TasksApprovalsPreview /> },
-  { id: 'timeline', label: 'Timeline', content: <TasksTimelinePreview /> },
+  { id: 'board', label: 'Board', content: <TaskBoardRealistic /> },
+  { id: 'list', label: 'List', content: <TaskListRealistic /> },
+  { id: 'approvals', label: 'Approvals', content: <ApprovalsFlowRealistic /> },
+  { id: 'timeline', label: 'Timeline', content: <TimelineRealistic /> },
 ];
 
 const SoftwareTasks = () => {
@@ -208,7 +208,7 @@ const SoftwareTasks = () => {
               onPersonaSelect={setActivePersona}
             />
             <ProductPreviewFrame variant="card" className="min-h-[280px]">
-              {activePersona === 0 && <TasksListPreview />}
+              {activePersona === 0 && <TaskListRealistic />}
               {activePersona === 1 && <TaskKanban />}
               {activePersona === 2 && <ChecklistApproval />}
             </ProductPreviewFrame>
