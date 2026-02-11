@@ -1,98 +1,167 @@
 
-# Fix Non-CRM Software Vignettes to Match CRM's Neutral UI Standard
+
+# Rebuild Non-CRM "In Action" Previews to Match CRM Quality
 
 ## Problem
-The CRM page's interactive previews use professional neutral surfaces (white backgrounds, gray borders, gray text hierarchy) that look like real SaaS app screenshots. All other software pages (Accounting, Inventory, Tasks) use dark backgrounds with mint/lavender colored text -- making them look like stylized concept art rather than realistic product previews.
 
-## Root Cause
-Two separate visual systems exist:
-- **CRM**: `CRMPreviews.tsx` components built with `bg-white`, `border-gray-200`, `text-gray-900/700/500`, using shared sub-components (`DataTable`, `DetailDrawer`, `StatusChip`)
-- **Everything else**: `ProductPreviews.tsx` + standalone vignettes built with `bg-ink/30`, `border-mint/10`, `text-offwhite`, `text-mint` -- the old dark-theme style
+The "in action" section on each software page uses `TabbedProductPreview` with 4 tab panels. The CRM page uses rich, high-fidelity components from `CRMPreviews.tsx` (200+ lines each, with real data, animations, hover-pause, shared sub-components like `DataTable`/`DetailDrawer`/`StatusChip`). The Accounting, Inventory, and Tasks pages use the simple components from `ProductPreviews.tsx` -- these are 20-30 line sketches with 3 tiny rows, empty placeholder divs, and no meaningful interactivity.
 
-## What Needs to Change
+### Quality comparison
 
-All non-CRM vignettes must be rewritten to use the CRM's neutral design language:
-- White/gray-50 backgrounds instead of ink/dark
-- Gray text hierarchy (gray-900 for headings, gray-700 for body, gray-500 for secondary)
-- Emerald for success, red for errors, amber for warnings (not mint/magenta/lavender)
-- Professional borders (border-gray-200) not colored borders (border-mint/10)
-- High information density matching CRM's level of detail
+```text
+CRM PipelineBoardRealistic        vs   TasksBoardPreview
+-----------------------------          ---------------------
+5 columns with labels + counts         3 columns, no counts
+Deal cards: company, value,            Empty 24px-tall gray divs
+  owner avatar, last activity            (no text at all)
+Column highlight animation             Column header highlight only
+Hover: shadow + lift effect            No hover
+~200 lines of code                     ~40 lines of code
 
-## Files to Rewrite
+CRM ContactsTableRealistic        vs   InventoryItemsPreview
+-----------------------------          ---------------------
+Full DataTable with 5 columns          3 static rows
+Row click opens DetailDrawer           No interactivity
+Auto-cycles rows, pauses on hover     No animation
+Pagination indicator                   No pagination
+~60 lines + shared components          ~28 lines
+```
 
-### 1. `src/components/ui/vignettes/ProductPreviews.tsx`
-All 12 preview components need neutral surface treatment:
+The fix: create realistic, CRM-quality preview components for Accounting, Inventory, and Tasks -- each with proper data density, animations, hover-pause, and interactivity.
 
-**Accounting (4 components):**
-- `AccountingInvoicePreview` -- white cards, gray text, emerald status badges (not ink/mint)
-- `AccountingExpensesPreview` -- white row cards, gray text, proper status chips (not ink/lavender)
-- `AccountingApprovalsPreview` -- white row cards, gray-900 buttons (not ink/mint)
-- `AccountingDashboardPreview` -- white stat cards, gray text, emerald trends (not ink/mint)
+## New Components to Create
 
-**Inventory (4 components):**
-- `InventoryItemsPreview` -- white table with gray header, proper StatusChip for stock levels (not ink/mint/magenta)
-- `InventoryLocationsPreview` -- white cards, gray text, dark value numbers (not ink/mint)
-- `InventoryReorderPreview` -- white cards, red/amber warning styling (not ink/magenta pulse)
-- `InventoryAssetPreview` -- white row cards, gray text, emerald/blue dots (not ink/mint/lavender)
+### `src/components/ui/vignettes/AccountingPreviews.tsx`
 
-**Tasks (4 components):**
-- `TasksBoardPreview` -- white column cards like PipelineBoardRealistic (not ink/mint)
-- `TasksListPreview` -- white rows with checkboxes, gray text, proper priority chips (not ink/mint/magenta)
-- `TasksApprovalsPreview` -- white rows, gray-900 buttons, emerald done state (not ink/mint/lavender)
-- `TasksTimelinePreview` -- white background, gray timeline bars with proper colors (not mint/lavender/plate-blue)
+Four rich components replacing the simple `ProductPreviews.tsx` versions:
 
-### 2. `src/components/ui/vignettes/InvoiceFlow.tsx`
-Currently: dark `bg-ink/40` card with mint status badges and mint step indicators
-Fix: white card background, gray text, emerald completion indicators, gray-900 active steps
+**InvoiceDashboardRealistic** (replaces AccountingInvoicePreview)
+- Full invoice table with columns: Invoice #, Client, Amount, Status, Due Date
+- 5+ invoice rows with realistic data
+- StatusChip badges (Paid/emerald, Pending/amber, Overdue/red, Draft/gray)
+- Row click to highlight/select, auto-cycle through rows
+- Hover-pause pattern
+- Summary bar at bottom (Total outstanding, Overdue count)
 
-### 3. `src/components/ui/vignettes/PaymentDashboard.tsx`
-Currently: dark `bg-ink/40` summary cards, mint text, mint/lavender/red status badges
-Fix: white summary cards, gray borders, emerald/amber/red StatusChip-style badges, gray text
+**ExpenseTrackerRealistic** (replaces AccountingExpensesPreview)
+- Category-grouped expense rows: Travel, Software, Office, Professional Services
+- Each row: description, date, amount, category tag, approval status
+- Auto-highlights rows one by one
+- Filter toggle (All / Pending / Approved)
+- Hover-pause pattern
 
-### 4. `src/components/ui/vignettes/InventoryList.tsx`
-Currently: dark `bg-ink/40` search bar, mint borders, mint/lavender/red stock text
-Fix: white search bar with gray border, gray table rows, emerald/amber/red stock indicators
+**ApprovalsQueueRealistic** (replaces AccountingApprovalsPreview)
+- Queue list with approval items: type icon, description, requester avatar, amount, submitted date
+- Approve/Reject buttons that animate on auto-cycle
+- Items auto-approve one by one, then reset
+- Hover-pause for manual clicking
 
-### 5. `src/components/ui/vignettes/ReorderAlert.tsx`
-Currently: dark theme with mint icons, red/lavender/mint status cards, mint borders
-Fix: white cards, gray borders, red warning styling for alerts, emerald for ordered status
+**FinanceDashboardRealistic** (replaces AccountingDashboardPreview)
+- 4 KPI cards (Revenue, Expenses, Net Income, Outstanding) with trend arrows
+- Animated bar chart similar to CRM's MiniReportsRealistic
+- Time range toggle (7d / 30d / 90d)
+- Bar heights shift periodically
+- Hover-pause pattern
 
-### 6. `src/components/ui/vignettes/TaskKanban.tsx`
-Currently: dark `bg-ink/30` columns, mint icons, `bg-ink/60` task cards, mint assignee avatars
-Fix: white/gray-50 columns like PipelineBoardRealistic, white task cards with gray borders
+### `src/components/ui/vignettes/InventoryPreviews.tsx`
 
-### 7. `src/components/ui/vignettes/ChecklistApproval.tsx`
-Currently: dark theme with mint progress bar, mint/offwhite text, ink backgrounds
-Fix: white cards, gray borders, emerald checkmarks, gray text hierarchy
+**ItemsTableRealistic** (replaces InventoryItemsPreview)
+- Full table with columns: SKU, Item Name, Category, Location, Qty, Status
+- 5+ item rows with realistic data
+- StatusChip for stock levels (In Stock/emerald, Low/amber, Critical/red, Out/gray)
+- Row selection with auto-cycle
+- Search/filter bar at top
+- Hover-pause pattern
 
-## Design Rules (matching CRM standard)
+**LocationsGridRealistic** (replaces InventoryLocationsPreview)
+- Location cards with: name, address/zone, item count, utilization bar
+- Auto-highlights locations one by one
+- Each card shows top items list
+- Hover-pause pattern
 
-| Element | Old (dark) | New (neutral) |
-|---------|-----------|---------------|
-| Background | `bg-ink/30`, `bg-ink/40` | `bg-white`, `bg-gray-50` |
-| Borders | `border-mint/10`, `border-mint/5` | `border-gray-200`, `border-gray-100` |
-| Primary text | `text-offwhite`, `text-mint` | `text-gray-900`, `text-gray-800` |
-| Secondary text | `text-offwhite/50`, `text-offwhite/70` | `text-gray-500`, `text-gray-600` |
-| Muted text | `text-offwhite/40` | `text-gray-400` |
-| Success | `bg-mint/20 text-mint` | `bg-emerald-100 text-emerald-700` |
-| Warning | `bg-lavender/20 text-lavender` | `bg-amber-100 text-amber-700` |
-| Error | `bg-magenta/20 text-magenta` | `bg-red-100 text-red-700` |
-| Active button | `bg-mint text-ink` | `bg-gray-900 text-white` |
-| Avatar circles | `bg-mint/20 text-mint` | `bg-gray-100 text-gray-600` |
-| Card shadow | none | `shadow-sm` |
-| Hover | `hover:bg-ink/40` | `hover:bg-gray-50`, `hover:shadow-md` |
+**ReorderQueueRealistic** (replaces InventoryReorderPreview)
+- Alert-style rows: item name, current qty vs threshold, supplier, action button
+- Items pulse with urgency indicator
+- Auto-triggers "Order Placed" state on items one by one
+- StatusChip: Critical/red, Low/amber, Ordered/emerald
+- Hover-pause pattern
 
-## Preserved Behavior
-- All existing animations (auto-cycling, interval-based state changes) remain unchanged
-- Hover-pause logic (`isHovered` state) remains unchanged
-- `useReducedMotion` checks remain unchanged
-- Click interactivity remains unchanged
-- Component APIs and props remain unchanged (no page-level changes needed)
+**AssetTrackerRealistic** (replaces InventoryAssetPreview)
+- Table-style rows: Asset tag, description, assignee avatar, location, status
+- Checkout/Return action buttons
+- Auto-cycles through checkout animations
+- Hover-pause pattern
+
+### `src/components/ui/vignettes/TasksPreviews.tsx`
+
+**TaskBoardRealistic** (replaces TasksBoardPreview)
+- Kanban board modeled on CRM's PipelineBoardRealistic
+- 4 columns: Backlog, In Progress, Review, Done
+- Task cards with: title, assignee avatar, priority chip, due date
+- Column counts, auto-highlight cycling
+- Hover effects: shadow + lift
+- Hover-pause pattern
+
+**TaskListRealistic** (replaces TasksListPreview)
+- Full task list modeled on CRM's TasksListRealistic
+- Checkbox, title, assignee, due date (with overdue/today/upcoming coloring), priority badge
+- My Tasks / Team toggle
+- Auto-checks tasks one by one, then resets
+- Hover-pause for manual interaction
+
+**ApprovalsFlowRealistic** (replaces TasksApprovalsPreview)
+- Sequential approval steps with status
+- Each step: reviewer avatar, title, status chip, timestamp
+- Auto-progresses through approval chain
+- Hover-pause pattern
+
+**TimelineRealistic** (replaces TasksTimelinePreview)
+- Gantt-style view with project rows
+- Each bar: project name, progress %, date range, assignee
+- Bars animate width on load
+- Time scale header (weeks)
+- Hover-pause pattern
+
+## Page Changes
+
+### `src/pages/software/SoftwareAccounting.tsx`
+- Import from `AccountingPreviews.tsx` instead of `ProductPreviews.tsx`
+- Update `heroTabs` to use new realistic components
+
+### `src/pages/software/SoftwareInventory.tsx`
+- Import from `InventoryPreviews.tsx` instead of `ProductPreviews.tsx`
+- Update `heroTabs` to use new realistic components
+
+### `src/pages/software/SoftwareTasks.tsx`
+- Import from `TasksPreviews.tsx` instead of `ProductPreviews.tsx`
+- Update `heroTabs` to use new realistic components
+
+## Shared Patterns (same as CRM)
+
+Every new component follows the CRM pattern:
+- `isHovered` state with `onMouseEnter`/`onMouseLeave`
+- `useReducedMotion` check
+- `useEffect` intervals skip when hovered or reduced motion
+- Manual click handlers work alongside animation
+- Neutral surfaces: `bg-white`, `bg-gray-50`, `border-gray-200`
+- Gray text hierarchy: `text-gray-900/700/500/400`
+- Semantic status colors: emerald/amber/red
+- `shadow-sm` on cards, `hover:shadow-md hover:-translate-y-0.5` on interactive items
+
+## Files Summary
+
+| File | Action |
+|------|--------|
+| `src/components/ui/vignettes/AccountingPreviews.tsx` | Create (4 components) |
+| `src/components/ui/vignettes/InventoryPreviews.tsx` | Create (4 components) |
+| `src/components/ui/vignettes/TasksPreviews.tsx` | Create (4 components) |
+| `src/pages/software/SoftwareAccounting.tsx` | Update imports + heroTabs |
+| `src/pages/software/SoftwareInventory.tsx` | Update imports + heroTabs |
+| `src/pages/software/SoftwareTasks.tsx` | Update imports + heroTabs |
 
 ## Acceptance Criteria
-1. All non-CRM vignettes use white/gray neutral surfaces matching CRM standard
-2. No `bg-ink`, `text-offwhite`, `text-mint`, `border-mint` styling in any vignette
-3. Status indicators use emerald/amber/red semantic colors
-4. Information density and data richness match CRM previews
-5. All existing animations and interactions continue working
-6. All four software pages visually consistent when viewed side by side
+1. All 12 new preview components match CRM's level of data density and visual sophistication
+2. Every component has hover-pause animation pattern
+3. Every component uses neutral surface design (no ink/mint/dark theme)
+4. Tab panels fill the 360-440px height of the TabbedProductPreview container
+5. All four software pages look visually consistent side by side
