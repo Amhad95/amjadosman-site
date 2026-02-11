@@ -1,54 +1,64 @@
 
 
-# Fix: Replace ProblemContrast with a more sophisticated design
+# Redesign: "Replace the chaos" section
 
 ## Problem
-The current component looks flat and generic. The emerald dots on the light background feel like a website skin element rather than polished marketing content. The before/after transition lacks visual hierarchy and sophistication.
+The current design fails on two fronts:
+1. **Contrast**: `text-gray-400` on white cards sitting on a warm off-white (`bg-muted`) background — everything blends together into a pale wash
+2. **Layout**: Small vertical cards with tiny text lack visual weight and feel like placeholder content, not a marketing section
 
-## New Design
+## New Design: Bold two-row table-style layout
 
-Replace the simple horizontal card layout with a more refined "transformation" design that uses stronger visual hierarchy:
-
-**Each card becomes two distinct zones separated by a vertical divider:**
+Instead of 4 small cards, use a single contained block with strong visual separation between "before" and "after" states. This reads like a confident comparison, not a collection of fragile cards.
 
 ```text
-+-------------------------------------------+
-|  [icon]                                   |
-|                                           |
-|  ~Before text~ (struck, muted)            |
-|  ─────────────────────────                |
-|  After text (bold, dark)                  |
-+-------------------------------------------+
++--------------------------------------------------------------+
+|  [icon]  Deals tracked in spreadsheets                       |
+|          Visual pipeline with clear stages              ✓    |
+|--------------------------------------------------------------|
+|  [icon]  Follow-ups lost in email                            |
+|          Automated task reminders                       ✓    |
+|--------------------------------------------------------------|
+|  [icon]  No visibility on team activity                      |
+|          Real-time dashboards and reports                ✓    |
+|--------------------------------------------------------------|
+|  [icon]  Handovers lose context                              |
+|          Full history travels with contacts              ✓    |
++--------------------------------------------------------------+
 ```
 
 **Design details:**
-- Each card is a clean white card with gray-200 border
-- Icon at top-left in a gray-100 circle with gray-600 color
-- "Before" text: gray-400, strikethrough, smaller size (text-xs)
-- A thin horizontal gray-200 separator line between before/after
-- "After" text: gray-900, font-semibold, normal size (text-sm)
-- No dots, no chevrons, no emerald/mint accents at all
-- The visual distinction comes purely from typography weight and muted vs. bold contrast
-- 2x2 grid on desktop, stacked on mobile
-- Hover: subtle shadow elevation and border-gray-300
+- Single white card container with rounded corners and `border border-gray-200` — one block, not four
+- Each row has two lines:
+  - **Before line**: icon (gray-400, w-4) + text in `text-gray-400` with `line-through`, `text-sm` (not text-xs — needs to be readable)
+  - **After line**: indented to align with text above, `text-gray-900 font-medium text-sm`, with a small `text-gray-400` check icon on the right
+- Rows separated by `border-b border-gray-100` dividers (last row has no border)
+- Generous padding: `py-4 px-5` per row
+- No hover effects on individual rows — the block is static and confident
+- No colored dots, no chevrons, no gradients, no emerald, no mint
 
-This removes all color accents and relies on typographic contrast alone, which reads as more professional and confident.
+**Why this is better:**
+- The "before" text at `text-sm text-gray-400` with strikethrough is readable (not text-xs)
+- The "after" text at `text-gray-900 font-medium` creates strong typographic contrast against the struck line
+- One contained block reads as a structured comparison, not scattered cards
+- The check marks give a subtle "resolved" signal without color accents
 
 ## Technical changes
 
 ### File: `src/components/sections/ProblemContrast.tsx`
-- Remove ChevronRight import (no longer needed)
-- Restructure each card to vertical layout: icon, before text (struck/muted), separator, after text (bold/dark)
-- Remove emerald dots entirely
-- Remove horizontal flex layout, use vertical stacking per card
-- Keep 2-column grid on md+
-- Maintain hover states (shadow, border darkening)
+- Replace the grid of cards with a single container `div` with `bg-white rounded-xl border border-gray-200 divide-y divide-gray-100`
+- Each item becomes a row with two lines (before struck, after bold)
+- Icon sits to the left of the before text (inline, not in a circle)
+- Check icon (`lucide-react Check`) on the right of the after line in `text-gray-300`
+- Remove the 2x2 grid layout entirely
+- Props interface stays the same (no breaking changes)
 
 ## Acceptance criteria
-1. No emerald/mint dots or accents on light backgrounds
-2. No chevron arrows
-3. Before/after distinction is purely typographic (muted struck vs. bold dark)
-4. Cards are clean white with gray borders
-5. Icons use gray-600 on gray-100 circles
-6. Professional, understated design
+1. Single contained block, not scattered cards
+2. "Before" text is `text-sm text-gray-400 line-through` — readable, not tiny
+3. "After" text is `text-sm text-gray-900 font-medium` — strong contrast
+4. Icons are `text-gray-400` inline (no circles, no tinted backgrounds)
+5. No mint, no emerald, no colored accents anywhere
+6. No hover animations on rows
+7. Check marks in `text-gray-300` for subtle resolution signal
 
