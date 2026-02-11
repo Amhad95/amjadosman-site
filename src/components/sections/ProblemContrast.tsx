@@ -20,28 +20,28 @@ export const ProblemContrast: React.FC<ProblemContrastProps> = ({
   return (
     <div
       className={cn(
-        'bg-white rounded-xl border border-gray-200 divide-y divide-gray-100',
+        'grid grid-cols-1 md:grid-cols-2 gap-px bg-gray-200 rounded-xl overflow-hidden border border-gray-200',
         className
       )}
     >
       {items.map((item, index) => {
         const Icon = item.icon;
         return (
-          <div key={index} className="py-4 px-5">
-            {/* Before line */}
-            <div className="flex items-center gap-2">
-              <Icon className="w-4 h-4 text-gray-400 shrink-0" />
-              <span className="text-sm text-gray-400 line-through decoration-gray-300">
+          <div key={index} className="bg-white p-6 flex flex-col gap-4">
+            {/* Icon + Before */}
+            <div className="flex items-start gap-3">
+              <Icon className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+              <p className="text-sm text-gray-500 line-through decoration-gray-400">
                 {item.before}
-              </span>
+              </p>
             </div>
 
-            {/* After line */}
-            <div className="flex items-center justify-between mt-2 pl-6">
-              <span className="text-sm text-gray-900 font-medium">
+            {/* After */}
+            <div className="flex items-start gap-3 pl-8">
+              <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <p className="text-sm text-foreground font-semibold">
                 {item.after}
-              </span>
-              <Check className="w-4 h-4 text-gray-300 shrink-0" />
+              </p>
             </div>
           </div>
         );
