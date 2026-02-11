@@ -38,18 +38,23 @@ const roleColors = {
 export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ className }) => {
   const reducedMotion = useReducedMotion();
   const [preset, setPreset] = useState<Preset>('simple');
+  const [isHovered, setIsHovered] = useState(false);
 
   // Auto-toggle between presets
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || isHovered) return;
     const interval = setInterval(() => {
       setPreset(prev => prev === 'simple' ? 'strict' : 'simple');
     }, 5000);
     return () => clearInterval(interval);
-  }, [reducedMotion]);
+  }, [reducedMotion, isHovered]);
 
   return (
-    <div className={cn('bg-white p-4', className)}>
+    <div
+      className={cn('bg-white p-4', className)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Preset toggle */}
       <div className="flex items-center gap-4 mb-6">
         <span className="text-sm font-medium text-gray-500">Governance preset:</span>

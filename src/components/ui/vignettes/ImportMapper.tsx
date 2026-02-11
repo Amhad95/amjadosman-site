@@ -22,10 +22,11 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
 }) => {
   const reducedMotion = useReducedMotion();
   const [mappings, setMappings] = useState(initialMappings);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Auto-match unmatched fields, then reset
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || isHovered) return;
     const unmatchedIndices = initialMappings
       .map((m, i) => (!m.matched ? i : -1))
       .filter(i => i !== -1);
@@ -34,7 +35,6 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
     let phase: 'waiting' | 'matched' = 'waiting';
     const interval = setInterval(() => {
       if (phase === 'waiting') {
-        // Match all unmatched
         setMappings(prev =>
           prev.map((m, i) =>
             unmatchedIndices.includes(i)
@@ -44,20 +44,23 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
         );
         phase = 'matched';
       } else {
-        // Reset to original
         setMappings(initialMappings);
         phase = 'waiting';
       }
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [reducedMotion, initialMappings]);
+  }, [reducedMotion, isHovered, initialMappings]);
 
   const matchedCount = mappings.filter(m => m.matched).length;
   const totalCount = mappings.length;
 
   return (
-    <div className={cn('h-full flex flex-col bg-white', className)}>
+    <div
+      className={cn('h-full flex flex-col bg-white', className)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center gap-2">

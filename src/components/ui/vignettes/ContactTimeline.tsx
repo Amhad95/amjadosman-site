@@ -13,19 +13,24 @@ const activities = [
 export const ContactTimeline: React.FC = () => {
   const reducedMotion = useReducedMotion();
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || isHovered) return;
     let index = 0;
     const interval = setInterval(() => {
       setHighlightedIndex(index);
       index = (index + 1) % activities.length;
     }, 2000);
     return () => clearInterval(interval);
-  }, [reducedMotion]);
+  }, [reducedMotion, isHovered]);
 
   return (
-    <div className="w-full h-full flex gap-3 p-3">
+    <div
+      className="w-full h-full flex gap-3 p-3"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Contact Card */}
       <div className="w-1/3 bg-white rounded-lg p-3 border border-gray-200">
         <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mb-2">

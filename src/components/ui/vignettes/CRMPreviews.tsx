@@ -320,30 +320,28 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
   const reducedMotion = useReducedMotion();
   const [tasks, setTasks] = useState(tasksData);
   const [filter, setFilter] = useState<'my' | 'team'>('my');
+  const [isHovered, setIsHovered] = useState(false);
 
   // Auto-check tasks one by one, then reset
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || isHovered) return;
     const uncheckedIds = tasksData.filter(t => !t.completed).map(t => t.id);
     let index = 0;
 
     const interval = setInterval(() => {
       if (index < uncheckedIds.length) {
-        // Check one task
         setTasks(prev => prev.map(t =>
           t.id === uncheckedIds[index] ? { ...t, completed: true } : t
         ));
         index++;
       } else {
-        // Reset all to original
         setTasks(tasksData);
         index = 0;
       }
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [reducedMotion]);
-
+  }, [reducedMotion, isHovered]);
   const toggleComplete = (id: string) => {
     setTasks(prev => prev.map(t => 
       t.id === id ? { ...t, completed: !t.completed } : t
@@ -351,7 +349,11 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
   };
 
   return (
-    <div className={cn('h-full flex flex-col p-3', className)}>
+    <div
+      className={cn('h-full flex flex-col p-3', className)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Toggle */}
       <div className="flex items-center gap-1 mb-3">
         <button
@@ -455,7 +457,7 @@ export const MiniReportsRealistic: React.FC<{ className?: string }> = ({ classNa
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
   const [barHeights, setBarHeights] = useState<number[]>(reducedMotion ? baseChartData : baseChartData.map(() => 0));
   const [mounted, setMounted] = useState(false);
-
+  const [isHovered, setIsHovered] = useState(false);
   // Grow bars from zero on mount
   useEffect(() => {
     if (reducedMotion) {
@@ -471,7 +473,7 @@ export const MiniReportsRealistic: React.FC<{ className?: string }> = ({ classNa
 
   // Periodically shift bar heights
   useEffect(() => {
-    if (reducedMotion || !mounted) return;
+    if (reducedMotion || !mounted || isHovered) return;
     const interval = setInterval(() => {
       setBarHeights(prev =>
         prev.map((v) => {
@@ -481,10 +483,14 @@ export const MiniReportsRealistic: React.FC<{ className?: string }> = ({ classNa
       );
     }, 3000);
     return () => clearInterval(interval);
-  }, [reducedMotion, mounted]);
+  }, [reducedMotion, mounted, isHovered]);
 
   return (
-    <div className={cn('h-full flex flex-col p-3', className)}>
+    <div
+      className={cn('h-full flex flex-col p-3', className)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Time range toggle */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs font-medium text-gray-700">Dashboard</span>

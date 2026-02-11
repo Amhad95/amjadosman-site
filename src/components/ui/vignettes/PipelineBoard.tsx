@@ -32,19 +32,24 @@ export const PipelineBoard: React.FC = () => {
   const reducedMotion = useReducedMotion();
   const [deals] = useState(initialDeals);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || isHovered) return;
     let index = 0;
     const interval = setInterval(() => {
       setHighlightedId(allDeals[index].id);
       index = (index + 1) % allDeals.length;
     }, 2000);
     return () => clearInterval(interval);
-  }, [reducedMotion]);
+  }, [reducedMotion, isHovered]);
 
   return (
-    <div className="w-full h-full flex gap-2 p-3 bg-white">
+    <div
+      className="w-full h-full flex gap-2 p-3 bg-white"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {columns.map((col, colIndex) => (
         <div key={col} className="flex-1 flex flex-col">
           <div className="text-xs font-semibold text-gray-600 mb-2 text-center">

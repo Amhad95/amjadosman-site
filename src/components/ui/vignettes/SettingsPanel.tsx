@@ -28,6 +28,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   className,
 }) => {
   const reducedMotion = useReducedMotion();
+  const [isHovered, setIsHovered] = useState(false);
   const [toggleStates, setToggleStates] = useState<Record<string, boolean>>(() => {
     const states: Record<string, boolean> = {};
     sections[activeSection]?.items.forEach((item, i) => {
@@ -40,7 +41,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
   // Auto-toggle switches one by one
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || isHovered) return;
     const toggleIndices = sections[activeSection]?.items
       .map((item, i) => (item.type === 'toggle' ? i : -1))
       .filter(i => i !== -1) ?? [];
@@ -55,10 +56,14 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     }, 2500);
 
     return () => clearInterval(interval);
-  }, [reducedMotion, activeSection, sections]);
+  }, [reducedMotion, isHovered, activeSection, sections]);
 
   return (
-    <div className={cn('flex h-full bg-white', className)}>
+    <div
+      className={cn('flex h-full bg-white', className)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Sidebar */}
       <div className="w-36 border-r border-gray-200 bg-gray-50 p-2">
         <div className="text-[10px] font-medium text-gray-400 uppercase tracking-wide px-2 mb-2">
@@ -97,10 +102,16 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 <span className="text-[11px] text-gray-700">{item.label}</span>
                 
                 {item.type === 'toggle' && (
-                  <div className={cn(
-                    'w-8 h-4 rounded-full relative transition-colors duration-300',
-                    isEnabled ? 'bg-emerald-500' : 'bg-gray-200'
-                  )}>
+                  <div
+                    onClick={() => {
+                      const key = `${activeSection}-${i}`;
+                      setToggleStates(prev => ({ ...prev, [key]: !prev[key] }));
+                    }}
+                    className={cn(
+                      'w-8 h-4 rounded-full relative transition-colors duration-300 cursor-pointer',
+                      isEnabled ? 'bg-emerald-500' : 'bg-gray-200'
+                    )}
+                  >
                     <div className={cn(
                       'absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform duration-300',
                       isEnabled ? 'translate-x-4' : 'translate-x-0.5'
