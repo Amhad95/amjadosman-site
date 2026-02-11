@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { ArrowRight, LucideIcon } from 'lucide-react';
+import { ChevronRight, LucideIcon } from 'lucide-react';
 
 interface ContrastItem {
   before: string;
@@ -18,45 +18,37 @@ export const ProblemContrast: React.FC<ProblemContrastProps> = ({
   className,
 }) => {
   return (
-    <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4', className)}>
+    <div className={cn('grid grid-cols-1 md:grid-cols-2 gap-3', className)}>
       {items.map((item, index) => {
         const Icon = item.icon;
         return (
           <div
             key={index}
             className={cn(
-              'group p-5 rounded-xl',
-              'bg-card border border-border',
-              'hover:border-primary/30 hover:shadow-lg',
+              'group flex items-center gap-4 p-4 rounded-xl',
+              'bg-gradient-to-r from-gray-50 to-white',
+              'border border-gray-200',
+              'hover:border-gray-300 hover:shadow-md',
               'transition-all duration-300'
             )}
           >
             {/* Icon */}
-            <div className={cn(
-              'w-10 h-10 rounded-lg mb-4',
-              'bg-plate-astral flex items-center justify-center',
-              'group-hover:scale-110 transition-transform duration-300'
-            )}>
-              <Icon className="w-5 h-5 text-mint" />
+            <div className="flex-shrink-0 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
+              <Icon className="w-4 h-4 text-gray-600" />
             </div>
 
-            {/* Before state */}
-            <div className="mb-3">
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">From</span>
-              <p className="text-sm text-muted-foreground line-through decoration-red-400/50 mt-1">
-                {item.before}
-              </p>
-            </div>
+            {/* Before */}
+            <p className="flex-1 text-sm text-gray-400 line-through decoration-gray-300">
+              {item.before}
+            </p>
 
-            {/* Arrow */}
-            <div className="flex items-center gap-2 mb-3">
-              <ArrowRight className="w-4 h-4 text-primary" />
-            </div>
+            {/* Chevron */}
+            <ChevronRight className="w-4 h-4 text-gray-300 flex-shrink-0" />
 
-            {/* After state */}
-            <div>
-              <span className="text-xs font-medium text-primary uppercase tracking-wide">To</span>
-              <p className="text-sm text-foreground font-medium mt-1">
+            {/* After */}
+            <div className="flex-1 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+              <p className="text-sm text-gray-900 font-medium">
                 {item.after}
               </p>
             </div>
