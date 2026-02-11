@@ -150,4 +150,37 @@ export const crmImportMappings: Mapping[] = [
   { source: 'notes', target: 'Notes', matched: false },
 ];
 
+// Accounting import mappings
+export const accountingImportMappings: Mapping[] = [
+  { source: 'vendor_name', target: 'Vendor', matched: true },
+  { source: 'invoice_number', target: 'Invoice #', matched: true },
+  { source: 'amount', target: 'Amount', matched: true },
+  { source: 'category', target: 'Category', matched: true },
+  { source: 'due_date', target: 'Due Date', matched: true },
+  { source: 'payment_status', target: 'Status', matched: true },
+  { source: 'ref_code', target: '', matched: false },
+];
+
+// Inventory import mappings
+export const inventoryImportMappings: Mapping[] = [
+  { source: 'sku', target: 'SKU', matched: true },
+  { source: 'item_name', target: 'Item Name', matched: true },
+  { source: 'quantity', target: 'Quantity', matched: true },
+  { source: 'location', target: 'Location', matched: true },
+  { source: 'reorder_point', target: 'Reorder Point', matched: true },
+  { source: 'unit_cost', target: 'Unit Cost', matched: true },
+  { source: 'supplier_ref', target: '', matched: false },
+];
+
+// Tasks import mappings
+export const tasksImportMappings: Mapping[] = [
+  { source: 'task_title', target: 'Task Name', matched: true },
+  { source: 'assignee', target: 'Assignee', matched: true },
+  { source: 'due_date', target: 'Due Date', matched: true },
+  { source: 'project', target: 'Project', matched: true },
+  { source: 'priority', target: 'Priority', matched: true },
+  { source: 'status', target: 'Status', matched: true },
+  { source: 'tags', target: '', matched: false },
+];
+
 export default ImportMapper;

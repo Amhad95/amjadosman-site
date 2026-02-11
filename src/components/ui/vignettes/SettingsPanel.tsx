@@ -182,4 +182,91 @@ export const crmSettingsConfig: SettingSection[] = [
   },
 ];
 
+// Accounting settings config
+export const accountingSettingsConfig: SettingSection[] = [
+  {
+    title: 'Categories',
+    items: [
+      { label: 'Expense Categories', type: 'list', items: ['Travel', 'Office', 'Software', 'Marketing', 'Utilities'] },
+      { label: 'Default Currency', type: 'select', value: 'EUR €' },
+      { label: 'Auto-categorize', type: 'toggle', enabled: true },
+      { label: 'Require receipts', type: 'toggle', enabled: false },
+    ],
+  },
+  {
+    title: 'Invoicing',
+    items: [
+      { label: 'Invoice Prefix', type: 'text', value: 'INV-' },
+      { label: 'Payment Terms', type: 'select', value: 'Net 30' },
+      { label: 'Auto-numbering', type: 'toggle', enabled: true },
+    ],
+  },
+  {
+    title: 'Approvals',
+    items: [
+      { label: 'Require approval over €500', type: 'toggle', enabled: true },
+      { label: 'Manager sign-off', type: 'toggle', enabled: true },
+      { label: 'Auto-approve recurring', type: 'toggle', enabled: false },
+    ],
+  },
+];
+
+// Inventory settings config
+export const inventorySettingsConfig: SettingSection[] = [
+  {
+    title: 'Locations',
+    items: [
+      { label: 'Warehouses', type: 'list', items: ['Main', 'Overflow', 'Returns', 'Staging'] },
+      { label: 'Default Location', type: 'select', value: 'Main' },
+      { label: 'Track sub-locations', type: 'toggle', enabled: true },
+      { label: 'Location transfers', type: 'toggle', enabled: true },
+    ],
+  },
+  {
+    title: 'Thresholds',
+    items: [
+      { label: 'Reorder Point', type: 'text', value: '10 units' },
+      { label: 'Low Stock Alert', type: 'toggle', enabled: true },
+      { label: 'Auto-reorder', type: 'toggle', enabled: false },
+    ],
+  },
+  {
+    title: 'Checkout',
+    items: [
+      { label: 'Require checkout approval', type: 'toggle', enabled: true },
+      { label: 'Return reminders', type: 'toggle', enabled: true },
+      { label: 'Asset depreciation', type: 'toggle', enabled: false },
+    ],
+  },
+];
+
+// Tasks settings config
+export const tasksSettingsConfig: SettingSection[] = [
+  {
+    title: 'Projects',
+    items: [
+      { label: 'Active Projects', type: 'list', items: ['Website', 'Marketing', 'Operations', 'Onboarding'] },
+      { label: 'Default View', type: 'select', value: 'Board' },
+      { label: 'Show priorities', type: 'toggle', enabled: true },
+      { label: 'Require due dates', type: 'toggle', enabled: false },
+    ],
+  },
+  {
+    title: 'Workflow',
+    items: [
+      { label: 'Stages', type: 'list', items: ['To Do', 'In Progress', 'Review', 'Done'] },
+      { label: 'Allow subtasks', type: 'toggle', enabled: true },
+      { label: 'Task templates', type: 'toggle', enabled: true },
+    ],
+  },
+  {
+    title: 'Automation',
+    items: [
+      { label: 'Auto-assign on create', type: 'toggle', enabled: false },
+      { label: 'Due date reminders', type: 'toggle', enabled: true },
+      { label: 'Recurring tasks', type: 'toggle', enabled: true },
+    ],
+  },
+];
+
 export default SettingsPanel;
