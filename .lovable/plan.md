@@ -1,64 +1,54 @@
 
 
-# Redesign: "Replace the chaos" section
+# Animate CRM UI Vignettes
 
 ## Problem
-The current design fails on two fronts:
-1. **Contrast**: `text-gray-400` on white cards sitting on a warm off-white (`bg-muted`) background — everything blends together into a pale wash
-2. **Layout**: Small vertical cards with tiny text lack visual weight and feel like placeholder content, not a marketing section
+All interactive UI previews on the CRM page are static -- they only respond to clicks. Since these are marketing previews (not actual apps), they should auto-animate to show off the product without requiring user interaction.
 
-## New Design: Bold two-row table-style layout
+## Vignettes to animate
 
-Instead of 4 small cards, use a single contained block with strong visual separation between "before" and "after" states. This reads like a confident comparison, not a collection of fragile cards.
+### Already animated (no changes needed)
+- **PipelineBoardRealistic** -- column highlight cycles every 2.5s
+- **MiniDashboard** -- metric values update randomly every 2.5s
+- **SupportRequestVignette** -- status badges progress every 3s
+- **TabbedProductPreview** -- tabs auto-rotate every 4s
 
-```text
-+--------------------------------------------------------------+
-|  [icon]  Deals tracked in spreadsheets                       |
-|          Visual pipeline with clear stages              ✓    |
-|--------------------------------------------------------------|
-|  [icon]  Follow-ups lost in email                            |
-|          Automated task reminders                       ✓    |
-|--------------------------------------------------------------|
-|  [icon]  No visibility on team activity                      |
-|          Real-time dashboards and reports                ✓    |
-|--------------------------------------------------------------|
-|  [icon]  Handovers lose context                              |
-|          Full history travels with contacts              ✓    |
-+--------------------------------------------------------------+
-```
+### Need animation added
 
-**Design details:**
-- Single white card container with rounded corners and `border border-gray-200` — one block, not four
-- Each row has two lines:
-  - **Before line**: icon (gray-400, w-4) + text in `text-gray-400` with `line-through`, `text-sm` (not text-xs — needs to be readable)
-  - **After line**: indented to align with text above, `text-gray-900 font-medium text-sm`, with a small `text-gray-400` check icon on the right
-- Rows separated by `border-b border-gray-100` dividers (last row has no border)
-- Generous padding: `py-4 px-5` per row
-- No hover effects on individual rows — the block is static and confident
-- No colored dots, no chevrons, no gradients, no emerald, no mint
+| Vignette | Animation | Interval |
+|----------|-----------|----------|
+| **PipelineBoard** (persona preview) | Highlight deal cards one by one with a subtle pulse/scale | 2s |
+| **ContactTimeline** (persona preview) | Highlight activity rows sequentially (top to bottom, loop) | 2s |
+| **ContactsTableRealistic** | Auto-select rows one by one (highlight row, briefly open detail drawer, close, next row) | 3.5s |
+| **TasksListRealistic** | Auto-check tasks one by one with a brief completed state, then reset | 3s |
+| **MiniReportsRealistic** | Animate chart bars growing in from zero on mount, then periodically shift bar heights | 3s |
+| **SettingsPanel** | Auto-toggle switches one by one on a cycle | 2.5s |
+| **ImportMapper** | Auto-match the unmatched "notes" field after a delay, showing the arrow turn green | 4s (one-shot then reset) |
+| **RolesPermissionsMatrix** | Auto-toggle between Simple and Strict presets | 5s |
 
-**Why this is better:**
-- The "before" text at `text-sm text-gray-400` with strikethrough is readable (not text-xs)
-- The "after" text at `text-gray-900 font-medium` creates strong typographic contrast against the struck line
-- One contained block reads as a structured comparison, not scattered cards
-- The check marks give a subtle "resolved" signal without color accents
+## Technical approach
 
-## Technical changes
+All animations follow the existing pattern:
+- Use `useReducedMotion()` hook -- skip all intervals if true
+- Use `useEffect` with `setInterval` or `setTimeout` for cycling
+- Use CSS `transition-all duration-300` for smooth state changes
+- Pause on hover (`isHovered` state via `onMouseEnter`/`onMouseLeave`) where the vignette supports interaction
 
-### File: `src/components/sections/ProblemContrast.tsx`
-- Replace the grid of cards with a single container `div` with `bg-white rounded-xl border border-gray-200 divide-y divide-gray-100`
-- Each item becomes a row with two lines (before struck, after bold)
-- Icon sits to the left of the before text (inline, not in a circle)
-- Check icon (`lucide-react Check`) on the right of the after line in `text-gray-300`
-- Remove the 2x2 grid layout entirely
-- Props interface stays the same (no breaking changes)
+## Files to modify
+
+| File | Change |
+|------|--------|
+| `src/components/ui/vignettes/PipelineBoard.tsx` | Add auto-highlight cycling through deal cards |
+| `src/components/ui/vignettes/ContactTimeline.tsx` | Add sequential activity row highlighting |
+| `src/components/ui/vignettes/CRMPreviews.tsx` | Add auto-row-select to ContactsTableRealistic, auto-check to TasksListRealistic, animate chart bars in MiniReportsRealistic |
+| `src/components/ui/vignettes/SettingsPanel.tsx` | Add auto-toggle cycling for switches |
+| `src/components/ui/vignettes/ImportMapper.tsx` | Add auto-match animation for unmatched field |
+| `src/components/sections/RolesPermissionsMatrix.tsx` | Add auto-toggle between Simple/Strict presets |
 
 ## Acceptance criteria
-1. Single contained block, not scattered cards
-2. "Before" text is `text-sm text-gray-400 line-through` — readable, not tiny
-3. "After" text is `text-sm text-gray-900 font-medium` — strong contrast
-4. Icons are `text-gray-400` inline (no circles, no tinted backgrounds)
-5. No mint, no emerald, no colored accents anywhere
-6. No hover animations on rows
-7. Check marks in `text-gray-300` for subtle resolution signal
+1. All vignettes auto-animate without user interaction
+2. Animations pause when `prefers-reduced-motion` is active
+3. Animations are subtle (scale, opacity, highlight) not jarring
+4. Existing click interactions still work alongside auto-animation
+5. No performance issues from multiple concurrent intervals
 
