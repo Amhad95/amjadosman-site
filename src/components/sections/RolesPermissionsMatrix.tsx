@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Check, X, Shield, ShieldCheck } from 'lucide-react';
 
 type Preset = 'simple' | 'strict';
@@ -35,7 +36,17 @@ const roleColors = {
 };
 
 export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ className }) => {
+  const reducedMotion = useReducedMotion();
   const [preset, setPreset] = useState<Preset>('simple');
+
+  // Auto-toggle between presets
+  useEffect(() => {
+    if (reducedMotion) return;
+    const interval = setInterval(() => {
+      setPreset(prev => prev === 'simple' ? 'strict' : 'simple');
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [reducedMotion]);
 
   return (
     <div className={cn('bg-white p-4', className)}>
@@ -46,7 +57,7 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
           <button
             onClick={() => setPreset('simple')}
             className={cn(
-              'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors',
+              'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors duration-300',
               preset === 'simple'
                 ? 'bg-gray-900 text-white'
                 : 'bg-white text-gray-600 hover:bg-gray-50'
@@ -58,7 +69,7 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
           <button
             onClick={() => setPreset('strict')}
             className={cn(
-              'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors',
+              'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors duration-300',
               preset === 'strict'
                 ? 'bg-gray-900 text-white'
                 : 'bg-white text-gray-600 hover:bg-gray-50'

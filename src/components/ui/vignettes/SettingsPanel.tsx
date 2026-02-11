@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { ChevronRight, Check } from 'lucide-react';
 
 interface SettingItem {
@@ -26,6 +27,36 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   activeSection = 0,
   className,
 }) => {
+  const reducedMotion = useReducedMotion();
+  const [toggleStates, setToggleStates] = useState<Record<string, boolean>>(() => {
+    const states: Record<string, boolean> = {};
+    sections[activeSection]?.items.forEach((item, i) => {
+      if (item.type === 'toggle') {
+        states[`${activeSection}-${i}`] = item.enabled ?? false;
+      }
+    });
+    return states;
+  });
+
+  // Auto-toggle switches one by one
+  useEffect(() => {
+    if (reducedMotion) return;
+    const toggleIndices = sections[activeSection]?.items
+      .map((item, i) => (item.type === 'toggle' ? i : -1))
+      .filter(i => i !== -1) ?? [];
+    if (toggleIndices.length === 0) return;
+
+    let cycleIndex = 0;
+    const interval = setInterval(() => {
+      const itemIndex = toggleIndices[cycleIndex];
+      const key = `${activeSection}-${itemIndex}`;
+      setToggleStates(prev => ({ ...prev, [key]: !prev[key] }));
+      cycleIndex = (cycleIndex + 1) % toggleIndices.length;
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, [reducedMotion, activeSection, sections]);
+
   return (
     <div className={cn('flex h-full bg-white', className)}>
       {/* Sidebar */}
@@ -55,49 +86,56 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           {sections[activeSection]?.title}
         </div>
         <div className="space-y-3">
-          {sections[activeSection]?.items.map((item, i) => (
-            <div key={i} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
-              <span className="text-[11px] text-gray-700">{item.label}</span>
-              
-              {item.type === 'toggle' && (
-                <div className={cn(
-                  'w-8 h-4 rounded-full relative transition-colors',
-                  item.enabled ? 'bg-emerald-500' : 'bg-gray-200'
-                )}>
+          {sections[activeSection]?.items.map((item, i) => {
+            const toggleKey = `${activeSection}-${i}`;
+            const isEnabled = item.type === 'toggle'
+              ? (toggleStates[toggleKey] ?? item.enabled ?? false)
+              : item.enabled;
+
+            return (
+              <div key={i} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                <span className="text-[11px] text-gray-700">{item.label}</span>
+                
+                {item.type === 'toggle' && (
                   <div className={cn(
-                    'absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform',
-                    item.enabled ? 'translate-x-4' : 'translate-x-0.5'
-                  )} />
-                </div>
-              )}
-              
-              {item.type === 'select' && (
-                <div className="flex items-center gap-1 px-2 py-1 bg-gray-50 border border-gray-200 rounded text-[10px] text-gray-600">
-                  {item.value}
-                  <ChevronRight className="w-3 h-3 rotate-90" />
-                </div>
-              )}
-              
-              {item.type === 'text' && (
-                <span className="text-[10px] text-gray-500">{item.value}</span>
-              )}
-              
-              {item.type === 'list' && item.items && (
-                <div className="flex gap-1">
-                  {item.items.slice(0, 3).map((listItem, j) => (
-                    <span key={j} className="px-1.5 py-0.5 bg-gray-100 text-[9px] text-gray-600 rounded">
-                      {listItem}
-                    </span>
-                  ))}
-                  {item.items.length > 3 && (
-                    <span className="px-1.5 py-0.5 bg-gray-100 text-[9px] text-gray-500 rounded">
-                      +{item.items.length - 3}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+                    'w-8 h-4 rounded-full relative transition-colors duration-300',
+                    isEnabled ? 'bg-emerald-500' : 'bg-gray-200'
+                  )}>
+                    <div className={cn(
+                      'absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform duration-300',
+                      isEnabled ? 'translate-x-4' : 'translate-x-0.5'
+                    )} />
+                  </div>
+                )}
+                
+                {item.type === 'select' && (
+                  <div className="flex items-center gap-1 px-2 py-1 bg-gray-50 border border-gray-200 rounded text-[10px] text-gray-600">
+                    {item.value}
+                    <ChevronRight className="w-3 h-3 rotate-90" />
+                  </div>
+                )}
+                
+                {item.type === 'text' && (
+                  <span className="text-[10px] text-gray-500">{item.value}</span>
+                )}
+                
+                {item.type === 'list' && item.items && (
+                  <div className="flex gap-1">
+                    {item.items.slice(0, 3).map((listItem, j) => (
+                      <span key={j} className="px-1.5 py-0.5 bg-gray-100 text-[9px] text-gray-600 rounded">
+                        {listItem}
+                      </span>
+                    ))}
+                    {item.items.length > 3 && (
+                      <span className="px-1.5 py-0.5 bg-gray-100 text-[9px] text-gray-500 rounded">
+                        +{item.items.length - 3}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

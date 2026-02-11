@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Check, ArrowRight, FileSpreadsheet, AlertCircle } from 'lucide-react';
 
 interface Mapping {
@@ -16,9 +17,42 @@ interface ImportMapperProps {
 
 export const ImportMapper: React.FC<ImportMapperProps> = ({
   sourceFile = 'contacts_export.csv',
-  mappings,
+  mappings: initialMappings,
   className,
 }) => {
+  const reducedMotion = useReducedMotion();
+  const [mappings, setMappings] = useState(initialMappings);
+
+  // Auto-match unmatched fields, then reset
+  useEffect(() => {
+    if (reducedMotion) return;
+    const unmatchedIndices = initialMappings
+      .map((m, i) => (!m.matched ? i : -1))
+      .filter(i => i !== -1);
+    if (unmatchedIndices.length === 0) return;
+
+    let phase: 'waiting' | 'matched' = 'waiting';
+    const interval = setInterval(() => {
+      if (phase === 'waiting') {
+        // Match all unmatched
+        setMappings(prev =>
+          prev.map((m, i) =>
+            unmatchedIndices.includes(i)
+              ? { ...m, matched: true, target: m.target || 'Notes' }
+              : m
+          )
+        );
+        phase = 'matched';
+      } else {
+        // Reset to original
+        setMappings(initialMappings);
+        phase = 'waiting';
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [reducedMotion, initialMappings]);
+
   const matchedCount = mappings.filter(m => m.matched).length;
   const totalCount = mappings.length;
 
@@ -32,7 +66,7 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
         </div>
         <div className="flex items-center gap-1.5">
           <div className={cn(
-            'w-4 h-4 rounded-full flex items-center justify-center',
+            'w-4 h-4 rounded-full flex items-center justify-center transition-colors duration-300',
             matchedCount === totalCount ? 'bg-emerald-100' : 'bg-amber-100'
           )}>
             {matchedCount === totalCount ? (
@@ -63,7 +97,7 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
           {mappings.map((mapping, i) => (
             <React.Fragment key={i}>
               <div className={cn(
-                'px-2 py-1.5 rounded border',
+                'px-2 py-1.5 rounded border transition-all duration-300',
                 mapping.matched
                   ? 'bg-gray-50 border-gray-200 text-gray-700'
                   : 'bg-amber-50 border-amber-200 text-amber-700'
@@ -72,12 +106,12 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
               </div>
               <div className="flex items-center justify-center">
                 <ArrowRight className={cn(
-                  'w-3 h-3',
+                  'w-3 h-3 transition-colors duration-300',
                   mapping.matched ? 'text-emerald-500' : 'text-gray-300'
                 )} />
               </div>
               <div className={cn(
-                'px-2 py-1.5 rounded border',
+                'px-2 py-1.5 rounded border transition-all duration-300',
                 mapping.matched
                   ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
                   : 'bg-gray-50 border-gray-200 text-gray-400'
