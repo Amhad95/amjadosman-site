@@ -19,7 +19,6 @@ export const PaymentDashboard: React.FC = () => {
     const interval = setInterval(() => {
       setStatuses((prev) => {
         const newStatuses = [...prev];
-        // Randomly update a status
         const index = Math.floor(Math.random() * newStatuses.length);
         if (newStatuses[index] === 'overdue') {
           newStatuses[index] = 'pending';
@@ -43,13 +42,13 @@ export const PaymentDashboard: React.FC = () => {
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'paid':
-        return 'bg-mint/20 text-mint';
+        return 'bg-emerald-100 text-emerald-700';
       case 'pending':
-        return 'bg-lavender/20 text-lavender';
+        return 'bg-amber-100 text-amber-700';
       case 'overdue':
-        return 'bg-red-500/20 text-red-400';
+        return 'bg-red-100 text-red-700';
       default:
-        return 'bg-ink/40 text-offwhite/60';
+        return 'bg-gray-100 text-gray-600';
     }
   };
 
@@ -57,31 +56,31 @@ export const PaymentDashboard: React.FC = () => {
     <div className="w-full h-full flex flex-col p-3 gap-3">
       {/* Summary Cards */}
       <div className="flex gap-2">
-        <div className="flex-1 bg-ink/40 rounded-lg p-2 border border-mint/10">
-          <div className="text-[10px] text-offwhite/50">Revenue</div>
-          <div className="text-sm font-bold text-mint">$23,000</div>
+        <div className="flex-1 bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+          <div className="text-[10px] text-gray-500">Revenue</div>
+          <div className="text-sm font-bold text-gray-900">$23,000</div>
         </div>
-        <div className="flex-1 bg-ink/40 rounded-lg p-2 border border-mint/10">
-          <div className="text-[10px] text-offwhite/50">Outstanding</div>
-          <div className="text-sm font-bold text-lavender">$18,800</div>
+        <div className="flex-1 bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+          <div className="text-[10px] text-gray-500">Outstanding</div>
+          <div className="text-sm font-bold text-gray-900">$18,800</div>
         </div>
-        <div className="flex-1 bg-ink/40 rounded-lg p-2 border border-mint/10">
-          <div className="text-[10px] text-offwhite/50">Collection</div>
+        <div className="flex-1 bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+          <div className="text-[10px] text-gray-500">Collection</div>
           <div className="flex items-center gap-1">
-            <div className="flex-1 h-1.5 bg-ink/60 rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-mint transition-all duration-500 rounded-full"
+                className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span className="text-[10px] text-mint">{Math.round(progress)}%</span>
+            <span className="text-[10px] text-emerald-600 font-medium">{Math.round(progress)}%</span>
           </div>
         </div>
       </div>
 
       {/* Invoice List */}
-      <div className="flex-1 bg-ink/30 rounded-lg overflow-hidden">
-        <div className="grid grid-cols-4 text-[9px] text-offwhite/50 p-2 border-b border-mint/10">
+      <div className="flex-1 bg-white rounded-lg overflow-hidden border border-gray-200">
+        <div className="grid grid-cols-4 text-[9px] text-gray-500 font-medium p-2 border-b border-gray-200 bg-gray-50">
           <span>Invoice</span>
           <span>Client</span>
           <span className="text-right">Amount</span>
@@ -90,14 +89,14 @@ export const PaymentDashboard: React.FC = () => {
         {invoices.map((inv, index) => (
           <div 
             key={inv.id} 
-            className="grid grid-cols-4 text-[10px] p-2 border-b border-mint/5 items-center"
+            className="grid grid-cols-4 text-[10px] p-2 border-b border-gray-100 items-center"
           >
-            <span className="text-offwhite font-medium">{inv.id}</span>
-            <span className="text-offwhite/70">{inv.client}</span>
-            <span className="text-offwhite text-right">{inv.amount}</span>
+            <span className="text-gray-900 font-medium">{inv.id}</span>
+            <span className="text-gray-600">{inv.client}</span>
+            <span className="text-gray-900 text-right font-medium">{inv.amount}</span>
             <div className="flex justify-center">
               <span className={cn(
-                'px-1.5 py-0.5 rounded text-[8px] capitalize transition-all duration-300',
+                'px-1.5 py-0.5 rounded-full text-[8px] capitalize font-medium transition-all duration-300',
                 getStatusStyle(statuses[index])
               )}>
                 {statuses[index]}

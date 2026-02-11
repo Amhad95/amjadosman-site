@@ -44,7 +44,6 @@ export const ChecklistApproval: React.FC = () => {
             setCurrentToggle(null);
           }, 500);
         } else {
-          // Reset all
           setItems(initialItems);
         }
         return prev;
@@ -62,22 +61,22 @@ export const ChecklistApproval: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-xs font-semibold text-offwhite">Project Launch Checklist</div>
-          <div className="text-[10px] text-offwhite/50 flex items-center gap-1">
+          <div className="text-xs font-semibold text-gray-900">Project Launch Checklist</div>
+          <div className="text-[10px] text-gray-500 flex items-center gap-1">
             <Clock size={10} />
             Due in 3 days
           </div>
         </div>
         <div className="text-right">
-          <div className="text-lg font-bold text-mint">{completedCount}/{items.length}</div>
-          <div className="text-[9px] text-mint/70">completed</div>
+          <div className="text-lg font-bold text-gray-900">{completedCount}/{items.length}</div>
+          <div className="text-[9px] text-gray-500">completed</div>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="h-1.5 bg-ink/40 rounded-full overflow-hidden">
+      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
         <div 
-          className="h-full bg-mint rounded-full transition-all duration-500"
+          className="h-full bg-emerald-500 rounded-full transition-all duration-500"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -91,29 +90,29 @@ export const ChecklistApproval: React.FC = () => {
               key={item.id}
               className={cn(
                 'flex items-center gap-2 p-2 rounded-lg transition-all duration-300',
-                'border',
+                'border shadow-sm',
                 item.completed 
-                  ? 'bg-mint/10 border-mint/20' 
-                  : 'bg-ink/30 border-mint/5',
-                isToggling && 'scale-[1.02] ring-2 ring-mint/30'
+                  ? 'bg-emerald-50 border-emerald-200' 
+                  : 'bg-white border-gray-200',
+                isToggling && 'scale-[1.02] ring-2 ring-emerald-300'
               )}
             >
               <div className="transition-transform duration-300">
                 {item.completed ? (
-                  <CheckSquare size={14} className="text-mint" />
+                  <CheckSquare size={14} className="text-emerald-600" />
                 ) : (
-                  <Square size={14} className="text-offwhite/40" />
+                  <Square size={14} className="text-gray-400" />
                 )}
               </div>
               <span className={cn(
                 'flex-1 text-[11px] transition-all duration-300',
                 item.completed 
-                  ? 'text-offwhite/50 line-through' 
-                  : 'text-offwhite'
+                  ? 'text-gray-400 line-through' 
+                  : 'text-gray-800'
               )}>
                 {item.text}
               </span>
-              <div className="flex items-center gap-1 text-[9px] text-offwhite/40">
+              <div className="flex items-center gap-1 text-[9px] text-gray-400">
                 <User size={9} />
                 {item.assignee}
               </div>

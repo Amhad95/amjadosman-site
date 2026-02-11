@@ -27,12 +27,10 @@ export const InventoryList: React.FC = () => {
         });
       });
 
-      // Toggle filter occasionally
       if (Math.random() > 0.7) {
         setFilterActive((prev) => !prev);
       }
 
-      // Simulate typing
       const texts = ['', 'Mac', 'Monitor', ''];
       setSearchText(texts[Math.floor(Math.random() * texts.length)]);
     }, 2500);
@@ -41,30 +39,30 @@ export const InventoryList: React.FC = () => {
   }, [reducedMotion]);
 
   const getStockStyle = (stock: number) => {
-    if (stock <= 5) return 'text-red-400';
-    if (stock <= 15) return 'text-lavender';
-    return 'text-mint';
+    if (stock <= 5) return 'text-red-600';
+    if (stock <= 15) return 'text-amber-600';
+    return 'text-emerald-600';
   };
 
   return (
     <div className="w-full h-full flex flex-col p-3 gap-2">
       {/* Search and Filter Bar */}
       <div className="flex gap-2">
-        <div className="flex-1 flex items-center gap-2 bg-ink/40 rounded-lg px-2 py-1.5 border border-mint/10">
-          <Search size={12} className="text-offwhite/40" />
+        <div className="flex-1 flex items-center gap-2 bg-white rounded-lg px-2 py-1.5 border border-gray-200">
+          <Search size={12} className="text-gray-400" />
           <span className={cn(
             'text-[10px] transition-all duration-300',
-            searchText ? 'text-offwhite' : 'text-offwhite/40'
+            searchText ? 'text-gray-800' : 'text-gray-400'
           )}>
             {searchText || 'Search inventory...'}
           </span>
         </div>
         <button 
           className={cn(
-            'flex items-center gap-1 px-2 py-1.5 rounded-lg text-[10px] transition-all duration-300',
+            'flex items-center gap-1 px-2 py-1.5 rounded-lg text-[10px] font-medium transition-all duration-300',
             filterActive 
-              ? 'bg-mint/20 text-mint border border-mint/30' 
-              : 'bg-ink/40 text-offwhite/60 border border-mint/10'
+              ? 'bg-gray-900 text-white' 
+              : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
           )}
         >
           <Filter size={10} />
@@ -73,8 +71,8 @@ export const InventoryList: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="flex-1 bg-ink/30 rounded-lg overflow-hidden">
-        <div className="grid grid-cols-4 text-[9px] text-offwhite/50 p-2 border-b border-mint/10">
+      <div className="flex-1 bg-white rounded-lg overflow-hidden border border-gray-200">
+        <div className="grid grid-cols-4 text-[9px] text-gray-500 font-medium p-2 border-b border-gray-200 bg-gray-50">
           <span>SKU</span>
           <span>Item</span>
           <span className="text-center">Stock</span>
@@ -84,13 +82,13 @@ export const InventoryList: React.FC = () => {
           <div 
             key={item.sku} 
             className={cn(
-              'grid grid-cols-4 text-[10px] p-2 border-b border-mint/5 items-center',
+              'grid grid-cols-4 text-[10px] p-2 border-b border-gray-100 items-center',
               'transition-all duration-300',
               filterActive && stocks[index] > 10 && 'opacity-30'
             )}
           >
-            <span className="text-mint/70 font-mono">{item.sku}</span>
-            <span className="text-offwhite truncate">{item.name}</span>
+            <span className="text-gray-500 font-mono">{item.sku}</span>
+            <span className="text-gray-800 font-medium truncate">{item.name}</span>
             <div className="flex justify-center">
               <span className={cn(
                 'font-semibold transition-colors duration-300',
@@ -99,7 +97,7 @@ export const InventoryList: React.FC = () => {
                 {stocks[index]}
               </span>
             </div>
-            <span className="text-offwhite/60 truncate">{item.location}</span>
+            <span className="text-gray-500 truncate">{item.location}</span>
           </div>
         ))}
       </div>

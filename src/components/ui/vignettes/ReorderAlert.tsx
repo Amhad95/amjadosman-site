@@ -26,7 +26,6 @@ export const ReorderAlert: React.FC = () => {
     if (reducedMotion) return;
 
     const interval = setInterval(() => {
-      // Cycle through states
       setAlerts((prev) => {
         return prev.map((alert, index) => {
           if (index === 0) {
@@ -38,7 +37,6 @@ export const ReorderAlert: React.FC = () => {
         });
       });
 
-      // Flash new alert indicator
       setNewAlertVisible(true);
       setTimeout(() => setNewAlertVisible(false), 1500);
     }, 3000);
@@ -49,22 +47,22 @@ export const ReorderAlert: React.FC = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'ordered':
-        return <Check size={10} className="text-mint" />;
+        return <Check size={10} className="text-emerald-600" />;
       case 'acknowledged':
-        return <ArrowRight size={10} className="text-lavender" />;
+        return <ArrowRight size={10} className="text-amber-600" />;
       default:
-        return <AlertTriangle size={10} className="text-red-400" />;
+        return <AlertTriangle size={10} className="text-red-600" />;
     }
   };
 
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'ordered':
-        return 'bg-mint/20 text-mint border-mint/30';
+        return 'bg-emerald-50 text-emerald-800 border-emerald-200';
       case 'acknowledged':
-        return 'bg-lavender/20 text-lavender border-lavender/30';
+        return 'bg-amber-50 text-amber-800 border-amber-200';
       default:
-        return 'bg-red-500/20 text-red-400 border-red-500/30';
+        return 'bg-red-50 text-red-800 border-red-200';
     }
   };
 
@@ -73,15 +71,15 @@ export const ReorderAlert: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Package size={14} className="text-mint" />
-          <span className="text-xs font-semibold text-offwhite">Reorder Alerts</span>
+          <Package size={14} className="text-gray-700" />
+          <span className="text-xs font-semibold text-gray-900">Reorder Alerts</span>
         </div>
         <div className={cn(
-          'flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px]',
+          'flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium',
           'transition-all duration-300',
           newAlertVisible 
-            ? 'bg-red-500/30 text-red-400 animate-pulse' 
-            : 'bg-ink/40 text-offwhite/60'
+            ? 'bg-red-100 text-red-700 animate-pulse' 
+            : 'bg-gray-100 text-gray-500'
         )}>
           <span className="w-1.5 h-1.5 rounded-full bg-current" />
           {alerts.filter(a => a.status === 'new').length} new
@@ -94,9 +92,9 @@ export const ReorderAlert: React.FC = () => {
           <div
             key={alert.id}
             className={cn(
-              'p-2.5 rounded-lg border transition-all duration-500',
+              'p-2.5 rounded-lg border transition-all duration-500 shadow-sm',
               getStatusStyle(alert.status),
-              index === 0 && 'ring-1 ring-offset-1 ring-offset-plate-astral ring-current'
+              index === 0 && 'ring-1 ring-offset-1 ring-offset-white ring-current'
             )}
           >
             <div className="flex items-start justify-between gap-2">
@@ -114,13 +112,13 @@ export const ReorderAlert: React.FC = () => {
               </div>
             </div>
             {/* Progress bar showing stock level */}
-            <div className="mt-2 h-1 bg-black/20 rounded-full overflow-hidden">
+            <div className="mt-2 h-1 bg-black/10 rounded-full overflow-hidden">
               <div 
                 className="h-full rounded-full transition-all duration-300"
                 style={{ 
                   width: `${(alert.stock / alert.threshold) * 100}%`,
                   backgroundColor: 'currentColor',
-                  opacity: 0.6
+                  opacity: 0.4
                 }}
               />
             </div>
