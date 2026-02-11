@@ -30,17 +30,17 @@ export const InvoiceFlow: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col justify-center p-4">
       {/* Invoice Preview */}
-      <div className="bg-ink/40 rounded-lg p-3 border border-mint/10 mb-4">
+      <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm mb-4">
         <div className="flex justify-between items-start mb-3">
           <div>
-            <div className="text-xs font-semibold text-offwhite">Invoice #1042</div>
-            <div className="text-[10px] text-offwhite/50">Acme Corp</div>
+            <div className="text-xs font-semibold text-gray-900">Invoice #1042</div>
+            <div className="text-[10px] text-gray-500">Acme Corp</div>
           </div>
           <div className="text-right">
-            <div className="text-sm font-bold text-mint">$8,500.00</div>
+            <div className="text-sm font-bold text-gray-900">$8,500.00</div>
             <div className={cn(
-              'text-[9px] px-1.5 py-0.5 rounded',
-              currentStep >= 3 ? 'bg-mint/20 text-mint' : 'bg-lavender/20 text-lavender'
+              'text-[9px] px-1.5 py-0.5 rounded-full font-medium',
+              currentStep >= 3 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
             )}>
               {currentStep >= 3 ? 'Paid' : currentStep >= 2 ? 'Sent' : 'Draft'}
             </div>
@@ -49,8 +49,8 @@ export const InvoiceFlow: React.FC = () => {
         <div className="space-y-1">
           {['Web Development', 'Design System', 'Training'].map((item, i) => (
             <div key={i} className="flex justify-between text-[10px]">
-              <span className="text-offwhite/60">{item}</span>
-              <span className="text-offwhite/80">${(2000 + i * 1500).toLocaleString()}</span>
+              <span className="text-gray-500">{item}</span>
+              <span className="text-gray-800 font-medium">${(2000 + i * 1500).toLocaleString()}</span>
             </div>
           ))}
         </div>
@@ -70,15 +70,15 @@ export const InvoiceFlow: React.FC = () => {
                   className={cn(
                     'w-8 h-8 rounded-full flex items-center justify-center',
                     'transition-all duration-300',
-                    isActive ? 'bg-mint text-ink' : 'bg-ink/40 text-offwhite/40',
-                    isCurrent && 'ring-2 ring-mint/50 ring-offset-2 ring-offset-plate-astral'
+                    isActive ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-400',
+                    isCurrent && 'ring-2 ring-gray-300 ring-offset-2 ring-offset-white'
                   )}
                 >
                   <Icon size={14} />
                 </div>
                 <div className={cn(
-                  'text-[9px] mt-1 transition-colors duration-300',
-                  isActive ? 'text-mint' : 'text-offwhite/40'
+                  'text-[9px] mt-1 font-medium transition-colors duration-300',
+                  isActive ? 'text-gray-900' : 'text-gray-400'
                 )}>
                   {step.label}
                 </div>
@@ -87,7 +87,7 @@ export const InvoiceFlow: React.FC = () => {
                 <div
                   className={cn(
                     'flex-1 h-0.5 mx-1 transition-colors duration-300',
-                    index < currentStep ? 'bg-mint' : 'bg-ink/40'
+                    index < currentStep ? 'bg-gray-900' : 'bg-gray-200'
                   )}
                 />
               )}
