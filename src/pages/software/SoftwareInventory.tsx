@@ -20,11 +20,11 @@ import { ImportMapper, inventoryImportMappings } from '@/components/ui/vignettes
 import { InventoryList } from '@/components/ui/vignettes/InventoryList';
 import { ReorderAlert } from '@/components/ui/vignettes/ReorderAlert';
 import {
-  InventoryItemsPreview,
-  InventoryLocationsPreview,
-  InventoryReorderPreview,
-  InventoryAssetPreview,
-} from '@/components/ui/vignettes/ProductPreviews';
+  ItemsTableRealistic,
+  LocationsGridRealistic,
+  ReorderQueueRealistic,
+  AssetTrackerRealistic,
+} from '@/components/ui/vignettes/InventoryPreviews';
 import { CyberPyramid } from '@/components/ui/cyber-pyramid';
 import {
   Package,
@@ -141,16 +141,16 @@ const workflowSteps = [
     id: 'workflow',
     title: 'Run day-to-day workflow',
     description: 'Track stock, process reorders, manage checkouts.',
-    content: <InventoryItemsPreview />,
+    content: <ItemsTableRealistic />,
   },
 ];
 
 // Hero preview tabs
 const heroTabs = [
-  { id: 'items', label: 'Items', content: <InventoryItemsPreview /> },
-  { id: 'locations', label: 'Locations', content: <InventoryLocationsPreview /> },
-  { id: 'reorder', label: 'Reorder', content: <InventoryReorderPreview /> },
-  { id: 'assets', label: 'Assets', content: <InventoryAssetPreview /> },
+  { id: 'items', label: 'Items', content: <ItemsTableRealistic /> },
+  { id: 'locations', label: 'Locations', content: <LocationsGridRealistic /> },
+  { id: 'reorder', label: 'Reorder', content: <ReorderQueueRealistic /> },
+  { id: 'assets', label: 'Assets', content: <AssetTrackerRealistic /> },
 ];
 
 const SoftwareInventory = () => {
@@ -210,7 +210,7 @@ const SoftwareInventory = () => {
             <ProductPreviewFrame variant="card" className="min-h-[280px]">
               {activePersona === 0 && <InventoryList />}
               {activePersona === 1 && <ReorderAlert />}
-              {activePersona === 2 && <InventoryAssetPreview />}
+              {activePersona === 2 && <AssetTrackerRealistic />}
             </ProductPreviewFrame>
           </div>
         </div>
