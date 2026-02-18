@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { Hero } from '@/components/sections/Hero';
+import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
 import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
 import { CTABand } from '@/components/sections/CTABand';
@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { CyberPercentage } from '@/components/ui/cyber-percentage';
+import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 
 const KpiAudit = () => {
   const [metrics, setMetrics] = useState('');
@@ -51,11 +51,12 @@ const KpiAudit = () => {
 
   return (
     <Layout>
-      <Hero
-        headline="KPI Audit"
-        subheadline="List the metrics you currently track. Get a brutally honest audit — what's vanity, what's missing, and what to actually measure."
+      <CompactPageHeader
+        eyebrow="AI tool"
+        title="KPI Audit"
+        description="List the metrics you currently track. Get a brutally honest audit — what's vanity, what's missing, and what to actually measure."
         plate="navy"
-        rightElement={<CyberPercentage />}
+        rightElement={<ToolHeaderAnimation slug="kpi-audit" />}
       />
 
       <section className="py-12 md:py-16 bg-background">

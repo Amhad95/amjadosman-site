@@ -2,7 +2,6 @@ import React from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { ServiceCardGrid } from '@/components/sections/ServiceCardGrid';
-import { Steps } from '@/components/sections/Steps';
 import { ProofTiles } from '@/components/sections/ProofTiles';
 import { ToolList } from '@/components/sections/ToolList';
 import { CTABand } from '@/components/sections/CTABand';
@@ -11,6 +10,8 @@ import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
 import { NeuralLattice } from '@/components/shared/NeuralLattice';
 import { siteContent } from '@/lib/content';
+import { OutcomesImpactSection } from '@/components/sections/OutcomesImpactSection';
+import { DeliveryProcessInteractive } from '@/components/sections/DeliveryProcessInteractive';
 
 const Index = () => {
   const { home } = siteContent;
@@ -28,6 +29,7 @@ const Index = () => {
         rightElement={<NeuralLattice color="mint" speed={0.8} />}
       />
 
+
       {/* What We Deliver */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
@@ -42,32 +44,10 @@ const Index = () => {
       </section>
 
       {/* Outcomes */}
-      <section className="py-16 md:py-24 bg-muted">
-        <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.outcomes.headline} variant="poster" />
-          <ul className="space-y-4 max-w-2xl">
-            {home.outcomes.items.map((item, index) => (
-              <li key={index} className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-mint flex-shrink-0 mt-2" />
-                <span className="text-body-lg text-foreground">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <OutcomesImpactSection />
 
       {/* How We Work */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.howWeWork.headline} variant="poster" />
-          <Steps steps={home.howWeWork.steps} />
-          <div className="mt-12 text-center">
-            <SecondaryButton href={home.howWeWork.cta.href}>
-              {home.howWeWork.cta.label}
-            </SecondaryButton>
-          </div>
-        </div>
-      </section>
+      <DeliveryProcessInteractive />
 
       {/* Proof Tiles */}
       <section className="py-16 md:py-24 bg-muted">

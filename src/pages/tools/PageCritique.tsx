@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { Hero } from '@/components/sections/Hero';
+import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
 import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
 import { CTABand } from '@/components/sections/CTABand';
@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { CyberCircuit } from '@/components/ui/cyber-circuit';
+import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 
 const PageCritique = () => {
   const [url, setUrl] = useState('');
@@ -52,11 +52,12 @@ const PageCritique = () => {
 
   return (
     <Layout>
-      <Hero
-        headline="Landing Page Critique"
-        subheadline="Paste your page URL or copy. Get a conversion audit with hierarchy notes, CTA fixes, and ranked priority actions."
+      <CompactPageHeader
+        eyebrow="AI tool"
+        title="Landing Page Critique"
+        description="Paste your page URL or copy. Get a conversion audit with hierarchy notes, CTA fixes, and ranked priority actions."
         plate="blue"
-        rightElement={<CyberCircuit />}
+        rightElement={<ToolHeaderAnimation slug="page-critique" />}
       />
 
       <section className="py-12 md:py-16 bg-background">
