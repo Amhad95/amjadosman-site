@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { Hero } from '@/components/sections/Hero';
+import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
 import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
 import { CTABand } from '@/components/sections/CTABand';
@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { CyberGlobeHeader } from '@/components/shared/CyberGlobeHeader';
+import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 
 const ProcessMapper = () => {
   const [workflow, setWorkflow] = useState('');
@@ -47,11 +47,12 @@ const ProcessMapper = () => {
 
   return (
     <Layout>
-      <Hero
-        headline="Process Flow Mapper"
-        subheadline="Describe how a workflow actually runs. Get a structured map with steps, decision points, and bottleneck analysis."
+      <CompactPageHeader
+        eyebrow="AI tool"
+        title="Process Flow Mapper"
+        description="Describe how a workflow actually runs. Get a structured map with steps, decision points, and bottleneck analysis."
         plate="emerald"
-        rightElement={<CyberGlobeHeader speed={0.6} />}
+        rightElement={<ToolHeaderAnimation slug="process-mapper" />}
       />
 
       <section className="py-12 md:py-16 bg-background">

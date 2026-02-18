@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { Hero } from '@/components/sections/Hero';
+import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
 import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
 import { CTABand } from '@/components/sections/CTABand';
@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { CyberMatrix } from '@/components/ui/cyber-matrix';
+import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 
 const BrandAudit = () => {
   const [brand, setBrand] = useState('');
@@ -51,11 +51,12 @@ const BrandAudit = () => {
 
   return (
     <Layout>
-      <Hero
-        headline="Brand Consistency Audit"
-        subheadline="Describe your brand and your assets. Get a consistency report with visual, tone, and priority fixes."
+      <CompactPageHeader
+        eyebrow="AI tool"
+        title="Brand Consistency Audit"
+        description="Describe your brand and your assets. Get a consistency report with visual, tone, and priority fixes."
         plate="burgundy"
-        rightElement={<CyberMatrix />}
+        rightElement={<ToolHeaderAnimation slug="brand-audit" />}
       />
 
       <section className="py-12 md:py-16 bg-background">

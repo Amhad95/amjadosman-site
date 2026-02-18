@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { Hero } from '@/components/sections/Hero';
+import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
 import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
 import { CTABand } from '@/components/sections/CTABand';
@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { CyberPyramid } from '@/components/ui/cyber-pyramid';
+import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 
 const DashboardBuilder = () => {
   const [audience, setAudience] = useState('');
@@ -54,11 +54,12 @@ const DashboardBuilder = () => {
 
   return (
     <Layout>
-      <Hero
-        headline="Dashboard Requirements Builder"
-        subheadline="Describe what you need to see and why. Get a complete dashboard specification with KPIs, data sources, and layout recommendations."
+      <CompactPageHeader
+        eyebrow="AI tool"
+        title="Dashboard Requirements Builder"
+        description="Describe what you need to see and why. Get a complete dashboard specification with KPIs, data sources, and layout recommendations."
         plate="astral"
-        rightElement={<CyberPyramid speed={0.8} />}
+        rightElement={<ToolHeaderAnimation slug="dashboard-builder" />}
       />
 
       <section className="py-12 md:py-16 bg-background">

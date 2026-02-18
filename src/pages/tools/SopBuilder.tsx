@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { Hero } from '@/components/sections/Hero';
+import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
 import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
 import { CTABand } from '@/components/sections/CTABand';
@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { KnotAnimation } from '@/components/ui/knot-animation';
+import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 
 const SopBuilder = () => {
   const [process, setProcess] = useState('');
@@ -47,11 +47,12 @@ const SopBuilder = () => {
 
   return (
     <Layout>
-      <Hero
-        headline="SOP Draft Builder"
-        subheadline="Describe any process in plain English. Get a complete, structured SOP document in seconds."
+      <CompactPageHeader
+        eyebrow="AI tool"
+        title="SOP Draft Builder"
+        description="Describe any process in plain English. Get a complete, structured SOP document in seconds."
         plate="violet"
-        rightElement={<KnotAnimation speedA={0.03} speedB={0.015} />}
+        rightElement={<ToolHeaderAnimation slug="sop-builder" />}
       />
 
       <section className="py-12 md:py-16 bg-background">
