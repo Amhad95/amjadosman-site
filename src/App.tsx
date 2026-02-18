@@ -17,10 +17,18 @@ import About from "./pages/About";
 import Book from "./pages/Book";
 import Process from "./pages/Process";
 import Resources from "./pages/Resources";
+import ArticleDetail from "./pages/ArticleDetail";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
+// Tool pages
+import SopBuilder from "./pages/tools/SopBuilder";
+import PageCritique from "./pages/tools/PageCritique";
+import BrandAudit from "./pages/tools/BrandAudit";
+import ProcessMapper from "./pages/tools/ProcessMapper";
+import DashboardBuilder from "./pages/tools/DashboardBuilder";
+import KpiAudit from "./pages/tools/KpiAudit";
 
 const queryClient = new QueryClient();
 
@@ -39,12 +47,19 @@ const App = () => (
           <Route path="/software/inventory" element={<SoftwareInventory />} />
           <Route path="/software/tasks" element={<SoftwareTasks />} />
           <Route path="/tools" element={<Tools />} />
+          <Route path="/tools/sop-builder" element={<SopBuilder />} />
+          <Route path="/tools/page-critique" element={<PageCritique />} />
+          <Route path="/tools/brand-audit" element={<BrandAudit />} />
+          <Route path="/tools/process-mapper" element={<ProcessMapper />} />
+          <Route path="/tools/dashboard-builder" element={<DashboardBuilder />} />
+          <Route path="/tools/kpi-audit" element={<KpiAudit />} />
           <Route path="/work" element={<Work />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/about" element={<About />} />
           <Route path="/book" element={<Book />} />
           <Route path="/process" element={<Process />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/:slug" element={<ArticleDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />

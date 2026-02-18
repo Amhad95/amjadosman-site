@@ -1,0 +1,115 @@
+import React, { useState, useCallback } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Copy, Check, Clock, FileText } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
+
+interface ToolOutputPanelProps {
+  output: string;
+  isStreaming: boolean;
+  className?: string;
+}
+
+export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
+  output,
+  isStreaming,
+  className,
+}) => {
+  const [copied, setCopied] = useState(false);
+
+  const wordCount = output.trim() ? output.trim().split(/\s+/).length : 0;
+  const readMinutes = Math.max(1, Math.round(wordCount / 200));
+
+  const handleCopy = useCallback(() => {
+    if (!output) return;
+    navigator.clipboard.writeText(output).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }, [output]);
+
+  if (!output && !isStreaming) return null;
+
+  return (
+    <div className={cn('bg-card border border-border rounded-2xl overflow-hidden', className)}>
+      {/* Header bar */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-muted/50">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <span className="flex items-center gap-1.5 font-medium text-foreground">
+            <FileText className="w-4 h-4" />
+            Output
+          </span>
+          {!isStreaming && wordCount > 0 && (
+            <>
+              <span>{wordCount.toLocaleString()} words</span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5" />
+                <span>{readMinutes} min read</span>
+              </span>
+            </>
+          )}
+          {isStreaming && (
+            <span className="flex items-center gap-2">
+              <span className="inline-flex gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 animate-bounce [animation-delay:0ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 animate-bounce [animation-delay:150ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 animate-bounce [animation-delay:300ms]" />
+              </span>
+              Generating...
+            </span>
+          )}
+        </div>
+        <button
+          onClick={handleCopy}
+          disabled={!output || isStreaming}
+          className={cn(
+            'flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg transition-all border border-border',
+            output && !isStreaming
+              ? 'hover:bg-accent text-foreground cursor-pointer'
+              : 'text-muted-foreground cursor-not-allowed opacity-50'
+          )}
+        >
+          {copied ? (
+            <><Check className="w-3.5 h-3.5" /> Copied</>
+          ) : (
+            <><Copy className="w-3.5 h-3.5" /> Copy</>
+          )}
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="p-6 md:p-8">
+        {isStreaming && !output && (
+          <div className="space-y-3">
+            <Skeleton className="h-5 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-4/5" />
+            <Skeleton className="h-5 w-1/2 mt-4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+        )}
+        {output && (
+          <div className="prose prose-sm max-w-none
+            prose-headings:font-serif prose-headings:text-foreground
+            prose-h1:text-2xl prose-h2:text-xl prose-h2:mt-6 prose-h3:text-base
+            prose-p:text-muted-foreground prose-p:leading-relaxed
+            prose-strong:text-foreground prose-strong:font-semibold
+            prose-ul:text-muted-foreground prose-ol:text-muted-foreground
+            prose-li:leading-relaxed
+            prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-foreground prose-code:text-xs
+            prose-pre:bg-muted prose-pre:border prose-pre:border-border
+            prose-blockquote:border-l-4 prose-blockquote:border-border prose-blockquote:text-muted-foreground
+            prose-hr:border-border
+            prose-table:text-sm">
+            <ReactMarkdown>{output}</ReactMarkdown>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ToolOutputPanel;
