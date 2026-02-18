@@ -13,6 +13,7 @@ import { siteContent } from '@/lib/content';
 import { OutcomesImpactSection } from '@/components/sections/OutcomesImpactSection';
 import { DeliveryProcessInteractive } from '@/components/sections/DeliveryProcessInteractive';
 
+
 const Index = () => {
   const { home } = siteContent;
 
