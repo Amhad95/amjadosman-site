@@ -1,167 +1,190 @@
 
+# Database + AI Tools: Full Implementation Plan
 
-# Rebuild Non-CRM "In Action" Previews to Match CRM Quality
+## Overview
 
-## Problem
+Two major workstreams:
 
-The "in action" section on each software page uses `TabbedProductPreview` with 4 tab panels. The CRM page uses rich, high-fidelity components from `CRMPreviews.tsx` (200+ lines each, with real data, animations, hover-pause, shared sub-components like `DataTable`/`DetailDrawer`/`StatusChip`). The Accounting, Inventory, and Tasks pages use the simple components from `ProductPreviews.tsx` -- these are 20-30 line sketches with 3 tiny rows, empty placeholder divs, and no meaningful interactivity.
+1. **Database** — Lovable Cloud (Supabase) database for Work case studies and Articles/Resources, with an admin-style management approach
+2. **AI Tools** — All 6 tools built as real, standalone pages with functional AI (Lovable AI gateway via edge functions), each optimised for direct traffic from Google
 
-### Quality comparison
+---
 
-```text
-CRM PipelineBoardRealistic        vs   TasksBoardPreview
------------------------------          ---------------------
-5 columns with labels + counts         3 columns, no counts
-Deal cards: company, value,            Empty 24px-tall gray divs
-  owner avatar, last activity            (no text at all)
-Column highlight animation             Column header highlight only
-Hover: shadow + lift effect            No hover
-~200 lines of code                     ~40 lines of code
+## Part 1: Database Architecture
 
-CRM ContactsTableRealistic        vs   InventoryItemsPreview
------------------------------          ---------------------
-Full DataTable with 5 columns          3 static rows
-Row click opens DetailDrawer           No interactivity
-Auto-cycles rows, pauses on hover     No animation
-Pagination indicator                   No pagination
-~60 lines + shared components          ~28 lines
+### Tables
+
+**`work_cases`** — Portfolio case studies shown on `/work`
+```
+id, title, description, thumbnail_url, href, cta_label, category, 
+published (bool), sort_order, created_at, updated_at
 ```
 
-The fix: create realistic, CRM-quality preview components for Accounting, Inventory, and Tasks -- each with proper data density, animations, hover-pause, and interactivity.
+**`articles`** — Resources / blog content shown on `/resources`
+```
+id, title, slug, excerpt, body (rich text), thumbnail_url, 
+category, published (bool), sort_order, created_at, updated_at
+```
 
-## New Components to Create
+Both tables are **public read** (no auth required for visitors), no user-auth needed since this is a content site. An admin seeder will populate the initial data from `content.ts`.
 
-### `src/components/ui/vignettes/AccountingPreviews.tsx`
+### RLS Policy
+- `SELECT`: public (anyone can read published rows)
+- `INSERT/UPDATE/DELETE`: locked (no anonymous mutations — content managed via Lovable Cloud dashboard or future admin panel)
 
-Four rich components replacing the simple `ProductPreviews.tsx` versions:
+---
 
-**InvoiceDashboardRealistic** (replaces AccountingInvoicePreview)
-- Full invoice table with columns: Invoice #, Client, Amount, Status, Due Date
-- 5+ invoice rows with realistic data
-- StatusChip badges (Paid/emerald, Pending/amber, Overdue/red, Draft/gray)
-- Row click to highlight/select, auto-cycle through rows
-- Hover-pause pattern
-- Summary bar at bottom (Total outstanding, Overdue count)
+## Part 2: AI Tools — Architecture
 
-**ExpenseTrackerRealistic** (replaces AccountingExpensesPreview)
-- Category-grouped expense rows: Travel, Software, Office, Professional Services
-- Each row: description, date, amount, category tag, approval status
-- Auto-highlights rows one by one
-- Filter toggle (All / Pending / Approved)
-- Hover-pause pattern
+### Shared Pattern Per Tool
 
-**ApprovalsQueueRealistic** (replaces AccountingApprovalsPreview)
-- Queue list with approval items: type icon, description, requester avatar, amount, submitted date
-- Approve/Reject buttons that animate on auto-cycle
-- Items auto-approve one by one, then reset
-- Hover-pause for manual clicking
+Every tool page follows this layout:
+```
+[Hero: Tool name, description, animated illustration]
+[Input Form: Tool-specific fields]
+[Output Panel: Streaming AI response rendered as markdown]
+[CTA Band: "Want us to implement this?" → /book]
+```
 
-**FinanceDashboardRealistic** (replaces AccountingDashboardPreview)
-- 4 KPI cards (Revenue, Expenses, Net Income, Outstanding) with trend arrows
-- Animated bar chart similar to CRM's MiniReportsRealistic
-- Time range toggle (7d / 30d / 90d)
-- Bar heights shift periodically
-- Hover-pause pattern
+### Edge Function Per Tool (or one shared function with branching)
+One shared edge function `ai-tool` with a `tool` parameter to branch on system prompt. This avoids deploying 6 separate functions.
 
-### `src/components/ui/vignettes/InventoryPreviews.tsx`
+```
+POST /functions/v1/ai-tool
+Body: { tool: "page-critique" | "sop-builder" | ... , input: { ... } }
+```
 
-**ItemsTableRealistic** (replaces InventoryItemsPreview)
-- Full table with columns: SKU, Item Name, Category, Location, Qty, Status
-- 5+ item rows with realistic data
-- StatusChip for stock levels (In Stock/emerald, Low/amber, Critical/red, Out/gray)
-- Row selection with auto-cycle
-- Search/filter bar at top
-- Hover-pause pattern
+### Streaming
+All tools stream the response token-by-token using SSE, rendered live using a markdown renderer so the user sees output appear as it's generated — feels alive, shows the AI working.
 
-**LocationsGridRealistic** (replaces InventoryLocationsPreview)
-- Location cards with: name, address/zone, item count, utilization bar
-- Auto-highlights locations one by one
-- Each card shows top items list
-- Hover-pause pattern
+---
 
-**ReorderQueueRealistic** (replaces InventoryReorderPreview)
-- Alert-style rows: item name, current qty vs threshold, supplier, action button
-- Items pulse with urgency indicator
-- Auto-triggers "Order Placed" state on items one by one
-- StatusChip: Critical/red, Low/amber, Ordered/emerald
-- Hover-pause pattern
+## Part 3: Tool Pages Detail
 
-**AssetTrackerRealistic** (replaces InventoryAssetPreview)
-- Table-style rows: Asset tag, description, assignee avatar, location, status
-- Checkout/Return action buttons
-- Auto-cycles through checkout animations
-- Hover-pause pattern
+### 6 Tool Pages (standalone routes, good for SEO)
 
-### `src/components/ui/vignettes/TasksPreviews.tsx`
+| Tool | Route | Input | System Prompt Focus |
+|------|-------|-------|---------------------|
+| Landing Page Critique | `/tools/page-critique` | URL or pasted copy | Conversion audit: hierarchy, CTA clarity, friction points |
+| SOP Draft Builder | `/tools/sop-builder` | Process description (textarea) | Structured SOP: purpose, scope, roles, steps, notes |
+| Brand Consistency Audit | `/tools/brand-audit` | Brand description + 3-5 assets described | Consistency report: visual, tone, typography priorities |
+| Process Flow Mapper | `/tools/process-mapper` | Workflow description | Structured flow: inputs, steps, decision points, outputs |
+| Dashboard Requirements Builder | `/tools/dashboard-builder` | Reporting needs description | Dashboard spec: KPIs, data sources, layout recommendations |
+| KPI Audit | `/tools/kpi-audit` | Current metrics list | KPI critique: what's missing, what's vanity, what to add |
 
-**TaskBoardRealistic** (replaces TasksBoardPreview)
-- Kanban board modeled on CRM's PipelineBoardRealistic
-- 4 columns: Backlog, In Progress, Review, Done
-- Task cards with: title, assignee avatar, priority chip, due date
-- Column counts, auto-highlight cycling
-- Hover effects: shadow + lift
-- Hover-pause pattern
+### Tool Page Structure (each page)
 
-**TaskListRealistic** (replaces TasksListPreview)
-- Full task list modeled on CRM's TasksListRealistic
-- Checkbox, title, assignee, due date (with overdue/today/upcoming coloring), priority badge
-- My Tasks / Team toggle
-- Auto-checks tasks one by one, then resets
-- Hover-pause for manual interaction
+```
+<Layout>
+  Hero (plate color, tool icon, headline, 1-line description)
+  Input Section (card with form fields + "Generate" button)
+  Output Section (appears after submit — streaming markdown + copy button)
+  CTA Band ("Want us to implement this?" → /book)
+</Layout>
+```
 
-**ApprovalsFlowRealistic** (replaces TasksApprovalsPreview)
-- Sequential approval steps with status
-- Each step: reviewer avatar, title, status chip, timestamp
-- Auto-progresses through approval chain
-- Hover-pause pattern
+**No email gate** — tools are fully free and open. Email capture only on the `/tools` index page (already exists). This maximises Google traffic conversion (user gets value immediately, then sees the CTA).
 
-**TimelineRealistic** (replaces TasksTimelinePreview)
-- Gantt-style view with project rows
-- Each bar: project name, progress %, date range, assignee
-- Bars animate width on load
-- Time scale header (weeks)
-- Hover-pause pattern
+---
 
-## Page Changes
+## Part 4: Files to Create / Modify
 
-### `src/pages/software/SoftwareAccounting.tsx`
-- Import from `AccountingPreviews.tsx` instead of `ProductPreviews.tsx`
-- Update `heroTabs` to use new realistic components
+### New Files
 
-### `src/pages/software/SoftwareInventory.tsx`
-- Import from `InventoryPreviews.tsx` instead of `ProductPreviews.tsx`
-- Update `heroTabs` to use new realistic components
+#### Database
+- `supabase/migrations/001_work_cases.sql` — `work_cases` table + RLS
+- `supabase/migrations/002_articles.sql` — `articles` table + RLS
 
-### `src/pages/software/SoftwareTasks.tsx`
-- Import from `TasksPreviews.tsx` instead of `ProductPreviews.tsx`
-- Update `heroTabs` to use new realistic components
+#### Edge Function
+- `supabase/functions/ai-tool/index.ts` — Single shared edge function with system prompts for all 6 tools
 
-## Shared Patterns (same as CRM)
+#### Shared Tool Components
+- `src/components/tools/ToolHero.tsx` — Reusable hero for tool pages (plate, icon, headline, description)
+- `src/components/tools/ToolInputForm.tsx` — Generic wrapper (renders children, handles submit state)
+- `src/components/tools/ToolOutputPanel.tsx` — Streaming markdown renderer with copy button, loading skeleton
+- `src/lib/streamTool.ts` — Client-side SSE streaming utility (reused across all 6 tool pages)
 
-Every new component follows the CRM pattern:
-- `isHovered` state with `onMouseEnter`/`onMouseLeave`
-- `useReducedMotion` check
-- `useEffect` intervals skip when hovered or reduced motion
-- Manual click handlers work alongside animation
-- Neutral surfaces: `bg-white`, `bg-gray-50`, `border-gray-200`
-- Gray text hierarchy: `text-gray-900/700/500/400`
-- Semantic status colors: emerald/amber/red
-- `shadow-sm` on cards, `hover:shadow-md hover:-translate-y-0.5` on interactive items
+#### Tool Pages (6 new pages)
+- `src/pages/tools/PageCritique.tsx`
+- `src/pages/tools/SopBuilder.tsx`
+- `src/pages/tools/BrandAudit.tsx`
+- `src/pages/tools/ProcessMapper.tsx`
+- `src/pages/tools/DashboardBuilder.tsx`
+- `src/pages/tools/KpiAudit.tsx`
 
-## Files Summary
+#### Updated Pages
+- `src/App.tsx` — Add 6 new tool routes + future article/work routes
+- `src/pages/Work.tsx` — Read from `work_cases` table (with fallback to static content)
+- `src/pages/Resources.tsx` — Read from `articles` table and show article grid (replacing "coming soon")
 
-| File | Action |
-|------|--------|
-| `src/components/ui/vignettes/AccountingPreviews.tsx` | Create (4 components) |
-| `src/components/ui/vignettes/InventoryPreviews.tsx` | Create (4 components) |
-| `src/components/ui/vignettes/TasksPreviews.tsx` | Create (4 components) |
-| `src/pages/software/SoftwareAccounting.tsx` | Update imports + heroTabs |
-| `src/pages/software/SoftwareInventory.tsx` | Update imports + heroTabs |
-| `src/pages/software/SoftwareTasks.tsx` | Update imports + heroTabs |
+### Modified Files
 
-## Acceptance Criteria
-1. All 12 new preview components match CRM's level of data density and visual sophistication
-2. Every component has hover-pause animation pattern
-3. Every component uses neutral surface design (no ink/mint/dark theme)
-4. Tab panels fill the 360-440px height of the TabbedProductPreview container
-5. All four software pages look visually consistent side by side
+- `src/lib/content.ts` — No changes needed (static data still used as fallback)
+- `src/pages/Tools.tsx` — Minor: tool cards now link to real standalone pages (already have `href` set)
+
+---
+
+## Part 5: Tool Pages Visual Design
+
+Each tool page uses the existing design system:
+
+**Hero section**: Uses existing `Hero` component with `plate` color unique per tool:
+- Page Critique → `blue`
+- SOP Builder → `violet`
+- Brand Audit → `burgundy`
+- Process Mapper → `emerald`
+- Dashboard Builder → `astral`
+- KPI Audit → `navy`
+
+**Input area**: Clean white card, `bg-card border border-ink/10 rounded-2xl p-6 md:p-8`
+
+**Output area**: Appears below input after generation starts. Contains:
+- Animated "Generating..." skeleton while streaming begins
+- Streamed markdown as it arrives (using a light markdown renderer)
+- "Copy output" button top-right
+- Word count / estimated read time
+
+**CTAs at bottom**: Use existing `CTABand` component
+
+---
+
+## Part 6: Database-Driven Work + Resources Pages
+
+### Work page (`/work`)
+- Fetches `work_cases` table on load (published = true, ordered by sort_order)
+- Falls back to static `siteContent.work.tiles` if DB returns empty
+- Each case study card: title, description, thumbnail_url (or placeholder), cta link
+- Add "Add case study" note visible only in dev (or admin link)
+
+### Resources page (`/resources`)
+- Fetches `articles` table (published = true, ordered by sort_order)
+- Replaces current "coming soon" state with real article grid
+- Each article card: thumbnail, category chip, title, excerpt, "Read article" link
+- Individual article pages at `/resources/:slug` render the `body` field as markdown
+
+---
+
+## Part 7: Implementation Order
+
+1. Enable Lovable Cloud
+2. Run migrations (work_cases + articles tables)
+3. Seed initial data from content.ts
+4. Create edge function `ai-tool` with all 6 system prompts
+5. Build shared tool components (ToolHero, ToolInputForm, ToolOutputPanel, streamTool utility)
+6. Build 6 tool pages
+7. Add routes to App.tsx
+8. Update Work.tsx to read from DB
+9. Update Resources.tsx to read from DB + article grid
+10. Create article detail page `/resources/:slug`
+
+---
+
+## Technical Notes
+
+- **Streaming**: Edge function returns `text/event-stream` — the client reads SSE line by line and appends delta content to state, which renders in a `<div className="prose prose-sm max-w-none">` block using a markdown component
+- **react-markdown**: Already a viable dep or can add it — used to render AI output with proper headings, lists, bold text
+- **No auth needed**: All tools are public. No login wall.
+- **SEO**: Each tool page has its own `<title>` and `<meta description>` via document.title + meta tags set in useEffect — this makes each page indexable independently
+- **Lovable AI model**: `google/gemini-3-flash-preview` (default, fast, balanced)
+- **Rate limiting**: 429 and 402 errors caught in edge function and surfaced as toast notifications on the frontend
+
