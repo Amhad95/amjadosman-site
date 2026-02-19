@@ -26,7 +26,7 @@ const outcomes: OutcomeCard[] = [
   },
   {
     title: 'Your brand actually holds together',
-    body: 'Identity, messaging, and visual standards that don\'t fall apart when a new team member joins.',
+    body: "Identity, messaging, and visual standards that don't fall apart when a new team member joins.",
     illustration: LineBrand,
   },
   {
@@ -68,14 +68,36 @@ export const OutcomesImpactSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Hero card — full width */}
-        <OutcomeCardHero card={hero} />
+        {/* 2-col grid — hero spans full width, rest fill naturally */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        {/* Remaining 5 cards — 2-col grid */}
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {rest.map((card) => (
-            <OutcomeCard key={card.title} card={card} />
-          ))}
+          {/* Hero card — spans both columns */}
+          <article className="md:col-span-2 rounded-2xl bg-card border border-foreground/8 p-7 md:p-9 flex flex-col md:flex-row items-start md:items-center gap-7 hover:shadow-md transition-shadow duration-200">
+            <div className="flex-shrink-0 flex items-center justify-center w-36 h-36 text-foreground/70">
+              <hero.illustration className="w-full h-full" />
+            </div>
+            <div>
+              <h3 className="font-serif text-heading-md text-foreground mb-3">{hero.title}</h3>
+              <p className="text-subheadline text-muted-foreground">{hero.body}</p>
+            </div>
+          </article>
+
+          {/* Remaining 5 cards */}
+          {rest.map((card) => {
+            const Illustration = card.illustration;
+            return (
+              <article
+                key={card.title}
+                className="rounded-2xl bg-card border border-foreground/8 p-6 flex flex-col hover:shadow-md transition-shadow duration-200"
+              >
+                <div className="flex items-center justify-center h-32 mb-6 text-foreground/65">
+                  <Illustration className="w-full h-full max-w-[120px]" />
+                </div>
+                <h3 className="font-serif text-heading-md text-foreground mb-3 leading-snug">{card.title}</h3>
+                <p className="text-body-md text-muted-foreground leading-relaxed">{card.body}</p>
+              </article>
+            );
+          })}
         </div>
 
         <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-3 sm:items-center">
@@ -84,40 +106,6 @@ export const OutcomesImpactSection: React.FC = () => {
         </div>
       </div>
     </section>
-  );
-};
-
-/* ---- sub-components ---- */
-
-const IllustrationWrapper: React.FC<{ Illustration: React.ComponentType<{ className?: string }> }> = ({ Illustration }) => (
-  <div className="flex items-center justify-center h-28 mb-6 text-mint opacity-80">
-    <Illustration className="w-full h-full max-w-[120px]" />
-  </div>
-);
-
-const OutcomeCardHero: React.FC<{ card: OutcomeCard }> = ({ card }) => {
-  const { illustration: Illustration, title, body } = card;
-  return (
-    <article className="rounded-2xl bg-plate-navy border border-white/10 p-7 md:p-9 flex flex-col md:flex-row items-start md:items-center gap-7">
-      <div className="flex-shrink-0 flex items-center justify-center w-36 h-36 text-mint opacity-85">
-        <Illustration className="w-full h-full" />
-      </div>
-      <div>
-        <h3 className="font-serif text-heading-md text-mint mb-3">{title}</h3>
-        <p className="text-subheadline text-offwhite/80">{body}</p>
-      </div>
-    </article>
-  );
-};
-
-const OutcomeCard: React.FC<{ card: OutcomeCard }> = ({ card }) => {
-  const { illustration: Illustration, title, body } = card;
-  return (
-    <article className="rounded-2xl bg-plate-navy border border-white/10 p-6 flex flex-col">
-      <IllustrationWrapper Illustration={Illustration} />
-      <h3 className="font-serif text-heading-md text-mint mb-3 leading-snug">{title}</h3>
-      <p className="text-body-md text-offwhite/75 leading-relaxed">{body}</p>
-    </article>
   );
 };
 
