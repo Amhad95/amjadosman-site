@@ -51,14 +51,14 @@ export const OutcomesImpactSection: React.FC = () => {
               className="group grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-3 md:gap-10 py-7 md:py-8 hover:bg-foreground/[0.02] transition-colors duration-150 -mx-4 px-4 md:-mx-6 md:px-6"
             >
               <div className="flex items-start gap-4">
-                <span className="font-mono text-xs text-foreground/30 mt-1.5 flex-shrink-0 select-none">
+                <span className="font-mono text-base text-foreground/40 mt-1 flex-shrink-0 select-none">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <h3 className="font-serif text-heading-md text-foreground leading-snug">
                   {outcome.title}
                 </h3>
               </div>
-              <p className="text-body-md text-muted-foreground leading-relaxed md:pt-0.5 pl-8 md:pl-0">
+              <p className="text-body-lg text-muted-foreground leading-relaxed md:pt-0.5 pl-8 md:pl-0">
                 {outcome.body}
               </p>
             </div>
