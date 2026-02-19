@@ -159,6 +159,11 @@
     line-height: 1.15;
   }
 
+  .text-subheadline {
+    font-size: clamp(1.2rem, 2vw, 1.375rem);
+    line-height: 1.5;
+  }
+
   .text-body-lg {
     font-size: 1.125rem;
     line-height: 1.6;
