@@ -71,16 +71,16 @@ export const DeliveryProcessInteractive: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <section className="py-16 md:py-24 bg-background" aria-labelledby="delivery-heading">
+    <section className="py-16 md:py-24 bg-plate-navy" aria-labelledby="delivery-heading">
       <div className="container mx-auto px-4 md:px-6">
 
         {/* Header */}
         <div className="max-w-3xl mb-10 md:mb-14">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-4">Delivery</p>
-          <h2 id="delivery-heading" className="font-serif text-poster-lg text-foreground mb-4">
+          <p className="text-xs uppercase tracking-[0.2em] text-mint/60 font-semibold mb-4">Delivery</p>
+          <h2 id="delivery-heading" className="font-serif text-poster-lg text-mint mb-4">
             Structured delivery, fewer meetings
           </h2>
-          <p className="text-subheadline text-muted-foreground">
+          <p className="text-subheadline text-offwhite/70">
             Clear artifacts, async updates, and focused checkpoints. You get momentum without calendar chaos.
           </p>
         </div>
@@ -107,7 +107,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
         <div className="hidden lg:grid lg:grid-cols-12 gap-6">
 
           {/* Step nav */}
-          <div className="lg:col-span-5 rounded-2xl border border-border bg-card/80 p-3">
+          <div className="lg:col-span-5 rounded-2xl border border-white/10 bg-ink/40 p-3">
             {deliverySteps.map((step, index) => {
               const isActive = activeStep === index;
               return (
@@ -116,24 +116,24 @@ export const DeliveryProcessInteractive: React.FC = () => {
                   type="button"
                   onClick={() => setActiveStep(index)}
                   className={cn(
-                    'w-full text-left rounded-xl px-4 py-4 mb-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-lavender focus:ring-offset-2',
+                    'w-full text-left rounded-xl px-4 py-4 mb-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-mint/40 focus:ring-offset-2 focus:ring-offset-plate-navy',
                     isActive
-                      ? 'bg-muted border-l-2 border-mint pl-3'
-                      : 'border border-transparent hover:bg-muted/65'
+                      ? 'bg-white/10 border-l-2 border-mint pl-3'
+                      : 'border border-transparent hover:bg-white/5'
                   )}
                   aria-expanded={isActive}
                   aria-controls={`delivery-panel-${index}`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-plate-navy flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-white/8 flex items-center justify-center flex-shrink-0">
                       <AnimatedIcon icon={step.icon} color="mint" size={20} animation="pulse" />
                     </div>
                     <div>
-                      <p className="font-serif text-lg text-foreground leading-tight">
+                      <p className="font-serif text-lg text-offwhite leading-tight">
                         <span className="text-mint mr-1.5 font-mono text-sm font-normal">{String(index + 1).padStart(2, '0')}</span>
                         {step.title}
                       </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{step.touchpoints}</p>
+                      <p className="text-xs text-offwhite/50 mt-0.5">{step.touchpoints}</p>
                     </div>
                   </div>
                 </button>
@@ -142,7 +142,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
           </div>
 
           {/* Step detail */}
-          <div className="lg:col-span-7 rounded-2xl border border-border bg-card/80 p-7">
+          <div className="lg:col-span-7 rounded-2xl border border-white/10 bg-ink/40 p-7">
             {deliverySteps.map((step, index) => {
               const isActive = activeStep === index;
               return (
@@ -151,11 +151,11 @@ export const DeliveryProcessInteractive: React.FC = () => {
                   key={step.title}
                   className={cn('transition-all duration-300', isActive ? 'block' : 'hidden')}
                 >
-                  <p className="font-mono text-2xl text-mint/40 tracking-widest mb-3 select-none">{step.ascii}</p>
-                  <h3 className="font-serif text-heading-md text-foreground mb-3">{step.title}</h3>
-                  <p className="text-body-lg text-muted-foreground mb-6">{step.summary}</p>
-                  <div className="rounded-xl bg-muted/65 border border-border/80 p-5">
-                    <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground font-semibold mb-3">Artifacts</p>
+                  <p className="font-mono text-2xl text-mint/50 tracking-widest mb-3 select-none">{step.ascii}</p>
+                  <h3 className="font-serif text-heading-md text-offwhite mb-3">{step.title}</h3>
+                  <p className="text-body-lg text-offwhite/75 mb-6">{step.summary}</p>
+                  <div className="rounded-xl bg-white/5 border border-white/10 p-5">
+                    <p className="text-xs uppercase tracking-[0.16em] text-offwhite/50 font-semibold mb-3">Artifacts</p>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {step.artifacts.map((artifact) => (
                         <span
@@ -167,7 +167,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
                       ))}
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-mint/15 text-mint text-xs font-semibold px-3 py-1">
+                      <span className="rounded-full bg-mint/20 text-mint text-xs font-semibold px-3 py-1">
                         {step.touchpoints}
                       </span>
                     </div>
@@ -183,28 +183,28 @@ export const DeliveryProcessInteractive: React.FC = () => {
           {deliverySteps.map((step, index) => {
             const isActive = activeStep === index;
             return (
-              <article key={step.title} className="rounded-2xl border border-border bg-card/80 overflow-hidden">
+              <article key={step.title} className="rounded-2xl border border-white/10 bg-ink/40 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setActiveStep(isActive ? -1 : index)}
-                  className="w-full px-4 py-4 text-left flex items-center justify-between gap-3 focus:outline-none focus:ring-2 focus:ring-lavender focus:ring-inset"
+                  className="w-full px-4 py-4 text-left flex items-center justify-between gap-3 focus:outline-none focus:ring-2 focus:ring-mint/40 focus:ring-inset"
                   aria-expanded={isActive}
                   aria-controls={`delivery-mobile-panel-${index}`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-xl bg-plate-navy flex items-center justify-center flex-shrink-0">
+                    <div className="w-11 h-11 rounded-xl bg-white/8 flex items-center justify-center flex-shrink-0">
                       <AnimatedIcon icon={step.icon} color="mint" size={18} animation="pulse" />
                     </div>
                     <div>
-                      <p className="font-serif text-base text-foreground">
+                      <p className="font-serif text-base text-offwhite">
                         <span className="font-mono text-xs text-mint mr-1">{String(index + 1).padStart(2, '0')}</span>
                         {step.title}
                       </p>
-                      <p className="text-xs text-muted-foreground">{step.touchpoints}</p>
+                      <p className="text-xs text-offwhite/50">{step.touchpoints}</p>
                     </div>
                   </div>
                   <ChevronDown
-                    className={cn('h-4 w-4 text-muted-foreground transition-transform duration-200 flex-shrink-0', isActive && 'rotate-180')}
+                    className={cn('h-4 w-4 text-offwhite/40 transition-transform duration-200 flex-shrink-0', isActive && 'rotate-180')}
                     aria-hidden="true"
                   />
                 </button>
@@ -213,9 +213,9 @@ export const DeliveryProcessInteractive: React.FC = () => {
                   className={cn('grid transition-all duration-300 ease-out', isActive ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]')}
                 >
                   <div className="overflow-hidden">
-                    <div className="px-4 pb-5 border-t border-border/70">
-                      <p className="font-mono text-lg text-mint/35 tracking-widest mt-3 mb-2 select-none">{step.ascii}</p>
-                      <p className="text-body-lg text-muted-foreground mb-3">{step.summary}</p>
+                    <div className="px-4 pb-5 border-t border-white/10">
+                      <p className="font-mono text-lg text-mint/50 tracking-widest mt-3 mb-2 select-none">{step.ascii}</p>
+                      <p className="text-body-lg text-offwhite/75 mb-3">{step.summary}</p>
                       <div className="flex flex-wrap gap-2">
                         {step.artifacts.map((artifact) => (
                           <span
@@ -235,11 +235,11 @@ export const DeliveryProcessInteractive: React.FC = () => {
         </div>
 
         {/* Footer strip */}
-        <div className="mt-8 rounded-2xl border border-border bg-muted/50 p-4 md:p-5">
-          <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground font-semibold mb-3">What you can expect</p>
+        <div className="mt-8 rounded-2xl border border-white/10 bg-ink/40 p-4 md:p-5">
+          <p className="text-xs uppercase tracking-[0.16em] text-offwhite/50 font-semibold mb-3">What you can expect</p>
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
             {expectationItems.map(({ label, icon: Icon }) => (
-              <li key={label} className="rounded-lg border border-border bg-card/80 px-3 py-2.5 flex items-center gap-2 text-sm text-foreground/90">
+              <li key={label} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 flex items-center gap-2 text-sm text-offwhite/90">
                 <Icon size={14} className="text-mint flex-shrink-0" aria-hidden="true" />
                 {label}
               </li>
