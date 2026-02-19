@@ -1,68 +1,91 @@
 
-# Fix: Outcomes + Delivery — correct visual system applied
+# Two Targeted Fixes
 
-## Root cause of both problems
+## Fix 1 — Delivery: Mint container on step icons (surgical)
 
-The previous implementation violated the site's established Dual-Mode Visual System in two opposite directions:
+**What's wrong:** The 5 step icons in the left nav panel sit bare inside a `bg-white/8` container. The request is a transparent mint border/background square around them to give them the branded container treatment used elsewhere in the site (icon-container-branding memory).
 
-**Outcomes (on `bg-muted` / light section):** Used dark `bg-plate-navy` cards on a light background. The rule for light backgrounds is white/card-surface cards with line illustrations rendered in `ink` (dark strokes). Dark plate cards belong on dark sections. The result was a jarring dark-on-light colour clash.
+**Change:** In `DeliveryProcessInteractive.tsx`, update the icon container div on both desktop and mobile:
+- Desktop: `w-12 h-12 rounded-xl bg-white/8` → `w-12 h-12 rounded-xl bg-mint/10 border border-mint/25`
+- Mobile: `w-11 h-11 rounded-xl bg-white/8` → `w-11 h-11 rounded-xl bg-mint/10 border border-mint/25`
 
-**Delivery (on `bg-background` / light section):** Used `text-mint` numerals and `bg-mint/15 text-mint` pills against `bg-card/80` (white) panels. Mint (#00FFD9) on white is unreadable neon — the rule is mint is reserved for dark surfaces. The terminal aesthetic (ASCII, monospace, dark panels) cannot work on a white/light background without the entire section being set on a dark surface.
-
----
-
-## Fix 1 — Outcomes: white cards, ink illustrations, correct light-mode pattern
-
-The section stays on `bg-muted`. Cards switch to `bg-card` (white) with `border border-ink/10`. Line illustrations render in `text-foreground` (ink) — the animated SVG strokes are ink-coloured on white, consistent with ProofTiles and the dual-mode rule.
-
-**Layout fix:** The "hero card spans 2 columns" pattern is kept, but with proper 2-column CSS grid (`grid-cols-2`) and the hero spanning `col-span-2`. The remaining 5 cards sit in the same 2-col grid naturally (3 + 2), no mismatched 3-col grid with an orphan.
-
-**Card anatomy (light mode):**
-- `bg-card` white surface, `border border-ink/10`, subtle `hover:shadow-md` lift
-- Illustration: large, centred, `text-foreground` (ink), `h-32` at top of card
-- Title: `font-serif text-heading-md text-foreground` (dark ink on white — readable)
-- Body: `text-body-md text-muted-foreground`
-- Hero card: illustration left, text right (horizontal layout), slightly larger illustration
-
-No mint used in this section at all — mint belongs on dark surfaces.
+This gives each icon a subtle glowing mint square container — mint-tinted background + mint border — without overwhelming the dark navy surface. The icon itself stays `color="mint"`.
 
 ---
 
-## Fix 2 — Delivery: move entire section to a dark surface
+## Fix 2 — Outcomes: Conceptual rethink
 
-The terminal aesthetic — ASCII text, monospace, `bg-ink` inner panels — only works when the surrounding section is dark. The fix is to set the section background to `bg-plate-navy` (deep navy), which is exactly what the ServiceCardGrid and the Pricing Teaser do.
+**The actual problem:** It's not a color or layout bug. It's that the format is wrong for what the section needs to communicate.
 
-**What changes:**
-- `<section>` background: `bg-background` → `bg-plate-navy`
-- Section header text: `text-foreground` → `text-mint` (heading), `text-offwhite/70` (subheadline)  
-- Eyebrow: `text-muted-foreground` → `text-mint/60`
-- Terminal marquee banner: stays as-is (already dark `bg-ink` with mint text — now looks intentional against navy)
-- Left step panel: `bg-card/80 border-border` → `bg-ink/40 border-white/10` (dark glass)
-  - Step buttons inactive: `hover:bg-white/5`
-  - Step buttons active: `bg-white/10 border-l-2 border-mint` — mint border accent now reads correctly on dark
-  - Step numbers `text-mint`: now readable on dark ✓
-  - Icon containers `bg-plate-navy` → `bg-white/8` (slightly lighter than the panel)
-  - Title text: `text-foreground` → `text-offwhite`
-  - Touchpoint subtext: `text-muted-foreground` → `text-offwhite/50`
-- Right content panel: `bg-card/80 border-border` → `bg-ink/40 border-white/10`
-  - ASCII decoration `text-mint/40` → `text-mint/50` (slightly more visible on dark)
-  - Title: `text-foreground` → `text-offwhite`
-  - Summary: `text-muted-foreground` → `text-offwhite/75`
-  - Artifacts sub-panel: `bg-muted/65 border-border/80` → `bg-white/5 border-white/10`
-  - Artifact chips: stay as `bg-plate-navy text-mint` — now have better contrast since the outer panel is slightly lighter
-  - Touchpoint pill: `bg-mint/15 text-mint` → `bg-mint/20 text-mint` (still works on dark ✓)
-- Footer "what you can expect" strip: `bg-muted/50` → `bg-ink/40`, `border-border` → `border-white/10`
-  - Item cards: `bg-card/80 border-border` → `bg-white/5 border-white/10`, `text-foreground/90` → `text-offwhite/90`
-  - Icons: `text-mint` stays (correct on dark ✓)
-- Mobile accordion: same dark surface treatment
+A "6 identical cards in a grid" format reads as a feature comparison matrix. It implies parity across all items — that each outcome is equally weighted, equally important. That's the wrong signal for an outcomes/results section. Outcomes should feel like proof, like a before/after, like transformation — not a checklist.
+
+**New concept — "Before / After" statement list with a bold left rail:**
+
+Replace the card grid entirely with a vertically stacked list of outcome statements, each one structured as a two-column row:
+- **Left column (40%):** A bold serif "after" state — the outcome in a single punchy phrase, set large in `text-heading-md` or larger. This is the signal.
+- **Right column (60%):** A single supporting sentence in `text-muted-foreground`. This is the proof. No illustrations needed.
+- A thin `border-b border-ink/10` separator between each row.
+- The list sits on `bg-muted` (unchanged).
+- On mobile, the two columns stack: heading then body.
+
+This pattern is common in high-end agency and SaaS sites — it reads like a list of guarantees or a client bill of rights rather than a feature grid. It's human, direct, and far more confident.
+
+**The 6 outcomes (content stays the same — only the visual format changes):**
+
+| Left (serif, large) | Right (body, muted) |
+|---|---|
+| You know exactly what you're getting | A one-page brief per engagement — no ambiguity about scope, timeline, or what "done" means. |
+| Your brand holds together under pressure | Identity, messaging, and visual standards that don't fall apart when a new team member joins. |
+| Your site earns its keep | A web presence that converts visitors into conversations, not just a digital brochure. |
+| Your team stops re-explaining things | SOPs, governance, and templates that new people can pick up without hand-holding. |
+| Decisions get made faster | Dashboards and briefs that cut the opinions loop and give leads clarity when it counts. |
+| AI tools your team actually uses | Workflows with guardrails and adoption hooks — not automation for its own sake. |
+
+**Layout structure:**
+
+```text
+┌──────────────────────────────────────────────────────────────────┐
+│  OUTCOMES                                                        │
+│  What working together actually produces          (heading area) │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  01  You know exactly what         A one-page brief per          │
+│      you're getting                engagement — no ambiguity     │
+│                                    about scope, timeline, or     │
+│                                    what "done" means.            │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  02  Your brand holds together     Identity, messaging, and      │
+│      under pressure                visual standards that don't   │
+│                                    fall apart when a new team    │
+│                                    member joins.                 │
+├──────────────────────────────────────────────────────────────────┤
+│  ...                                                             │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+Each row:
+- Mint numbered counter `01` – `06` in `font-mono text-xs text-mint` (on muted/light background this is acceptable as a tiny accent, similar to how step numbers work in stepped lists; if contrast is a concern it will be switched to `text-foreground/40`)
+- Left: `font-serif text-heading-md text-foreground` (the outcome, 3–5 words)
+- Right: `text-body-md text-muted-foreground`
+- `border-b border-ink/8` divider
+- On hover: a subtle left-rail accent `border-l-2 border-ink/20 pl-4` or just a background tint `hover:bg-ink/[0.02]`
+- Last row has no border-b
+
+**Why this is better:**
+- No cards = no matrix feel
+- Serial numbered list implies progression and weight
+- Large serif left-column makes the outcome itself the headline — not buried as a card title
+- Scannable at a glance — left column skimmable, right column for those who want detail
+- Removes all the "primitive" card layout problems without needing illustrations or animations
+
+**What's removed:** All line illustrations (LineDocument, LineBrand, etc.) — they were only there to fill card space. In a list format they're unnecessary and would add noise.
 
 ---
 
 ## Files to modify
 
 | File | Change |
-|------|--------|
-| `src/components/sections/OutcomesImpactSection.tsx` | White cards, ink illustrations, correct 2-col grid layout |
-| `src/components/sections/DeliveryProcessInteractive.tsx` | Full section to dark `bg-plate-navy` surface, all colour tokens corrected |
-
-No CSS or other files need changing — the typography scale (`text-subheadline`) is already correctly defined in `src/index.css` from the previous round.
+|---|---|
+| `src/components/sections/DeliveryProcessInteractive.tsx` | Update icon container on desktop + mobile step buttons |
+| `src/components/sections/OutcomesImpactSection.tsx` | Replace card grid with numbered statement list |
