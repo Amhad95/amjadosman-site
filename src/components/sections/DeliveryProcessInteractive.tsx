@@ -125,7 +125,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
                   aria-controls={`delivery-panel-${index}`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-white/8 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-mint/10 border border-mint/25 flex items-center justify-center flex-shrink-0">
                       <AnimatedIcon icon={step.icon} color="mint" size={20} animation="pulse" />
                     </div>
                     <div>
@@ -192,7 +192,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
                   aria-controls={`delivery-mobile-panel-${index}`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-xl bg-white/8 flex items-center justify-center flex-shrink-0">
+                    <div className="w-11 h-11 rounded-xl bg-mint/10 border border-mint/25 flex items-center justify-center flex-shrink-0">
                       <AnimatedIcon icon={step.icon} color="mint" size={18} animation="pulse" />
                     </div>
                     <div>

@@ -1,59 +1,35 @@
 import React from 'react';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
-import {
-  LineDocument,
-  LineBrand,
-  LineWebsite,
-  LineChart,
-  LineDashboard,
-  LineGear,
-} from '@/components/ui/line-illustrations';
 
-interface OutcomeCard {
-  title: string;
-  body: string;
-  illustration: React.ComponentType<{ className?: string }>;
-  hero?: boolean;
-}
-
-const outcomes: OutcomeCard[] = [
+const outcomes = [
   {
-    title: "You know what you're getting",
+    title: "You know exactly what you're getting",
     body: 'A one-page brief per engagement — no ambiguity about scope, timeline, or what "done" means.',
-    illustration: LineDocument,
-    hero: true,
   },
   {
-    title: 'Your brand actually holds together',
+    title: 'Your brand holds together under pressure',
     body: "Identity, messaging, and visual standards that don't fall apart when a new team member joins.",
-    illustration: LineBrand,
   },
   {
     title: 'Your site earns its keep',
     body: 'A web presence that converts visitors into conversations, not just a digital brochure.',
-    illustration: LineWebsite,
-  },
-  {
-    title: 'Decisions get made faster',
-    body: 'Dashboards and briefs that cut the opinions loop and give leads clarity when it counts.',
-    illustration: LineChart,
   },
   {
     title: 'Your team stops re-explaining things',
     body: 'SOPs, governance, and templates that new people can pick up without hand-holding.',
-    illustration: LineDashboard,
+  },
+  {
+    title: 'Decisions get made faster',
+    body: 'Dashboards and briefs that cut the opinions loop and give leads clarity when it counts.',
   },
   {
     title: 'AI tools your team actually uses',
     body: 'Workflows with guardrails and adoption hooks — not automation for its own sake.',
-    illustration: LineGear,
   },
 ];
 
 export const OutcomesImpactSection: React.FC = () => {
-  const [hero, ...rest] = outcomes;
-
   return (
     <section className="py-16 md:py-24 bg-muted" aria-labelledby="outcomes-heading">
       <div className="container mx-auto px-4 md:px-6">
@@ -68,36 +44,25 @@ export const OutcomesImpactSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 2-col grid — hero spans full width, rest fill naturally */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          {/* Hero card — spans both columns */}
-          <article className="md:col-span-2 rounded-2xl bg-card border border-foreground/8 p-7 md:p-9 flex flex-col md:flex-row items-start md:items-center gap-7 hover:shadow-md transition-shadow duration-200">
-            <div className="flex-shrink-0 flex items-center justify-center w-36 h-36 text-foreground/70">
-              <hero.illustration className="w-full h-full" />
+        <div className="divide-y divide-foreground/8">
+          {outcomes.map((outcome, index) => (
+            <div
+              key={outcome.title}
+              className="group grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-3 md:gap-10 py-7 md:py-8 hover:bg-foreground/[0.02] transition-colors duration-150 -mx-4 px-4 md:-mx-6 md:px-6"
+            >
+              <div className="flex items-start gap-4">
+                <span className="font-mono text-xs text-foreground/30 mt-1.5 flex-shrink-0 select-none">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className="font-serif text-heading-md text-foreground leading-snug">
+                  {outcome.title}
+                </h3>
+              </div>
+              <p className="text-body-md text-muted-foreground leading-relaxed md:pt-0.5 pl-8 md:pl-0">
+                {outcome.body}
+              </p>
             </div>
-            <div>
-              <h3 className="font-serif text-heading-md text-foreground mb-3">{hero.title}</h3>
-              <p className="text-subheadline text-muted-foreground">{hero.body}</p>
-            </div>
-          </article>
-
-          {/* Remaining 5 cards */}
-          {rest.map((card) => {
-            const Illustration = card.illustration;
-            return (
-              <article
-                key={card.title}
-                className="rounded-2xl bg-card border border-foreground/8 p-6 flex flex-col hover:shadow-md transition-shadow duration-200"
-              >
-                <div className="flex items-center justify-center h-32 mb-6 text-foreground/65">
-                  <Illustration className="w-full h-full max-w-[120px]" />
-                </div>
-                <h3 className="font-serif text-heading-md text-foreground mb-3 leading-snug">{card.title}</h3>
-                <p className="text-body-md text-muted-foreground leading-relaxed">{card.body}</p>
-              </article>
-            );
-          })}
+          ))}
         </div>
 
         <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-3 sm:items-center">
