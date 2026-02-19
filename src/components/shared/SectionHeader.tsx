@@ -41,7 +41,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         {headline}
       </h2>
       {subheadline && (
-        <p className="text-body-lg text-muted-foreground max-w-3xl">
+        <p className="text-subheadline text-muted-foreground max-w-3xl">
           {subheadline}
         </p>
       )}
