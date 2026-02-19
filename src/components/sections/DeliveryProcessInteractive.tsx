@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Code2, Palette, Rocket, TreePine, Workflow, LucideIcon } from 'lucide-react';
+import { AnimatedIcon } from '@/components/shared/AnimatedIcon';
 
 interface DeliveryStep {
   title: string;
   summary: string;
   artifacts: string[];
   touchpoints: string;
+  icon: LucideIcon;
 }
 
 const deliverySteps: DeliveryStep[] = [
@@ -16,30 +18,35 @@ const deliverySteps: DeliveryStep[] = [
     summary: 'Scope, success metrics, constraints, and risks are locked before delivery starts.',
     artifacts: ['One-page brief', 'Success metrics', 'Risks and assumptions'],
     touchpoints: '1 kickoff',
+    icon: Workflow,
   },
   {
     title: 'Map',
     summary: 'Research findings and flow mapping create a shared model for design and implementation.',
     artifacts: ['Journey map or flow map', 'Requirements set', 'Prioritization list'],
     touchpoints: '1 review',
+    icon: TreePine,
   },
   {
     title: 'Design',
     summary: 'UX and interface decisions are validated early with async feedback loops.',
     artifacts: ['Clickable prototype', 'Design specifications', 'Content outlines'],
     touchpoints: 'Async reviews + 1 checkpoint',
+    icon: Palette,
   },
   {
     title: 'Build',
     summary: 'Implementation moves in working increments with integration and QA built in.',
     artifacts: ['Working increments', 'QA notes', 'Release plan'],
     touchpoints: 'Weekly 20-min checkpoint (only if needed)',
+    icon: Code2,
   },
   {
     title: 'Launch and Iterate',
     summary: 'Launch with handover, training, and a practical backlog for continuous improvements.',
     artifacts: ['Handover pack', 'Tracking plan', 'Iteration backlog'],
     touchpoints: '1 handover',
+    icon: Rocket,
   },
 ];
 
@@ -64,6 +71,16 @@ export const DeliveryProcessInteractive: React.FC = () => {
           <p className="text-body-lg text-muted-foreground">
             Clear artifacts, async updates, and focused checkpoints. You get momentum without calendar chaos.
           </p>
+        </div>
+
+        <div className="mb-6 rounded-2xl bg-gradient-to-r from-plate-navy via-plate-astral to-plate-blue p-[1px]">
+          <div className="rounded-2xl bg-ink px-5 py-4 md:px-6 md:py-5 flex flex-wrap gap-3 items-center justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.16em] text-mint/80 font-semibold mb-1">Delivery rhythm</p>
+              <p className="text-offwhite/85 text-sm">Mostly async collaboration with decision-focused check-ins.</p>
+            </div>
+            <p className="font-mono text-mint text-sm" aria-label="Process animation">{`[ intake ] -> [ map ] -> [ design ] -> [ build ] -> [ launch ]`}</p>
+          </div>
         </div>
 
         <div className="hidden lg:grid lg:grid-cols-12 gap-6">
@@ -92,7 +109,12 @@ export const DeliveryProcessInteractive: React.FC = () => {
                       {index + 1}
                     </span>
                     <div>
-                      <p className="font-semibold text-foreground">{step.title}</p>
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-plate-navy flex items-center justify-center">
+                          <AnimatedIcon icon={step.icon} color="mint" size={12} animation="pulse" />
+                        </div>
+                        <p className="font-semibold text-foreground">{step.title}</p>
+                      </div>
                       <p className="text-sm text-muted-foreground">{step.touchpoints}</p>
                     </div>
                   </div>
@@ -148,7 +170,12 @@ export const DeliveryProcessInteractive: React.FC = () => {
                   aria-controls={`delivery-mobile-panel-${index}`}
                 >
                   <div>
-                    <p className="font-semibold text-foreground">{index + 1}. {step.title}</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-md bg-plate-navy flex items-center justify-center">
+                        <AnimatedIcon icon={step.icon} color="mint" size={12} animation="pulse" />
+                      </div>
+                      <p className="font-semibold text-foreground">{index + 1}. {step.title}</p>
+                    </div>
                     <p className="text-sm text-muted-foreground">{step.touchpoints}</p>
                   </div>
                   <ChevronDown

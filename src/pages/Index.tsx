@@ -34,7 +34,12 @@ const Index = () => {
       {/* What We Deliver */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.whatWeDeliver.headline} variant="poster" />
+          <SectionHeader
+            eyebrow="Services"
+            headline={home.whatWeDeliver.headline}
+            subheadline="Brand, web, operations, and software support delivered as one practical system."
+            variant="poster"
+          />
           <ServiceCardGrid items={home.whatWeDeliver.cards} />
           <div className="mt-8 text-center">
             <SecondaryButton href={home.whatWeDeliver.cta.href}>
@@ -53,7 +58,12 @@ const Index = () => {
       {/* Proof Tiles */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline={home.proofTiles.headline} variant="poster" />
+          <SectionHeader
+            eyebrow="Proof"
+            headline={home.proofTiles.headline}
+            subheadline="Review tangible samples quickly so decisions are based on evidence, not promises."
+            variant="poster"
+          />
           <ProofTiles
             tiles={home.proofTiles.tiles.map((tile) => ({
               ...tile,
@@ -73,6 +83,7 @@ const Index = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow="AI tools"
             headline={home.aiTools.headline}
             subheadline={home.aiTools.subheadline}
             variant="poster"

@@ -45,6 +45,7 @@ const Services = () => {
             {services.tracks.map((track) => (
               <div key={track.id} id={track.id} className="scroll-mt-24">
                 <SectionHeader
+                  eyebrow="Service track"
                   headline={track.title}
                   subheadline={track.description}
                   variant="poster"

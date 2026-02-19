@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface SectionHeaderProps {
+  eyebrow?: string;
   headline: string;
   subheadline?: string;
   className?: string;
@@ -10,6 +11,7 @@ interface SectionHeaderProps {
 }
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
+  eyebrow,
   headline,
   subheadline,
   className,
@@ -24,6 +26,11 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         className
       )}
     >
+      {eyebrow && (
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-4">
+          {eyebrow}
+        </p>
+      )}
       <h2
         className={cn(
           'adsi-section-header font-serif',
