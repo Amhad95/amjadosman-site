@@ -1,85 +1,60 @@
 
-# Three-Part Design Upgrade
+# Fix: Outcomes + Delivery — correct visual system applied
 
-## What's changing and why
+## Root cause of both problems
 
-Three distinct problems are being fixed in two components, plus a typography scale update that affects the whole site.
+The previous implementation violated the site's established Dual-Mode Visual System in two opposite directions:
 
----
+**Outcomes (on `bg-muted` / light section):** Used dark `bg-plate-navy` cards on a light background. The rule for light backgrounds is white/card-surface cards with line illustrations rendered in `ink` (dark strokes). Dark plate cards belong on dark sections. The result was a jarring dark-on-light colour clash.
 
-## 1. Subheadline sizing — site-wide
-
-**Problem:** `text-body-lg` (18px / 1.125rem) is the same size as body copy. Section supporting sentences — the lines directly below H2 headings — feel like regular text, not like a meaningful supporting statement.
-
-**Fix:** Add a new `text-subheadline` scale step (approximately 1.25rem / 20px, line-height 1.5) to `src/index.css`, then update the two key components:
-
-- `src/components/shared/SectionHeader.tsx` — the shared component used across most pages. This cascades the fix site-wide automatically for Services, Proof, AI Tools, all section headers.
-- `src/components/sections/OutcomesImpactSection.tsx` — inline subheadline (not using SectionHeader)
-- `src/components/sections/DeliveryProcessInteractive.tsx` — inline subheadline
-
-No other files need touching because `SectionHeader` propagates the change to every page that uses it.
+**Delivery (on `bg-background` / light section):** Used `text-mint` numerals and `bg-mint/15 text-mint` pills against `bg-card/80` (white) panels. Mint (#00FFD9) on white is unreadable neon — the rule is mint is reserved for dark surfaces. The terminal aesthetic (ASCII, monospace, dark panels) cannot work on a white/light background without the entire section being set on a dark surface.
 
 ---
 
-## 2. Outcomes section — full redesign
+## Fix 1 — Outcomes: white cards, ink illustrations, correct light-mode pattern
 
-**Problems:**
-- Too much text (description + "why it matters" + outputs list = reading overload)
-- Content is software-centric jargon ("scope brief", "sprint plan", "iteration backlog") — doesn't represent the full service range
-- Visual format is a list of accordion-style rows — no brand presence
+The section stays on `bg-muted`. Cards switch to `bg-card` (white) with `border border-ink/10`. Line illustrations render in `text-foreground` (ink) — the animated SVG strokes are ink-coloured on white, consistent with ProofTiles and the dual-mode rule.
 
-**New content — 6 outcomes rewritten to be human, service-agnostic, and concise:**
+**Layout fix:** The "hero card spans 2 columns" pattern is kept, but with proper 2-column CSS grid (`grid-cols-2`) and the hero spanning `col-span-2`. The remaining 5 cards sit in the same 2-col grid naturally (3 + 2), no mismatched 3-col grid with an orphan.
 
-| # | Title | Single supporting line |
-|---|-------|----------------------|
-| 1 | You know what you're getting | A one-page brief per engagement — no ambiguity about scope, timeline, or what "done" means. |
-| 2 | Your brand actually holds together | Identity, messaging, and visual standards that don't fall apart when a new team member joins. |
-| 3 | Your site earns its keep | A web presence that converts visitors into conversations, not just a digital brochure. |
-| 4 | Your team stops re-explaining things | SOPs, governance, and templates that new people can pick up without hand-holding. |
-| 5 | Decisions get made faster | Dashboards and briefs that cut the opinions loop and give leads clarity when it counts. |
-| 6 | AI tools your team actually uses | Workflows with guardrails and adoption hooks — not automation for its own sake. |
+**Card anatomy (light mode):**
+- `bg-card` white surface, `border border-ink/10`, subtle `hover:shadow-md` lift
+- Illustration: large, centred, `text-foreground` (ink), `h-32` at top of card
+- Title: `font-serif text-heading-md text-foreground` (dark ink on white — readable)
+- Body: `text-body-md text-muted-foreground`
+- Hero card: illustration left, text right (horizontal layout), slightly larger illustration
 
-**New visual layout — 2-column masonry-style card grid (desktop), single column (mobile):**
-
-Each card is a dark `bg-plate-navy` card with:
-- Large animated line illustration (top of card, centered, using existing `LineDocument`, `LineBrand`, `LineWebsite`, `LineChart`, `LineDashboard`, `LineGear` SVGs rendered in mint) occupying roughly 1/3 of the card height
-- Title in serif (mint on dark)
-- One sentence below (offwhite/80)
-- No bullet lists, no "why this matters", no "typical outputs"
-
-Cards alternate sizing: first card spans 2 columns on desktop (hero card), remaining 5 fill the grid. This breaks the rigid matrix feel.
-
-This replaces the full `OutcomesImpactSection.tsx` layout — the bottom CTA buttons are kept.
+No mint used in this section at all — mint belongs on dark surfaces.
 
 ---
 
-## 3. Delivery Process — brand injection
+## Fix 2 — Delivery: move entire section to a dark surface
 
-**Problems:**
-- Left panel is a plain button list — no visual weight
-- Right panel is a text block with a bullet list — reads like documentation
-- Almost no brand presence (only the small dark monospace banner at top)
+The terminal aesthetic — ASCII text, monospace, `bg-ink` inner panels — only works when the surrounding section is dark. The fix is to set the section background to `bg-plate-navy` (deep navy), which is exactly what the ServiceCardGrid and the Pricing Teaser do.
 
-**Approach — keep the interactive tab mechanic but upgrade everything around it:**
-
-**Top banner:** Keep the dark gradient border card, but make the ASCII flow text larger and animate it with a CSS marquee-style animation so it scrolls left infinitely — gives it a live, terminal feel.
-
-**Left step list:** Each step button gets:
-- A larger icon container (`w-12 h-12`, `bg-plate-navy`) with the step's `AnimatedIcon` at size 20 (currently it's size 12 in a `w-6`)
-- Step number shown as a mint serif numeral beside the icon
-- Title in serif font (currently sans-serif `font-semibold`)
-- The active state gets a left mint border accent (`border-l-2 border-mint`) instead of just a muted background
-
-**Right content panel:** Each active step gets:
-- A large decorative ASCII art line at the top drawn from the step's theme (e.g., `[ ALIGN ]` in the terminal style already used in the banner, shown large)
-- Title in serif `text-heading-md`
-- Summary text bumped to `text-body-lg` (currently `text-body-md`)
-- Artifacts rendered as styled chips (`rounded-lg bg-plate-navy text-mint text-sm px-3 py-1.5`) in a flex-wrap row — not a bullet list
-- Touchpoint shown as a mint pill badge at the bottom
-
-**"What you can expect" footer strip:** The 4 items get icon badges added (simple Lucide icons: `MessageSquare`, `FileText`, `Lock`, `Monitor`) before their text.
-
-**Mobile accordion:** Same icon/title upgrades applied, summary text sized up.
+**What changes:**
+- `<section>` background: `bg-background` → `bg-plate-navy`
+- Section header text: `text-foreground` → `text-mint` (heading), `text-offwhite/70` (subheadline)  
+- Eyebrow: `text-muted-foreground` → `text-mint/60`
+- Terminal marquee banner: stays as-is (already dark `bg-ink` with mint text — now looks intentional against navy)
+- Left step panel: `bg-card/80 border-border` → `bg-ink/40 border-white/10` (dark glass)
+  - Step buttons inactive: `hover:bg-white/5`
+  - Step buttons active: `bg-white/10 border-l-2 border-mint` — mint border accent now reads correctly on dark
+  - Step numbers `text-mint`: now readable on dark ✓
+  - Icon containers `bg-plate-navy` → `bg-white/8` (slightly lighter than the panel)
+  - Title text: `text-foreground` → `text-offwhite`
+  - Touchpoint subtext: `text-muted-foreground` → `text-offwhite/50`
+- Right content panel: `bg-card/80 border-border` → `bg-ink/40 border-white/10`
+  - ASCII decoration `text-mint/40` → `text-mint/50` (slightly more visible on dark)
+  - Title: `text-foreground` → `text-offwhite`
+  - Summary: `text-muted-foreground` → `text-offwhite/75`
+  - Artifacts sub-panel: `bg-muted/65 border-border/80` → `bg-white/5 border-white/10`
+  - Artifact chips: stay as `bg-plate-navy text-mint` — now have better contrast since the outer panel is slightly lighter
+  - Touchpoint pill: `bg-mint/15 text-mint` → `bg-mint/20 text-mint` (still works on dark ✓)
+- Footer "what you can expect" strip: `bg-muted/50` → `bg-ink/40`, `border-border` → `border-white/10`
+  - Item cards: `bg-card/80 border-border` → `bg-white/5 border-white/10`, `text-foreground/90` → `text-offwhite/90`
+  - Icons: `text-mint` stays (correct on dark ✓)
+- Mobile accordion: same dark surface treatment
 
 ---
 
@@ -87,9 +62,7 @@ This replaces the full `OutcomesImpactSection.tsx` layout — the bottom CTA but
 
 | File | Change |
 |------|--------|
-| `src/index.css` | Add `.text-subheadline` scale step |
-| `src/components/shared/SectionHeader.tsx` | Use `text-subheadline` for subheadline paragraph |
-| `src/components/sections/OutcomesImpactSection.tsx` | Full layout + content rewrite — dark card grid with line illustrations |
-| `src/components/sections/DeliveryProcessInteractive.tsx` | Brand upgrade — icon sizing, ascii decoration, artifact chips, animated banner |
+| `src/components/sections/OutcomesImpactSection.tsx` | White cards, ink illustrations, correct 2-col grid layout |
+| `src/components/sections/DeliveryProcessInteractive.tsx` | Full section to dark `bg-plate-navy` surface, all colour tokens corrected |
 
-No new components or dependencies needed. All line illustrations and animated icons already exist in the codebase.
+No CSS or other files need changing — the typography scale (`text-subheadline`) is already correctly defined in `src/index.css` from the previous round.
