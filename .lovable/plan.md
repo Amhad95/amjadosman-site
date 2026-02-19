@@ -1,190 +1,95 @@
 
-# Database + AI Tools: Full Implementation Plan
+# Three-Part Design Upgrade
 
-## Overview
+## What's changing and why
 
-Two major workstreams:
-
-1. **Database** — Lovable Cloud (Supabase) database for Work case studies and Articles/Resources, with an admin-style management approach
-2. **AI Tools** — All 6 tools built as real, standalone pages with functional AI (Lovable AI gateway via edge functions), each optimised for direct traffic from Google
+Three distinct problems are being fixed in two components, plus a typography scale update that affects the whole site.
 
 ---
 
-## Part 1: Database Architecture
+## 1. Subheadline sizing — site-wide
 
-### Tables
+**Problem:** `text-body-lg` (18px / 1.125rem) is the same size as body copy. Section supporting sentences — the lines directly below H2 headings — feel like regular text, not like a meaningful supporting statement.
 
-**`work_cases`** — Portfolio case studies shown on `/work`
-```
-id, title, description, thumbnail_url, href, cta_label, category, 
-published (bool), sort_order, created_at, updated_at
-```
+**Fix:** Add a new `text-subheadline` scale step (approximately 1.25rem / 20px, line-height 1.5) to `src/index.css`, then update the two key components:
 
-**`articles`** — Resources / blog content shown on `/resources`
-```
-id, title, slug, excerpt, body (rich text), thumbnail_url, 
-category, published (bool), sort_order, created_at, updated_at
-```
+- `src/components/shared/SectionHeader.tsx` — the shared component used across most pages. This cascades the fix site-wide automatically for Services, Proof, AI Tools, all section headers.
+- `src/components/sections/OutcomesImpactSection.tsx` — inline subheadline (not using SectionHeader)
+- `src/components/sections/DeliveryProcessInteractive.tsx` — inline subheadline
 
-Both tables are **public read** (no auth required for visitors), no user-auth needed since this is a content site. An admin seeder will populate the initial data from `content.ts`.
-
-### RLS Policy
-- `SELECT`: public (anyone can read published rows)
-- `INSERT/UPDATE/DELETE`: locked (no anonymous mutations — content managed via Lovable Cloud dashboard or future admin panel)
+No other files need touching because `SectionHeader` propagates the change to every page that uses it.
 
 ---
 
-## Part 2: AI Tools — Architecture
+## 2. Outcomes section — full redesign
 
-### Shared Pattern Per Tool
+**Problems:**
+- Too much text (description + "why it matters" + outputs list = reading overload)
+- Content is software-centric jargon ("scope brief", "sprint plan", "iteration backlog") — doesn't represent the full service range
+- Visual format is a list of accordion-style rows — no brand presence
 
-Every tool page follows this layout:
-```
-[Hero: Tool name, description, animated illustration]
-[Input Form: Tool-specific fields]
-[Output Panel: Streaming AI response rendered as markdown]
-[CTA Band: "Want us to implement this?" → /book]
-```
+**New content — 6 outcomes rewritten to be human, service-agnostic, and concise:**
 
-### Edge Function Per Tool (or one shared function with branching)
-One shared edge function `ai-tool` with a `tool` parameter to branch on system prompt. This avoids deploying 6 separate functions.
+| # | Title | Single supporting line |
+|---|-------|----------------------|
+| 1 | You know what you're getting | A one-page brief per engagement — no ambiguity about scope, timeline, or what "done" means. |
+| 2 | Your brand actually holds together | Identity, messaging, and visual standards that don't fall apart when a new team member joins. |
+| 3 | Your site earns its keep | A web presence that converts visitors into conversations, not just a digital brochure. |
+| 4 | Your team stops re-explaining things | SOPs, governance, and templates that new people can pick up without hand-holding. |
+| 5 | Decisions get made faster | Dashboards and briefs that cut the opinions loop and give leads clarity when it counts. |
+| 6 | AI tools your team actually uses | Workflows with guardrails and adoption hooks — not automation for its own sake. |
 
-```
-POST /functions/v1/ai-tool
-Body: { tool: "page-critique" | "sop-builder" | ... , input: { ... } }
-```
+**New visual layout — 2-column masonry-style card grid (desktop), single column (mobile):**
 
-### Streaming
-All tools stream the response token-by-token using SSE, rendered live using a markdown renderer so the user sees output appear as it's generated — feels alive, shows the AI working.
+Each card is a dark `bg-plate-navy` card with:
+- Large animated line illustration (top of card, centered, using existing `LineDocument`, `LineBrand`, `LineWebsite`, `LineChart`, `LineDashboard`, `LineGear` SVGs rendered in mint) occupying roughly 1/3 of the card height
+- Title in serif (mint on dark)
+- One sentence below (offwhite/80)
+- No bullet lists, no "why this matters", no "typical outputs"
 
----
+Cards alternate sizing: first card spans 2 columns on desktop (hero card), remaining 5 fill the grid. This breaks the rigid matrix feel.
 
-## Part 3: Tool Pages Detail
-
-### 6 Tool Pages (standalone routes, good for SEO)
-
-| Tool | Route | Input | System Prompt Focus |
-|------|-------|-------|---------------------|
-| Landing Page Critique | `/tools/page-critique` | URL or pasted copy | Conversion audit: hierarchy, CTA clarity, friction points |
-| SOP Draft Builder | `/tools/sop-builder` | Process description (textarea) | Structured SOP: purpose, scope, roles, steps, notes |
-| Brand Consistency Audit | `/tools/brand-audit` | Brand description + 3-5 assets described | Consistency report: visual, tone, typography priorities |
-| Process Flow Mapper | `/tools/process-mapper` | Workflow description | Structured flow: inputs, steps, decision points, outputs |
-| Dashboard Requirements Builder | `/tools/dashboard-builder` | Reporting needs description | Dashboard spec: KPIs, data sources, layout recommendations |
-| KPI Audit | `/tools/kpi-audit` | Current metrics list | KPI critique: what's missing, what's vanity, what to add |
-
-### Tool Page Structure (each page)
-
-```
-<Layout>
-  Hero (plate color, tool icon, headline, 1-line description)
-  Input Section (card with form fields + "Generate" button)
-  Output Section (appears after submit — streaming markdown + copy button)
-  CTA Band ("Want us to implement this?" → /book)
-</Layout>
-```
-
-**No email gate** — tools are fully free and open. Email capture only on the `/tools` index page (already exists). This maximises Google traffic conversion (user gets value immediately, then sees the CTA).
+This replaces the full `OutcomesImpactSection.tsx` layout — the bottom CTA buttons are kept.
 
 ---
 
-## Part 4: Files to Create / Modify
+## 3. Delivery Process — brand injection
 
-### New Files
+**Problems:**
+- Left panel is a plain button list — no visual weight
+- Right panel is a text block with a bullet list — reads like documentation
+- Almost no brand presence (only the small dark monospace banner at top)
 
-#### Database
-- `supabase/migrations/001_work_cases.sql` — `work_cases` table + RLS
-- `supabase/migrations/002_articles.sql` — `articles` table + RLS
+**Approach — keep the interactive tab mechanic but upgrade everything around it:**
 
-#### Edge Function
-- `supabase/functions/ai-tool/index.ts` — Single shared edge function with system prompts for all 6 tools
+**Top banner:** Keep the dark gradient border card, but make the ASCII flow text larger and animate it with a CSS marquee-style animation so it scrolls left infinitely — gives it a live, terminal feel.
 
-#### Shared Tool Components
-- `src/components/tools/ToolHero.tsx` — Reusable hero for tool pages (plate, icon, headline, description)
-- `src/components/tools/ToolInputForm.tsx` — Generic wrapper (renders children, handles submit state)
-- `src/components/tools/ToolOutputPanel.tsx` — Streaming markdown renderer with copy button, loading skeleton
-- `src/lib/streamTool.ts` — Client-side SSE streaming utility (reused across all 6 tool pages)
+**Left step list:** Each step button gets:
+- A larger icon container (`w-12 h-12`, `bg-plate-navy`) with the step's `AnimatedIcon` at size 20 (currently it's size 12 in a `w-6`)
+- Step number shown as a mint serif numeral beside the icon
+- Title in serif font (currently sans-serif `font-semibold`)
+- The active state gets a left mint border accent (`border-l-2 border-mint`) instead of just a muted background
 
-#### Tool Pages (6 new pages)
-- `src/pages/tools/PageCritique.tsx`
-- `src/pages/tools/SopBuilder.tsx`
-- `src/pages/tools/BrandAudit.tsx`
-- `src/pages/tools/ProcessMapper.tsx`
-- `src/pages/tools/DashboardBuilder.tsx`
-- `src/pages/tools/KpiAudit.tsx`
+**Right content panel:** Each active step gets:
+- A large decorative ASCII art line at the top drawn from the step's theme (e.g., `[ ALIGN ]` in the terminal style already used in the banner, shown large)
+- Title in serif `text-heading-md`
+- Summary text bumped to `text-body-lg` (currently `text-body-md`)
+- Artifacts rendered as styled chips (`rounded-lg bg-plate-navy text-mint text-sm px-3 py-1.5`) in a flex-wrap row — not a bullet list
+- Touchpoint shown as a mint pill badge at the bottom
 
-#### Updated Pages
-- `src/App.tsx` — Add 6 new tool routes + future article/work routes
-- `src/pages/Work.tsx` — Read from `work_cases` table (with fallback to static content)
-- `src/pages/Resources.tsx` — Read from `articles` table and show article grid (replacing "coming soon")
+**"What you can expect" footer strip:** The 4 items get icon badges added (simple Lucide icons: `MessageSquare`, `FileText`, `Lock`, `Monitor`) before their text.
 
-### Modified Files
-
-- `src/lib/content.ts` — No changes needed (static data still used as fallback)
-- `src/pages/Tools.tsx` — Minor: tool cards now link to real standalone pages (already have `href` set)
+**Mobile accordion:** Same icon/title upgrades applied, summary text sized up.
 
 ---
 
-## Part 5: Tool Pages Visual Design
+## Files to modify
 
-Each tool page uses the existing design system:
+| File | Change |
+|------|--------|
+| `src/index.css` | Add `.text-subheadline` scale step |
+| `src/components/shared/SectionHeader.tsx` | Use `text-subheadline` for subheadline paragraph |
+| `src/components/sections/OutcomesImpactSection.tsx` | Full layout + content rewrite — dark card grid with line illustrations |
+| `src/components/sections/DeliveryProcessInteractive.tsx` | Brand upgrade — icon sizing, ascii decoration, artifact chips, animated banner |
 
-**Hero section**: Uses existing `Hero` component with `plate` color unique per tool:
-- Page Critique → `blue`
-- SOP Builder → `violet`
-- Brand Audit → `burgundy`
-- Process Mapper → `emerald`
-- Dashboard Builder → `astral`
-- KPI Audit → `navy`
-
-**Input area**: Clean white card, `bg-card border border-ink/10 rounded-2xl p-6 md:p-8`
-
-**Output area**: Appears below input after generation starts. Contains:
-- Animated "Generating..." skeleton while streaming begins
-- Streamed markdown as it arrives (using a light markdown renderer)
-- "Copy output" button top-right
-- Word count / estimated read time
-
-**CTAs at bottom**: Use existing `CTABand` component
-
----
-
-## Part 6: Database-Driven Work + Resources Pages
-
-### Work page (`/work`)
-- Fetches `work_cases` table on load (published = true, ordered by sort_order)
-- Falls back to static `siteContent.work.tiles` if DB returns empty
-- Each case study card: title, description, thumbnail_url (or placeholder), cta link
-- Add "Add case study" note visible only in dev (or admin link)
-
-### Resources page (`/resources`)
-- Fetches `articles` table (published = true, ordered by sort_order)
-- Replaces current "coming soon" state with real article grid
-- Each article card: thumbnail, category chip, title, excerpt, "Read article" link
-- Individual article pages at `/resources/:slug` render the `body` field as markdown
-
----
-
-## Part 7: Implementation Order
-
-1. Enable Lovable Cloud
-2. Run migrations (work_cases + articles tables)
-3. Seed initial data from content.ts
-4. Create edge function `ai-tool` with all 6 system prompts
-5. Build shared tool components (ToolHero, ToolInputForm, ToolOutputPanel, streamTool utility)
-6. Build 6 tool pages
-7. Add routes to App.tsx
-8. Update Work.tsx to read from DB
-9. Update Resources.tsx to read from DB + article grid
-10. Create article detail page `/resources/:slug`
-
----
-
-## Technical Notes
-
-- **Streaming**: Edge function returns `text/event-stream` — the client reads SSE line by line and appends delta content to state, which renders in a `<div className="prose prose-sm max-w-none">` block using a markdown component
-- **react-markdown**: Already a viable dep or can add it — used to render AI output with proper headings, lists, bold text
-- **No auth needed**: All tools are public. No login wall.
-- **SEO**: Each tool page has its own `<title>` and `<meta description>` via document.title + meta tags set in useEffect — this makes each page indexable independently
-- **Lovable AI model**: `google/gemini-3-flash-preview` (default, fast, balanced)
-- **Rate limiting**: 429 and 402 errors caught in edge function and surfaced as toast notifications on the frontend
-
+No new components or dependencies needed. All line illustrations and animated icons already exist in the codebase.
