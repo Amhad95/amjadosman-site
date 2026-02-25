@@ -9,6 +9,7 @@ import { RetainerCard } from '@/components/sections/RetainerCard';
 import { Steps } from '@/components/sections/Steps';
 import { CTABand } from '@/components/sections/CTABand';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { STRIPE_PRICES } from '@/lib/stripe';
 
 const outcomes = [
   { title: 'Credibility that matches your capability.', body: 'Your brand communicates the quality your team actually delivers.' },
@@ -18,18 +19,9 @@ const outcomes = [
 ];
 
 const serviceGroups = [
-  {
-    title: 'Brand System',
-    items: ['Identity and guidelines', 'Document and deck templates', 'Brand asset organization'],
-  },
-  {
-    title: 'Website and CMS',
-    items: ['Site architecture and copy structure', 'CMS model and publishing flow', 'Conversion landing pages'],
-  },
-  {
-    title: 'Sales Materials',
-    items: ['Pitch deck system', 'Proposal template system', 'Case study template system'],
-  },
+  { title: 'Brand System', items: ['Identity and guidelines', 'Document and deck templates', 'Brand asset organization'] },
+  { title: 'Website and CMS', items: ['Site architecture and copy structure', 'CMS model and publishing flow', 'Conversion landing pages'] },
+  { title: 'Sales Materials', items: ['Pitch deck system', 'Proposal template system', 'Case study template system'] },
 ];
 
 const faqs = [
@@ -100,25 +92,28 @@ const ServicesBrand = () => {
                 name="Brand System Sprint"
                 inclusions={['Identity and guidelines', 'Template pack', 'Brand asset library']}
                 timeline="10-15 business days"
-                price="Starting from EUR 8,000"
+                price="Starting from EUR 3,500"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.brand_sprint}
               />
               <RecommendedOfferCard
                 name="Website and CMS Build"
                 inclusions={['Site architecture', 'CMS setup', 'Conversion pages', 'SEO foundation']}
                 timeline="2-4 weeks"
-                price="Starting from EUR 12,000"
+                price="Starting from EUR 5,000"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.web_build}
               />
               <RecommendedOfferCard
                 name="Sales Materials Kit"
                 inclusions={['Pitch deck system', 'Proposal templates', 'Case study format']}
                 timeline="7-12 business days"
-                price="Starting from EUR 5,000"
+                price="Starting from EUR 2,500"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.sales_kit}
               />
             </div>
           </PricingZone>
@@ -126,9 +121,9 @@ const ServicesBrand = () => {
           <PricingZone headline="Pick individual services" description="Available separately at project-based pricing.">
             <ServiceMenuList
               items={[
-                { name: 'Landing page conversion pass', startingPrice: 'Starting from EUR 2,500', payHref: '/book', bookHref: '/book' },
-                { name: 'Brand template pack', startingPrice: 'Starting from EUR 3,000', payHref: '/book', bookHref: '/book' },
-                { name: 'Pitch deck rebuild', startingPrice: 'Starting from EUR 4,000', payHref: '/book', bookHref: '/book' },
+                { name: 'Landing page conversion pass', startingPrice: 'Starting from EUR 1,500', bookHref: '/book', stripePriceId: STRIPE_PRICES.landing_page },
+                { name: 'Brand template pack', startingPrice: 'Starting from EUR 1,200', bookHref: '/book', stripePriceId: STRIPE_PRICES.brand_template },
+                { name: 'Pitch deck rebuild', startingPrice: 'Starting from EUR 2,000', bookHref: '/book', stripePriceId: STRIPE_PRICES.pitch_deck },
               ]}
             />
           </PricingZone>
@@ -139,25 +134,28 @@ const ServicesBrand = () => {
                 tier="Lite"
                 inclusions={['Minor content updates', 'Design tweaks', 'Monthly check-in']}
                 responseTime="Response within 3 business days"
-                price="EUR 1,500/mo"
+                price="EUR 800/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.brand_retainer_lite}
               />
               <RetainerCard
                 tier="Standard"
                 inclusions={['Content updates', 'Design changes', 'New page builds', 'Priority support']}
                 responseTime="Response within 1 business day"
-                price="EUR 3,000/mo"
+                price="EUR 1,500/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.brand_retainer_standard}
               />
               <RetainerCard
                 tier="Priority"
                 inclusions={['Unlimited changes', 'Strategy sessions', 'Dedicated support', 'Same-day response']}
                 responseTime="Same-day response"
-                price="EUR 5,000/mo"
+                price="EUR 2,500/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.brand_retainer_priority}
               />
             </div>
           </PricingZone>

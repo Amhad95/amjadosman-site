@@ -10,6 +10,7 @@ import { Steps } from '@/components/sections/Steps';
 import { CTABand } from '@/components/sections/CTABand';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { CheckCircle, Shield } from 'lucide-react';
+import { STRIPE_PRICES } from '@/lib/stripe';
 
 const outcomes = [
   { title: 'Less manual triage and repetitive drafting.', body: 'Agents handle intake, categorization, and first-draft responses.' },
@@ -65,10 +66,10 @@ const controls = [
 ];
 
 const implementation = [
-  'Claude-based agent logic where appropriate',
-  'Workflow orchestration via automation platforms such as n8n',
-  'MCP-style secure connectors where applicable',
-  'Internal agent runbooks and guardrails',
+  'Agent logic selected per use case for reliability and cost efficiency',
+  'Workflow orchestration via established automation platforms',
+  'Secure connectors with scoped access to internal systems',
+  'Internal agent runbooks, guardrails, and rollback procedures',
 ];
 
 const faqs = [
@@ -76,7 +77,7 @@ const faqs = [
   { q: 'How do you ensure data security?', a: 'Role-based access, audit logs, and permission boundaries. No agent accesses data beyond its defined scope.' },
   { q: 'What happens when an agent fails?', a: 'Safe failure modes escalate to humans. Every failure is logged for review and tuning.' },
   { q: 'Can we start with one use case?', a: 'Yes. The Agent Pilot is designed for exactly this. Pick one use case, validate it, then expand.' },
-  { q: 'What platforms do you use?', a: 'We use Claude for agent logic, n8n for workflow orchestration, and MCP-style connectors for secure integrations. But we name services by what they do, not what they run on.' },
+  { q: 'What platforms do you use?', a: 'We select tools based on the use case — typically a combination of language model APIs for agent reasoning, workflow orchestration platforms, and secure connectors for your existing systems. We prioritize reliability and auditability over novelty.' },
   { q: 'How long until we see results?', a: 'Agent Pilot delivers a working workflow in 10-15 business days. Value is visible within the first week of operation.' },
   { q: 'Do you monitor agents after deployment?', a: 'Yes, via retainer tiers. Monitoring includes performance review, prompt tuning, and workflow adjustments.' },
 ];
@@ -170,25 +171,28 @@ const ServicesAgents = () => {
                 name="Agent Pilot"
                 inclusions={['One use case', 'Controlled scope', 'Approval workflows', 'Monitoring setup']}
                 timeline="10-15 business days"
-                price="Starting from EUR 8,000"
+                price="Starting from EUR 4,000"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.agent_pilot}
               />
               <RecommendedOfferCard
                 name="Agent Workflow Pack"
                 inclusions={['2-3 use cases', 'Cross-workflow orchestration', 'Governance setup', 'Team training']}
                 timeline="3-5 weeks"
-                price="Starting from EUR 18,000"
+                price="Starting from EUR 8,000"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.agent_pack}
               />
               <RecommendedOfferCard
                 name="Knowledge Agent Setup"
                 inclusions={['Permission-aware search', 'Source citation', 'Role-based access', 'Monitoring dashboard']}
                 timeline="2-4 weeks"
-                price="Starting from EUR 12,000"
+                price="Starting from EUR 5,000"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.knowledge_agent}
               />
             </div>
           </PricingZone>
@@ -196,9 +200,9 @@ const ServicesAgents = () => {
           <PricingZone headline="Pick individual services" description="Individual agent workflows available separately.">
             <ServiceMenuList
               items={[
-                { name: 'Workflow triage agent', startingPrice: 'Starting from EUR 5,000', payHref: '/book', bookHref: '/book' },
-                { name: 'Report summarization workflow', startingPrice: 'Starting from EUR 4,000', payHref: '/book', bookHref: '/book' },
-                { name: 'Intake and routing workflow', startingPrice: 'Starting from EUR 4,500', payHref: '/book', bookHref: '/book' },
+                { name: 'Workflow triage agent', startingPrice: 'Starting from EUR 2,500', bookHref: '/book', stripePriceId: STRIPE_PRICES.triage_agent },
+                { name: 'Report summarization workflow', startingPrice: 'Starting from EUR 2,000', bookHref: '/book', stripePriceId: STRIPE_PRICES.report_summarization },
+                { name: 'Intake and routing workflow', startingPrice: 'Starting from EUR 2,000', bookHref: '/book', stripePriceId: STRIPE_PRICES.intake_routing },
               ]}
             />
           </PricingZone>
@@ -209,25 +213,28 @@ const ServicesAgents = () => {
                 tier="Monitoring Lite"
                 inclusions={['Performance monitoring', 'Monthly review', 'Bug fixes']}
                 responseTime="Response within 3 business days"
-                price="EUR 2,000/mo"
+                price="EUR 1,000/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.agents_retainer_lite}
               />
               <RetainerCard
                 tier="Standard"
                 inclusions={['Monitoring and tuning', 'Prompt adjustments', 'Workflow changes', 'Priority support']}
                 responseTime="Response within 1 business day"
-                price="EUR 4,000/mo"
+                price="EUR 2,000/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.agents_retainer_standard}
               />
               <RetainerCard
                 tier="Priority"
                 inclusions={['Full management', 'New workflow builds', 'Strategy sessions', 'Same-day response']}
                 responseTime="Same-day response"
-                price="EUR 7,000/mo"
+                price="EUR 3,500/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.agents_retainer_priority}
               />
             </div>
           </PricingZone>

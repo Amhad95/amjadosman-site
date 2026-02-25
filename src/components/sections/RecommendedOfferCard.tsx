@@ -1,6 +1,7 @@
 import React from 'react';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
+import { startCheckout } from '@/lib/stripe';
 
 interface RecommendedOfferCardProps {
   name: string;
@@ -9,6 +10,7 @@ interface RecommendedOfferCardProps {
   price: string;
   payHref: string;
   bookHref: string;
+  stripePriceId?: string;
 }
 
 export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
@@ -18,7 +20,14 @@ export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
   price,
   payHref,
   bookHref,
+  stripePriceId,
 }) => {
+  const handlePay = () => {
+    if (stripePriceId) {
+      startCheckout(stripePriceId, 'payment');
+    }
+  };
+
   return (
     <div className="bg-card border border-ink/10 rounded-2xl p-8 flex flex-col">
       <h4 className="font-serif text-heading-md text-foreground mb-4">{name}</h4>
@@ -33,7 +42,11 @@ export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
       <p className="text-sm text-muted-foreground mb-1">{timeline}</p>
       <p className="font-serif text-heading-md text-foreground mb-6">{price}</p>
       <div className="flex flex-wrap gap-3">
-        <PrimaryButton href={payHref} textColor="ink">Pay and start</PrimaryButton>
+        {stripePriceId ? (
+          <PrimaryButton onClick={handlePay} textColor="ink">Pay and start</PrimaryButton>
+        ) : (
+          <PrimaryButton href={payHref} textColor="ink">Pay and start</PrimaryButton>
+        )}
         <SecondaryButton href={bookHref}>Book a call</SecondaryButton>
       </div>
     </div>
