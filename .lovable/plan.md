@@ -1,192 +1,146 @@
 
 
-# Phase 1: IA + Pages — Services Dropdown, Overview, Track Pages, Pricing Router
+# Phases 2, 3, and 4 — Implementation Plan
 
-## Scope
+## Current State
 
-Phase 1 only. No Stripe, no booking modal, no payment mechanics. Those are Phase 2 and 3.
+Phase 1 is complete:
+- Navbar dropdown works
+- `/services` overview with 3 TrackFeatureBlocks
+- `/services/brand`, `/services/ops`, `/services/agents` track pages with full content, 3-zone pricing, FAQs, delivery steps
+- `/pricing` is a router page
+- All pricing cards, service menu lists, and retainer cards exist as components
+- All CTAs currently link to `/book` (a form page)
 
----
-
-## 1. Navbar: Services Dropdown
-
-**File:** `src/components/layout/Header.tsx`
-
-Replace the flat "Services" link with a hover-triggered dropdown (desktop) and an expandable sub-menu (mobile).
-
-**Desktop dropdown:**
-- On hover/click of "Services", show a dropdown with 4 links:
-  - Services Overview → `/services`
-  - Brand and Growth Systems → `/services/brand`
-  - Internal Operations Systems → `/services/ops`
-  - AI Agents and Automation → `/services/agents`
-- Clicking "Services" label itself navigates to `/services`
-- Dropdown: `bg-ink/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-lg` — consistent with the existing scrolled nav pill aesthetic
-- Links: `text-offwhite/70 hover:text-offwhite text-sm font-semibold`
-- Close on mouse leave or route change
-- When scrolled (pill nav), dropdown still works but anchored to the "Services" text
-
-**Mobile:**
-- "Services" in the mobile menu becomes a collapsible section
-- Tap to expand sub-links (indented with `pl-4`)
-- Tap any sub-link to navigate + close menu
-
-**Route plate map additions:**
-```
-'/services/brand': 'navy',
-'/services/ops': 'navy',
-'/services/agents': 'navy',
-```
-
-**Active state:** Highlight "Services" in the nav when on any `/services/*` route (use `location.pathname.startsWith('/services')`).
+What's missing: Stripe checkout, booking modal, Track C credibility tightening.
 
 ---
 
-## 2. /services — Overview Page (rewrite)
+## Phase 2 — Stripe Checkout
 
-**File:** `src/pages/Services.tsx` (rewrite)
+### Step 1: Enable Stripe
 
-Remove the current grid-based layout. Replace with the exact structure specified.
+Use the Stripe enablement tool. This will prompt for the Stripe secret key and expose the Stripe integration tools and patterns.
 
-### Section 1: Hero (Poster Mode, `bg-plate-navy`)
-- Headline: "Services organized by track, so buyers can self-select fast."
-- Subheadline: "Pick the track that matches your bottleneck. Each track has clear deliverables, pricing, and a direct checkout option."
-- Primary CTA: "Explore tracks" — smooth scrolls to `#track-a`
-- Secondary CTA: "Book a call" — links to `/book` (Phase 3 converts to modal)
-- Use existing `<Hero>` component with `plate="navy"`
+### Step 2: Create Stripe Products and Prices
 
-### Sections 2–4: TrackFeatureBlock × 3
+After Stripe is enabled, create placeholder products/prices for all purchasable items across the 3 tracks. The Stripe tool will provide the exact API for this.
 
-New shared component: `src/components/sections/TrackFeatureBlock.tsx`
+### Step 3: Wire checkout into components
 
-Props:
+**Files to modify:**
+
+| File | Change |
+|---|---|
+| `src/components/sections/RecommendedOfferCard.tsx` | Accept `stripePriceId` prop. "Pay and start" button triggers Stripe one-time checkout instead of linking to `/book`. |
+| `src/components/sections/ServiceMenuList.tsx` | Accept `stripePriceId` per item. "Pay" button triggers Stripe one-time checkout. |
+| `src/components/sections/RetainerCard.tsx` | Accept `stripePriceId` prop. "Subscribe" button triggers Stripe subscription checkout. |
+| `src/pages/services/ServicesBrand.tsx` | Pass `stripePriceId` to each pricing component. |
+| `src/pages/services/ServicesOps.tsx` | Pass `stripePriceId` to each pricing component. |
+| `src/pages/services/ServicesAgents.tsx` | Pass `stripePriceId` to each pricing component. |
+
+Each component keeps both CTAs:
+- **Pay / Subscribe**: triggers Stripe checkout (one-time or subscription)
+- **Book a call**: opens booking modal (wired in Phase 3, stays as `/book` link until then)
+
+The Stripe integration pattern (edge function for creating checkout sessions, client-side redirect) will be determined after enabling Stripe, as the tool provides specific implementation guidance.
+
+---
+
+## Phase 3 — Booking Modal
+
+### New component: `src/components/shared/BookingModal.tsx`
+
+A dialog (using the existing `@radix-ui/react-dialog` setup) containing an iframe.
+
+**Props:**
 ```ts
-interface TrackFeatureBlockProps {
-  id: string;           // anchor id
-  label: string;        // "Track A"
-  headline: string;
-  explainer: string;
-  whenFits: string[];   // bullet points
-  deliverables: { title: string; description: string }[];
-  deliveryOptions: string[];  // chip labels
-  primaryCta: { label: string; href: string };
-  secondaryCta: { label: string; href: string };
+interface BookingModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 ```
 
-Layout (Interface Mode, `bg-background` for A/C, `bg-muted` for B — alternating):
-- Section label: eyebrow in `text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold`
-- Headline: `font-serif text-poster-lg text-foreground`
-- Explainer: `text-subheadline text-muted-foreground`
-- "When this track fits": 3 bullets with check-circle icons, in a vertical list
-- Deliverables: cards in a responsive grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`), each card `bg-card border border-ink/10 rounded-2xl p-6` with title in `font-serif text-heading-sm` and description in `text-body-md text-muted-foreground`
-- "How it's delivered": horizontal row of chips — `bg-muted border border-ink/8 rounded-full px-4 py-1.5 text-sm font-medium`
-- CTA row: two buttons side by side using `PrimaryButton` and `SecondaryButton`
+**Implementation:**
+- Uses existing `Dialog`, `DialogContent` from `src/components/ui/dialog.tsx`
+- Contains an `<iframe>` with `src={BOOKING_URL}` (placeholder constant)
+- Sizing: `max-w-2xl w-full h-[70vh]` on desktop, full-width on mobile
+- Close button via Radix dialog close
+- `BOOKING_URL` defined as a constant at the top of the file: `const BOOKING_URL = "https://calendar.google.com/calendar/appointments/PLACEHOLDER";`
 
-Track A content: exactly as specified in the brief (Brand and Growth Systems, 3 bullets, 3 cards, 2 chips)
-Track B content: exactly as specified (Internal Operations Systems, 3 bullets, 4 cards, 2 chips)
-Track C content: exactly as specified (AI Agents and Automation, 3 bullets, 6 use-case cards, 3 control chips)
+### Wiring "Book a call" everywhere
 
-### Section 5: "How engagement works" stepper
+**Approach:** Create a React context `BookingContext` that provides `openBooking()` function. Wrap the app in this provider. All "Book a call" buttons call `openBooking()` instead of navigating.
 
-Reuse the existing `Steps` component pattern or build inline. 5 steps as specified. Simple horizontal stepper on desktop, vertical on mobile. No proof strip.
-
----
-
-## 3. Track Pages (3 new files)
-
-All three follow the common structure. Phase 1 includes full content but placeholder prices (`EUR [X]`) and placeholder Stripe IDs. CTAs link to `/book` for now (Phase 2/3 wires Stripe and modal).
-
-### New files:
-- `src/pages/services/ServicesBrand.tsx`
-- `src/pages/services/ServicesOps.tsx`
-- `src/pages/services/ServicesAgents.tsx`
-
-### Common structure per track page:
-
-**1) Hero** — `<Hero>` with `plate="navy"`, track-specific headline/explainer, two CTAs
-
-**2) Outcomes** — 4 tiles in a `grid-cols-1 md:grid-cols-2` grid, each tile: `bg-card border border-ink/10 rounded-2xl p-8`, serif headline + one sentence body
-
-**3) Services in this track** — Grouped into 3 groups (2–3 for agents), each group has a subheading and bullet list or sub-cards
-
-**4) Pricing section** (id="pricing") — Three zones:
-
-- **Zone 1: Recommended starting points** — 3 cards, each with: name, inclusions list, timeline, price, two CTA buttons (placeholder hrefs)
-- **Zone 2: Pick individual services** — A clean table/list with service name, starting price, and CTA button per row
-- **Zone 3: Retainers** — 3 tier cards (Lite/Standard/Priority) with inclusions, response time, monthly price, Subscribe + Book a call buttons
-
-New shared components:
-- `src/components/sections/PricingZone.tsx` — wrapper for a pricing zone with headline
-- `src/components/sections/RecommendedOfferCard.tsx` — fixed-scope offer card
-- `src/components/sections/ServiceMenuList.tsx` — individual services list
-- `src/components/sections/RetainerCard.tsx` — subscription tier card
-
-All use the existing card/button design system. Cards on light backgrounds use `bg-card border border-ink/10`. Pricing amounts in `font-serif text-heading-md`.
-
-**5) "How we deliver"** — 4–5 step stepper, track-specific
-
-**6) FAQ** — Accordion using existing `<Accordion>` component, 6–8 items per track
-
-### Track-specific content:
-
-**Brand (/services/brand):** Content exactly as specified — Brand System, Website and CMS, Sales Materials groups. 3 recommended offers, 3 individual services, 3 retainer tiers.
-
-**Ops (/services/ops):** SharePoint Architecture, SOPs and Templates, Onboarding System groups. 3 recommended offers, 3 individual services, 3 retainer tiers.
-
-**Agents (/services/agents):** 6 use-case blocks (not tool-named), controls/governance section, "How it's implemented" section (where tools get mentioned). 3 recommended offers, 3 individual services, 3 retainer tiers.
-
----
-
-## 4. /pricing — Router Page (rewrite)
-
-**File:** `src/pages/Pricing.tsx` (rewrite)
-
-Strip all existing pricing tables. Replace with:
-
-- Hero: "Pricing by track" headline, short subheadline
-- 3 cards linking to each track's pricing:
-  - "Brand and Growth Systems" → `/services/brand#pricing`
-  - "Internal Operations Systems" → `/services/ops#pricing`
-  - "AI Agents and Automation" → `/services/agents#pricing`
-- Each card: track name, one-line description, "View pricing →" link
-- CTA band at bottom: "Book a call" 
-
----
-
-## 5. Routing
-
-**File:** `src/App.tsx`
-
-Add 3 new routes:
-```
-/services/brand → ServicesBrand
-/services/ops → ServicesOps
-/services/agents → ServicesAgents
-```
-
----
-
-## Files to create
-
+**Files to create:**
 | File | Purpose |
-|------|---------|
-| `src/components/sections/TrackFeatureBlock.tsx` | Reusable track block for /services overview |
-| `src/components/sections/RecommendedOfferCard.tsx` | Fixed-scope pricing card |
-| `src/components/sections/ServiceMenuList.tsx` | À la carte services list |
-| `src/components/sections/RetainerCard.tsx` | Subscription tier card |
-| `src/pages/services/ServicesBrand.tsx` | Track A detail page |
-| `src/pages/services/ServicesOps.tsx` | Track B detail page |
-| `src/pages/services/ServicesAgents.tsx` | Track C detail page |
+|---|---|
+| `src/components/shared/BookingModal.tsx` | Modal component with iframe |
+| `src/contexts/BookingContext.tsx` | Context provider with modal state |
 
-## Files to modify
+**Files to modify:**
 
 | File | Change |
-|------|--------|
-| `src/components/layout/Header.tsx` | Services dropdown (desktop + mobile) |
-| `src/pages/Services.tsx` | Rewrite to overview with TrackFeatureBlocks |
-| `src/pages/Pricing.tsx` | Rewrite to router page |
-| `src/App.tsx` | Add 3 new routes |
+|---|---|
+| `src/App.tsx` or `src/components/layout/Layout.tsx` | Wrap with `BookingProvider`, render `BookingModal` |
+| `src/components/sections/RecommendedOfferCard.tsx` | `bookHref` prop replaced with `onBook` callback. Button calls `openBooking()` from context. |
+| `src/components/sections/ServiceMenuList.tsx` | Same pattern — `onBook` callback |
+| `src/components/sections/RetainerCard.tsx` | Same pattern — `onBook` callback |
+| `src/components/sections/Hero.tsx` | If `secondaryCta.href === '/book'`, intercept and call `openBooking()` instead of navigating |
+| `src/components/sections/CTABand.tsx` | Same interception pattern for `/book` hrefs |
+| `src/components/layout/Header.tsx` | Header "Book a Call" CTA opens modal instead of navigating |
+| `src/pages/services/ServicesBrand.tsx` | Remove `bookHref="/book"`, use context pattern |
+| `src/pages/services/ServicesOps.tsx` | Same |
+| `src/pages/services/ServicesAgents.tsx` | Same |
+| `src/pages/Pricing.tsx` | CTABand book action uses modal |
+| `src/pages/Services.tsx` | Hero secondary CTA uses modal |
 
-No changes to other pages, global styles, or the design system.
+**Alternative simpler approach:** Instead of modifying every component's props, create a custom `useBooking` hook and modify only the button components (`PrimaryButton`, `SecondaryButton`) to detect when `href="/book"` and intercept with modal. This is fewer file changes.
+
+**Recommended approach:** The interception pattern. Modify `PrimaryButton` and `SecondaryButton` to check if `href` starts with `/book`. If so, prevent navigation and call `openBooking()` from context. This means zero changes to the 25+ files that pass `href="/book"` — they all automatically open the modal.
+
+**Files for interception approach:**
+| File | Change |
+|---|---|
+| `src/components/shared/BookingModal.tsx` | New — modal with iframe |
+| `src/contexts/BookingContext.tsx` | New — context with `openBooking()` |
+| `src/components/layout/Layout.tsx` | Wrap children with `BookingProvider`, render `BookingModal` |
+| `src/components/shared/PrimaryButton.tsx` | If `href` starts with `/book`, call `openBooking()` instead of rendering `<Link>` |
+| `src/components/shared/SecondaryButton.tsx` | Same interception |
+
+This is 3 new/modified files instead of 15+. All existing `href="/book"` references across the entire site automatically open the modal.
+
+The `/book` page itself can remain as a fallback for direct URL access.
+
+---
+
+## Phase 4 — Track C Credibility Pass
+
+**File:** `src/pages/services/ServicesAgents.tsx`
+
+Review and confirm:
+1. All 6 use-case blocks are named by outcome/operation, not by tool — **already correct** (Customer Support Automation, Sales and CRM Operations, etc.)
+2. Tool names (Claude, n8n, MCP) appear only in the "How it's implemented" section — **already correct** (lines 67-72)
+3. Language tightening — minor copy edits:
+   - Ensure no use-case card mentions specific AI model names
+   - Ensure FAQ answer about platforms is measured (line 79 currently says "We use Claude for agent logic, n8n for workflow orchestration" — this is in FAQ, which is acceptable as it answers a direct question, but could be softened)
+   - Review that control descriptions are operational and specific
+
+This phase is mostly a content audit. The current implementation already follows the constraint well. Minor copy adjustments only.
+
+---
+
+## Execution Order
+
+1. **Phase 2**: Enable Stripe → create products → wire checkout into 3 pricing components → update 3 track pages with price IDs
+2. **Phase 3**: Create BookingContext + BookingModal → modify PrimaryButton + SecondaryButton interception → wrap Layout
+3. **Phase 4**: Content audit pass on ServicesAgents.tsx — minor copy edits only
+
+## Total files to create/modify
+
+| Phase | Create | Modify |
+|---|---|---|
+| Phase 2 | Edge function for checkout | 6 files (3 components + 3 track pages) |
+| Phase 3 | 2 files (BookingModal, BookingContext) | 2 files (PrimaryButton, SecondaryButton, Layout) |
+| Phase 4 | 0 | 1 file (ServicesAgents.tsx) |
 
