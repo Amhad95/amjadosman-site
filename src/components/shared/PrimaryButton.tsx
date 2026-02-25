@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useBooking } from '@/contexts/BookingContext';
 
 type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy' | 'ink';
 
@@ -35,6 +36,10 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   size = 'default',
   textColor = 'ink',
 }) => {
+  const booking = (() => {
+    try { return useBooking(); } catch { return null; }
+  })();
+
   const sizeStyles = size === 'lg'
     ? 'h-14 px-8 text-lg'
     : 'h-12 md:h-[48px] px-5 md:px-6 text-base';
@@ -52,6 +57,20 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     'disabled:opacity-50 disabled:cursor-not-allowed',
     className
   );
+
+  // Intercept /book links to open booking modal
+  if (href?.startsWith('/book') && booking) {
+    return (
+      <button
+        type="button"
+        onClick={booking.openBooking}
+        className={baseStyles}
+        disabled={disabled}
+      >
+        {children}
+      </button>
+    );
+  }
 
   if (href) {
     return (

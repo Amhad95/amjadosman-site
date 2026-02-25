@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useBooking } from '@/contexts/BookingContext';
 
 interface SecondaryButtonProps {
   children: React.ReactNode;
@@ -21,6 +22,10 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   disabled = false,
   variant = 'light',
 }) => {
+  const booking = (() => {
+    try { return useBooking(); } catch { return null; }
+  })();
+
   const baseStyles = cn(
     'inline-flex items-center justify-center',
     'h-12 md:h-[48px] px-5 md:px-6',
@@ -35,6 +40,20 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
       : 'border border-ink/20 text-ink hover:bg-ink/5',
     className
   );
+
+  // Intercept /book links to open booking modal
+  if (href?.startsWith('/book') && booking) {
+    return (
+      <button
+        type="button"
+        onClick={booking.openBooking}
+        className={baseStyles}
+        disabled={disabled}
+      >
+        {children}
+      </button>
+    );
+  }
 
   if (href) {
     return (

@@ -9,6 +9,7 @@ import { RetainerCard } from '@/components/sections/RetainerCard';
 import { Steps } from '@/components/sections/Steps';
 import { CTABand } from '@/components/sections/CTABand';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { STRIPE_PRICES } from '@/lib/stripe';
 
 const outcomes = [
   { title: 'Findability and permissions that make sense.', body: 'Files organized with clear ownership and access rules.' },
@@ -18,18 +19,9 @@ const outcomes = [
 ];
 
 const serviceGroups = [
-  {
-    title: 'SharePoint Architecture',
-    items: ['Site and library structure', 'Permissions and roles', 'Naming conventions and governance rules'],
-  },
-  {
-    title: 'SOPs and Templates',
-    items: ['SOP library', 'Forms and templates', 'Approval workflows'],
-  },
-  {
-    title: 'Onboarding System',
-    items: ['Onboarding checklists', 'Team guides', 'Knowledge base structure'],
-  },
+  { title: 'SharePoint Architecture', items: ['Site and library structure', 'Permissions and roles', 'Naming conventions and governance rules'] },
+  { title: 'SOPs and Templates', items: ['SOP library', 'Forms and templates', 'Approval workflows'] },
+  { title: 'Onboarding System', items: ['Onboarding checklists', 'Team guides', 'Knowledge base structure'] },
 ];
 
 const faqs = [
@@ -100,25 +92,28 @@ const ServicesOps = () => {
                 name="Ops Audit"
                 inclusions={['Current state assessment', 'Gap analysis', 'Recommendations report']}
                 timeline="5-7 business days"
-                price="Starting from EUR 4,000"
+                price="Starting from EUR 2,000"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.ops_audit}
               />
               <RecommendedOfferCard
                 name="SharePoint Setup"
                 inclusions={['Site architecture', 'Document libraries', 'Permissions model', 'Governance rules']}
                 timeline="2-3 weeks"
-                price="Starting from EUR 10,000"
+                price="Starting from EUR 4,000"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.sharepoint_setup}
               />
               <RecommendedOfferCard
                 name="SOP Library Pack"
                 inclusions={['15-25 SOPs documented', 'Role mapping', 'QA checklists', 'Update workflow']}
                 timeline="2-3 weeks"
-                price="Starting from EUR 6,000"
+                price="Starting from EUR 3,500"
                 payHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.sop_pack}
               />
             </div>
           </PricingZone>
@@ -126,9 +121,9 @@ const ServicesOps = () => {
           <PricingZone headline="Pick individual services" description="Available separately at project-based pricing.">
             <ServiceMenuList
               items={[
-                { name: 'Permissions overhaul', startingPrice: 'Starting from EUR 3,000', payHref: '/book', bookHref: '/book' },
-                { name: 'SOP creation (per SOP)', startingPrice: 'Starting from EUR 500', payHref: '/book', bookHref: '/book' },
-                { name: 'Template library setup', startingPrice: 'Starting from EUR 2,500', payHref: '/book', bookHref: '/book' },
+                { name: 'Permissions overhaul', startingPrice: 'Starting from EUR 1,500', bookHref: '/book', stripePriceId: STRIPE_PRICES.permissions_overhaul },
+                { name: 'SOP creation (per SOP)', startingPrice: 'Starting from EUR 800', bookHref: '/book', stripePriceId: STRIPE_PRICES.sop_creation },
+                { name: 'Template library setup', startingPrice: 'Starting from EUR 1,200', bookHref: '/book', stripePriceId: STRIPE_PRICES.template_library },
               ]}
             />
           </PricingZone>
@@ -139,25 +134,28 @@ const ServicesOps = () => {
                 tier="Ops Maintenance Lite"
                 inclusions={['SOP updates', 'Minor SharePoint changes', 'Monthly review']}
                 responseTime="Response within 3 business days"
-                price="EUR 1,500/mo"
+                price="EUR 600/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.ops_retainer_lite}
               />
               <RetainerCard
                 tier="Standard"
                 inclusions={['SOP creation and updates', 'SharePoint changes', 'New workflows', 'Priority support']}
                 responseTime="Response within 1 business day"
-                price="EUR 3,000/mo"
+                price="EUR 1,200/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.ops_retainer_standard}
               />
               <RetainerCard
                 tier="Priority"
                 inclusions={['Unlimited changes', 'New system builds', 'Training sessions', 'Same-day response']}
                 responseTime="Same-day response"
-                price="EUR 5,000/mo"
+                price="EUR 2,000/mo"
                 subscribeHref="/book"
                 bookHref="/book"
+                stripePriceId={STRIPE_PRICES.ops_retainer_priority}
               />
             </div>
           </PricingZone>
