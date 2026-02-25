@@ -10,6 +10,9 @@ import SoftwareCRM from "./pages/software/SoftwareCRM";
 import SoftwareAccounting from "./pages/software/SoftwareAccounting";
 import SoftwareInventory from "./pages/software/SoftwareInventory";
 import SoftwareTasks from "./pages/software/SoftwareTasks";
+import ServicesBrand from "./pages/services/ServicesBrand";
+import ServicesOps from "./pages/services/ServicesOps";
+import ServicesAgents from "./pages/services/ServicesAgents";
 import Tools from "./pages/Tools";
 import Work from "./pages/Work";
 import Pricing from "./pages/Pricing";
@@ -41,6 +44,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/brand" element={<ServicesBrand />} />
+          <Route path="/services/ops" element={<ServicesOps />} />
+          <Route path="/services/agents" element={<ServicesAgents />} />
           <Route path="/software" element={<Software />} />
           <Route path="/software/crm" element={<SoftwareCRM />} />
           <Route path="/software/accounting" element={<SoftwareAccounting />} />

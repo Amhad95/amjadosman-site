@@ -1,82 +1,66 @@
 import React from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
-import { CyberPercentage } from '@/components/ui/cyber-percentage';
-import { SectionHeader } from '@/components/shared/SectionHeader';
-import { DecisionHelper } from '@/components/sections/DecisionHelper';
-import { IncludedStrip } from '@/components/sections/IncludedStrip';
-import { PricingTable } from '@/components/sections/PricingTable';
 import { CTABand } from '@/components/sections/CTABand';
-import { siteContent } from '@/lib/content';
+import { CyberPercentage } from '@/components/ui/cyber-percentage';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const tracks = [
+  {
+    title: 'Brand and Growth Systems',
+    description: 'Brand, web, and sales materials. Fixed-scope projects and monthly retainers.',
+    href: '/services/brand#pricing',
+  },
+  {
+    title: 'Internal Operations Systems',
+    description: 'SharePoint, SOPs, templates, and governance. Setup projects and ops maintenance.',
+    href: '/services/ops#pricing',
+  },
+  {
+    title: 'AI Agents and Automation',
+    description: 'Agent workflows with approvals, logs, and monitoring. Pilots, packs, and managed retainers.',
+    href: '/services/agents#pricing',
+  },
+];
 
 const Pricing = () => {
-  const { pricing } = siteContent;
-
-  const packageGroups = [
-    {
-      id: pricing.packages.externalCredibility.id,
-      title: pricing.packages.externalCredibility.title,
-      description: pricing.packages.externalCredibility.description,
-      items: pricing.packages.externalCredibility.items,
-    },
-    {
-      id: pricing.packages.internalExecution.id,
-      title: pricing.packages.internalExecution.title,
-      description: pricing.packages.internalExecution.description,
-      items: pricing.packages.internalExecution.items,
-    },
-  ];
-
   return (
     <Layout>
-      {/* Hero */}
       <Hero
-        headline={pricing.hero.headline}
-        subheadline={pricing.hero.subheadline}
+        headline="Pricing by track"
+        subheadline="Each track has its own pricing: fixed-scope offers, individual services, and retainers. Pick the track that matches your needs."
         plate="navy"
         primaryCta={{ label: 'Book a Call', href: '/book' }}
         rightElement={<CyberPercentage speed={0.8} />}
       />
 
-      {/* Decision Helper */}
-      <section className="py-16 bg-background">
+      <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <DecisionHelper
-            headline={pricing.decisionHelper.headline}
-            options={pricing.decisionHelper.options}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {tracks.map((track, i) => (
+              <Link
+                key={i}
+                to={track.href}
+                className="bg-card border border-ink/10 rounded-2xl p-8 hover:border-ink/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group flex flex-col"
+              >
+                <h3 className="font-serif text-heading-md text-foreground mb-3">{track.title}</h3>
+                <p className="text-body-md text-muted-foreground mb-6 flex-1">{track.description}</p>
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-lavender group-hover:text-lavender/80 transition-colors">
+                  View pricing
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Included Strip */}
-      <section className="pb-16 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <IncludedStrip
-            headline={pricing.includedStrip.headline}
-            items={pricing.includedStrip.items}
-          />
-        </div>
-      </section>
-
-      {/* Pricing Tables */}
-      <section className="py-16 md:py-24 bg-muted">
-        <div className="container mx-auto px-4 md:px-6">
-          <PricingTable
-            groups={packageGroups}
-            foundation={pricing.packages.foundationBuild}
-            plateColor="navy"
-          />
-        </div>
-      </section>
-
-      {/* Final CTA */}
       <CTABand
-        headline={pricing.finalCta.headline}
-        description="Book a short call and we will share a clear scope, timeline, and cost."
-        primaryCta={pricing.finalCta.primaryCta}
-        secondaryCta={pricing.finalCta.secondaryCta}
+        headline="Not sure which track? Book a short call."
+        primaryCta={{ label: 'Book a Call', href: '/book' }}
+        secondaryCta={{ label: 'View all services', href: '/services' }}
         variant="dark"
-        size="large"
       />
     </Layout>
   );
