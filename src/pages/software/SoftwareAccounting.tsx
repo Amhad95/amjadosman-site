@@ -13,7 +13,7 @@ import { WorkflowStepper } from '@/components/sections/WorkflowStepper';
 import { RolesPermissionsMatrix } from '@/components/sections/RolesPermissionsMatrix';
 import { SetupSupportCards } from '@/components/sections/SetupSupportCards';
 import { TabbedProductPreview } from '@/components/ui/vignettes/TabbedProductPreview';
-import { MiniDashboard, defaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
+import { MiniDashboard, getDefaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
 import { SupportRequestVignette } from '@/components/ui/vignettes/SupportRequestVignette';
 import { SettingsPanel, accountingSettingsConfig } from '@/components/ui/vignettes/SettingsPanel';
 import { ImportMapper, accountingImportMappings } from '@/components/ui/vignettes/ImportMapper';
@@ -26,6 +26,8 @@ import {
   FinanceDashboardRealistic,
 } from '@/components/ui/vignettes/AccountingPreviews';
 import { CyberPercentage } from '@/components/ui/cyber-percentage';
+import { useLocale } from '@/lib/locale';
+import { getSoftwarePageContent } from '@/lib/softwarePageContent';
 import {
   FileSpreadsheet,
   Calculator,
@@ -38,133 +40,56 @@ import {
   TrendingUp,
 } from 'lucide-react';
 
-// Problem contrast items
-const problemItems = [
-  {
-    before: 'Invoices created in Word or Excel',
-    after: 'Templated invoices with auto-numbering',
-    icon: FileText,
-  },
-  {
-    before: 'Expenses tracked in spreadsheets',
-    after: 'Structured submission with category rules',
-    icon: FileSpreadsheet,
-  },
-  {
-    before: 'Approvals handled over email',
-    after: 'Built-in approval chains with audit trail',
-    icon: CheckCircle,
-  },
-  {
-    before: 'No real-time visibility on cash flow',
-    after: 'Live dashboards with payment status',
-    icon: TrendingUp,
-  },
-];
-
-// Outcomes
-const outcomes = [
-  {
-    headline: 'Faster invoicing and payment tracking',
-    description: 'Create, send, and track invoices with templates and status updates.',
-  },
-  {
-    headline: 'Cleaner expense capture and approvals',
-    description: 'Structured expense submission with category rules and approval chains.',
-  },
-  {
-    headline: 'A dashboard that stays readable',
-    description: 'Key metrics without the complexity of full accounting software.',
-  },
-  {
-    headline: 'Audit-ready records without manual cleanup',
-    description: 'Clean categorization and proper documentation from day one.',
-  },
-];
-
-// Capabilities
-const capabilities = [
-  {
-    icon: Receipt,
-    title: 'Invoicing',
-    description: 'Templated invoices with auto-numbering, status tracking, and payment reminders.',
-  },
-  {
-    icon: FileSpreadsheet,
-    title: 'Expense tracking',
-    description: 'Categorized expenses with receipt uploads and recurring entries.',
-  },
-  {
-    icon: CheckCircle,
-    title: 'Approval workflows',
-    description: 'Multi-level approval chains with spending limits and escalation rules.',
-  },
-  {
-    icon: BarChart3,
-    title: 'Financial dashboards',
-    description: 'Revenue, expenses, and cash flow visibility in real time.',
-  },
-  {
-    icon: Calculator,
-    title: 'Tax categories',
-    description: 'Pre-configured tax rules and category mappings for compliance.',
-  },
-  {
-    icon: Shield,
-    title: 'Audit trail',
-    description: 'Complete history of every transaction, edit, and approval decision.',
-  },
-];
-
-// Workflow steps with realistic previews
-const workflowSteps = [
-  {
-    id: 'configure',
-    title: 'Configure structure',
-    description: 'Categories, invoice templates, and numbering set up.',
-    content: <SettingsPanel sections={accountingSettingsConfig} activeSection={0} />,
-  },
-  {
-    id: 'roles',
-    title: 'Assign roles and permissions',
-    description: 'Approver roles, spending limits, and workflows defined.',
-    content: <SettingsPanel sections={accountingSettingsConfig} activeSection={2} />,
-  },
-  {
-    id: 'import',
-    title: 'Import data',
-    description: 'Client and vendor records migrated with opening balances.',
-    content: <ImportMapper mappings={accountingImportMappings} sourceFile="vendors_export.csv" />,
-  },
-  {
-    id: 'workflow',
-    title: 'Run day-to-day workflow',
-    description: 'Create invoices, track payments, manage expenses.',
-    content: <InvoiceDashboardRealistic />,
-  },
-];
-
-// Hero preview tabs
-const heroTabs = [
-  { id: 'invoice', label: 'Invoices', content: <InvoiceDashboardRealistic /> },
-  { id: 'expenses', label: 'Expenses', content: <ExpenseTrackerRealistic /> },
-  { id: 'approvals', label: 'Approvals', content: <ApprovalsQueueRealistic /> },
-  { id: 'dashboard', label: 'Dashboard', content: <FinanceDashboardRealistic /> },
-];
-
 const SoftwareAccounting = () => {
+  const { locale } = useLocale();
+  const content = getSoftwarePageContent(locale).accounting;
+
   const [activePersona, setActivePersona] = useState(0);
+  const problemIcons = [FileText, FileSpreadsheet, CheckCircle, TrendingUp];
+  const capabilityIcons = [Receipt, FileSpreadsheet, CheckCircle, BarChart3, Calculator, Shield];
+  const previewTabs = [
+    { id: 'invoice', label: content.previewSection.tabLabels[0], content: <InvoiceDashboardRealistic /> },
+    { id: 'expenses', label: content.previewSection.tabLabels[1], content: <ExpenseTrackerRealistic /> },
+    { id: 'approvals', label: content.previewSection.tabLabels[2], content: <ApprovalsQueueRealistic /> },
+    { id: 'dashboard', label: content.previewSection.tabLabels[3], content: <FinanceDashboardRealistic /> },
+  ];
+  const workflowSteps = [
+    {
+      id: 'configure',
+      title: content.workflowSection.steps[0].title,
+      description: content.workflowSection.steps[0].description,
+      content: <SettingsPanel sections={accountingSettingsConfig} activeSection={0} />,
+    },
+    {
+      id: 'roles',
+      title: content.workflowSection.steps[1].title,
+      description: content.workflowSection.steps[1].description,
+      content: <SettingsPanel sections={accountingSettingsConfig} activeSection={2} />,
+    },
+    {
+      id: 'import',
+      title: content.workflowSection.steps[2].title,
+      description: content.workflowSection.steps[2].description,
+      content: <ImportMapper mappings={accountingImportMappings} sourceFile="vendors_export.csv" />,
+    },
+    {
+      id: 'workflow',
+      title: content.workflowSection.steps[3].title,
+      description: content.workflowSection.steps[3].description,
+      content: <InvoiceDashboardRealistic />,
+    },
+  ];
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       {/* 1. Hero with ASCII Animation */}
       <ProductHero
         productName="Ledger"
-        productDescriptor="for Accounting"
-        headline="Financial workflows configured for clarity, not complexity."
-        subheadline="Invoicing, expenses, and basic finance visibility in a clean system. Provisioned with your approval flows, categories, and reporting needs."
-        primaryCta={{ label: 'Request access', href: '/book?intent=accounting' }}
-        secondaryCta={{ label: 'How onboarding works', href: '#onboarding' }}
+        productDescriptor={content.hero.productDescriptor}
+        headline={content.hero.headline}
+        subheadline={content.hero.subheadline}
+        primaryCta={{ label: content.hero.primaryCtaLabel, href: '/book?intent=accounting' }}
+        secondaryCta={{ label: content.hero.secondaryCtaLabel, href: '#onboarding' }}
         asciiComponent={<CyberPercentage color="mint" speed={0.8} />}
         plate="astral"
       />
@@ -173,19 +98,19 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Ledger in action"
-            subheadline="Invoicing, expenses, approvals, and reporting in one place."
+            headline={content.previewSection.headline}
+            subheadline={content.previewSection.subheadline}
             align="center"
           />
           <div className="mt-10 max-w-5xl mx-auto">
-            <ProductPreviewFrame title="Ledger Accounting" variant="browser">
+            <ProductPreviewFrame title={content.previewSection.frameTitle} variant="browser">
               <div className="h-[360px] md:h-[440px]">
                 <TabbedProductPreview
-                  tabs={heroTabs}
-                  searchPlaceholder="Search invoices, expenses..."
+                  tabs={previewTabs}
+                  searchPlaceholder={content.previewSection.searchPlaceholder}
                   filters={[
-                    { label: 'Status', active: false },
-                    { label: 'Category', active: false },
+                    { label: content.previewSection.filters[0], active: false },
+                    { label: content.previewSection.filters[1], active: false },
                   ]}
                 />
               </div>
@@ -198,8 +123,8 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Built for teams who manage money"
-            subheadline="Whether you're sending invoices, approving expenses, or tracking cash flow."
+            headline={content.personaSection.headline}
+            subheadline={content.personaSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-8">
             <PersonaCards
@@ -219,11 +144,16 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Replace the chaos"
-            subheadline="Move from scattered spreadsheets and manual approvals to structured operations."
+            headline={content.problemSection.headline}
+            subheadline={content.problemSection.subheadline}
           />
           <div className="mt-8">
-            <ProblemContrast items={problemItems} />
+            <ProblemContrast
+              items={content.problemSection.items.map((item, index) => ({
+                ...item,
+                icon: problemIcons[index],
+              }))}
+            />
           </div>
         </div>
       </section>
@@ -232,18 +162,18 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="What changes on day one"
-            subheadline="Clear, immediate value—not promises."
+            headline={content.outcomesSection.headline}
+            subheadline={content.outcomesSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
             <div className="lg:col-span-2">
-              <OutcomeTiles outcomes={outcomes} />
+              <OutcomeTiles outcomes={content.outcomesSection.items} />
             </div>
             <ProductPreviewFrame variant="minimal" className="p-4">
               <h4 className="text-xs font-semibold text-foreground mb-4 uppercase tracking-wide">
-                Activity snapshot
+                {content.outcomesSection.snapshotLabel}
               </h4>
-              <MiniDashboard metrics={defaultMetrics.accounting} />
+              <MiniDashboard metrics={getDefaultMetrics(locale).accounting} />
             </ProductPreviewFrame>
           </div>
         </div>
@@ -253,11 +183,17 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Core capabilities"
-            subheadline="Everything you need, configured and ready."
+            headline={content.capabilitiesSection.headline}
+            subheadline={content.capabilitiesSection.subheadline}
           />
           <div className="mt-8">
-            <CapabilityGrid capabilities={capabilities} columns={3} />
+            <CapabilityGrid
+              capabilities={content.capabilitiesSection.items.map((item, index) => ({
+                ...item,
+                icon: capabilityIcons[index],
+              }))}
+              columns={3}
+            />
           </div>
         </div>
       </section>
@@ -266,8 +202,8 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Your setup journey"
-            subheadline="From first login to daily operations in four steps."
+            headline={content.workflowSection.headline}
+            subheadline={content.workflowSection.subheadline}
           />
           <WorkflowStepper steps={workflowSteps} className="mt-8" />
         </div>
@@ -277,8 +213,8 @@ const SoftwareAccounting = () => {
       <section id="governance" className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Control who does what"
-            subheadline="Roles, permissions, and approval chains built in from day one."
+            headline={content.governanceSection.headline}
+            subheadline={content.governanceSection.subheadline}
           />
           <div className="mt-8 max-w-4xl mx-auto">
             <ProductPreviewFrame variant="card">
@@ -292,8 +228,8 @@ const SoftwareAccounting = () => {
       <section id="onboarding" className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Configured for your team, not just activated"
-            subheadline="We handle provisioning, configuration, training, and ongoing admin support."
+            headline={content.onboardingSection.headline}
+            subheadline={content.onboardingSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
             <div className="lg:col-span-2">
@@ -311,13 +247,13 @@ const SoftwareAccounting = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-xl">
             <p className="text-lg text-foreground mb-2">
-              Ledger™ for Accounting starts from EUR 500 per month, depending on users and configuration.
+              {content.pricingSection.note}
             </p>
             <p className="text-muted-foreground mb-6">
-              Setup is included in Foundation Build packages or available as a fixed onboarding fee.
+              {content.pricingSection.setupNote}
             </p>
             <PrimaryButton href="/book?intent=accounting-pricing" textColor="astral">
-              Get Accounting pricing
+              {content.pricingSection.ctaLabel}
             </PrimaryButton>
           </div>
         </div>
@@ -325,9 +261,11 @@ const SoftwareAccounting = () => {
 
       {/* Final CTA */}
       <CTABand
-        headline="Ready to get started with Ledger™?"
-        primaryCta={{ label: 'Request access', href: '/book?intent=accounting' }}
-        secondaryCta={{ label: 'Book a call', href: '/book' }}
+        headline={content.finalCta.headline}
+        description={content.finalCta.description}
+        primaryCta={{ label: content.finalCta.primaryLabel, href: '/book' }}
+        secondaryCta={{ label: content.finalCta.secondaryLabel, href: '/pricing' }}
+        visualKey="ledger-torus"
         variant="dark"
       />
     </Layout>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
+import { RevealGroup } from '@/components/motion/Reveal';
+import { useLocale } from '@/lib/locale';
 
 interface Capability {
   icon: LucideIcon;
@@ -19,6 +21,7 @@ export const CapabilityGrid: React.FC<CapabilityGridProps> = ({
   columns = 3,
   className,
 }) => {
+  const { isRTL } = useLocale();
   const gridCols = {
     2: 'md:grid-cols-2',
     3: 'md:grid-cols-2 lg:grid-cols-3',
@@ -26,7 +29,7 @@ export const CapabilityGrid: React.FC<CapabilityGridProps> = ({
   };
 
   return (
-    <div className={cn('grid grid-cols-1 gap-4', gridCols[columns], className)}>
+    <RevealGroup className={cn('grid grid-cols-1 gap-4', gridCols[columns], className)} variant="subtle" stagger={66}>
       {capabilities.map((capability, index) => {
         const Icon = capability.icon;
         return (
@@ -39,7 +42,7 @@ export const CapabilityGrid: React.FC<CapabilityGridProps> = ({
               'transition-all duration-300'
             )}
           >
-            <div className="flex items-start gap-4">
+            <div className={cn('flex items-start gap-4', isRTL && 'flex-row-reverse text-right')}>
               {/* Icon */}
               <div className={cn(
                 'flex-shrink-0 w-10 h-10 rounded-lg',
@@ -62,7 +65,7 @@ export const CapabilityGrid: React.FC<CapabilityGridProps> = ({
           </div>
         );
       })}
-    </div>
+    </RevealGroup>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Check, Clock, User } from 'lucide-react';
+import { useLocale, type Locale } from '@/lib/locale';
 
 // ============ TASK BOARD (Kanban) ============
 
@@ -26,31 +27,31 @@ const priorityStyles = {
   low: 'bg-gray-100 text-gray-600',
 };
 
-const boardData: BoardColumn[] = [
+const getBoardData = (locale: Locale): BoardColumn[] => [
   {
-    id: 'backlog', label: 'Backlog', count: 5,
+    id: 'backlog', label: locale === 'ar' ? 'متراكم' : 'Backlog', count: 5,
     tasks: [
-      { id: 't1', title: 'Update API documentation', assignee: 'JD', priority: 'low', due: 'Feb 15' },
-      { id: 't2', title: 'Design review: settings page', assignee: 'SK', priority: 'medium', due: 'Feb 10' },
+      { id: 't1', title: locale === 'ar' ? 'تحديث توثيق API' : 'Update API documentation', assignee: 'JD', priority: 'low', due: locale === 'ar' ? '15 فبراير' : 'Feb 15' },
+      { id: 't2', title: locale === 'ar' ? 'مراجعة تصميم صفحة الإعدادات' : 'Design review: settings page', assignee: 'SK', priority: 'medium', due: locale === 'ar' ? '10 فبراير' : 'Feb 10' },
     ],
   },
   {
-    id: 'progress', label: 'In Progress', count: 3,
+    id: 'progress', label: locale === 'ar' ? 'قيد التنفيذ' : 'In Progress', count: 3,
     tasks: [
-      { id: 't3', title: 'Build user dashboard', assignee: 'MR', priority: 'high', due: 'Feb 05' },
-      { id: 't4', title: 'Fix login redirect bug', assignee: 'JD', priority: 'high', due: 'Today' },
+      { id: 't3', title: locale === 'ar' ? 'بناء لوحة المستخدم' : 'Build user dashboard', assignee: 'MR', priority: 'high', due: locale === 'ar' ? '05 فبراير' : 'Feb 05' },
+      { id: 't4', title: locale === 'ar' ? 'إصلاح خطأ تحويل تسجيل الدخول' : 'Fix login redirect bug', assignee: 'JD', priority: 'high', due: locale === 'ar' ? 'اليوم' : 'Today' },
     ],
   },
   {
-    id: 'review', label: 'Review', count: 2,
+    id: 'review', label: locale === 'ar' ? 'مراجعة' : 'Review', count: 2,
     tasks: [
-      { id: 't5', title: 'Onboarding flow v2', assignee: 'SK', priority: 'medium', due: 'Feb 08' },
+      { id: 't5', title: locale === 'ar' ? 'إعداد الانضمام v2' : 'Onboarding flow v2', assignee: 'SK', priority: 'medium', due: locale === 'ar' ? '08 فبراير' : 'Feb 08' },
     ],
   },
   {
-    id: 'done', label: 'Done', count: 8,
+    id: 'done', label: locale === 'ar' ? 'مكتمل' : 'Done', count: 8,
     tasks: [
-      { id: 't6', title: 'Deploy staging environment', assignee: 'MR', priority: 'low', due: 'Jan 30' },
+      { id: 't6', title: locale === 'ar' ? 'نشر بيئة التجريب' : 'Deploy staging environment', assignee: 'MR', priority: 'low', due: locale === 'ar' ? '30 يناير' : 'Jan 30' },
     ],
   },
 ];
@@ -59,6 +60,8 @@ export const TaskBoardRealistic: React.FC<{ className?: string }> = ({ className
   const reducedMotion = useReducedMotion();
   const [highlightedColumn, setHighlightedColumn] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const { locale, isRTL } = useLocale();
+  const boardData = getBoardData(locale);
 
   useEffect(() => {
     if (reducedMotion || isHovered) return;
@@ -73,7 +76,7 @@ export const TaskBoardRealistic: React.FC<{ className?: string }> = ({ className
 
   return (
     <div
-      className={cn('flex gap-2 p-3 h-full overflow-x-auto', className)}
+      className={cn('flex gap-2 p-3 h-full overflow-x-auto', isRTL && 'flex-row-reverse text-right', className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -104,18 +107,24 @@ export const TaskBoardRealistic: React.FC<{ className?: string }> = ({ className
                 <div className="text-[11px] font-medium text-gray-900 leading-tight mb-1.5">
                   {task.title}
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
+                <div className={cn('flex items-center justify-between', isRTL && 'flex-row-reverse')}>
+                  <div className={cn('flex items-center gap-1.5', isRTL && 'flex-row-reverse')}>
                     <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[9px] font-medium text-gray-500">
                       {task.assignee}
                     </div>
                     <span className={cn('px-1.5 py-0.5 text-[8px] font-medium rounded-full', priorityStyles[task.priority])}>
-                      {task.priority}
+                      {locale === 'ar'
+                        ? task.priority === 'high'
+                          ? 'عالية'
+                          : task.priority === 'medium'
+                            ? 'متوسطة'
+                            : 'منخفضة'
+                        : task.priority}
                     </span>
                   </div>
                   <span className={cn(
                     'text-[9px]',
-                    task.due === 'Today' ? 'text-amber-600 font-medium' : 'text-gray-400'
+                    task.due === 'Today' || task.due === 'اليوم' ? 'text-amber-600 font-medium' : 'text-gray-400'
                   )}>
                     {task.due}
                   </span>
@@ -131,12 +140,12 @@ export const TaskBoardRealistic: React.FC<{ className?: string }> = ({ className
 
 // ============ TASK LIST ============
 
-const taskListData = [
-  { id: 'tl1', title: 'Follow up with Acme Corp', assignee: 'JD', due: 'Yesterday', dueStatus: 'overdue' as const, priority: 'high' as const, completed: false },
-  { id: 'tl2', title: 'Send proposal to TechStart', assignee: 'SK', due: 'Today', dueStatus: 'today' as const, priority: 'high' as const, completed: false },
-  { id: 'tl3', title: 'Schedule demo with GlobalFin', assignee: 'JD', due: 'Tomorrow', dueStatus: 'upcoming' as const, priority: 'medium' as const, completed: false },
-  { id: 'tl4', title: 'Update project timeline', assignee: 'MR', due: 'Friday', dueStatus: 'upcoming' as const, priority: 'low' as const, completed: true },
-  { id: 'tl5', title: 'Review design mockups', assignee: 'SK', due: 'Thursday', dueStatus: 'upcoming' as const, priority: 'medium' as const, completed: false },
+const getTaskListData = (locale: Locale) => [
+  { id: 'tl1', title: locale === 'ar' ? 'متابعة مع Acme Corp' : 'Follow up with Acme Corp', assignee: 'JD', due: locale === 'ar' ? 'أمس' : 'Yesterday', dueStatus: 'overdue' as const, priority: 'high' as const, completed: false },
+  { id: 'tl2', title: locale === 'ar' ? 'إرسال عرض السعر إلى TechStart' : 'Send proposal to TechStart', assignee: 'SK', due: locale === 'ar' ? 'اليوم' : 'Today', dueStatus: 'today' as const, priority: 'high' as const, completed: false },
+  { id: 'tl3', title: locale === 'ar' ? 'جدولة عرض توضيحي مع GlobalFin' : 'Schedule demo with GlobalFin', assignee: 'JD', due: locale === 'ar' ? 'غداً' : 'Tomorrow', dueStatus: 'upcoming' as const, priority: 'medium' as const, completed: false },
+  { id: 'tl4', title: locale === 'ar' ? 'تحديث الجدول الزمني للمشروع' : 'Update project timeline', assignee: 'MR', due: locale === 'ar' ? 'الجمعة' : 'Friday', dueStatus: 'upcoming' as const, priority: 'low' as const, completed: true },
+  { id: 'tl5', title: locale === 'ar' ? 'مراجعة نماذج التصميم' : 'Review design mockups', assignee: 'SK', due: locale === 'ar' ? 'الخميس' : 'Thursday', dueStatus: 'upcoming' as const, priority: 'medium' as const, completed: false },
 ];
 
 const dueDateStyles = {
@@ -147,9 +156,15 @@ const dueDateStyles = {
 
 export const TaskListRealistic: React.FC<{ className?: string }> = ({ className }) => {
   const reducedMotion = useReducedMotion();
+  const { locale, isRTL } = useLocale();
+  const taskListData = getTaskListData(locale);
   const [tasks, setTasks] = useState(taskListData);
   const [filter, setFilter] = useState<'my' | 'team'>('my');
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    setTasks(taskListData);
+  }, [taskListData]);
 
   useEffect(() => {
     if (reducedMotion || isHovered) return;
@@ -175,12 +190,12 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
 
   return (
     <div
-      className={cn('h-full flex flex-col p-3', className)}
+      className={cn('h-full flex flex-col p-3', isRTL && 'text-right', className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Toggle */}
-      <div className="flex items-center gap-1 mb-3">
+      <div className={cn('flex items-center gap-1 mb-3', isRTL && 'flex-row-reverse')}>
         <button
           onClick={() => setFilter('my')}
           className={cn(
@@ -188,7 +203,7 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
             filter === 'my' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           )}
         >
-          My Tasks
+          {locale === 'ar' ? 'مهامي' : 'My Tasks'}
         </button>
         <button
           onClick={() => setFilter('team')}
@@ -197,7 +212,7 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
             filter === 'team' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           )}
         >
-          Team
+          {locale === 'ar' ? 'الفريق' : 'Team'}
         </button>
       </div>
 
@@ -208,6 +223,7 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
             key={task.id}
             className={cn(
               'flex items-center gap-3 p-2.5 bg-white rounded-lg border border-gray-200',
+              isRTL && 'flex-row-reverse',
               'transition-all duration-300 hover:border-gray-300',
               task.completed && 'opacity-60'
             )}
@@ -237,7 +253,13 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
             </span>
 
             <span className={cn('px-2 py-0.5 text-[9px] font-medium rounded-full', priorityStyles[task.priority])}>
-              {task.priority}
+              {locale === 'ar'
+                ? task.priority === 'high'
+                  ? 'عالية'
+                  : task.priority === 'medium'
+                    ? 'متوسطة'
+                    : 'منخفضة'
+                : task.priority}
             </span>
 
             <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[9px] font-medium text-gray-500">
@@ -252,23 +274,30 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
 
 // ============ APPROVALS FLOW ============
 
-const approvalSteps = [
-  { id: 'as1', reviewer: 'JD', title: 'Technical Review', status: 'approved' as const, timestamp: 'Jan 28, 10:15 AM' },
-  { id: 'as2', reviewer: 'SK', title: 'Design Review', status: 'approved' as const, timestamp: 'Jan 29, 2:30 PM' },
-  { id: 'as3', reviewer: 'MR', title: 'Manager Approval', status: 'pending' as const, timestamp: '—' },
-  { id: 'as4', reviewer: 'AL', title: 'Final Sign-off', status: 'waiting' as const, timestamp: '—' },
+const getApprovalSteps = (locale: Locale) => [
+  { id: 'as1', reviewer: 'JD', title: locale === 'ar' ? 'مراجعة تقنية' : 'Technical Review', status: 'approved' as const, timestamp: locale === 'ar' ? '28 يناير، 10:15 ص' : 'Jan 28, 10:15 AM' },
+  { id: 'as2', reviewer: 'SK', title: locale === 'ar' ? 'مراجعة التصميم' : 'Design Review', status: 'approved' as const, timestamp: locale === 'ar' ? '29 يناير، 2:30 م' : 'Jan 29, 2:30 PM' },
+  { id: 'as3', reviewer: 'MR', title: locale === 'ar' ? 'اعتماد المدير' : 'Manager Approval', status: 'pending' as const, timestamp: '—' },
+  { id: 'as4', reviewer: 'AL', title: locale === 'ar' ? 'اعتماد نهائي' : 'Final Sign-off', status: 'waiting' as const, timestamp: '—' },
 ];
 
-const stepStatusStyles = {
-  approved: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Approved' },
-  pending: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Pending' },
-  waiting: { bg: 'bg-gray-100', text: 'text-gray-500', label: 'Waiting' },
-};
+const getStepStatusStyles = (locale: Locale) => ({
+  approved: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: locale === 'ar' ? 'مُعتمد' : 'Approved' },
+  pending: { bg: 'bg-amber-100', text: 'text-amber-700', label: locale === 'ar' ? 'معلق' : 'Pending' },
+  waiting: { bg: 'bg-gray-100', text: 'text-gray-500', label: locale === 'ar' ? 'بانتظار' : 'Waiting' },
+});
 
 export const ApprovalsFlowRealistic: React.FC<{ className?: string }> = ({ className }) => {
   const reducedMotion = useReducedMotion();
+  const { locale, isRTL } = useLocale();
+  const approvalSteps = getApprovalSteps(locale);
+  const stepStatusStyles = getStepStatusStyles(locale);
   const [steps, setSteps] = useState(approvalSteps);
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    setSteps(approvalSteps);
+  }, [approvalSteps]);
 
   useEffect(() => {
     if (reducedMotion || isHovered) return;
@@ -277,7 +306,7 @@ export const ApprovalsFlowRealistic: React.FC<{ className?: string }> = ({ class
     const interval = setInterval(() => {
       if (index < pendingIds.length) {
         setSteps(prev => prev.map(s =>
-          s.id === pendingIds[index] ? { ...s, status: 'approved' as const, timestamp: 'Just now' } : s
+          s.id === pendingIds[index] ? { ...s, status: 'approved' as const, timestamp: locale === 'ar' ? 'الآن' : 'Just now' } : s
         ));
         index++;
       } else {
@@ -286,22 +315,22 @@ export const ApprovalsFlowRealistic: React.FC<{ className?: string }> = ({ class
       }
     }, 3000);
     return () => clearInterval(interval);
-  }, [reducedMotion, isHovered]);
+  }, [reducedMotion, isHovered, approvalSteps, locale]);
 
   return (
     <div
-      className={cn('h-full flex flex-col p-3', className)}
+      className={cn('h-full flex flex-col p-3', isRTL && 'text-right', className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="text-xs font-medium text-gray-700 mb-1">Approval Chain</div>
-      <div className="text-[10px] text-gray-500 mb-4">Project: Dashboard v2 Release</div>
+      <div className="text-xs font-medium text-gray-700 mb-1">{locale === 'ar' ? 'سلسلة الاعتماد' : 'Approval Chain'}</div>
+      <div className="text-[10px] text-gray-500 mb-4">{locale === 'ar' ? 'المشروع: إصدار Dashboard v2' : 'Project: Dashboard v2 Release'}</div>
 
       <div className="flex-1 space-y-0">
         {steps.map((step, i) => {
           const st = stepStatusStyles[step.status];
           return (
-            <div key={step.id} className="flex gap-3">
+            <div key={step.id} className={cn('flex gap-3', isRTL && 'flex-row-reverse')}>
               {/* Vertical line + dot */}
               <div className="flex flex-col items-center">
                 <div className={cn(
@@ -324,16 +353,16 @@ export const ApprovalsFlowRealistic: React.FC<{ className?: string }> = ({ class
 
               {/* Content */}
               <div className="pb-4 flex-1">
-                <div className="flex items-center gap-2 mb-0.5">
+                <div className={cn('flex items-center gap-2 mb-0.5', isRTL && 'flex-row-reverse')}>
                   <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[9px] font-medium text-gray-500">
                     {step.reviewer}
                   </div>
                   <span className="text-[11px] font-medium text-gray-900">{step.title}</span>
-                  <span className={cn('px-2 py-0.5 text-[9px] font-medium rounded-full ml-auto', st.bg, st.text)}>
+                  <span className={cn('px-2 py-0.5 text-[9px] font-medium rounded-full', isRTL ? 'mr-auto' : 'ml-auto', st.bg, st.text)}>
                     {st.label}
                   </span>
                 </div>
-                <span className="text-[9px] text-gray-400 ml-7">{step.timestamp}</span>
+                <span className={cn('text-[9px] text-gray-400', isRTL ? 'mr-7' : 'ml-7')}>{step.timestamp}</span>
               </div>
             </div>
           );
@@ -345,17 +374,20 @@ export const ApprovalsFlowRealistic: React.FC<{ className?: string }> = ({ class
 
 // ============ TIMELINE (Gantt) ============
 
-const timelineProjects = [
-  { id: 'p1', name: 'Dashboard v2', progress: 75, start: 0, width: 65, assignee: 'JD', color: 'bg-blue-400' },
-  { id: 'p2', name: 'API Migration', progress: 40, start: 15, width: 50, assignee: 'SK', color: 'bg-emerald-400' },
-  { id: 'p3', name: 'Mobile App', progress: 20, start: 30, width: 70, assignee: 'MR', color: 'bg-amber-400' },
-  { id: 'p4', name: 'Security Audit', progress: 90, start: 5, width: 35, assignee: 'AL', color: 'bg-purple-400' },
+const getTimelineProjects = (locale: Locale) => [
+  { id: 'p1', name: locale === 'ar' ? 'Dashboard v2' : 'Dashboard v2', progress: 75, start: 0, width: 65, assignee: 'JD', color: 'bg-blue-400' },
+  { id: 'p2', name: locale === 'ar' ? 'ترحيل API' : 'API Migration', progress: 40, start: 15, width: 50, assignee: 'SK', color: 'bg-emerald-400' },
+  { id: 'p3', name: locale === 'ar' ? 'تطبيق الجوال' : 'Mobile App', progress: 20, start: 30, width: 70, assignee: 'MR', color: 'bg-amber-400' },
+  { id: 'p4', name: locale === 'ar' ? 'تدقيق أمني' : 'Security Audit', progress: 90, start: 5, width: 35, assignee: 'AL', color: 'bg-purple-400' },
 ];
 
-const weeks = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8'];
+const getWeeks = (locale: Locale) => (locale === 'ar' ? ['أ1', 'أ2', 'أ3', 'أ4', 'أ5', 'أ6', 'أ7', 'أ8'] : ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8']);
 
 export const TimelineRealistic: React.FC<{ className?: string }> = ({ className }) => {
   const reducedMotion = useReducedMotion();
+  const { locale, isRTL } = useLocale();
+  const timelineProjects = getTimelineProjects(locale);
+  const weeks = getWeeks(locale);
   const [animatedWidths, setAnimatedWidths] = useState<number[]>(
     reducedMotion ? timelineProjects.map(p => p.width) : timelineProjects.map(() => 0)
   );
@@ -371,14 +403,14 @@ export const TimelineRealistic: React.FC<{ className?: string }> = ({ className 
 
   return (
     <div
-      className={cn('h-full flex flex-col p-3', className)}
+      className={cn('h-full flex flex-col p-3', isRTL && 'text-right', className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Week headers */}
-      <div className="flex items-center mb-3 pl-[120px]">
+      <div className={cn('flex items-center mb-3 pl-[120px]', isRTL && 'pr-[120px] pl-0')}>
         {weeks.map((w) => (
-          <div key={w} className="flex-1 text-center text-[9px] font-medium text-gray-400 border-l border-gray-100 first:border-l-0">
+          <div key={w} className={cn('flex-1 text-center text-[9px] font-medium text-gray-400 border-l border-gray-100 first:border-l-0', isRTL && 'border-r border-l-0 first:border-r-0')}>
             {w}
           </div>
         ))}
@@ -387,7 +419,7 @@ export const TimelineRealistic: React.FC<{ className?: string }> = ({ className 
       {/* Project rows */}
       <div className="flex-1 space-y-3">
         {timelineProjects.map((project, i) => (
-          <div key={project.id} className="flex items-center gap-3">
+          <div key={project.id} className={cn('flex items-center gap-3', isRTL && 'flex-row-reverse')}>
             {/* Label */}
             <div className="w-[108px] flex-shrink-0">
               <div className="text-[11px] font-medium text-gray-900">{project.name}</div>

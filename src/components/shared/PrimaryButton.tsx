@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { useBooking } from '@/contexts/BookingContext';
+import { isExternalHref, resolveBookingHref } from '@/lib/booking';
 
 type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy' | 'ink';
 
@@ -12,7 +12,7 @@ const textColorClasses: Record<PlateColor, string> = {
   blue: 'text-plate-blue',
   astral: 'text-plate-astral',
   burgundy: 'text-plate-burgundy',
-  ink: 'text-ink',
+  ink: 'text-foreground',
 };
 
 interface PrimaryButtonProps {
@@ -36,16 +36,14 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   size = 'default',
   textColor = 'ink',
 }) => {
-  const booking = (() => {
-    try { return useBooking(); } catch { return null; }
-  })();
-
   const sizeStyles = size === 'lg'
     ? 'h-14 px-8 text-lg'
     : 'h-12 md:h-[48px] px-5 md:px-6 text-base';
 
   const baseStyles = cn(
     'inline-flex items-center justify-center',
+    'adsi-button',
+    size === 'lg' ? 'adsi-button--lg' : 'adsi-button--default',
     sizeStyles,
     'rounded-lg',
     'bg-mint',
@@ -58,23 +56,24 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     className
   );
 
-  // Intercept /book links to open booking modal
-  if (href?.startsWith('/book') && booking) {
+  const resolvedHref = resolveBookingHref(href);
+
+  if (resolvedHref && isExternalHref(resolvedHref)) {
     return (
-      <button
-        type="button"
-        onClick={booking.openBooking}
+      <a
+        href={resolvedHref}
+        target="_blank"
+        rel="noreferrer"
         className={baseStyles}
-        disabled={disabled}
       >
         {children}
-      </button>
+      </a>
     );
   }
 
-  if (href) {
+  if (resolvedHref) {
     return (
-      <Link to={href} className={baseStyles}>
+      <Link to={resolvedHref} className={baseStyles}>
         {children}
       </Link>
     );

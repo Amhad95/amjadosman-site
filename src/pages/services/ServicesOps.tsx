@@ -2,189 +2,195 @@ import React from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { SectionHeader } from '@/components/shared/SectionHeader';
-import { PricingZone } from '@/components/sections/PricingZone';
-import { RecommendedOfferCard } from '@/components/sections/RecommendedOfferCard';
-import { ServiceMenuList } from '@/components/sections/ServiceMenuList';
-import { RetainerCard } from '@/components/sections/RetainerCard';
-import { Steps } from '@/components/sections/Steps';
+import { ServicePricingStack } from '@/components/sections/ServicePricingStack';
+import { ServiceDeliverySection } from '@/components/sections/ServiceDeliverySection';
 import { CTABand } from '@/components/sections/CTABand';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { STRIPE_PRICES } from '@/lib/stripe';
+import { OutcomeMotionCard, OutcomeMotionVariant } from '@/components/services/OutcomeMotionCard';
+import { ClipboardCheck, FileText, Folders, SearchCheck, ShieldCheck, Users, Workflow } from 'lucide-react';
+import { usePricingContent } from '@/lib/pricingContent';
+import { useLocale } from '@/lib/locale';
+import { getServicePageContent } from '@/lib/servicePageContent';
+import { cn } from '@/lib/utils';
 
-const outcomes = [
-  { title: 'Findability and permissions that make sense.', body: 'Files organized with clear ownership and access rules.' },
-  { title: 'Processes documented with ownership.', body: 'SOPs that people follow because they are clear and accessible.' },
-  { title: 'Faster onboarding with less dependence on individuals.', body: 'New hires productive without shadowing for weeks.' },
-  { title: 'Controlled requests and approvals.', body: 'Workflows that route properly instead of email chains.' },
+const outcomeMotions: OutcomeMotionVariant[] = [
+  'ops-files',
+  'ops-processes',
+  'ops-onboarding',
+  'ops-handoffs',
 ];
 
-const serviceGroups = [
-  { title: 'SharePoint Architecture', items: ['Site and library structure', 'Permissions and roles', 'Naming conventions and governance rules'] },
-  { title: 'SOPs and Templates', items: ['SOP library', 'Forms and templates', 'Approval workflows'] },
-  { title: 'Onboarding System', items: ['Onboarding checklists', 'Team guides', 'Knowledge base structure'] },
-];
-
-const faqs = [
-  { q: 'Do you work with our existing SharePoint?', a: 'Yes. We audit your current setup and restructure or build on top of it depending on what makes sense.' },
-  { q: 'How many SOPs are included?', a: 'Depends on the package. The SOP Library Pack typically covers 15-25 procedures. Individual SOPs are also available.' },
-  { q: 'Can you train our team?', a: 'Yes. Handover includes documentation and training sessions. Ongoing training is available via retainer.' },
-  { q: 'What if we use Google Workspace instead?', a: 'We can adapt the approach. The principles of structure, governance, and documentation apply regardless of platform.' },
-  { q: 'How long does a SharePoint setup take?', a: 'Typically 2-3 weeks for core architecture. Complex multi-site setups take longer.' },
-  { q: 'Do retainers cover new SOP creation?', a: 'Standard and Priority tiers include new SOP creation. Lite covers updates to existing SOPs.' },
-];
+const deliverableIcons = [Folders, ClipboardCheck, Users];
+const proofSignalIcons = [SearchCheck, Workflow, FileText, ShieldCheck];
 
 const ServicesOps = () => {
+  const { locale, isRTL } = useLocale();
+  const { servicePricingTracks } = usePricingContent();
+  const pricingTrack = servicePricingTracks.ops;
+  const content = getServicePageContent(locale).ops;
+
   return (
     <Layout>
       <Hero
-        headline="Internal Operations Systems"
-        subheadline="SharePoint, SOPs, templates, and governance that reduce operational drag."
-        primaryCta={{ label: 'Pay and start', href: '#pricing' }}
-        secondaryCta={{ label: 'Book a call', href: '/book' }}
+        eyebrow={content.hero.eyebrow}
+        headline={content.hero.headline}
+        subheadline={content.hero.subheadline}
+        primaryCta={{ label: content.hero.primaryCtaLabel, href: '#pricing' }}
+        secondaryCta={{ label: content.hero.secondaryCtaLabel, href: '/book' }}
         plate="navy"
+        rightElement={
+          <div className="w-full max-w-xl">
+            <div className={cn('rounded-[30px] border border-white/12 bg-white/5 backdrop-blur-xl p-5 shadow-2xl shadow-black/20', isRTL && 'text-right')}>
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-2">{content.summaryPanel.mostRequested.label}</p>
+                  <p className="font-serif text-2xl text-mint leading-none mb-2">{content.summaryPanel.mostRequested.title}</p>
+                  <p className="text-sm text-offwhite/70">{content.summaryPanel.mostRequested.body}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-2">{content.summaryPanel.typicalStart.label}</p>
+                  <p className="font-serif text-2xl text-mint leading-none mb-2">{content.summaryPanel.typicalStart.title}</p>
+                  <p className="text-sm text-offwhite/70">{content.summaryPanel.typicalStart.body}</p>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/10 p-5">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-3">{content.summaryPanel.includedLabel}</p>
+                <div className="space-y-3">
+                  {content.summaryPanel.includedItems.map((item) => (
+                    <div key={item} className={cn('flex items-center justify-between border-b border-white/10 pb-3 last:border-b-0 last:pb-0', isRTL && 'flex-row-reverse')}>
+                      <p className="text-offwhite font-medium">{item}</p>
+                      <span className="text-mint text-sm">{content.summaryPanel.readyToScopeLabel}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        }
       />
 
-      {/* Outcomes */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="What this track covers" variant="poster" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {outcomes.map((o, i) => (
-              <div key={i} className="bg-card border border-ink/10 rounded-2xl p-8">
-                <h3 className="font-serif text-lg text-foreground mb-2">{o.title}</h3>
-                <p className="text-body-md text-muted-foreground">{o.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services */}
-      <section className="py-16 md:py-24 bg-muted">
-        <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="Services in this track" variant="poster" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {serviceGroups.map((group, i) => (
-              <div key={i}>
-                <h3 className="font-serif text-heading-md text-foreground mb-4">{group.title}</h3>
-                <ul className="space-y-2">
-                  {group.items.map((item, j) => (
-                    <li key={j} className="text-body-md text-muted-foreground flex items-start gap-2">
-                      <span className="text-mint mt-1">•</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="pricing" className="py-16 md:py-24 bg-background scroll-mt-24">
-        <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="Pricing" variant="poster" />
-
-          <PricingZone headline="Recommended starting points" description="Common entry offers with fixed scope and timeline.">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <RecommendedOfferCard
-                name="Ops Audit"
-                inclusions={['Current state assessment', 'Gap analysis', 'Recommendations report']}
-                timeline="5-7 business days"
-                price="Starting from EUR 2,000"
-                payHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.ops_audit}
-              />
-              <RecommendedOfferCard
-                name="SharePoint Setup"
-                inclusions={['Site architecture', 'Document libraries', 'Permissions model', 'Governance rules']}
-                timeline="2-3 weeks"
-                price="Starting from EUR 4,000"
-                payHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.sharepoint_setup}
-              />
-              <RecommendedOfferCard
-                name="SOP Library Pack"
-                inclusions={['15-25 SOPs documented', 'Role mapping', 'QA checklists', 'Update workflow']}
-                timeline="2-3 weeks"
-                price="Starting from EUR 3,500"
-                payHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.sop_pack}
-              />
-            </div>
-          </PricingZone>
-
-          <PricingZone headline="Pick individual services" description="Available separately at project-based pricing.">
-            <ServiceMenuList
-              items={[
-                { name: 'Permissions overhaul', startingPrice: 'Starting from EUR 1,500', bookHref: '/book', stripePriceId: STRIPE_PRICES.permissions_overhaul },
-                { name: 'SOP creation (per SOP)', startingPrice: 'Starting from EUR 800', bookHref: '/book', stripePriceId: STRIPE_PRICES.sop_creation },
-                { name: 'Template library setup', startingPrice: 'Starting from EUR 1,200', bookHref: '/book', stripePriceId: STRIPE_PRICES.template_library },
-              ]}
-            />
-          </PricingZone>
-
-          <PricingZone headline="Retainers" description="Monthly operations maintenance.">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <RetainerCard
-                tier="Ops Maintenance Lite"
-                inclusions={['SOP updates', 'Minor SharePoint changes', 'Monthly review']}
-                responseTime="Response within 3 business days"
-                price="EUR 600/mo"
-                subscribeHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.ops_retainer_lite}
-              />
-              <RetainerCard
-                tier="Standard"
-                inclusions={['SOP creation and updates', 'SharePoint changes', 'New workflows', 'Priority support']}
-                responseTime="Response within 1 business day"
-                price="EUR 1,200/mo"
-                subscribeHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.ops_retainer_standard}
-              />
-              <RetainerCard
-                tier="Priority"
-                inclusions={['Unlimited changes', 'New system builds', 'Training sessions', 'Same-day response']}
-                responseTime="Same-day response"
-                price="EUR 2,000/mo"
-                subscribeHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.ops_retainer_priority}
-              />
-            </div>
-          </PricingZone>
-        </div>
-      </section>
-
-      {/* How we deliver */}
-      <section className="py-16 md:py-24 bg-muted">
-        <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="How we deliver" variant="poster" />
-          <Steps
-            steps={[
-              { title: 'Audit', description: 'Review current systems and identify gaps.' },
-              { title: 'Architecture', description: 'Design structure, permissions, and governance.' },
-              { title: 'Build', description: 'Implement in structured sprints with async updates.' },
-              { title: 'Handover', description: 'Documentation, training, and knowledge transfer.' },
-              { title: 'Optional retainer', description: 'Ongoing maintenance and support.' },
-            ]}
+          <SectionHeader
+            eyebrow={content.outcomesSection.eyebrow}
+            headline={content.outcomesSection.headline}
+            subheadline={content.outcomesSection.subheadline}
+            variant="poster"
           />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {content.outcomesSection.items.map((item, index) => (
+              <OutcomeMotionCard
+                key={item.title}
+                title={item.title}
+                body={item.body}
+                variant={outcomeMotions[index]}
+                tone="ops"
+                sequence={index + 1}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      <section className="py-16 md:py-24 bg-muted">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-14 items-start">
+            <div>
+              <SectionHeader
+                eyebrow={content.whyHireSection.eyebrow}
+                headline={content.whyHireSection.headline}
+                subheadline={content.whyHireSection.subheadline}
+                variant="poster"
+              />
+              <ul className="space-y-3">
+                {content.whyHireSection.reasons.map((item) => (
+                  <li key={item} className={cn('flex items-start gap-3 text-body-md text-muted-foreground', isRTL && 'flex-row-reverse text-right')}>
+                    <span className="text-mint mt-1">•</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={cn('rounded-[30px] bg-plate-astral p-6 md:p-8 text-offwhite border border-lavender/20 shadow-xl', isRTL && 'text-right')}>
+              <p className="text-xs uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-4">
+                {content.deliverablesSection.title}
+              </p>
+              <div className="grid grid-cols-1 gap-4">
+                {content.deliverablesSection.items.map((item, index) => {
+                  const Icon = deliverableIcons[index];
+                  return (
+                    <div key={item.title} className="rounded-2xl border border-white/10 bg-black/10 p-5">
+                      <div className="w-11 h-11 rounded-xl bg-white/6 text-mint flex items-center justify-center mb-4">
+                        {Icon ? <Icon size={20} /> : null}
+                      </div>
+                      <h3 className="font-serif text-2xl text-mint mb-2">{item.title}</h3>
+                      <p className="text-sm text-offwhite/72 leading-relaxed">{item.body}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader
+            eyebrow={content.signalSection.eyebrow}
+            headline={content.signalSection.headline}
+            subheadline={content.signalSection.subheadline}
+            variant="poster"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {content.signalSection.items.map((item, index) => {
+              const Icon = proofSignalIcons[index];
+              return (
+                <div key={item.title} className={cn('rounded-2xl border border-ink/10 bg-card p-8 transition-all duration-200 hover:border-ink/20 hover:shadow-lg', isRTL && 'text-right')}>
+                  <div className="w-11 h-11 rounded-xl bg-plate-astral text-mint flex items-center justify-center mb-4">
+                    {Icon ? <Icon size={20} /> : null}
+                  </div>
+                  <h3 className="font-serif text-heading-md text-foreground mb-3">{item.title}</h3>
+                  <p className="text-body-md text-muted-foreground">{item.body}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" className="py-16 md:py-24 bg-muted scroll-mt-24">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader
+            eyebrow={content.pricingSection.eyebrow}
+            headline={content.pricingSection.headline}
+            subheadline={pricingTrack.pricingIntro}
+            variant="poster"
+          />
+          <ServicePricingStack track={pricingTrack} />
+        </div>
+      </section>
+
+      <ServiceDeliverySection
+        subheadline={content.deliverySection.subheadline}
+        steps={content.deliverySection.steps.map((step, index) => ({
+          ...step,
+          icon: [SearchCheck, Workflow, Folders, Users, ShieldCheck][index],
+        }))}
+      />
+
+      <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <SectionHeader headline="Frequently asked questions" variant="poster" />
+          <SectionHeader
+            eyebrow={content.faqSection.eyebrow}
+            headline={content.faqSection.headline}
+            subheadline={content.faqSection.subheadline}
+            variant="poster"
+          />
           <Accordion type="single" collapsible>
-            {faqs.map((faq, i) => (
-              <AccordionItem key={i} value={`faq-${i}`}>
+            {content.faqSection.items.map((faq, index) => (
+              <AccordionItem key={faq.q} value={`faq-${index}`}>
                 <AccordionTrigger className="font-serif text-lg text-foreground">{faq.q}</AccordionTrigger>
                 <AccordionContent className="text-body-md text-muted-foreground">{faq.a}</AccordionContent>
               </AccordionItem>
@@ -194,9 +200,11 @@ const ServicesOps = () => {
       </section>
 
       <CTABand
-        headline="Ready to fix your operations infrastructure?"
-        primaryCta={{ label: 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: 'View all services', href: '/services' }}
+        headline={content.ctaBand.headline}
+        description={content.ctaBand.description}
+        primaryCta={{ label: content.ctaBand.primaryLabel, href: '/book' }}
+        secondaryCta={{ label: content.ctaBand.secondaryLabel, href: '/pricing' }}
+        visualKey="stack-cube"
         variant="dark"
       />
     </Layout>

@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ArrowRight, Image as ImageIcon } from 'lucide-react';
+import { RevealGroup } from '@/components/motion/Reveal';
+import { useLocale } from '@/lib/locale';
 
 interface Tile {
   title: string;
@@ -17,8 +19,12 @@ interface ProofTilesProps {
 }
 
 export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
+  const { locale, isRTL } = useLocale();
   return (
-    <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6', className)}>
+    <RevealGroup
+      className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6', className)}
+      stagger={74}
+    >
       {tiles.map((tile) => {
         const content = (
           <>
@@ -33,13 +39,15 @@ export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
               ) : (
                 <div className="flex flex-col items-center justify-center text-muted-foreground/50 gap-2">
                   <ImageIcon size={32} strokeWidth={1.5} />
-                  <span className="text-xs font-medium uppercase tracking-wider">Project Preview</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">
+                    {locale === 'ar' ? 'معاينة المشروع' : 'Project Preview'}
+                  </span>
                 </div>
               )}
             </div>
             
             {/* Content */}
-            <div className="p-3 md:p-4">
+            <div className={cn('p-3 md:p-4', isRTL && 'text-right')}>
               <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
                 {tile.title}
               </h3>
@@ -47,9 +55,9 @@ export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
                 {tile.description}
               </p>
               {tile.cta && (
-                <span className="inline-flex items-center gap-2 text-sm font-medium text-ink group-hover:text-lavender transition-colors">
+                <span className={cn('inline-flex items-center gap-2 text-sm font-medium text-foreground group-hover:text-lavender transition-colors', isRTL && 'flex-row-reverse')}>
                   {tile.cta}
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={16} className={cn('transition-transform', isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1')} />
                 </span>
               )}
             </div>
@@ -77,7 +85,7 @@ export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
           </div>
         );
       })}
-    </div>
+    </RevealGroup>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { useBooking } from '@/contexts/BookingContext';
+import { isExternalHref, resolveBookingHref } from '@/lib/booking';
 
 interface SecondaryButtonProps {
   children: React.ReactNode;
@@ -22,12 +22,9 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   disabled = false,
   variant = 'light',
 }) => {
-  const booking = (() => {
-    try { return useBooking(); } catch { return null; }
-  })();
-
   const baseStyles = cn(
     'inline-flex items-center justify-center',
+    'adsi-button adsi-button--default',
     'h-12 md:h-[48px] px-5 md:px-6',
     'rounded-lg',
     'bg-transparent',
@@ -37,27 +34,28 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
     'disabled:opacity-50 disabled:cursor-not-allowed',
     variant === 'dark'
       ? 'border border-mint/55 text-mint hover:bg-mint/10'
-      : 'border border-ink/20 text-ink hover:bg-ink/5',
+      : 'border border-ink/20 text-foreground hover:bg-ink/5',
     className
   );
 
-  // Intercept /book links to open booking modal
-  if (href?.startsWith('/book') && booking) {
+  const resolvedHref = resolveBookingHref(href);
+
+  if (resolvedHref && isExternalHref(resolvedHref)) {
     return (
-      <button
-        type="button"
-        onClick={booking.openBooking}
+      <a
+        href={resolvedHref}
+        target="_blank"
+        rel="noreferrer"
         className={baseStyles}
-        disabled={disabled}
       >
         {children}
-      </button>
+      </a>
     );
   }
 
-  if (href) {
+  if (resolvedHref) {
     return (
-      <Link to={href} className={baseStyles}>
+      <Link to={resolvedHref} className={baseStyles}>
         {children}
       </Link>
     );

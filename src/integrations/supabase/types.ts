@@ -17,41 +17,53 @@ export type Database = {
       articles: {
         Row: {
           body: string | null
+          body_ar: string | null
           category: string | null
+          category_ar: string | null
           created_at: string
           excerpt: string
+          excerpt_ar: string | null
           id: string
           published: boolean
           slug: string
           sort_order: number
           thumbnail_url: string | null
           title: string
+          title_ar: string | null
           updated_at: string
         }
         Insert: {
           body?: string | null
+          body_ar?: string | null
           category?: string | null
+          category_ar?: string | null
           created_at?: string
           excerpt: string
+          excerpt_ar?: string | null
           id?: string
           published?: boolean
           slug: string
           sort_order?: number
           thumbnail_url?: string | null
           title: string
+          title_ar?: string | null
           updated_at?: string
         }
         Update: {
           body?: string | null
+          body_ar?: string | null
           category?: string | null
+          category_ar?: string | null
           created_at?: string
           excerpt?: string
+          excerpt_ar?: string | null
           id?: string
           published?: boolean
           slug?: string
           sort_order?: number
           thumbnail_url?: string | null
           title?: string
+          title_ar?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -59,41 +71,53 @@ export type Database = {
       work_cases: {
         Row: {
           category: string | null
+          category_ar: string | null
           created_at: string
           cta_label: string
+          cta_label_ar: string | null
           description: string
+          description_ar: string | null
           href: string
           id: string
           published: boolean
           sort_order: number
           thumbnail_url: string | null
           title: string
+          title_ar: string | null
           updated_at: string
         }
         Insert: {
           category?: string | null
+          category_ar?: string | null
           created_at?: string
           cta_label?: string
+          cta_label_ar?: string | null
           description: string
+          description_ar?: string | null
           href: string
           id?: string
           published?: boolean
           sort_order?: number
           thumbnail_url?: string | null
           title: string
+          title_ar?: string | null
           updated_at?: string
         }
         Update: {
           category?: string | null
+          category_ar?: string | null
           created_at?: string
           cta_label?: string
+          cta_label_ar?: string | null
           description?: string
+          description_ar?: string | null
           href?: string
           id?: string
           published?: boolean
           sort_order?: number
           thumbnail_url?: string | null
           title?: string
+          title_ar?: string | null
           updated_at?: string
         }
         Relationships: []

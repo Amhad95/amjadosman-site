@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
+import { useLocale } from '@/lib/locale';
 
 interface ToolInputFormProps {
   children: React.ReactNode;
@@ -17,11 +18,13 @@ export const ToolInputForm: React.FC<ToolInputFormProps> = ({
   submitLabel = 'Generate',
   className,
 }) => {
+  const { locale, isRTL } = useLocale();
   return (
     <form
       onSubmit={onSubmit}
       className={cn(
         'bg-card border border-border rounded-2xl p-6 md:p-8',
+        isRTL && 'text-right',
         className
       )}
     >
@@ -34,7 +37,11 @@ export const ToolInputForm: React.FC<ToolInputFormProps> = ({
           disabled={isLoading}
           className="w-full sm:w-auto"
         >
-          {isLoading ? 'Generating...' : submitLabel}
+          {isLoading
+            ? locale === 'ar'
+              ? 'جارٍ التوليد...'
+              : 'Generating...'
+            : submitLabel}
         </PrimaryButton>
       </div>
     </form>

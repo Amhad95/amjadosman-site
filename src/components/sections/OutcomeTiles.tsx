@@ -1,6 +1,8 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { TrendingUp, Clock, Shield, Target } from 'lucide-react';
+import { RevealGroup } from '@/components/motion/Reveal';
+import { useLocale } from '@/lib/locale';
 
 interface Outcome {
   headline: string;
@@ -16,8 +18,10 @@ interface OutcomeTilesProps {
 const defaultIcons = [TrendingUp, Clock, Shield, Target];
 
 export const OutcomeTiles: React.FC<OutcomeTilesProps> = ({ outcomes, className }) => {
+  const { isRTL } = useLocale();
+
   return (
-    <div className={cn('grid grid-cols-1 sm:grid-cols-2 gap-4', className)}>
+    <RevealGroup className={cn('grid grid-cols-1 sm:grid-cols-2 gap-4', className)} variant="subtle" stagger={68}>
       {outcomes.map((outcome, index) => {
         const Icon = outcome.icon || defaultIcons[index % defaultIcons.length];
         
@@ -31,7 +35,7 @@ export const OutcomeTiles: React.FC<OutcomeTilesProps> = ({ outcomes, className 
               'transition-all duration-300'
             )}
           >
-            <div className="flex items-start gap-4">
+            <div className={cn('flex items-start gap-4', isRTL && 'flex-row-reverse text-right')}>
               <div className={cn(
                 'flex-shrink-0 w-10 h-10 rounded-lg',
                 'bg-gray-100 text-gray-600',
@@ -53,7 +57,7 @@ export const OutcomeTiles: React.FC<OutcomeTilesProps> = ({ outcomes, className 
           </div>
         );
       })}
-    </div>
+    </RevealGroup>
   );
 };
 

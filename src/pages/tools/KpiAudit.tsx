@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
@@ -9,6 +9,9 @@ import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
 import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
+import { useLocale } from '@/lib/locale';
+import { usePageMeta } from '@/hooks/use-page-meta';
+import { getToolPageContent } from '@/lib/toolPageContent';
 
 const KpiAudit = () => {
   const [metrics, setMetrics] = useState('');
@@ -17,12 +20,13 @@ const KpiAudit = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
+  const { locale, isRTL } = useLocale();
+  const copy = getToolPageContent(locale, 'kpi-audit');
 
-  useEffect(() => {
-    document.title = 'KPI Audit — Free Metrics Review Tool | ADSI';
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'Get a free AI-powered KPI audit. Identify vanity metrics, missing indicators, and build a healthier measurement framework. Free tool from ADSI.');
-  }, []);
+  usePageMeta({
+    title: copy.metaTitle,
+    description: copy.metaDescription,
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,55 +43,58 @@ const KpiAudit = () => {
         'Current metrics list': metrics,
         ...(context.trim() ? { 'Business context': context } : {}),
       },
+      locale,
       signal: abortRef.current.signal,
       onDelta: (chunk) => setOutput((prev) => prev + chunk),
       onDone: () => setIsStreaming(false),
       onError: (message) => {
         setIsStreaming(false);
-        toast({ title: 'Error', description: message, variant: 'destructive' });
+        toast({ title: copy.errorTitle, description: message, variant: 'destructive' });
       },
     });
   };
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       <CompactPageHeader
-        eyebrow="AI tool"
-        title="KPI Audit"
-        description="List the metrics you currently track. Get a brutally honest audit — what's vanity, what's missing, and what to actually measure."
+        eyebrow={copy.eyebrow}
+        title={copy.title}
+        description={copy.description}
         plate="navy"
         rightElement={<ToolHeaderAnimation slug="kpi-audit" />}
       />
 
       <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel="Audit KPIs">
+          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel={copy.submitLabel}>
             <div>
               <Label htmlFor="metrics" className="text-sm font-semibold mb-2 block">
-                List your current metrics
+                {copy.fields.metricsLabel}
               </Label>
               <p className="text-sm text-muted-foreground mb-3">
-                List every metric your team tracks — in meetings, dashboards, or reports. One per line is easiest.
+                {copy.fields.metricsHelp}
               </p>
               <Textarea
                 id="metrics"
                 value={metrics}
                 onChange={(e) => setMetrics(e.target.value)}
-                placeholder={`e.g.\nWebsite visitors (monthly)\nLinkedIn followers\nRevenue (monthly)\nNumber of proposals sent\nEmail open rate\nCustomer satisfaction score\nNew leads from ads`}
+                placeholder={copy.fields.metricsPlaceholder}
                 rows={8}
                 required
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
             <div>
               <Label htmlFor="context" className="text-sm font-semibold mb-2 block">
-                Business context <span className="font-normal text-muted-foreground">(optional)</span>
+                {copy.fields.contextLabel} <span className="font-normal text-muted-foreground">{copy.fields.optional}</span>
               </Label>
               <Textarea
                 id="context"
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
-                placeholder="e.g. B2B services company, 12 staff, EUR 2M revenue, growth stage. Main goal is increasing qualified pipeline from inbound..."
+                placeholder={copy.fields.contextPlaceholder}
                 rows={3}
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
           </ToolInputForm>
@@ -101,10 +108,11 @@ const KpiAudit = () => {
       </section>
 
       <CTABand
-        headline="Want to implement a proper reporting framework?"
-        description="We design and build operational dashboards connected to your real data. Stop pulling numbers from five different places."
-        primaryCta={{ label: 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: 'View pricing', href: '/pricing' }}
+        headline={copy.buildCtaHeadline}
+        description={copy.buildCtaDescription}
+        primaryCta={{ label: copy.primaryCtaLabel, href: '/book' }}
+        secondaryCta={{ label: copy.secondaryCtaLabel, href: '/pricing' }}
+        visualKey="signal-needle"
         variant="dark"
       />
     </Layout>

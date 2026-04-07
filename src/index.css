@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Cairo:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -32,33 +32,33 @@
 
     /* Text tokens */
     --text-on-plate: 170 100% 50%;
-    --text-on-light: 216 28% 6%;
-    --text-muted: 216 28% 6% / 0.70;
+    --text-on-light: 218 6% 26.3%;
+    --text-muted: 218 6% 26.3% / 0.70;
     --text-muted-dark: 40 23% 95% / 0.78;
 
     /* CTA tokens */
     --cta-bg: 170 100% 50%;
-    --cta-text: 216 28% 6%;
+    --cta-text: 218 6% 26.3%;
     --cta-border: 170 100% 50% / 0.55;
 
     /* Default semantic tokens (mapped to existing system) */
     --background: 40 23% 95%;
-    --foreground: 216 28% 6%;
+    --foreground: 218 6% 26.3%;
 
     --card: 0 0% 100%;
-    --card-foreground: 216 28% 6%;
+    --card-foreground: 218 6% 26.3%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 216 28% 6%;
+    --popover-foreground: 218 6% 26.3%;
 
     --primary: 170 100% 50%;
-    --primary-foreground: 216 28% 6%;
+    --primary-foreground: 218 6% 26.3%;
 
     --secondary: 40 23% 95%;
-    --secondary-foreground: 216 28% 6%;
+    --secondary-foreground: 218 6% 26.3%;
 
     --muted: 40 23% 92%;
-    --muted-foreground: 216 28% 6% / 0.70;
+    --muted-foreground: 218 6% 26.3% / 0.70;
 
     --accent: 274 72% 66%;
     --accent-foreground: 0 0% 100%;
@@ -73,7 +73,7 @@
     --radius: 0.75rem;
 
     --sidebar-background: 40 23% 95%;
-    --sidebar-foreground: 216 28% 6%;
+    --sidebar-foreground: 218 6% 26.3%;
     --sidebar-primary: 170 100% 50%;
     --sidebar-primary-foreground: 216 28% 6%;
     --sidebar-accent: 274 72% 66%;
@@ -132,9 +132,43 @@
     font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   }
 
+  html[lang="ar"] body {
+    font-family: "Cairo", "Noto Sans Arabic", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  }
+
   /* Typography scale */
   .font-serif {
     font-family: "Instrument Serif", Georgia, serif;
+  }
+
+  html[lang="ar"] .font-serif {
+    font-family: "El Messiri", "Cairo", Georgia, serif;
+  }
+
+  html[lang="ar"] .font-serif.text-poster-xl,
+  html[lang="ar"] .font-serif.text-poster-lg {
+    font-weight: 700;
+  }
+
+  html[lang="ar"] .font-serif.text-heading-lg,
+  html[lang="ar"] .font-serif.text-3xl,
+  html[lang="ar"] .font-serif.text-2xl {
+    font-weight: 600;
+  }
+
+  html[lang="ar"] .font-serif.text-heading-md,
+  html[lang="ar"] .font-serif.text-xl,
+  html[lang="ar"] .font-serif.text-lg {
+    font-weight: 500;
+  }
+
+  html[lang="ar"] .adsi-button {
+    font-family: "El Messiri", "Cairo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    font-weight: 600;
+  }
+
+  html[lang="ar"] .adsi-button.adsi-button--lg {
+    font-weight: 700;
   }
 
   .text-poster-xl {
@@ -183,6 +217,126 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+html[dir="rtl"] .prose {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .prose blockquote {
+  border-left: 0;
+  border-right: 4px solid hsl(var(--border));
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+html[dir="rtl"] .prose ul,
+html[dir="rtl"] .prose ol {
+  padding-left: 0;
+  padding-right: 1.5rem;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.page-transition-shell {
+  animation: page-enter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: opacity, transform;
+}
+
+.motion-hero-copy,
+.motion-hero-visual {
+  opacity: 0;
+  animation: hero-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.motion-hero-copy {
+  animation-delay: 70ms;
+}
+
+.motion-hero-visual {
+  animation-delay: 130ms;
+}
+
+.motion-reveal {
+  --motion-delay: 0ms;
+  --motion-distance: 24px;
+  --motion-duration: 0.54s;
+  opacity: 0;
+  transform: translate3d(0, var(--motion-distance), 0);
+  transition:
+    opacity var(--motion-duration) cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--motion-duration) cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--motion-delay), var(--motion-delay);
+  will-change: opacity, transform;
+}
+
+.motion-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.motion-reveal--subtle {
+  --motion-distance: 16px;
+  --motion-duration: 0.4s;
+}
+
+.motion-reveal--hero {
+  --motion-distance: 12px;
+  --motion-duration: 0.36s;
+}
+
+.motion-reveal-group {
+  --motion-stagger: 72ms;
+  --motion-distance: 22px;
+  --motion-duration: 0.5s;
+}
+
+.motion-reveal-group > .motion-reveal-item {
+  opacity: 0;
+  transform: translate3d(0, var(--motion-distance), 0);
+  transition:
+    opacity var(--motion-duration) cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--motion-duration) cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay:
+    calc(var(--motion-index, 0) * var(--motion-stagger)),
+    calc(var(--motion-index, 0) * var(--motion-stagger));
+  will-change: opacity, transform;
+}
+
+.motion-reveal-group.is-visible > .motion-reveal-item {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.motion-reveal-group--subtle {
+  --motion-distance: 14px;
+  --motion-duration: 0.38s;
+}
+
+.motion-reveal-group--hero {
+  --motion-distance: 10px;
+  --motion-duration: 0.34s;
 }
 
 /* Custom scrollbar */
@@ -260,4 +414,213 @@ html {
   stroke-dasharray: 200;
   stroke-dashoffset: 200;
   animation: draw-line-loop 3s ease-in-out infinite;
+}
+
+/* Outcome card vector motion */
+@keyframes outcome-float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes outcome-float-y-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes outcome-float-x {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(8px); }
+}
+
+@keyframes outcome-pulse-soft {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes outcome-draw-route {
+  0% { stroke-dashoffset: 240; }
+  45%, 60% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -240; }
+}
+
+@keyframes outcome-scan-x {
+  0% {
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+  20% { opacity: 0.22; }
+  55% { opacity: 0.5; }
+  100% {
+    opacity: 0;
+    transform: translateX(320%);
+  }
+}
+
+@keyframes outcome-scan-y {
+  0% {
+    opacity: 0;
+    transform: translateY(-125%);
+  }
+  20% { opacity: 0.18; }
+  55% { opacity: 0.46; }
+  100% {
+    opacity: 0;
+    transform: translateY(270%);
+  }
+}
+
+@keyframes outcome-rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes outcome-packet-right {
+  0%, 8% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  20%, 72% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translateX(82px);
+  }
+}
+
+@keyframes outcome-packet-diagonal-up {
+  0%, 8% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  20%, 70% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(54px, -50px);
+  }
+}
+
+@keyframes outcome-packet-diagonal-down {
+  0%, 8% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  20%, 70% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(54px, 28px);
+  }
+}
+
+.outcome-motion [class*="outcome-"] {
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity, stroke-dashoffset;
+}
+
+.outcome-float-y {
+  animation: outcome-float-y 3.1s ease-in-out infinite;
+}
+
+.outcome-float-y-soft {
+  animation: outcome-float-y-soft 2.5s ease-in-out infinite;
+}
+
+.outcome-float-x {
+  animation: outcome-float-x 3.2s ease-in-out infinite;
+}
+
+.outcome-pulse-soft {
+  animation: outcome-pulse-soft 1.9s ease-in-out infinite;
+}
+
+.outcome-draw-route {
+  stroke-dasharray: 240;
+  stroke-dashoffset: 240;
+  animation: outcome-draw-route 2.8s ease-in-out infinite;
+}
+
+.outcome-scan-x {
+  animation: outcome-scan-x 2.4s ease-in-out infinite;
+}
+
+.outcome-scan-y {
+  animation: outcome-scan-y 2.6s ease-in-out infinite;
+}
+
+.outcome-rotate-slow {
+  animation: outcome-rotate-slow 4.8s linear infinite;
+}
+
+.outcome-packet-right {
+  animation: outcome-packet-right 2.4s ease-in-out infinite;
+}
+
+.outcome-packet-diagonal-up {
+  animation: outcome-packet-diagonal-up 2.5s ease-in-out infinite;
+}
+
+.outcome-packet-diagonal-down {
+  animation: outcome-packet-diagonal-down 2.5s ease-in-out infinite;
+}
+
+.outcome-motion-card:hover .outcome-float-y {
+  animation-duration: 2.2s;
+}
+
+.outcome-motion-card:hover .outcome-float-y-soft {
+  animation-duration: 1.8s;
+}
+
+.outcome-motion-card:hover .outcome-float-x {
+  animation-duration: 2.1s;
+}
+
+.outcome-motion-card:hover .outcome-pulse-soft {
+  animation-duration: 1.25s;
+}
+
+.outcome-motion-card:hover .outcome-draw-route {
+  animation-duration: 1.8s;
+}
+
+.outcome-motion-card:hover .outcome-scan-x,
+.outcome-motion-card:hover .outcome-scan-y,
+.outcome-motion-card:hover .outcome-packet-right,
+.outcome-motion-card:hover .outcome-packet-diagonal-up,
+.outcome-motion-card:hover .outcome-packet-diagonal-down {
+  animation-duration: 1.7s;
+}
+
+.outcome-motion-card:hover .outcome-rotate-slow {
+  animation-duration: 3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .page-transition-shell,
+  .motion-hero-copy,
+  .motion-hero-visual {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .motion-reveal,
+  .motion-reveal-group > .motion-reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .outcome-motion-card [class*="outcome-"] {
+    animation: none !important;
+  }
 }

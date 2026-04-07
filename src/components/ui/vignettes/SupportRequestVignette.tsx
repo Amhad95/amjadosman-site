@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { MessageSquare, Check, Clock, Send, ChevronRight } from 'lucide-react';
+import { useLocale } from '@/lib/locale';
 
 interface SupportRequest {
   id: string;
@@ -10,48 +11,58 @@ interface SupportRequest {
   time: string;
 }
 
-const initialRequests: SupportRequest[] = [
-  { id: '1', title: 'Add new pipeline stage', status: 'shipped', time: '2d ago' },
-  { id: '2', title: 'Update approval workflow', status: 'approved', time: '1d ago' },
-  { id: '3', title: 'New user permissions', status: 'in-review', time: '4h ago' },
-  { id: '4', title: 'Add custom field', status: 'new', time: 'Just now' },
-];
-
-const statusConfig = {
-  new: { 
-    label: 'New', 
-    bg: 'bg-blue-100', 
-    text: 'text-blue-700', 
-    iconBg: 'bg-blue-100',
-    icon: MessageSquare 
-  },
-  'in-review': { 
-    label: 'In Review', 
-    bg: 'bg-amber-100', 
-    text: 'text-amber-700', 
-    iconBg: 'bg-amber-100',
-    icon: Clock 
-  },
-  approved: { 
-    label: 'Approved', 
-    bg: 'bg-emerald-100', 
-    text: 'text-emerald-700', 
-    iconBg: 'bg-emerald-100',
-    icon: Check 
-  },
-  shipped: { 
-    label: 'Shipped', 
-    bg: 'bg-gray-900', 
-    text: 'text-white', 
-    iconBg: 'bg-gray-900',
-    icon: Send 
-  },
-};
-
 export const SupportRequestVignette: React.FC<{ className?: string }> = ({ className }) => {
   const reducedMotion = useReducedMotion();
+  const { locale, isRTL } = useLocale();
+  const initialRequests: SupportRequest[] = locale === 'ar'
+    ? [
+        { id: '1', title: 'إضافة مرحلة جديدة للمسار', status: 'shipped', time: 'منذ يومين' },
+        { id: '2', title: 'تحديث مسار الاعتماد', status: 'approved', time: 'منذ يوم' },
+        { id: '3', title: 'صلاحيات مستخدم جديد', status: 'in-review', time: 'منذ 4 ساعات' },
+        { id: '4', title: 'إضافة حقل مخصص', status: 'new', time: 'الآن' },
+      ]
+    : [
+        { id: '1', title: 'Add new pipeline stage', status: 'shipped', time: '2d ago' },
+        { id: '2', title: 'Update approval workflow', status: 'approved', time: '1d ago' },
+        { id: '3', title: 'New user permissions', status: 'in-review', time: '4h ago' },
+        { id: '4', title: 'Add custom field', status: 'new', time: 'Just now' },
+      ];
+  const statusConfig = {
+    new: {
+      label: locale === 'ar' ? 'جديد' : 'New',
+      bg: 'bg-blue-100',
+      text: 'text-blue-700',
+      iconBg: 'bg-blue-100',
+      icon: MessageSquare,
+    },
+    'in-review': {
+      label: locale === 'ar' ? 'قيد المراجعة' : 'In Review',
+      bg: 'bg-amber-100',
+      text: 'text-amber-700',
+      iconBg: 'bg-amber-100',
+      icon: Clock,
+    },
+    approved: {
+      label: locale === 'ar' ? 'معتمد' : 'Approved',
+      bg: 'bg-emerald-100',
+      text: 'text-emerald-700',
+      iconBg: 'bg-emerald-100',
+      icon: Check,
+    },
+    shipped: {
+      label: locale === 'ar' ? 'تم التنفيذ' : 'Shipped',
+      bg: 'bg-gray-900',
+      text: 'text-white',
+      iconBg: 'bg-gray-900',
+      icon: Send,
+    },
+  };
   const [requests, setRequests] = useState(initialRequests);
   const [animatingId, setAnimatingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setRequests(initialRequests);
+  }, [locale]);
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -89,11 +100,15 @@ export const SupportRequestVignette: React.FC<{ className?: string }> = ({ class
   }, [reducedMotion]);
 
   return (
-    <div className={cn('w-full h-full flex flex-col bg-white', className)}>
+    <div className={cn('w-full h-full flex flex-col bg-white', isRTL && 'text-right', className)}>
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2.5 border-b border-gray-200 bg-gray-50">
-        <span className="text-xs font-semibold text-gray-700">Admin Requests</span>
-        <span className="text-[10px] text-gray-500">4 total</span>
+      <div className={cn('flex items-center justify-between px-3 py-2.5 border-b border-gray-200 bg-gray-50', isRTL && 'flex-row-reverse')}>
+        <span className="text-xs font-semibold text-gray-700">
+          {locale === 'ar' ? 'طلبات الإدارة' : 'Admin Requests'}
+        </span>
+        <span className="text-[10px] text-gray-500">
+          {locale === 'ar' ? '4 إجمالاً' : '4 total'}
+        </span>
       </div>
 
       {/* List */}
@@ -110,6 +125,7 @@ export const SupportRequestVignette: React.FC<{ className?: string }> = ({ class
                 'flex items-center gap-3 p-2.5 rounded-lg',
                 'bg-white border border-gray-200',
                 'transition-all duration-300',
+                isRTL && 'flex-row-reverse',
                 isAnimating && 'scale-[1.02] shadow-md border-gray-300'
               )}
             >

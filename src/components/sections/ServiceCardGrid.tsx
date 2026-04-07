@@ -5,6 +5,8 @@ import { CyberSpaceImpact } from "@/components/ui/cyber-space-impact";
 import { CyberTraffic } from "@/components/ui/cyber-traffic";
 import { CyberCircuit } from "@/components/ui/cyber-circuit";
 import { CyberMario } from "@/components/ui/cyber-mario";
+import { CyberRelay } from "@/components/ui/cyber-relay";
+import { RevealGroup } from "@/components/motion/Reveal";
 
 interface ServiceCardItem {
   title: string;
@@ -25,6 +27,7 @@ const CARD_CONFIGS: {
   { bg: "bg-plate-blue", Animation: CyberSpaceImpact },  // Digital Apps
   { bg: "bg-plate-burgundy", Animation: CyberTraffic },  // Internal Operations
   { bg: "bg-plate-navy", Animation: CyberCircuit },      // Subscription Software
+  { bg: "bg-plate-astral", Animation: CyberRelay },      // AI Agents
 ];
 
 export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
@@ -32,11 +35,12 @@ export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
   className,
 }) => {
   return (
-    <div
+    <RevealGroup
       className={cn(
         "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8",
         className
       )}
+      stagger={86}
     >
       {items.map((item, index) => {
         const config = CARD_CONFIGS[index % CARD_CONFIGS.length];
@@ -68,7 +72,7 @@ export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
           </div>
         );
       })}
-    </div>
+    </RevealGroup>
   );
 };
 

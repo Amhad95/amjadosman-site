@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { AnimatedIcon } from '@/components/shared/AnimatedIcon';
 import { ClipboardCheck, LayoutGrid, Hammer, FileCheck, Shield, LucideIcon } from 'lucide-react';
+import { useLocale } from '@/lib/locale';
 
 interface Step {
   title: string;
@@ -23,6 +24,7 @@ const defaultStepIcons: LucideIcon[] = [
 ];
 
 export const Steps: React.FC<StepsProps> = ({ steps, className }) => {
+  const { isRTL } = useLocale();
   return (
     <div className={cn('relative', className)}>
       {/* Desktop horizontal layout */}
@@ -33,7 +35,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, className }) => {
             <div key={index} className="flex-1 relative">
               {/* Connector line */}
               {index < steps.length - 1 && (
-                <div className="absolute top-10 left-[calc(50%+32px)] right-0 h-px bg-ink/20" />
+                <div className={cn('absolute top-10 h-px bg-ink/20', isRTL ? 'left-0 right-[calc(50%+32px)]' : 'left-[calc(50%+32px)] right-0')} />
               )}
               
               <div className="flex flex-col items-center text-center">
@@ -48,7 +50,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, className }) => {
                 </div>
                 
                 {/* Number circle */}
-                <div className="w-12 h-12 rounded-full bg-mint text-ink flex items-center justify-center font-semibold text-lg mb-4">
+                <div className="w-12 h-12 rounded-full bg-mint text-foreground flex items-center justify-center font-semibold text-lg mb-4">
                   {index + 1}
                 </div>
                 
@@ -70,7 +72,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, className }) => {
         {steps.map((step, index) => {
           const StepIcon = step.icon || defaultStepIcons[index] || FileCheck;
           return (
-            <div key={index} className="flex gap-4">
+            <div key={index} className={cn('flex gap-4', isRTL && 'flex-row-reverse text-right')}>
               {/* Icon, Number and line */}
               <div className="flex flex-col items-center">
                 <div className="mb-1">
@@ -81,7 +83,7 @@ export const Steps: React.FC<StepsProps> = ({ steps, className }) => {
                     size={20} 
                   />
                 </div>
-                <div className="w-10 h-10 rounded-full bg-mint text-ink flex items-center justify-center font-semibold text-base flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-mint text-foreground flex items-center justify-center font-semibold text-base flex-shrink-0">
                   {index + 1}
                 </div>
                 {index < steps.length - 1 && (

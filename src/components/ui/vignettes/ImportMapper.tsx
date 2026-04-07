@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { Check, ArrowRight, FileSpreadsheet, AlertCircle } from 'lucide-react';
+import { Check, ArrowLeft, ArrowRight, FileSpreadsheet, AlertCircle } from 'lucide-react';
+import { useLocale } from '@/lib/locale';
 
 interface Mapping {
   source: string;
   target: string;
+  target_ar?: string;
   matched?: boolean;
 }
 
@@ -20,9 +22,11 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
   mappings: initialMappings,
   className,
 }) => {
+  const { locale, isRTL } = useLocale();
   const reducedMotion = useReducedMotion();
   const [mappings, setMappings] = useState(initialMappings);
   const [isHovered, setIsHovered] = useState(false);
+  const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
 
   // Auto-match unmatched fields, then reset
   useEffect(() => {
@@ -38,7 +42,7 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
         setMappings(prev =>
           prev.map((m, i) =>
             unmatchedIndices.includes(i)
-              ? { ...m, matched: true, target: m.target || 'Notes' }
+              ? { ...m, matched: true, target: m.target || 'Notes', target_ar: m.target_ar || 'ملاحظات' }
               : m
           )
         );
@@ -57,17 +61,17 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
 
   return (
     <div
-      className={cn('h-full flex flex-col bg-white', className)}
+      className={cn('h-full flex flex-col bg-white', isRTL && 'text-right', className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b border-gray-200 bg-gray-50">
-        <div className="flex items-center gap-2">
+      <div className={cn('flex items-center justify-between p-3 border-b border-gray-200 bg-gray-50', isRTL && 'flex-row-reverse')}>
+        <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
           <FileSpreadsheet className="w-4 h-4 text-gray-500" />
           <span className="text-xs font-medium text-gray-700">{sourceFile}</span>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className={cn('flex items-center gap-1.5', isRTL && 'flex-row-reverse')}>
           <div className={cn(
             'w-4 h-4 rounded-full flex items-center justify-center transition-colors duration-300',
             matchedCount === totalCount ? 'bg-emerald-100' : 'bg-amber-100'
@@ -79,7 +83,9 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
             )}
           </div>
           <span className="text-[10px] text-gray-500">
-            {matchedCount}/{totalCount} fields mapped
+            {locale === 'ar'
+              ? `${matchedCount}/${totalCount} حقول تمت مطابقتها`
+              : `${matchedCount}/${totalCount} fields mapped`}
           </span>
         </div>
       </div>
@@ -89,11 +95,11 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
         <div className="grid grid-cols-[1fr,auto,1fr] gap-2 text-[10px]">
           {/* Header row */}
           <div className="font-semibold text-gray-500 uppercase tracking-wide pb-2">
-            Source Column
+            {locale === 'ar' ? 'العمود المصدر' : 'Source Column'}
           </div>
           <div />
           <div className="font-semibold text-gray-500 uppercase tracking-wide pb-2">
-            Target Field
+            {locale === 'ar' ? 'الحقل الهدف' : 'Target Field'}
           </div>
 
           {/* Mappings */}
@@ -108,10 +114,12 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
                 {mapping.source}
               </div>
               <div className="flex items-center justify-center">
-                <ArrowRight className={cn(
+                <ArrowIcon
+                  className={cn(
                   'w-3 h-3 transition-colors duration-300',
                   mapping.matched ? 'text-emerald-500' : 'text-gray-300'
-                )} />
+                  )}
+                />
               </div>
               <div className={cn(
                 'px-2 py-1.5 rounded border transition-all duration-300',
@@ -119,7 +127,9 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
                   ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
                   : 'bg-gray-50 border-gray-200 text-gray-400'
               )}>
-                {mapping.target || '— Select field —'}
+                {locale === 'ar'
+                  ? (mapping.target_ar ?? mapping.target ?? '— اختر حقلاً —')
+                  : mapping.target || '— Select field —'}
               </div>
             </React.Fragment>
           ))}
@@ -127,12 +137,12 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-t border-gray-200 bg-gray-50 flex justify-between items-center">
+      <div className={cn('p-3 border-t border-gray-200 bg-gray-50 flex justify-between items-center', isRTL && 'flex-row-reverse')}>
         <span className="text-[10px] text-gray-500">
-          234 records ready to import
+          {locale === 'ar' ? '234 سجلاً جاهزاً للاستيراد' : '234 records ready to import'}
         </span>
         <button className="px-3 py-1.5 bg-gray-900 text-white text-[10px] font-medium rounded-md hover:bg-gray-800 transition-colors">
-          Start Import
+          {locale === 'ar' ? 'بدء الاستيراد' : 'Start Import'}
         </button>
       </div>
     </div>
@@ -141,45 +151,45 @@ export const ImportMapper: React.FC<ImportMapperProps> = ({
 
 // Default CRM import mappings
 export const crmImportMappings: Mapping[] = [
-  { source: 'full_name', target: 'Contact Name', matched: true },
-  { source: 'company', target: 'Company', matched: true },
-  { source: 'email_address', target: 'Email', matched: true },
-  { source: 'phone', target: 'Phone', matched: true },
-  { source: 'deal_stage', target: 'Pipeline Stage', matched: true },
-  { source: 'deal_value', target: 'Deal Value', matched: true },
-  { source: 'notes', target: 'Notes', matched: false },
+  { source: 'full_name', target: 'Contact Name', target_ar: 'اسم جهة الاتصال', matched: true },
+  { source: 'company', target: 'Company', target_ar: 'الشركة', matched: true },
+  { source: 'email_address', target: 'Email', target_ar: 'البريد الإلكتروني', matched: true },
+  { source: 'phone', target: 'Phone', target_ar: 'الهاتف', matched: true },
+  { source: 'deal_stage', target: 'Pipeline Stage', target_ar: 'مرحلة المسار', matched: true },
+  { source: 'deal_value', target: 'Deal Value', target_ar: 'قيمة الصفقة', matched: true },
+  { source: 'notes', target: 'Notes', target_ar: 'ملاحظات', matched: false },
 ];
 
 // Accounting import mappings
 export const accountingImportMappings: Mapping[] = [
-  { source: 'vendor_name', target: 'Vendor', matched: true },
-  { source: 'invoice_number', target: 'Invoice #', matched: true },
-  { source: 'amount', target: 'Amount', matched: true },
-  { source: 'category', target: 'Category', matched: true },
-  { source: 'due_date', target: 'Due Date', matched: true },
-  { source: 'payment_status', target: 'Status', matched: true },
+  { source: 'vendor_name', target: 'Vendor', target_ar: 'المورّد', matched: true },
+  { source: 'invoice_number', target: 'Invoice #', target_ar: 'رقم الفاتورة', matched: true },
+  { source: 'amount', target: 'Amount', target_ar: 'المبلغ', matched: true },
+  { source: 'category', target: 'Category', target_ar: 'الفئة', matched: true },
+  { source: 'due_date', target: 'Due Date', target_ar: 'تاريخ الاستحقاق', matched: true },
+  { source: 'payment_status', target: 'Status', target_ar: 'الحالة', matched: true },
   { source: 'ref_code', target: '', matched: false },
 ];
 
 // Inventory import mappings
 export const inventoryImportMappings: Mapping[] = [
   { source: 'sku', target: 'SKU', matched: true },
-  { source: 'item_name', target: 'Item Name', matched: true },
-  { source: 'quantity', target: 'Quantity', matched: true },
-  { source: 'location', target: 'Location', matched: true },
-  { source: 'reorder_point', target: 'Reorder Point', matched: true },
-  { source: 'unit_cost', target: 'Unit Cost', matched: true },
+  { source: 'item_name', target: 'Item Name', target_ar: 'اسم العنصر', matched: true },
+  { source: 'quantity', target: 'Quantity', target_ar: 'الكمية', matched: true },
+  { source: 'location', target: 'Location', target_ar: 'الموقع', matched: true },
+  { source: 'reorder_point', target: 'Reorder Point', target_ar: 'نقطة إعادة الطلب', matched: true },
+  { source: 'unit_cost', target: 'Unit Cost', target_ar: 'تكلفة الوحدة', matched: true },
   { source: 'supplier_ref', target: '', matched: false },
 ];
 
 // Tasks import mappings
 export const tasksImportMappings: Mapping[] = [
-  { source: 'task_title', target: 'Task Name', matched: true },
-  { source: 'assignee', target: 'Assignee', matched: true },
-  { source: 'due_date', target: 'Due Date', matched: true },
-  { source: 'project', target: 'Project', matched: true },
-  { source: 'priority', target: 'Priority', matched: true },
-  { source: 'status', target: 'Status', matched: true },
+  { source: 'task_title', target: 'Task Name', target_ar: 'اسم المهمة', matched: true },
+  { source: 'assignee', target: 'Assignee', target_ar: 'المسؤول', matched: true },
+  { source: 'due_date', target: 'Due Date', target_ar: 'تاريخ الاستحقاق', matched: true },
+  { source: 'project', target: 'Project', target_ar: 'المشروع', matched: true },
+  { source: 'priority', target: 'Priority', target_ar: 'الأولوية', matched: true },
+  { source: 'status', target: 'Status', target_ar: 'الحالة', matched: true },
   { source: 'tags', target: '', matched: false },
 ];
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
@@ -9,6 +9,9 @@ import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
 import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
+import { useLocale } from '@/lib/locale';
+import { usePageMeta } from '@/hooks/use-page-meta';
+import { getToolPageContent } from '@/lib/toolPageContent';
 
 const SopBuilder = () => {
   const [process, setProcess] = useState('');
@@ -16,12 +19,13 @@ const SopBuilder = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
+  const { locale, isRTL } = useLocale();
+  const copy = getToolPageContent(locale, 'sop-builder');
 
-  useEffect(() => {
-    document.title = 'SOP Draft Builder — Free SOP Generator | ADSI';
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'Generate a complete, structured Standard Operating Procedure from a messy process description. Free AI tool from ADSI.');
-  }, []);
+  usePageMeta({
+    title: copy.metaTitle,
+    description: copy.metaDescription,
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,43 +39,45 @@ const SopBuilder = () => {
     streamTool({
       tool: 'sop-builder',
       input: { 'Process description': process },
+      locale,
       signal: abortRef.current.signal,
       onDelta: (chunk) => setOutput((prev) => prev + chunk),
       onDone: () => setIsStreaming(false),
       onError: (message) => {
         setIsStreaming(false);
-        toast({ title: 'Error', description: message, variant: 'destructive' });
+        toast({ title: copy.errorTitle, description: message, variant: 'destructive' });
       },
     });
   };
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       <CompactPageHeader
-        eyebrow="AI tool"
-        title="SOP Draft Builder"
-        description="Describe any process in plain English. Get a complete, structured SOP document in seconds."
+        eyebrow={copy.eyebrow}
+        title={copy.title}
+        description={copy.description}
         plate="violet"
         rightElement={<ToolHeaderAnimation slug="sop-builder" />}
       />
 
       <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel="Build SOP">
+          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel={copy.submitLabel}>
             <div>
               <Label htmlFor="process" className="text-sm font-semibold mb-2 block">
-                Describe the process
+                {copy.fields.processLabel}
               </Label>
               <p className="text-sm text-muted-foreground mb-3">
-                Write as much or as little as you know. Include who does what, what tools are involved, and what the output should be.
+                {copy.fields.processHelp}
               </p>
               <Textarea
                 id="process"
                 value={process}
                 onChange={(e) => setProcess(e.target.value)}
-                placeholder="e.g. When a new client signs up, our sales team sends them a welcome email, then a member of the ops team schedules an onboarding call, then we create their workspace and send login details..."
+                placeholder={copy.fields.processPlaceholder}
                 rows={7}
                 required
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
           </ToolInputForm>
@@ -85,10 +91,11 @@ const SopBuilder = () => {
       </section>
 
       <CTABand
-        headline="Want us to implement this SOP properly?"
-        description="We turn AI-generated drafts into a complete, maintained SOP library — with role mapping, version control, and a SharePoint home."
-        primaryCta={{ label: 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: 'View pricing', href: '/pricing' }}
+        headline={copy.buildCtaHeadline}
+        description={copy.buildCtaDescription}
+        primaryCta={{ label: copy.primaryCtaLabel, href: '/book' }}
+        secondaryCta={{ label: copy.secondaryCtaLabel, href: '/pricing' }}
+        visualKey="document-totem"
         variant="dark"
       />
     </Layout>

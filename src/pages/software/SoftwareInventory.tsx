@@ -13,7 +13,7 @@ import { WorkflowStepper } from '@/components/sections/WorkflowStepper';
 import { RolesPermissionsMatrix } from '@/components/sections/RolesPermissionsMatrix';
 import { SetupSupportCards } from '@/components/sections/SetupSupportCards';
 import { TabbedProductPreview } from '@/components/ui/vignettes/TabbedProductPreview';
-import { MiniDashboard, defaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
+import { MiniDashboard, getDefaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
 import { SupportRequestVignette } from '@/components/ui/vignettes/SupportRequestVignette';
 import { SettingsPanel, inventorySettingsConfig } from '@/components/ui/vignettes/SettingsPanel';
 import { ImportMapper, inventoryImportMappings } from '@/components/ui/vignettes/ImportMapper';
@@ -26,6 +26,8 @@ import {
   AssetTrackerRealistic,
 } from '@/components/ui/vignettes/InventoryPreviews';
 import { CyberPyramid } from '@/components/ui/cyber-pyramid';
+import { useLocale } from '@/lib/locale';
+import { getSoftwarePageContent } from '@/lib/softwarePageContent';
 import {
   Package,
   MapPin,
@@ -39,133 +41,56 @@ import {
   Box,
 } from 'lucide-react';
 
-// Problem contrast items
-const problemItems = [
-  {
-    before: 'Stock counted manually on paper',
-    after: 'Real-time stock levels with location tracking',
-    icon: FileSpreadsheet,
-  },
-  {
-    before: 'Reorders triggered by guesswork',
-    after: 'Threshold-based alerts before items run out',
-    icon: AlertTriangle,
-  },
-  {
-    before: 'No record of who has what equipment',
-    after: 'Full checkout history with return tracking',
-    icon: Clipboard,
-  },
-  {
-    before: 'Audit prep takes days of cleanup',
-    after: 'Always-current records ready for review',
-    icon: Search,
-  },
-];
-
-// Outcomes
-const outcomes = [
-  {
-    headline: 'Know what exists and where it is',
-    description: 'Searchable records with location tracking and category filtering.',
-  },
-  {
-    headline: 'Reorder alerts and basic controls',
-    description: 'Threshold-based alerts before items run out.',
-  },
-  {
-    headline: 'Cleaner handovers and accountability',
-    description: 'Assignment history for equipment and assets.',
-  },
-  {
-    headline: 'Audit-ready records for assets and stock',
-    description: 'Clean documentation for compliance and reporting.',
-  },
-];
-
-// Capabilities
-const capabilities = [
-  {
-    icon: Package,
-    title: 'Item tracking',
-    description: 'SKU-based catalog with quantities, costs, and category management.',
-  },
-  {
-    icon: MapPin,
-    title: 'Location management',
-    description: 'Multi-warehouse tracking with sub-locations and transfer workflows.',
-  },
-  {
-    icon: AlertTriangle,
-    title: 'Reorder alerts',
-    description: 'Configurable thresholds with notifications and suggested quantities.',
-  },
-  {
-    icon: Box,
-    title: 'Asset tracking',
-    description: 'Equipment lifecycle from procurement to depreciation and disposal.',
-  },
-  {
-    icon: RotateCcw,
-    title: 'Checkout and return',
-    description: 'Track who has what with checkout approval and return reminders.',
-  },
-  {
-    icon: Shield,
-    title: 'Audit trail',
-    description: 'Complete history of every movement, adjustment, and transfer.',
-  },
-];
-
-// Workflow steps
-const workflowSteps = [
-  {
-    id: 'configure',
-    title: 'Configure structure',
-    description: 'Locations, categories, and thresholds set up.',
-    content: <SettingsPanel sections={inventorySettingsConfig} activeSection={0} />,
-  },
-  {
-    id: 'roles',
-    title: 'Assign roles and permissions',
-    description: 'Warehouse roles, access levels, and checkout rules defined.',
-    content: <SettingsPanel sections={inventorySettingsConfig} activeSection={2} />,
-  },
-  {
-    id: 'import',
-    title: 'Import data',
-    description: 'Item records and stock levels imported and validated.',
-    content: <ImportMapper mappings={inventoryImportMappings} sourceFile="inventory_export.csv" />,
-  },
-  {
-    id: 'workflow',
-    title: 'Run day-to-day workflow',
-    description: 'Track stock, process reorders, manage checkouts.',
-    content: <ItemsTableRealistic />,
-  },
-];
-
-// Hero preview tabs
-const heroTabs = [
-  { id: 'items', label: 'Items', content: <ItemsTableRealistic /> },
-  { id: 'locations', label: 'Locations', content: <LocationsGridRealistic /> },
-  { id: 'reorder', label: 'Reorder', content: <ReorderQueueRealistic /> },
-  { id: 'assets', label: 'Assets', content: <AssetTrackerRealistic /> },
-];
-
 const SoftwareInventory = () => {
+  const { locale } = useLocale();
+  const content = getSoftwarePageContent(locale).inventory;
+
   const [activePersona, setActivePersona] = useState(0);
+  const problemIcons = [FileSpreadsheet, AlertTriangle, Clipboard, Search];
+  const capabilityIcons = [Package, MapPin, AlertTriangle, Box, RotateCcw, Shield];
+  const previewTabs = [
+    { id: 'items', label: content.previewSection.tabLabels[0], content: <ItemsTableRealistic /> },
+    { id: 'locations', label: content.previewSection.tabLabels[1], content: <LocationsGridRealistic /> },
+    { id: 'reorder', label: content.previewSection.tabLabels[2], content: <ReorderQueueRealistic /> },
+    { id: 'assets', label: content.previewSection.tabLabels[3], content: <AssetTrackerRealistic /> },
+  ];
+  const workflowSteps = [
+    {
+      id: 'configure',
+      title: content.workflowSection.steps[0].title,
+      description: content.workflowSection.steps[0].description,
+      content: <SettingsPanel sections={inventorySettingsConfig} activeSection={0} />,
+    },
+    {
+      id: 'roles',
+      title: content.workflowSection.steps[1].title,
+      description: content.workflowSection.steps[1].description,
+      content: <SettingsPanel sections={inventorySettingsConfig} activeSection={2} />,
+    },
+    {
+      id: 'import',
+      title: content.workflowSection.steps[2].title,
+      description: content.workflowSection.steps[2].description,
+      content: <ImportMapper mappings={inventoryImportMappings} sourceFile="inventory_export.csv" />,
+    },
+    {
+      id: 'workflow',
+      title: content.workflowSection.steps[3].title,
+      description: content.workflowSection.steps[3].description,
+      content: <ItemsTableRealistic />,
+    },
+  ];
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       {/* 1. Hero with ASCII Animation */}
       <ProductHero
         productName="Stockroom"
-        productDescriptor="for Inventory"
-        headline="Inventory and asset tracking with controlled access."
-        subheadline="Know what exists, where it is, and who is accountable. Provisioned with your locations, categories, and reorder workflows."
-        primaryCta={{ label: 'Request access', href: '/book?intent=inventory' }}
-        secondaryCta={{ label: 'How onboarding works', href: '#onboarding' }}
+        productDescriptor={content.hero.productDescriptor}
+        headline={content.hero.headline}
+        subheadline={content.hero.subheadline}
+        primaryCta={{ label: content.hero.primaryCtaLabel, href: '/book?intent=inventory' }}
+        secondaryCta={{ label: content.hero.secondaryCtaLabel, href: '#onboarding' }}
         asciiComponent={<CyberPyramid color="mint" speed={0.8} />}
         plate="astral"
       />
@@ -174,19 +99,19 @@ const SoftwareInventory = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Stockroom in action"
-            subheadline="Items, locations, reorder alerts, and asset tracking."
+            headline={content.previewSection.headline}
+            subheadline={content.previewSection.subheadline}
             align="center"
           />
           <div className="mt-10 max-w-5xl mx-auto">
-            <ProductPreviewFrame title="Stockroom Inventory" variant="browser">
+            <ProductPreviewFrame title={content.previewSection.frameTitle} variant="browser">
               <div className="h-[360px] md:h-[440px]">
                 <TabbedProductPreview
-                  tabs={heroTabs}
-                  searchPlaceholder="Search items, locations..."
+                  tabs={previewTabs}
+                  searchPlaceholder={content.previewSection.searchPlaceholder}
                   filters={[
-                    { label: 'Location', active: false },
-                    { label: 'Category', active: false },
+                    { label: content.previewSection.filters[0], active: false },
+                    { label: content.previewSection.filters[1], active: false },
                   ]}
                 />
               </div>
@@ -199,8 +124,8 @@ const SoftwareInventory = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Built for teams who track and manage"
-            subheadline="Whether you're counting stock, managing equipment, or running audits."
+            headline={content.personaSection.headline}
+            subheadline={content.personaSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-8">
             <PersonaCards
@@ -220,11 +145,16 @@ const SoftwareInventory = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Replace the chaos"
-            subheadline="Move from manual counts and missing records to structured inventory operations."
+            headline={content.problemSection.headline}
+            subheadline={content.problemSection.subheadline}
           />
           <div className="mt-8">
-            <ProblemContrast items={problemItems} />
+            <ProblemContrast
+              items={content.problemSection.items.map((item, index) => ({
+                ...item,
+                icon: problemIcons[index],
+              }))}
+            />
           </div>
         </div>
       </section>
@@ -233,18 +163,18 @@ const SoftwareInventory = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="What changes on day one"
-            subheadline="Clear, immediate value—not promises."
+            headline={content.outcomesSection.headline}
+            subheadline={content.outcomesSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
             <div className="lg:col-span-2">
-              <OutcomeTiles outcomes={outcomes} />
+              <OutcomeTiles outcomes={content.outcomesSection.items} />
             </div>
             <ProductPreviewFrame variant="minimal" className="p-4">
               <h4 className="text-xs font-semibold text-foreground mb-4 uppercase tracking-wide">
-                Activity snapshot
+                {content.outcomesSection.snapshotLabel}
               </h4>
-              <MiniDashboard metrics={defaultMetrics.inventory} />
+              <MiniDashboard metrics={getDefaultMetrics(locale).inventory} />
             </ProductPreviewFrame>
           </div>
         </div>
@@ -254,11 +184,17 @@ const SoftwareInventory = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Core capabilities"
-            subheadline="Everything you need, configured and ready."
+            headline={content.capabilitiesSection.headline}
+            subheadline={content.capabilitiesSection.subheadline}
           />
           <div className="mt-8">
-            <CapabilityGrid capabilities={capabilities} columns={3} />
+            <CapabilityGrid
+              capabilities={content.capabilitiesSection.items.map((item, index) => ({
+                ...item,
+                icon: capabilityIcons[index],
+              }))}
+              columns={3}
+            />
           </div>
         </div>
       </section>
@@ -267,8 +203,8 @@ const SoftwareInventory = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Your setup journey"
-            subheadline="From first login to daily operations in four steps."
+            headline={content.workflowSection.headline}
+            subheadline={content.workflowSection.subheadline}
           />
           <WorkflowStepper steps={workflowSteps} className="mt-8" />
         </div>
@@ -278,8 +214,8 @@ const SoftwareInventory = () => {
       <section id="governance" className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Control who does what"
-            subheadline="Roles, permissions, and approval chains built in from day one."
+            headline={content.governanceSection.headline}
+            subheadline={content.governanceSection.subheadline}
           />
           <div className="mt-8 max-w-4xl mx-auto">
             <ProductPreviewFrame variant="card">
@@ -293,8 +229,8 @@ const SoftwareInventory = () => {
       <section id="onboarding" className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Configured for your team, not just activated"
-            subheadline="We handle provisioning, configuration, training, and ongoing admin support."
+            headline={content.onboardingSection.headline}
+            subheadline={content.onboardingSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
             <div className="lg:col-span-2">
@@ -312,13 +248,13 @@ const SoftwareInventory = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-xl">
             <p className="text-lg text-foreground mb-2">
-              Stockroom™ for Inventory starts from EUR 500 per month, depending on users and configuration.
+              {content.pricingSection.note}
             </p>
             <p className="text-muted-foreground mb-6">
-              Setup is included in Foundation Build packages or available as a fixed onboarding fee.
+              {content.pricingSection.setupNote}
             </p>
             <PrimaryButton href="/book?intent=inventory-pricing" textColor="astral">
-              Get Inventory pricing
+              {content.pricingSection.ctaLabel}
             </PrimaryButton>
           </div>
         </div>
@@ -326,9 +262,11 @@ const SoftwareInventory = () => {
 
       {/* Final CTA */}
       <CTABand
-        headline="Ready to get started with Stockroom™?"
-        primaryCta={{ label: 'Request access', href: '/book?intent=inventory' }}
-        secondaryCta={{ label: 'Book a call', href: '/book' }}
+        headline={content.finalCta.headline}
+        description={content.finalCta.description}
+        primaryCta={{ label: content.finalCta.primaryLabel, href: '/book' }}
+        secondaryCta={{ label: content.finalCta.secondaryLabel, href: '/pricing' }}
+        visualKey="stock-prism"
         variant="dark"
       />
     </Layout>

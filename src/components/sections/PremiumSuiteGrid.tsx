@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Users, Calculator, Package, ListTodo, LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { RevealGroup } from '@/components/motion/Reveal';
+import { useLocale } from '@/lib/locale';
 
 interface SuiteProduct {
   id: string;
@@ -31,8 +33,9 @@ const productGradients: Record<string, string> = {
 };
 
 export const PremiumSuiteGrid: React.FC<PremiumSuiteGridProps> = ({ products, className }) => {
+  const { locale, isRTL } = useLocale();
   return (
-    <div className={cn('grid grid-cols-1 md:grid-cols-2 gap-6', className)}>
+    <RevealGroup className={cn('grid grid-cols-1 md:grid-cols-2 gap-6', className)} variant="subtle" stagger={70}>
       {products.map((product) => {
         const ProductIcon = productIconMap[product.id] || Users;
         const gradient = productGradients[product.id] || 'from-mint/20 to-mint/5';
@@ -56,9 +59,9 @@ export const PremiumSuiteGrid: React.FC<PremiumSuiteGridProps> = ({ products, cl
               gradient
             )} />
             
-            <div className="relative z-10 flex flex-col h-full">
+            <div className={cn('relative z-10 flex flex-col h-full', isRTL && 'text-right')}>
               {/* Header */}
-              <div className="flex items-center gap-4 mb-4">
+              <div className={cn('flex items-center gap-4 mb-4', isRTL && 'flex-row-reverse')}>
                 <div className={cn(
                   'flex-shrink-0 w-14 h-14 rounded-xl',
                   'bg-plate-astral flex items-center justify-center',
@@ -96,18 +99,24 @@ export const PremiumSuiteGrid: React.FC<PremiumSuiteGridProps> = ({ products, cl
               <div className={cn(
                 'inline-flex items-center justify-center gap-2',
                 'h-12 px-6 rounded-xl',
-                'bg-mint text-ink font-semibold text-sm',
+                'bg-mint text-foreground font-semibold text-sm',
                 'group-hover:bg-mint group-hover:shadow-lg group-hover:shadow-mint/30',
                 'transition-all duration-300'
               )}>
-                Explore {product.name}
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                {locale === 'ar' ? `استكشف ${product.name}` : `Explore ${product.name}`}
+                <ArrowRight
+                  size={18}
+                  className={cn(
+                    'transition-transform',
+                    isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'
+                  )}
+                />
               </div>
             </div>
           </Link>
         );
       })}
-    </div>
+    </RevealGroup>
   );
 };
 

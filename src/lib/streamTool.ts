@@ -1,11 +1,14 @@
 // Client-side SSE streaming utility for AI tool pages
 // Parses the event stream token by token and calls onDelta for each chunk.
 
+import type { Locale } from "@/lib/locale";
+
 const AI_TOOL_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-tool`;
 
 export interface StreamOptions {
   tool: string;
   input: Record<string, string> | string;
+  locale?: Locale;
   onDelta: (chunk: string) => void;
   onDone: () => void;
   onError: (message: string) => void;
@@ -13,7 +16,7 @@ export interface StreamOptions {
 }
 
 export async function streamTool(opts: StreamOptions): Promise<void> {
-  const { tool, input, onDelta, onDone, onError, signal } = opts;
+  const { tool, input, locale = "en", onDelta, onDone, onError, signal } = opts;
 
   let resp: Response;
   try {
@@ -23,29 +26,46 @@ export async function streamTool(opts: StreamOptions): Promise<void> {
         "Content-Type": "application/json",
         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
-      body: JSON.stringify({ tool, input }),
+      body: JSON.stringify({ tool, input, locale }),
       signal,
     });
   } catch (e) {
     if ((e as Error).name === "AbortError") return;
-    onError("Failed to connect to AI service. Please try again.");
+    onError(
+      locale === "ar"
+        ? "تعذر الاتصال بخدمة الذكاء الاصطناعي. حاول مرة أخرى."
+        : "Failed to connect to AI service. Please try again."
+    );
     return;
   }
 
   if (!resp.ok) {
-    let message = "Something went wrong. Please try again.";
+    let message =
+      locale === "ar"
+        ? "حدث خطأ ما. حاول مرة أخرى."
+        : "Something went wrong. Please try again.";
     try {
       const data = await resp.json();
       if (data?.error) message = data.error;
     } catch {}
-    if (resp.status === 429) message = "Rate limit reached. Please wait a moment and try again.";
-    if (resp.status === 402) message = "AI usage limit reached. Please add credits to continue.";
+    if (resp.status === 429) {
+      message =
+        locale === "ar"
+          ? "تم الوصول إلى حد الاستخدام. انتظر قليلاً ثم حاول مرة أخرى."
+          : "Rate limit reached. Please wait a moment and try again.";
+    }
+    if (resp.status === 402) {
+      message =
+        locale === "ar"
+          ? "تم الوصول إلى حد استخدام الذكاء الاصطناعي. أضف رصيداً للمتابعة."
+          : "AI usage limit reached. Please add credits to continue.";
+    }
     onError(message);
     return;
   }
 
   if (!resp.body) {
-    onError("No response received.");
+    onError(locale === "ar" ? "لم يتم استلام أي استجابة." : "No response received.");
     return;
   }
 

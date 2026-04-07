@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Settings, Users, Database, GraduationCap, Check } from 'lucide-react';
+import { useLocale } from '@/lib/locale';
 
 interface TimelineStep {
   week: string;
@@ -10,7 +11,7 @@ interface TimelineStep {
   icon: React.ElementType;
 }
 
-const steps: TimelineStep[] = [
+const stepsEn: TimelineStep[] = [
   {
     week: 'Week 1',
     title: 'Roles and permissions',
@@ -37,9 +38,38 @@ const steps: TimelineStep[] = [
   },
 ];
 
+const stepsAr: TimelineStep[] = [
+  {
+    week: 'الأسبوع 1',
+    title: 'الأدوار والصلاحيات',
+    description: 'تهيئة هيكل الفريق ومستويات الوصول ومسارات الاعتماد.',
+    icon: Users,
+  },
+  {
+    week: 'الأسبوع 2',
+    title: 'القوالب وسير العمل',
+    description: 'إعداد مراحل العمل وقوالب المستندات وقواعد الأتمتة.',
+    icon: Settings,
+  },
+  {
+    week: 'الأسبوع 3',
+    title: 'استيراد البيانات',
+    description: 'نقل السجلات الحالية والتحقق منها داخل هيكل نظيف.',
+    icon: Database,
+  },
+  {
+    week: 'الأسبوع 4',
+    title: 'التدريب والتسليم',
+    description: 'بدء تأهيل الفريق والتوثيق ودعم الإدارة.',
+    icon: GraduationCap,
+  },
+];
+
 export const SetupTimeline: React.FC<{ className?: string }> = ({ className }) => {
+  const { locale, isRTL } = useLocale();
   const reducedMotion = useReducedMotion();
   const [activeStep, setActiveStep] = useState(0);
+  const steps = locale === 'ar' ? stepsAr : stepsEn;
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -53,15 +83,13 @@ export const SetupTimeline: React.FC<{ className?: string }> = ({ className }) =
 
   return (
     <div className={cn('relative', className)}>
-      {/* Progress line */}
-      <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-ink/10">
+      <div className={cn('absolute top-8 bottom-8 w-0.5 bg-ink/10', isRTL ? 'right-6' : 'left-6')}>
         <div
           className="w-full bg-mint transition-all duration-500 ease-out"
           style={{ height: `${((activeStep + 1) / steps.length) * 100}%` }}
         />
       </div>
 
-      {/* Steps */}
       <div className="space-y-4">
         {steps.map((step, index) => {
           const Icon = step.icon;
@@ -73,6 +101,7 @@ export const SetupTimeline: React.FC<{ className?: string }> = ({ className }) =
               key={step.week}
               className={cn(
                 'relative flex gap-4 p-4 rounded-xl transition-all duration-300',
+                isRTL && 'flex-row-reverse text-right',
                 isActive && 'bg-mint/10',
                 !isActive && 'hover:bg-muted/50 cursor-pointer'
               )}
@@ -84,7 +113,7 @@ export const SetupTimeline: React.FC<{ className?: string }> = ({ className }) =
                   'relative z-10 flex-shrink-0 w-12 h-12 rounded-full',
                   'flex items-center justify-center',
                   'transition-all duration-300',
-                  isComplete && 'bg-mint text-ink',
+                  isComplete && 'bg-mint text-foreground',
                   isActive && 'bg-plate-astral text-mint ring-2 ring-mint',
                   !isActive && !isComplete && 'bg-muted text-muted-foreground'
                 )}

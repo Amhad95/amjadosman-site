@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -7,12 +7,21 @@ import { CTABand } from '@/components/sections/CTABand';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
 import ReactMarkdown from 'react-markdown';
+import { fallbackArticles, resolveLocalizedArticle } from '@/lib/fallbackContent';
+import { useLocale } from '@/lib/locale';
+import { useSiteContent } from '@/lib/content';
+import { usePageMeta } from '@/hooks/use-page-meta';
+import { cn } from '@/lib/utils';
+import { ArrowLeft } from 'lucide-react';
 
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { locale, isRTL } = useLocale();
+  const { common } = useSiteContent();
+  const fallbackArticle = fallbackArticles.find((item) => item.slug === slug);
 
   const { data: article, isLoading, isError } = useQuery({
-    queryKey: ['article', slug],
+    queryKey: ['article', slug, locale],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('articles')
@@ -26,13 +35,20 @@ const ArticleDetail = () => {
     enabled: !!slug,
   });
 
-  useEffect(() => {
-    if (article) {
-      document.title = `${article.title} | ADSI Resources`;
-      const meta = document.querySelector('meta[name="description"]');
-      if (meta) meta.setAttribute('content', article.excerpt);
-    }
-  }, [article]);
+  const resolvedArticle = article
+    ? resolveLocalizedArticle(article, locale)
+    : fallbackArticle
+      ? resolveLocalizedArticle(fallbackArticle, locale)
+      : null;
+
+  usePageMeta({
+    title: resolvedArticle
+      ? `${resolvedArticle.title} | ${locale === 'ar' ? 'موارد ADSI' : 'ADSI Resources'}`
+      : locale === 'ar'
+        ? 'المقال | ADSI'
+        : 'Article | ADSI',
+    description: resolvedArticle?.excerpt,
+  });
 
   if (isLoading) {
     return (
@@ -50,13 +66,13 @@ const ArticleDetail = () => {
     );
   }
 
-  if (isError || !article) {
+  if ((isError && !fallbackArticle) || (!isLoading && !resolvedArticle)) {
     return (
       <Layout>
         <div className="container mx-auto px-4 md:px-6 py-24 max-w-3xl text-center">
-          <h1 className="font-serif text-heading-lg mb-4">Article not found</h1>
-          <p className="text-muted-foreground mb-8">This article doesn't exist or has been removed.</p>
-          <SecondaryButton href="/resources">Back to Resources</SecondaryButton>
+          <h1 className="font-serif text-heading-lg mb-4">{common.articleNotFound}</h1>
+          <p className="text-muted-foreground mb-8">{common.articleUnavailable}</p>
+          <SecondaryButton href="/resources">{common.backToResources}</SecondaryButton>
         </div>
       </Layout>
     );
@@ -69,28 +85,32 @@ const ArticleDetail = () => {
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
           <Link
             to="/resources"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
+            className={cn(
+              "inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors",
+              isRTL && "flex-row-reverse"
+            )}
           >
-            ← Back to Resources
+            <ArrowLeft className={cn("h-4 w-4", isRTL && "rotate-180")} />
+            {common.backToResources}
           </Link>
-          {article.category && (
+          {resolvedArticle.category && (
             <span className="inline-block text-xs font-semibold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-0.5 rounded mb-4">
-              {article.category}
+              {resolvedArticle.category}
             </span>
           )}
           <h1 className="font-serif text-poster-lg text-foreground mb-4 leading-tight">
-            {article.title}
+            {resolvedArticle.title}
           </h1>
-          <p className="text-body-lg text-muted-foreground leading-relaxed">{article.excerpt}</p>
+          <p className="text-body-lg text-muted-foreground leading-relaxed">{resolvedArticle.excerpt}</p>
         </div>
       </section>
 
       {/* Thumbnail */}
-      {article.thumbnail_url && (
+      {resolvedArticle.thumbnail_url && (
         <div className="container mx-auto px-4 md:px-6 max-w-3xl mb-8">
           <img
-            src={article.thumbnail_url}
-            alt={article.title}
+            src={resolvedArticle.thumbnail_url}
+            alt={resolvedArticle.title}
             className="w-full rounded-2xl object-cover aspect-video"
           />
         </div>
@@ -99,8 +119,11 @@ const ArticleDetail = () => {
       {/* Article body */}
       <section className="bg-background py-8 pb-16 md:pb-24">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          {article.body ? (
-            <div className="prose prose-base max-w-none
+          {resolvedArticle.body ? (
+            <div className={cn(
+              "prose prose-base max-w-none",
+              isRTL && "text-right"
+            ) + `
               prose-headings:font-serif prose-headings:text-foreground
               prose-h1:text-3xl prose-h2:text-2xl prose-h2:mt-10 prose-h3:text-xl prose-h3:mt-8
               prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:text-base
@@ -110,20 +133,25 @@ const ArticleDetail = () => {
               prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
               prose-pre:bg-muted prose-pre:border prose-pre:border-border
               prose-blockquote:border-l-4 prose-blockquote:border-border prose-blockquote:text-muted-foreground
-              prose-hr:border-border">
-              <ReactMarkdown>{article.body}</ReactMarkdown>
+              prose-hr:border-border`}>
+              <ReactMarkdown>{resolvedArticle.body}</ReactMarkdown>
             </div>
           ) : (
-            <p className="text-muted-foreground">Full content coming soon.</p>
+            <p className="text-muted-foreground">
+              {locale === 'ar'
+                ? 'هذا الملخص متاح حالياً. تواصل معنا إذا كنت تريد ملاحظات التنفيذ الكاملة.'
+                : 'This article summary is available now. Reach out if you want the full implementation notes.'}
+            </p>
           )}
         </div>
       </section>
 
       <CTABand
-        headline="Need help implementing this?"
-        description="We build the systems and infrastructure described in this guide. Fixed scope, clean handover."
-        primaryCta={{ label: 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: 'View pricing', href: '/pricing' }}
+        headline={common.resourceCtaHeadline}
+        description={common.resourceCtaDescription}
+        primaryCta={{ label: locale === 'ar' ? 'احجز مكالمة' : 'Book a Call', href: '/book' }}
+        secondaryCta={{ label: locale === 'ar' ? 'عرض الأسعار' : 'View pricing', href: '/pricing' }}
+        visualKey="insight-lens"
         variant="dark"
       />
     </Layout>

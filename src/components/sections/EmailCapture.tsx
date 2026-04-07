@@ -3,10 +3,7 @@ import { z } from 'zod';
 import { cn } from '@/lib/utils';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
-
-const emailSchema = z.object({
-  email: z.string().trim().email({ message: "Please enter a valid email address" }).max(255),
-});
+import { useLocale } from '@/lib/locale';
 
 interface EmailCaptureProps {
   headline: string;
@@ -27,6 +24,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
   followUpCta,
   className,
 }) => {
+  const { locale, isRTL } = useLocale();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -35,6 +33,19 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const emailSchema = z.object({
+      email: z
+        .string()
+        .trim()
+        .email({
+          message:
+            locale === 'ar'
+              ? 'يرجى إدخال بريد إلكتروني صالح'
+              : 'Please enter a valid email address',
+        })
+        .max(255),
+    });
 
     const result = emailSchema.safeParse({ email });
     if (!result.success) {
@@ -52,9 +63,9 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
   if (isSubmitted) {
     return (
       <div className={cn('bg-plate-emerald rounded-2xl p-8 md:p-12', className)}>
-        <div className="text-center">
+        <div className={cn('text-center', isRTL && 'text-right')}>
           <p className="text-mint text-lg font-medium mb-6">{successMessage}</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className={cn('flex flex-col sm:flex-row items-center justify-center gap-4', isRTL && 'sm:flex-row-reverse')}>
             <PrimaryButton href="#">
               {downloadLabel}
             </PrimaryButton>
@@ -71,7 +82,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
 
   return (
     <div className={cn('bg-plate-emerald rounded-2xl p-8 md:p-12', className)}>
-      <div className="max-w-xl mx-auto text-center">
+      <div className={cn('max-w-xl mx-auto text-center', isRTL && 'text-right')}>
         <h3 className="font-serif text-heading-md text-mint mb-3">
           {headline}
         </h3>
@@ -79,28 +90,32 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
           {description}
         </p>
         
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+        <form onSubmit={handleSubmit} className={cn('flex flex-col sm:flex-row gap-3', isRTL && 'sm:flex-row-reverse')}>
           <div className="flex-1">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
+              placeholder={locale === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email'}
               className={cn(
                 'w-full h-12 px-4 rounded-lg',
                 'bg-white/10 text-offwhite placeholder:text-offwhite/50',
                 'border border-mint/30 focus:border-mint',
                 'focus:outline-none focus:ring-2 focus:ring-mint/50',
-                error && 'border-magenta'
+                error && 'border-magenta',
+                isRTL && 'text-right'
               )}
-              aria-label="Email address"
+              aria-label={locale === 'ar' ? 'البريد الإلكتروني' : 'Email address'}
+              dir="ltr"
             />
             {error && (
-              <p className="mt-2 text-sm text-magenta text-left">{error}</p>
+              <p className={cn('mt-2 text-sm text-magenta text-left', isRTL && 'text-right')}>
+                {error}
+              </p>
             )}
           </div>
           <PrimaryButton type="submit" disabled={isLoading}>
-            {isLoading ? 'Sending...' : buttonLabel}
+            {isLoading ? (locale === 'ar' ? 'جارٍ الإرسال...' : 'Sending...') : buttonLabel}
           </PrimaryButton>
         </form>
       </div>

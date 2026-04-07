@@ -214,15 +214,33 @@ Concrete steps to implement the recommended changes.
 Be direct. Challenge assumptions. Most businesses track too many metrics and act on too few.`,
 };
 
+const getSystemPrompt = (tool: string, locale: string | undefined) => {
+  const basePrompt = SYSTEM_PROMPTS[tool];
+  if (!basePrompt) return null;
+
+  if (locale === "ar") {
+    return `${basePrompt}
+
+Additional output rules:
+- Write the full response in Arabic.
+- Use Arabic section headings and bullet points.
+- Keep proper nouns, product names, and URLs in their original form when needed.
+- Keep the tone clear, practical, and concise.`;
+  }
+
+  return basePrompt;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { tool, input } = await req.json();
+    const { tool, input, locale } = await req.json();
+    const systemPrompt = getSystemPrompt(tool, locale);
 
-    if (!tool || !SYSTEM_PROMPTS[tool]) {
+    if (!tool || !systemPrompt) {
       return new Response(JSON.stringify({ error: "Invalid tool specified" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -254,7 +272,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: SYSTEM_PROMPTS[tool] },
+          { role: "system", content: systemPrompt },
           { role: "user", content: userMessage },
         ],
         stream: true,

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
@@ -10,6 +10,9 @@ import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
 import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
+import { useLocale } from '@/lib/locale';
+import { usePageMeta } from '@/hooks/use-page-meta';
+import { getToolPageContent } from '@/lib/toolPageContent';
 
 const PageCritique = () => {
   const [url, setUrl] = useState('');
@@ -18,12 +21,13 @@ const PageCritique = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
+  const { locale, isRTL } = useLocale();
+  const toolCopy = getToolPageContent(locale, 'page-critique');
 
-  useEffect(() => {
-    document.title = 'Landing Page Critique — Free Conversion Audit | ADSI';
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'Get a free AI-powered conversion audit of your landing page. Hierarchy analysis, CTA review, friction points, and priority fixes. Free tool from ADSI.');
-  }, []);
+  usePageMeta({
+    title: toolCopy.metaTitle,
+    description: toolCopy.metaDescription,
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,57 +44,60 @@ const PageCritique = () => {
         ...(url.trim() ? { 'Page URL': url } : {}),
         ...(copy.trim() ? { 'Page copy': copy } : {}),
       },
+      locale,
       signal: abortRef.current.signal,
       onDelta: (chunk) => setOutput((prev) => prev + chunk),
       onDone: () => setIsStreaming(false),
       onError: (message) => {
         setIsStreaming(false);
-        toast({ title: 'Error', description: message, variant: 'destructive' });
+        toast({ title: toolCopy.errorTitle, description: message, variant: 'destructive' });
       },
     });
   };
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       <CompactPageHeader
-        eyebrow="AI tool"
-        title="Landing Page Critique"
-        description="Paste your page URL or copy. Get a conversion audit with hierarchy notes, CTA fixes, and ranked priority actions."
+        eyebrow={toolCopy.eyebrow}
+        title={toolCopy.title}
+        description={toolCopy.description}
         plate="blue"
         rightElement={<ToolHeaderAnimation slug="page-critique" />}
       />
 
       <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel="Critique Page">
+          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel={toolCopy.submitLabel}>
             <div>
               <Label htmlFor="url" className="text-sm font-semibold mb-2 block">
-                Page URL <span className="font-normal text-muted-foreground">(optional)</span>
+                {toolCopy.fields.urlLabel} <span className="font-normal text-muted-foreground">{toolCopy.fields.optional}</span>
               </Label>
               <Input
                 id="url"
                 type="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://yoursite.com/landing-page"
+                placeholder={toolCopy.fields.urlPlaceholder}
+                dir="ltr"
               />
             </div>
             <div>
               <Label htmlFor="copy" className="text-sm font-semibold mb-2 block">
-                Paste your page copy <span className="font-normal text-muted-foreground">(optional)</span>
+                {toolCopy.fields.copyLabel} <span className="font-normal text-muted-foreground">{toolCopy.fields.optional}</span>
               </Label>
               <p className="text-sm text-muted-foreground mb-3">
-                Paste the headline, subheadline, body copy, and CTA text from your page.
+                {toolCopy.fields.copyHelp}
               </p>
               <Textarea
                 id="copy"
                 value={copy}
                 onChange={(e) => setCopy(e.target.value)}
-                placeholder="Paste your landing page copy here — headline, subheadline, benefits, social proof, CTA..."
+                placeholder={toolCopy.fields.copyPlaceholder}
                 rows={8}
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
-            <p className="text-xs text-muted-foreground">Provide a URL, pasted copy, or both.</p>
+            <p className="text-xs text-muted-foreground">{toolCopy.fields.note}</p>
           </ToolInputForm>
 
           {(output || isStreaming) && (
@@ -102,10 +109,11 @@ const PageCritique = () => {
       </section>
 
       <CTABand
-        headline="Want us to implement these fixes?"
-        description="We redesign and rebuild landing pages for conversion. Fixed scope, clear timeline, clean handover."
-        primaryCta={{ label: 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: 'View pricing', href: '/pricing' }}
+        headline={toolCopy.buildCtaHeadline}
+        description={toolCopy.buildCtaDescription}
+        primaryCta={{ label: toolCopy.primaryCtaLabel, href: '/book' }}
+        secondaryCta={{ label: toolCopy.secondaryCtaLabel, href: '/pricing' }}
+        visualKey="focus-lens"
         variant="dark"
       />
     </Layout>

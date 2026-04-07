@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import { ProductPreviewFrame } from '@/components/shared/ProductPreviewFrame';
+import { useLocale } from '@/lib/locale';
 
 interface WorkflowStep {
   id: string;
@@ -17,13 +18,14 @@ interface WorkflowStepperProps {
 
 export const WorkflowStepper: React.FC<WorkflowStepperProps> = ({ steps, className }) => {
   const [activeStep, setActiveStep] = useState(0);
+  const { locale, isRTL } = useLocale();
 
   return (
     <div className={cn('grid grid-cols-1 lg:grid-cols-2 gap-8', className)}>
       {/* Left: Stepper */}
       <div className="relative">
         {/* Vertical line */}
-        <div className="absolute left-4 top-8 bottom-8 w-0.5 bg-gray-200" />
+        <div className={cn('absolute top-8 bottom-8 w-0.5 bg-gray-200', isRTL ? 'right-4' : 'left-4')} />
         
         <div className="space-y-2">
           {steps.map((step, index) => {
@@ -36,6 +38,7 @@ export const WorkflowStepper: React.FC<WorkflowStepperProps> = ({ steps, classNa
                 onClick={() => setActiveStep(index)}
                 className={cn(
                   'relative flex gap-4 p-4 rounded-xl cursor-pointer',
+                  isRTL && 'flex-row-reverse text-right',
                   'transition-all duration-300',
                   isActive && 'bg-gray-100',
                   !isActive && 'hover:bg-gray-50'
@@ -77,7 +80,10 @@ export const WorkflowStepper: React.FC<WorkflowStepperProps> = ({ steps, classNa
       </div>
 
       {/* Right: Preview in neutral frame */}
-      <ProductPreviewFrame variant="browser" title="Configuration">
+      <ProductPreviewFrame
+        variant="browser"
+        title={locale === 'ar' ? 'الإعداد' : 'Configuration'}
+      >
         <div className="relative min-h-[300px]">
           {steps.map((step, index) => (
             <div

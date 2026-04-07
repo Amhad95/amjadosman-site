@@ -2,10 +2,12 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
+import { useLocale } from '@/lib/locale';
 
 type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
 
 interface HeroProps {
+  eyebrow?: string;
   headline: string;
   subheadline?: string;
   credibilityStrip?: string;
@@ -26,6 +28,7 @@ const plateClasses: Record<PlateColor, string> = {
 };
 
 export const Hero: React.FC<HeroProps> = ({
+  eyebrow,
   headline,
   subheadline,
   credibilityStrip,
@@ -35,6 +38,7 @@ export const Hero: React.FC<HeroProps> = ({
   className,
   rightElement,
 }) => {
+  const { isRTL } = useLocale();
   return (
     <section
       className={cn(
@@ -44,9 +48,20 @@ export const Hero: React.FC<HeroProps> = ({
       )}
     >
       <div className="container mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-24">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div
+          className={cn(
+            'flex flex-col lg:items-center lg:justify-between gap-8',
+            isRTL ? 'lg:flex-row-reverse text-right' : 'lg:flex-row'
+          )}
+        >
           {/* Left: Text content */}
-          <div className="max-w-4xl lg:max-w-2xl">
+          <div className="motion-hero-copy max-w-4xl lg:max-w-2xl">
+            {eyebrow && (
+              <p className="text-xs uppercase tracking-[0.22em] text-offwhite/70 font-semibold mb-4 md:mb-5">
+                {eyebrow}
+              </p>
+            )}
+
             {/* Headline */}
             <h1 className="font-serif text-poster-xl text-mint mb-6 md:mb-8">
               {headline}
@@ -85,7 +100,12 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Right: Animation - visible on all screens */}
           {rightElement && (
-            <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end mt-8 lg:mt-0">
+            <div
+              className={cn(
+                'motion-hero-visual w-full lg:w-auto lg:flex-shrink-0 flex justify-center mt-8 lg:mt-0',
+                isRTL ? 'lg:justify-start' : 'lg:justify-end'
+              )}
+            >
               {rightElement}
             </div>
           )}

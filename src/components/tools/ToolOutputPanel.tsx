@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { Copy, Check, Clock, FileText } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { useLocale, getIntlLocale } from '@/lib/locale';
 
 interface ToolOutputPanelProps {
   output: string;
@@ -16,6 +17,7 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
   className,
 }) => {
   const [copied, setCopied] = useState(false);
+  const { locale, isRTL } = useLocale();
 
   const wordCount = output.trim() ? output.trim().split(/\s+/).length : 0;
   const readMinutes = Math.max(1, Math.round(wordCount / 200));
@@ -31,20 +33,26 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
   if (!output && !isStreaming) return null;
 
   return (
-    <div className={cn('bg-card border border-border rounded-2xl overflow-hidden', className)}>
+    <div className={cn('bg-card border border-border rounded-2xl overflow-hidden', isRTL && 'text-right', className)}>
       {/* Header bar */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-muted/50">
+      <div className={cn('flex items-center justify-between px-6 py-4 border-b border-border bg-muted/50', isRTL && 'flex-row-reverse')}>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <span className="flex items-center gap-1.5 font-medium text-foreground">
             <FileText className="w-4 h-4" />
-            Output
+            {locale === 'ar' ? 'المخرجات' : 'Output'}
           </span>
           {!isStreaming && wordCount > 0 && (
             <>
-              <span>{wordCount.toLocaleString()} words</span>
+              <span>
+                {wordCount.toLocaleString(getIntlLocale(locale))}{" "}
+                {locale === 'ar' ? 'كلمة' : 'words'}
+              </span>
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
-                <span>{readMinutes} min read</span>
+                <span>
+                  {readMinutes.toLocaleString(getIntlLocale(locale))}{" "}
+                  {locale === 'ar' ? 'دقيقة قراءة' : 'min read'}
+                </span>
               </span>
             </>
           )}
@@ -55,7 +63,7 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
                 <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 animate-bounce [animation-delay:150ms]" />
                 <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 animate-bounce [animation-delay:300ms]" />
               </span>
-              Generating...
+              {locale === 'ar' ? 'جارٍ التوليد...' : 'Generating...'}
             </span>
           )}
         </div>
@@ -70,9 +78,9 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
           )}
         >
           {copied ? (
-            <><Check className="w-3.5 h-3.5" /> Copied</>
+            <><Check className="w-3.5 h-3.5" /> {locale === 'ar' ? 'تم النسخ' : 'Copied'}</>
           ) : (
-            <><Copy className="w-3.5 h-3.5" /> Copy</>
+            <><Copy className="w-3.5 h-3.5" /> {locale === 'ar' ? 'نسخ' : 'Copy'}</>
           )}
         </button>
       </div>

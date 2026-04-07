@@ -9,13 +9,13 @@ import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
 import { NeuralLattice } from '@/components/shared/NeuralLattice';
-import { siteContent } from '@/lib/content';
+import { useSiteContent } from '@/lib/content';
 import { OutcomesImpactSection } from '@/components/sections/OutcomesImpactSection';
 import { DeliveryProcessInteractive } from '@/components/sections/DeliveryProcessInteractive';
 
 
 const Index = () => {
-  const { home } = siteContent;
+  const { home } = useSiteContent();
 
   return (
     <Layout>
@@ -35,9 +35,9 @@ const Index = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            eyebrow="Services"
+            eyebrow={home.whatWeDeliver.eyebrow}
             headline={home.whatWeDeliver.headline}
-            subheadline="Brand, web, operations, and software support delivered as one practical system."
+            subheadline={home.whatWeDeliver.subheadline}
             variant="poster"
           />
           <ServiceCardGrid items={home.whatWeDeliver.cards} />
@@ -59,15 +59,15 @@ const Index = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            eyebrow="Proof"
+            eyebrow={home.proofTiles.eyebrow}
             headline={home.proofTiles.headline}
-            subheadline="Review tangible samples quickly so decisions are based on evidence, not promises."
+            subheadline={home.proofTiles.subheadline}
             variant="poster"
           />
           <ProofTiles
             tiles={home.proofTiles.tiles.map((tile) => ({
               ...tile,
-              cta: 'View sample',
+              cta: home.proofTiles.tileCta,
               href: '/work',
             }))}
           />
@@ -83,7 +83,7 @@ const Index = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            eyebrow="AI tools"
+            eyebrow={home.aiTools.eyebrow}
             headline={home.aiTools.headline}
             subheadline={home.aiTools.subheadline}
             variant="poster"
@@ -117,7 +117,10 @@ const Index = () => {
       {/* Final CTA */}
       <CTABand
         headline={home.finalCta.headline}
-        primaryCta={home.finalCta.cta}
+        description={home.finalCta.description}
+        primaryCta={home.finalCta.primaryCta}
+        secondaryCta={home.finalCta.secondaryCta}
+        visualKey="signal-core"
         variant="dark"
       />
     </Layout>

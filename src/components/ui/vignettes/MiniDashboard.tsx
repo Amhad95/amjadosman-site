@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import type { Locale } from '@/lib/locale';
+import { useLocale } from '@/lib/locale';
 
 interface Metric {
   label: string;
@@ -17,6 +19,7 @@ interface MiniDashboardProps {
 
 export const MiniDashboard: React.FC<MiniDashboardProps> = ({ metrics, className }) => {
   const reducedMotion = useReducedMotion();
+  const { isRTL } = useLocale();
   const [displayedMetrics, setDisplayedMetrics] = useState(metrics);
   const [animatingIndex, setAnimatingIndex] = useState<number | null>(null);
 
@@ -68,13 +71,13 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ metrics, className
             animatingIndex === index && 'scale-105 border-gray-300 shadow-md'
           )}
         >
-          <div className="flex items-center justify-between mb-1">
+          <div className={cn('flex items-center justify-between mb-1', isRTL && 'flex-row-reverse')}>
             <span className="text-[9px] uppercase tracking-wide text-gray-500 font-medium">
               {metric.label}
             </span>
             {getTrendIcon(metric.trend)}
           </div>
-          <div className="text-lg font-bold text-gray-900">
+          <div className={cn('text-lg font-bold text-gray-900', isRTL && 'text-right')}>
             {metric.value}{metric.suffix || ''}
           </div>
         </div>
@@ -83,8 +86,7 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ metrics, className
   );
 };
 
-// Default metrics for different products
-export const defaultMetrics = {
+const defaultMetricsEn = {
   crm: [
     { label: 'Open Deals', value: 24, trend: 'up' as const },
     { label: 'This Month', value: 12, trend: 'up' as const },
@@ -110,5 +112,37 @@ export const defaultMetrics = {
     { label: 'This Week', value: 23, trend: 'up' as const },
   ],
 };
+
+const defaultMetricsAr: typeof defaultMetricsEn = {
+  crm: [
+    { label: 'صفقات مفتوحة', value: 24, trend: 'up' as const },
+    { label: 'هذا الشهر', value: 12, trend: 'up' as const },
+    { label: 'متابعات', value: 8, trend: 'neutral' as const },
+    { label: 'نسبة الإغلاق', value: 34, suffix: '%', trend: 'up' as const },
+  ],
+  accounting: [
+    { label: 'معلّق', value: 7, trend: 'down' as const },
+    { label: 'مدفوع', value: 42, trend: 'up' as const },
+    { label: 'متأخر', value: 3, trend: 'down' as const },
+    { label: 'هذا الأسبوع', value: 18, trend: 'up' as const },
+  ],
+  inventory: [
+    { label: 'عناصر', value: 156, trend: 'neutral' as const },
+    { label: 'مخزون منخفض', value: 4, trend: 'down' as const },
+    { label: 'قيد الطلب', value: 12, trend: 'up' as const },
+    { label: 'مواقع', value: 3, trend: 'neutral' as const },
+  ],
+  tasks: [
+    { label: 'نشطة', value: 18, trend: 'neutral' as const },
+    { label: 'مكتملة', value: 47, trend: 'up' as const },
+    { label: 'متأخرة', value: 2, trend: 'down' as const },
+    { label: 'هذا الأسبوع', value: 23, trend: 'up' as const },
+  ],
+};
+
+export const getDefaultMetrics = (locale: Locale) =>
+  locale === 'ar' ? defaultMetricsAr : defaultMetricsEn;
+
+export const defaultMetrics = defaultMetricsEn;
 
 export default MiniDashboard;

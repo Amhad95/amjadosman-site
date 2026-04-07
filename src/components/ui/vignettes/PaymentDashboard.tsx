@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useLocale } from '@/lib/locale';
 
 const invoices = [
   { id: 'INV-1041', client: 'TechStart', amount: '$4,200', status: 'paid' },
@@ -9,6 +10,7 @@ const invoices = [
 ];
 
 export const PaymentDashboard: React.FC = () => {
+  const { locale, isRTL } = useLocale();
   const reducedMotion = useReducedMotion();
   const [statuses, setStatuses] = useState(invoices.map(i => i.status));
   const [progress, setProgress] = useState(45);
@@ -52,20 +54,29 @@ export const PaymentDashboard: React.FC = () => {
     }
   };
 
+  const localizedStatus = (status: string) =>
+    locale === 'ar'
+      ? status === 'paid'
+        ? 'مدفوع'
+        : status === 'pending'
+          ? 'معلق'
+          : 'متأخر'
+      : status;
+
   return (
-    <div className="w-full h-full flex flex-col p-3 gap-3">
+    <div className={cn('w-full h-full flex flex-col p-3 gap-3', isRTL && 'text-right')}>
       {/* Summary Cards */}
-      <div className="flex gap-2">
+      <div className={cn('flex gap-2', isRTL && 'flex-row-reverse')}>
         <div className="flex-1 bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
-          <div className="text-[10px] text-gray-500">Revenue</div>
+          <div className="text-[10px] text-gray-500">{locale === 'ar' ? 'الإيراد' : 'Revenue'}</div>
           <div className="text-sm font-bold text-gray-900">$23,000</div>
         </div>
         <div className="flex-1 bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
-          <div className="text-[10px] text-gray-500">Outstanding</div>
+          <div className="text-[10px] text-gray-500">{locale === 'ar' ? 'المستحق' : 'Outstanding'}</div>
           <div className="text-sm font-bold text-gray-900">$18,800</div>
         </div>
         <div className="flex-1 bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
-          <div className="text-[10px] text-gray-500">Collection</div>
+          <div className="text-[10px] text-gray-500">{locale === 'ar' ? 'التحصيل' : 'Collection'}</div>
           <div className="flex items-center gap-1">
             <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div 
@@ -81,10 +92,10 @@ export const PaymentDashboard: React.FC = () => {
       {/* Invoice List */}
       <div className="flex-1 bg-white rounded-lg overflow-hidden border border-gray-200">
         <div className="grid grid-cols-4 text-[9px] text-gray-500 font-medium p-2 border-b border-gray-200 bg-gray-50">
-          <span>Invoice</span>
-          <span>Client</span>
-          <span className="text-right">Amount</span>
-          <span className="text-center">Status</span>
+          <span>{locale === 'ar' ? 'الفاتورة' : 'Invoice'}</span>
+          <span>{locale === 'ar' ? 'العميل' : 'Client'}</span>
+          <span className={cn(isRTL ? 'text-left' : 'text-right')}>{locale === 'ar' ? 'المبلغ' : 'Amount'}</span>
+          <span className="text-center">{locale === 'ar' ? 'الحالة' : 'Status'}</span>
         </div>
         {invoices.map((inv, index) => (
           <div 
@@ -99,7 +110,7 @@ export const PaymentDashboard: React.FC = () => {
                 'px-1.5 py-0.5 rounded-full text-[8px] capitalize font-medium transition-all duration-300',
                 getStatusStyle(statuses[index])
               )}>
-                {statuses[index]}
+                {localizedStatus(statuses[index])}
               </span>
             </div>
           </div>

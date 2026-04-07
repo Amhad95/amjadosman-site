@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
+import { useLocale } from '@/lib/locale';
 
 type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
 
@@ -37,6 +38,7 @@ export const ProductHero: React.FC<ProductHeroProps> = ({
   plate = 'astral',
   className,
 }) => {
+  const { isRTL } = useLocale();
   return (
     <section
       className={cn(
@@ -46,7 +48,12 @@ export const ProductHero: React.FC<ProductHeroProps> = ({
       )}
     >
       <div className="container mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-24">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12">
+        <div
+          className={cn(
+            'flex flex-col lg:items-center lg:justify-between gap-8 lg:gap-12',
+            isRTL ? 'lg:flex-row-reverse text-right' : 'lg:flex-row'
+          )}
+        >
           {/* Left: Text content */}
           <div className="max-w-2xl">
             {/* Product Name with TM */}
@@ -84,7 +91,7 @@ export const ProductHero: React.FC<ProductHeroProps> = ({
           </div>
 
           {/* Right: ASCII Animation */}
-          <div className="w-full lg:w-auto lg:flex-shrink-0 flex justify-center lg:justify-end">
+          <div className={cn('w-full lg:w-auto lg:flex-shrink-0 flex justify-center', isRTL ? 'lg:justify-start' : 'lg:justify-end')}>
             <div className="w-full max-w-md lg:max-w-lg">
               {asciiComponent}
             </div>

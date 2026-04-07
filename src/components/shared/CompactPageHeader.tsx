@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
+import { useLocale } from '@/lib/locale';
 
 type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy';
 
@@ -32,10 +33,11 @@ export const CompactPageHeader: React.FC<CompactPageHeaderProps> = ({
   rightElement,
   className,
 }) => {
+  const { isRTL } = useLocale();
   return (
     <section className={cn('relative min-h-[38vh] md:min-h-[46vh] flex items-end', plateClasses[plate], className)}>
       <div className="container mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-10 md:pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end">
+        <div className={cn('grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end', isRTL && 'text-right')}>
           <div className="lg:col-span-7 max-w-3xl">
             {eyebrow && (
               <p className="text-xs uppercase tracking-[0.2em] text-mint/80 font-semibold mb-4">{eyebrow}</p>
@@ -50,7 +52,11 @@ export const CompactPageHeader: React.FC<CompactPageHeaderProps> = ({
               </div>
             )}
           </div>
-          {rightElement && <div className="lg:col-span-5 flex justify-start lg:justify-end">{rightElement}</div>}
+          {rightElement && (
+            <div className={cn('lg:col-span-5 flex', isRTL ? 'justify-end lg:justify-start' : 'justify-start lg:justify-end')}>
+              {rightElement}
+            </div>
+          )}
         </div>
       </div>
     </section>

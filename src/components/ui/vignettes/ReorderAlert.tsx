@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { AlertTriangle, Package, ArrowRight, Check } from 'lucide-react';
+import { AlertTriangle, Package, ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { useLocale } from '@/lib/locale';
 
 interface Alert {
   id: string;
@@ -11,16 +12,28 @@ interface Alert {
   status: 'new' | 'acknowledged' | 'ordered';
 }
 
-const initialAlerts: Alert[] = [
-  { id: '1', item: 'Wireless Mouse', stock: 3, threshold: 10, status: 'new' },
-  { id: '2', item: 'USB-C Cables', stock: 5, threshold: 15, status: 'new' },
-  { id: '3', item: 'Webcam HD', stock: 2, threshold: 8, status: 'acknowledged' },
-];
+const alertsByLocale = {
+  en: [
+    { id: '1', item: 'Wireless Mouse', stock: 3, threshold: 10, status: 'new' as const },
+    { id: '2', item: 'USB-C Cables', stock: 5, threshold: 15, status: 'new' as const },
+    { id: '3', item: 'Webcam HD', stock: 2, threshold: 8, status: 'acknowledged' as const },
+  ],
+  ar: [
+    { id: '1', item: 'فأرة لاسلكية', stock: 3, threshold: 10, status: 'new' as const },
+    { id: '2', item: 'كوابل USB-C', stock: 5, threshold: 15, status: 'new' as const },
+    { id: '3', item: 'كاميرا ويب HD', stock: 2, threshold: 8, status: 'acknowledged' as const },
+  ],
+} as const;
 
 export const ReorderAlert: React.FC = () => {
+  const { locale, isRTL } = useLocale();
   const reducedMotion = useReducedMotion();
-  const [alerts, setAlerts] = useState(initialAlerts);
+  const [alerts, setAlerts] = useState(alertsByLocale[locale]);
   const [newAlertVisible, setNewAlertVisible] = useState(false);
+
+  useEffect(() => {
+    setAlerts(alertsByLocale[locale]);
+  }, [locale]);
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -49,7 +62,9 @@ export const ReorderAlert: React.FC = () => {
       case 'ordered':
         return <Check size={10} className="text-emerald-600" />;
       case 'acknowledged':
-        return <ArrowRight size={10} className="text-amber-600" />;
+        return isRTL
+          ? <ArrowLeft size={10} className="text-amber-600" />
+          : <ArrowRight size={10} className="text-amber-600" />;
       default:
         return <AlertTriangle size={10} className="text-red-600" />;
     }
@@ -66,13 +81,22 @@ export const ReorderAlert: React.FC = () => {
     }
   };
 
+  const getStatusLabel = (status: Alert['status']) =>
+    locale === 'ar'
+      ? status === 'ordered'
+        ? 'تم الطلب'
+        : status === 'acknowledged'
+          ? 'تمت المراجعة'
+          : 'جديد'
+      : status;
+
   return (
-    <div className="w-full h-full flex flex-col p-3 gap-3">
+    <div className={cn('w-full h-full flex flex-col p-3 gap-3', isRTL && 'text-right')}>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className={cn('flex items-center justify-between', isRTL && 'flex-row-reverse')}>
+        <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
           <Package size={14} className="text-gray-700" />
-          <span className="text-xs font-semibold text-gray-900">Reorder Alerts</span>
+          <span className="text-xs font-semibold text-gray-900">{locale === 'ar' ? 'تنبيهات إعادة الطلب' : 'Reorder Alerts'}</span>
         </div>
         <div className={cn(
           'flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium',
@@ -82,7 +106,7 @@ export const ReorderAlert: React.FC = () => {
             : 'bg-gray-100 text-gray-500'
         )}>
           <span className="w-1.5 h-1.5 rounded-full bg-current" />
-          {alerts.filter(a => a.status === 'new').length} new
+          {alerts.filter(a => a.status === 'new').length} {locale === 'ar' ? 'جديد' : 'new'}
         </div>
       </div>
 
@@ -101,13 +125,13 @@ export const ReorderAlert: React.FC = () => {
               <div className="flex-1">
                 <div className="text-[11px] font-medium">{alert.item}</div>
                 <div className="text-[9px] opacity-70">
-                  Stock: {alert.stock} / Min: {alert.threshold}
+                  {locale === 'ar' ? `المخزون: ${alert.stock} / الحد الأدنى: ${alert.threshold}` : `Stock: ${alert.stock} / Min: ${alert.threshold}`}
                 </div>
               </div>
-              <div className="flex items-center gap-1.5">
+              <div className={cn('flex items-center gap-1.5', isRTL && 'flex-row-reverse')}>
                 {getStatusIcon(alert.status)}
                 <span className="text-[8px] uppercase font-semibold">
-                  {alert.status}
+                  {getStatusLabel(alert.status)}
                 </span>
               </div>
             </div>

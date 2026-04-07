@@ -2,19 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Search, Filter } from 'lucide-react';
+import { useLocale } from '@/lib/locale';
 
-const items = [
-  { sku: 'LAP-001', name: 'MacBook Pro 14"', stock: 24, location: 'Warehouse A' },
-  { sku: 'MON-015', name: 'Dell Monitor 27"', stock: 8, location: 'Warehouse B' },
-  { sku: 'KEY-042', name: 'Mechanical Keyboard', stock: 45, location: 'Warehouse A' },
-  { sku: 'MOU-033', name: 'Wireless Mouse', stock: 3, location: 'Warehouse C' },
-];
+const itemsByLocale = {
+  en: [
+    { sku: 'LAP-001', name: 'MacBook Pro 14"', stock: 24, location: 'Warehouse A' },
+    { sku: 'MON-015', name: 'Dell Monitor 27"', stock: 8, location: 'Warehouse B' },
+    { sku: 'KEY-042', name: 'Mechanical Keyboard', stock: 45, location: 'Warehouse A' },
+    { sku: 'MOU-033', name: 'Wireless Mouse', stock: 3, location: 'Warehouse C' },
+  ],
+  ar: [
+    { sku: 'LAP-001', name: 'ماك بوك برو 14"', stock: 24, location: 'المستودع أ' },
+    { sku: 'MON-015', name: 'شاشة Dell 27"', stock: 8, location: 'المستودع ب' },
+    { sku: 'KEY-042', name: 'لوحة مفاتيح ميكانيكية', stock: 45, location: 'المستودع أ' },
+    { sku: 'MOU-033', name: 'فأرة لاسلكية', stock: 3, location: 'المستودع ج' },
+  ],
+} as const;
 
 export const InventoryList: React.FC = () => {
+  const { locale, isRTL } = useLocale();
   const reducedMotion = useReducedMotion();
-  const [stocks, setStocks] = useState(items.map(i => i.stock));
+  const items = itemsByLocale[locale];
+  const [stocks, setStocks] = useState(items.map((item) => item.stock));
   const [filterActive, setFilterActive] = useState(false);
   const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    setStocks(items.map((item) => item.stock));
+    setSearchText('');
+  }, [items]);
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -31,12 +47,12 @@ export const InventoryList: React.FC = () => {
         setFilterActive((prev) => !prev);
       }
 
-      const texts = ['', 'Mac', 'Monitor', ''];
+      const texts = locale === 'ar' ? ['', 'ماك', 'شاشة', ''] : ['', 'Mac', 'Monitor', ''];
       setSearchText(texts[Math.floor(Math.random() * texts.length)]);
     }, 2500);
 
     return () => clearInterval(interval);
-  }, [reducedMotion]);
+  }, [locale, reducedMotion]);
 
   const getStockStyle = (stock: number) => {
     if (stock <= 5) return 'text-red-600';
@@ -45,16 +61,16 @@ export const InventoryList: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col p-3 gap-2">
+    <div className={cn('w-full h-full flex flex-col p-3 gap-2', isRTL && 'text-right')}>
       {/* Search and Filter Bar */}
-      <div className="flex gap-2">
-        <div className="flex-1 flex items-center gap-2 bg-white rounded-lg px-2 py-1.5 border border-gray-200">
+      <div className={cn('flex gap-2', isRTL && 'flex-row-reverse')}>
+        <div className={cn('flex-1 flex items-center gap-2 bg-white rounded-lg px-2 py-1.5 border border-gray-200', isRTL && 'flex-row-reverse')}>
           <Search size={12} className="text-gray-400" />
           <span className={cn(
             'text-[10px] transition-all duration-300',
             searchText ? 'text-gray-800' : 'text-gray-400'
           )}>
-            {searchText || 'Search inventory...'}
+            {searchText || (locale === 'ar' ? 'ابحث في المخزون...' : 'Search inventory...')}
           </span>
         </div>
         <button 
@@ -66,7 +82,7 @@ export const InventoryList: React.FC = () => {
           )}
         >
           <Filter size={10} />
-          Filter
+          {locale === 'ar' ? 'تصفية' : 'Filter'}
         </button>
       </div>
 
@@ -74,9 +90,9 @@ export const InventoryList: React.FC = () => {
       <div className="flex-1 bg-white rounded-lg overflow-hidden border border-gray-200">
         <div className="grid grid-cols-4 text-[9px] text-gray-500 font-medium p-2 border-b border-gray-200 bg-gray-50">
           <span>SKU</span>
-          <span>Item</span>
-          <span className="text-center">Stock</span>
-          <span>Location</span>
+          <span>{locale === 'ar' ? 'العنصر' : 'Item'}</span>
+          <span className="text-center">{locale === 'ar' ? 'المخزون' : 'Stock'}</span>
+          <span>{locale === 'ar' ? 'الموقع' : 'Location'}</span>
         </div>
         {items.map((item, index) => (
           <div 

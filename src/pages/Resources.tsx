@@ -5,25 +5,38 @@ import { Layout } from '@/components/layout/Layout';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
 import { CTABand } from '@/components/sections/CTABand';
-import { siteContent } from '@/lib/content';
+import { useSiteContent } from '@/lib/content';
 import { Link } from 'react-router-dom';
+import { fallbackArticles, resolveLocalizedArticle, type ResolvedArticle } from '@/lib/fallbackContent';
+import { RevealGroup } from '@/components/motion/Reveal';
+import { useLocale } from '@/lib/locale';
+import { cn } from '@/lib/utils';
+import { usePageMeta } from '@/hooks/use-page-meta';
 
 interface Article {
   id: string;
   title: string;
+  title_ar?: string | null;
   slug: string;
   excerpt: string;
+  excerpt_ar?: string | null;
   thumbnail_url: string | null;
   category: string | null;
+  category_ar?: string | null;
   created_at: string;
 }
 
-const ArticleCard: React.FC<{ article: Article }> = ({ article }) => (
+const ArticleCard: React.FC<{ article: ResolvedArticle }> = ({ article }) => {
+  const { locale, isRTL } = useLocale();
+
+  return (
   <Link
     to={`/resources/${article.slug}`}
-    className="group bg-card border border-border rounded-2xl overflow-hidden flex flex-col hover:shadow-md transition-shadow duration-200"
+    className={cn(
+      "group bg-card border border-border rounded-2xl overflow-hidden flex flex-col hover:shadow-md transition-shadow duration-200",
+      isRTL && "text-right"
+    )}
   >
-    {/* Thumbnail */}
     <div className="aspect-video bg-muted overflow-hidden">
       {article.thumbnail_url ? (
         <img src={article.thumbnail_url} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -49,21 +62,28 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => (
       </h3>
       <p className="text-body-sm text-muted-foreground flex-1 line-clamp-3">{article.excerpt}</p>
       <span className="mt-4 text-sm font-semibold text-foreground group-hover:underline">
-        Read article →
+        {locale === 'ar' ? 'اقرأ المقال' : 'Read article'}
       </span>
     </div>
   </Link>
-);
+  );
+};
 
 const Resources = () => {
-  const { resources } = siteContent;
+  const { resources, common } = useSiteContent();
+  const { locale } = useLocale();
+
+  usePageMeta({
+    title: locale === 'ar' ? 'الموارد | ADSI' : 'Resources | ADSI',
+    description: resources.hero.subheadline,
+  });
 
   const { data: articles, isLoading } = useQuery({
-    queryKey: ['articles'],
+    queryKey: ['articles', locale],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('articles')
-        .select('id, title, slug, excerpt, thumbnail_url, category, created_at')
+        .select('id, title, title_ar, slug, excerpt, excerpt_ar, thumbnail_url, category, category_ar, created_at')
         .eq('published', true)
         .order('sort_order', { ascending: true });
       if (error) throw error;
@@ -71,7 +91,10 @@ const Resources = () => {
     },
   });
 
-  const hasArticles = articles && articles.length > 0;
+  const resolvedArticles = (articles && articles.length > 0 ? articles : fallbackArticles).map((article) =>
+    resolveLocalizedArticle(article, locale)
+  );
+  const hasArticles = resolvedArticles.length > 0;
 
   return (
     <Layout>
@@ -93,11 +116,11 @@ const Resources = () => {
           )}
 
           {!isLoading && hasArticles && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-              {articles.map((article) => (
+            <RevealGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12" stagger={72}>
+              {resolvedArticles.map((article) => (
                 <ArticleCard key={article.id} article={article} />
               ))}
-            </div>
+            </RevealGroup>
           )}
 
           {!isLoading && !hasArticles && (
@@ -112,10 +135,11 @@ const Resources = () => {
       </section>
 
       <CTABand
-        headline="Need help implementing any of this?"
-        description="We build the systems, SOPs, and infrastructure described in these guides. Fixed scope, clean handover."
-        primaryCta={{ label: 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: 'View pricing', href: '/pricing' }}
+        headline={common.resourceCtaHeadline}
+        description={common.resourceCtaDescription}
+        primaryCta={{ label: locale === 'ar' ? 'احجز مكالمة' : 'Book a Call', href: '/book' }}
+        secondaryCta={{ label: locale === 'ar' ? 'عرض الأسعار' : 'View pricing', href: '/pricing' }}
+        visualKey="archive-beacon"
         variant="dark"
       />
     </Layout>

@@ -6,13 +6,15 @@ import { EmailCapture } from '@/components/sections/EmailCapture';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { KnotAnimation } from '@/components/ui/knot-animation';
-import { siteContent } from '@/lib/content';
+import { useSiteContent } from '@/lib/content';
+import { useLocale } from '@/lib/locale';
 
 const Tools = () => {
-  const { tools } = siteContent;
+  const { tools } = useSiteContent();
+  const { locale } = useLocale();
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       {/* Hero */}
       <Hero
         headline={tools.hero.headline}
@@ -26,7 +28,10 @@ const Tools = () => {
       {/* Tool Listing */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="Available tools" subheadline="Select a tool to get started" />
+          <SectionHeader
+            headline={locale === 'ar' ? 'الأدوات المتاحة' : 'Available tools'}
+            subheadline={locale === 'ar' ? 'اختر أداة للبدء' : 'Select a tool to get started'}
+          />
           <ToolList
             tools={tools.list.map((tool) => ({
               title: tool.title,
@@ -55,10 +60,15 @@ const Tools = () => {
 
       {/* Final CTA */}
       <CTABand
-        headline="Need help with your project?"
-        description="Our team can implement the outputs from these tools as part of a structured delivery."
-        primaryCta={{ label: "Book a Call", href: "/book" }}
-        secondaryCta={{ label: "View pricing", href: "/pricing" }}
+        headline={locale === 'ar' ? 'انتقل من التدقيق إلى التنفيذ.' : 'Move from audit to build.'}
+        description={
+          locale === 'ar'
+            ? 'استخدم الأداة الآن، ثم احجز مكالمة إذا أردت أن ننفذها لك.'
+            : 'Use the tool now, then book a call if you want us to implement it.'
+        }
+        primaryCta={{ label: locale === 'ar' ? 'احجز مكالمة' : 'Book a Call', href: "/book" }}
+        secondaryCta={{ label: locale === 'ar' ? 'عرض الأسعار' : 'View pricing', href: "/pricing" }}
+        visualKey="logic-knot"
         variant="dark"
       />
     </Layout>

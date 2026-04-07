@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Check, X, Shield, ShieldCheck } from 'lucide-react';
+import { useLocale } from '@/lib/locale';
 
 type Preset = 'simple' | 'strict';
 
@@ -39,6 +40,15 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
   const reducedMotion = useReducedMotion();
   const [preset, setPreset] = useState<Preset>('simple');
   const [isHovered, setIsHovered] = useState(false);
+  const { locale, isRTL } = useLocale();
+  const roleLabels =
+    locale === 'ar'
+      ? { Admin: 'مشرف', Manager: 'مدير', Staff: 'موظف', Viewer: 'مشاهد' }
+      : { Admin: 'Admin', Manager: 'Manager', Staff: 'Staff', Viewer: 'Viewer' };
+  const actionLabels =
+    locale === 'ar'
+      ? ['إنشاء', 'اعتماد', 'تصدير', 'حذف']
+      : actions;
 
   // Auto-toggle between presets
   useEffect(() => {
@@ -51,13 +61,15 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
 
   return (
     <div
-      className={cn('bg-white p-4', className)}
+      className={cn('bg-white p-4', isRTL && 'text-right', className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Preset toggle */}
-      <div className="flex items-center gap-4 mb-6">
-        <span className="text-sm font-medium text-gray-500">Governance preset:</span>
+      <div className={cn('flex items-center gap-4 mb-6', isRTL && 'flex-row-reverse justify-end')}>
+        <span className="text-sm font-medium text-gray-500">
+          {locale === 'ar' ? 'إعداد الحوكمة:' : 'Governance preset:'}
+        </span>
         <div className="flex rounded-lg overflow-hidden border border-gray-200">
           <button
             onClick={() => setPreset('simple')}
@@ -69,7 +81,7 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
             )}
           >
             <Shield size={16} />
-            Simple
+            {locale === 'ar' ? 'مبسّط' : 'Simple'}
           </button>
           <button
             onClick={() => setPreset('strict')}
@@ -81,7 +93,7 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
             )}
           >
             <ShieldCheck size={16} />
-            Strict
+            {locale === 'ar' ? 'صارم' : 'Strict'}
           </button>
         </div>
       </div>
@@ -90,8 +102,10 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Header */}
         <div className="grid grid-cols-5 bg-gray-50 border-b border-gray-200">
-          <div className="p-4 text-sm font-semibold text-gray-700">Role</div>
-          {actions.map((action) => (
+          <div className="p-4 text-sm font-semibold text-gray-700">
+            {locale === 'ar' ? 'الدور' : 'Role'}
+          </div>
+          {actionLabels.map((action) => (
             <div key={action} className="p-4 text-sm font-semibold text-gray-700 text-center">
               {action}
             </div>
@@ -107,12 +121,12 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
               rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
             )}
           >
-            <div className="p-4 text-sm font-medium text-gray-800 flex items-center gap-2">
+            <div className={cn('p-4 text-sm font-medium text-gray-800 flex items-center gap-2', isRTL && 'flex-row-reverse')}>
               <div className={cn(
                 'w-2 h-2 rounded-full',
                 roleColors[role as keyof typeof roleColors]
               )} />
-              {role}
+              {roleLabels[role as keyof typeof roleLabels]}
             </div>
             {permissionMatrix[preset][role].map((hasPermission, colIndex) => (
               <div

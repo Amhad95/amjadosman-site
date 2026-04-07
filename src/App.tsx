@@ -21,6 +21,7 @@ import Book from "./pages/Book";
 import Process from "./pages/Process";
 import Resources from "./pages/Resources";
 import ArticleDetail from "./pages/ArticleDetail";
+import WorkDetail from "./pages/WorkDetail";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -60,6 +61,7 @@ const App = () => (
           <Route path="/tools/dashboard-builder" element={<DashboardBuilder />} />
           <Route path="/tools/kpi-audit" element={<KpiAudit />} />
           <Route path="/work" element={<Work />} />
+          <Route path="/work/:slug" element={<WorkDetail />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/about" element={<About />} />
           <Route path="/book" element={<Book />} />

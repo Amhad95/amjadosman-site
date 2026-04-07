@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Card, CardTitle, CardDescription, CardIcon } from '@/components/shared/Card';
 import { LucideIcon } from 'lucide-react';
+import { RevealGroup } from '@/components/motion/Reveal';
 
 interface CardItem {
   title: string;
@@ -30,12 +31,13 @@ export const CardGrid: React.FC<CardGridProps> = ({
   };
 
   return (
-    <div
+    <RevealGroup
       className={cn(
         'grid grid-cols-1 gap-6 md:gap-8',
         gridCols[columns],
         className
       )}
+      stagger={72}
     >
       {items.map((item, index) => (
         <Card key={index} variant={variant} featured={item.featured}>
@@ -48,7 +50,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
           <CardDescription>{item.description}</CardDescription>
         </Card>
       ))}
-    </div>
+    </RevealGroup>
   );
 };
 

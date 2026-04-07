@@ -2,268 +2,210 @@ import React from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { SectionHeader } from '@/components/shared/SectionHeader';
-import { PricingZone } from '@/components/sections/PricingZone';
-import { RecommendedOfferCard } from '@/components/sections/RecommendedOfferCard';
-import { ServiceMenuList } from '@/components/sections/ServiceMenuList';
-import { RetainerCard } from '@/components/sections/RetainerCard';
-import { Steps } from '@/components/sections/Steps';
+import { ServicePricingStack } from '@/components/sections/ServicePricingStack';
+import { ServiceDeliverySection } from '@/components/sections/ServiceDeliverySection';
 import { CTABand } from '@/components/sections/CTABand';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { CheckCircle, Shield } from 'lucide-react';
-import { STRIPE_PRICES } from '@/lib/stripe';
+import { OutcomeMotionCard, OutcomeMotionVariant } from '@/components/services/OutcomeMotionCard';
+import { Bot, BrainCircuit, CheckCircle, Gauge, Shield, ShieldCheck, Sparkles, Workflow } from 'lucide-react';
+import { usePricingContent } from '@/lib/pricingContent';
+import { useLocale } from '@/lib/locale';
+import { getServicePageContent } from '@/lib/servicePageContent';
+import { cn } from '@/lib/utils';
 
-const outcomes = [
-  { title: 'Less manual triage and repetitive drafting.', body: 'Agents handle intake, categorization, and first-draft responses.' },
-  { title: 'Cleaner routing with human approvals.', body: 'Workflows that escalate properly instead of failing silently.' },
-  { title: 'Knowledge answers with permission boundaries.', body: 'Staff get answers from internal docs without access leakage.' },
-  { title: 'Operational visibility with logs and audit trails.', body: 'Every agent action is logged and reviewable.' },
+const outcomeMotions: OutcomeMotionVariant[] = [
+  'agents-admin',
+  'agents-handoffs',
+  'agents-knowledge',
+  'agents-safety',
 ];
 
-const useCases = [
-  {
-    title: 'Customer Support Automation',
-    outcome: 'Reduce response time and manual triage.',
-    workflows: ['Ticket classification and priority routing', 'Draft reply generation with context', 'Escalation to human agents for complex cases'],
-    control: 'Human approval on outbound replies. Escalation paths for edge cases.',
-  },
-  {
-    title: 'Sales and CRM Operations',
-    outcome: 'Automate intake and prep so reps focus on selling.',
-    workflows: ['Lead intake and enrichment', 'Follow-up sequence triggers', 'Meeting prep summaries from CRM data'],
-    control: 'Rep approval before outbound. Data enrichment logged.',
-  },
-  {
-    title: 'Marketing Operations',
-    outcome: 'Reduce manual reporting and content assembly.',
-    workflows: ['Brief generation from campaign data', 'Content repurposing across channels', 'Reporting summary generation'],
-    control: 'Human review on published content. Automated drafts only.',
-  },
-  {
-    title: 'Finance Ops and Admin',
-    outcome: 'Faster intake and cleaner categorization.',
-    workflows: ['Invoice intake and categorization', 'Expense approval routing', 'Report generation from financial data'],
-    control: 'Approval required for all financial actions. Audit trail mandatory.',
-  },
-  {
-    title: 'HR and People Ops',
-    outcome: 'Reduce repetitive HR requests and onboarding friction.',
-    workflows: ['Onboarding workflow automation', 'Policy Q&A from internal docs', 'Internal request routing and tracking'],
-    control: 'Sensitive data handled with role-based access. Escalation for edge cases.',
-  },
-  {
-    title: 'Knowledge and Search',
-    outcome: 'Permission-aware answers from your internal documentation.',
-    workflows: ['Natural language search across docs', 'Context-aware answers with source citations', 'Access-controlled responses based on user role'],
-    control: 'Permission boundaries enforced. No cross-team data leakage.',
-  },
-];
-
-const controls = [
-  'Human-in-the-loop approvals',
-  'Role-based permissions',
-  'Audit logs and monitoring',
-  'Safe failure modes and escalation paths',
-];
-
-const implementation = [
-  'Agent logic selected per use case for reliability and cost efficiency',
-  'Workflow orchestration via established automation platforms',
-  'Secure connectors with scoped access to internal systems',
-  'Internal agent runbooks, guardrails, and rollback procedures',
-];
-
-const faqs = [
-  { q: 'Do agents replace our staff?', a: 'No. Agents handle repetitive, high-volume tasks. Staff focus on judgment calls, relationships, and exceptions.' },
-  { q: 'How do you ensure data security?', a: 'Role-based access, audit logs, and permission boundaries. No agent accesses data beyond its defined scope.' },
-  { q: 'What happens when an agent fails?', a: 'Safe failure modes escalate to humans. Every failure is logged for review and tuning.' },
-  { q: 'Can we start with one use case?', a: 'Yes. The Agent Pilot is designed for exactly this. Pick one use case, validate it, then expand.' },
-  { q: 'What platforms do you use?', a: 'We select tools based on the use case — typically a combination of language model APIs for agent reasoning, workflow orchestration platforms, and secure connectors for your existing systems. We prioritize reliability and auditability over novelty.' },
-  { q: 'How long until we see results?', a: 'Agent Pilot delivers a working workflow in 10-15 business days. Value is visible within the first week of operation.' },
-  { q: 'Do you monitor agents after deployment?', a: 'Yes, via retainer tiers. Monitoring includes performance review, prompt tuning, and workflow adjustments.' },
-];
+const deliverableIcons = [Bot, BrainCircuit, ShieldCheck];
+const proofSignalIcons = [Workflow, Sparkles, Gauge, Shield];
 
 const ServicesAgents = () => {
+  const { locale, isRTL } = useLocale();
+  const { servicePricingTracks } = usePricingContent();
+  const pricingTrack = servicePricingTracks.agents;
+  const content = getServicePageContent(locale).agents;
+
   return (
     <Layout>
       <Hero
-        headline="AI Agents and Automation"
-        subheadline="Agent workflows implemented with approvals, logs, and clear boundaries. Built for real teams."
-        primaryCta={{ label: 'Pay and start', href: '#pricing' }}
-        secondaryCta={{ label: 'Book a call', href: '/book' }}
+        eyebrow={content.hero.eyebrow}
+        headline={content.hero.headline}
+        subheadline={content.hero.subheadline}
+        primaryCta={{ label: content.hero.primaryCtaLabel, href: '#pricing' }}
+        secondaryCta={{ label: content.hero.secondaryCtaLabel, href: '/book' }}
         plate="navy"
+        rightElement={
+          <div className="w-full max-w-xl">
+            <div className={cn('rounded-[30px] border border-white/12 bg-white/5 backdrop-blur-xl p-5 shadow-2xl shadow-black/20', isRTL && 'text-right')}>
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-2">{content.summaryPanel.mostRequested.label}</p>
+                  <p className="font-serif text-2xl text-mint leading-none mb-2">{content.summaryPanel.mostRequested.title}</p>
+                  <p className="text-sm text-offwhite/70">{content.summaryPanel.mostRequested.body}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-2">{content.summaryPanel.typicalStart.label}</p>
+                  <p className="font-serif text-2xl text-mint leading-none mb-2">{content.summaryPanel.typicalStart.title}</p>
+                  <p className="text-sm text-offwhite/70">{content.summaryPanel.typicalStart.body}</p>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/10 p-5">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-3">{content.summaryPanel.includedLabel}</p>
+                <div className="space-y-3">
+                  {content.summaryPanel.includedItems.map((item) => (
+                    <div key={item} className={cn('flex items-center justify-between border-b border-white/10 pb-3 last:border-b-0 last:pb-0', isRTL && 'flex-row-reverse')}>
+                      <p className="text-offwhite font-medium">{item}</p>
+                      <span className="text-mint text-sm">{content.summaryPanel.readyToScopeLabel}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        }
       />
 
-      {/* Outcomes */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="What this track covers" variant="poster" />
+          <SectionHeader
+            eyebrow={content.outcomesSection.eyebrow}
+            headline={content.outcomesSection.headline}
+            subheadline={content.outcomesSection.subheadline}
+            variant="poster"
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {outcomes.map((o, i) => (
-              <div key={i} className="bg-card border border-ink/10 rounded-2xl p-8">
-                <h3 className="font-serif text-lg text-foreground mb-2">{o.title}</h3>
-                <p className="text-body-md text-muted-foreground">{o.body}</p>
-              </div>
+            {content.outcomesSection.items.map((item, index) => (
+              <OutcomeMotionCard
+                key={item.title}
+                title={item.title}
+                body={item.body}
+                variant={outcomeMotions[index]}
+                tone="agents"
+                sequence={index + 1}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Use Cases */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="Use cases we implement" variant="poster" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {useCases.map((uc, i) => (
-              <div key={i} className="bg-card border border-ink/10 rounded-2xl p-8">
-                <h3 className="font-serif text-lg text-foreground mb-2">{uc.title}</h3>
-                <p className="text-body-md text-muted-foreground mb-4">{uc.outcome}</p>
-                <ul className="space-y-2 mb-4">
-                  {uc.workflows.map((w, j) => (
-                    <li key={j} className="text-sm text-muted-foreground flex items-start gap-2">
-                      <span className="text-mint mt-0.5">•</span>
-                      {w}
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-xs text-muted-foreground border-t border-ink/8 pt-3">
-                  <Shield size={12} className="inline mr-1 text-mint" />
-                  {uc.control}
-                </p>
+          <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-14 items-start">
+            <div>
+              <SectionHeader
+                eyebrow={content.whyHireSection.eyebrow}
+                headline={content.whyHireSection.headline}
+                subheadline={content.whyHireSection.subheadline}
+                variant="poster"
+              />
+              <ul className="space-y-3">
+                {content.whyHireSection.reasons.map((item) => (
+                  <li key={item} className={cn('flex items-start gap-3 text-body-md text-muted-foreground', isRTL && 'flex-row-reverse text-right')}>
+                    <span className="text-mint mt-1">•</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={cn('rounded-[30px] bg-plate-emerald p-6 md:p-8 text-offwhite border border-mint/20 shadow-xl', isRTL && 'text-right')}>
+              <p className="text-xs uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-4">
+                {content.deliverablesSection.title}
+              </p>
+              <div className="grid grid-cols-1 gap-4">
+                {content.deliverablesSection.items.map((item, index) => {
+                  const Icon = deliverableIcons[index];
+                  return (
+                    <div key={item.title} className="rounded-2xl border border-white/10 bg-black/10 p-5">
+                      <div className="w-11 h-11 rounded-xl bg-white/6 text-mint flex items-center justify-center mb-4">
+                        {Icon ? <Icon size={20} /> : null}
+                      </div>
+                      <h3 className="font-serif text-2xl text-mint mb-2">{item.title}</h3>
+                      <p className="text-sm text-offwhite/72 leading-relaxed">{item.body}</p>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Controls and governance */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="Controls and governance" variant="poster" />
+          <SectionHeader
+            eyebrow={content.signalSection.eyebrow}
+            headline={content.signalSection.headline}
+            subheadline={content.signalSection.subheadline}
+            variant="poster"
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {controls.map((c, i) => (
-              <div key={i} className="flex items-start gap-3">
+            {content.signalSection.items.map((item, index) => {
+              const Icon = proofSignalIcons[index];
+              return (
+                <div key={item.title} className={cn('rounded-2xl border border-ink/10 bg-card p-8 transition-all duration-200 hover:border-ink/20 hover:shadow-lg', isRTL && 'text-right')}>
+                  <div className="w-11 h-11 rounded-xl bg-plate-astral text-mint flex items-center justify-center mb-4">
+                    {Icon ? <Icon size={20} /> : null}
+                  </div>
+                  <h3 className="font-serif text-heading-md text-foreground mb-3">{item.title}</h3>
+                  <p className="text-body-md text-muted-foreground">{item.body}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <SectionHeader
+            eyebrow={content.controlsSection?.eyebrow}
+            headline={content.controlsSection?.headline ?? ''}
+            subheadline={content.controlsSection?.subheadline}
+            variant="poster"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {content.controlsSection?.items.map((item) => (
+              <div key={item} className={cn('flex items-start gap-3 rounded-2xl border border-ink/10 bg-card p-6', isRTL && 'flex-row-reverse text-right')}>
                 <CheckCircle size={20} className="text-mint flex-shrink-0 mt-0.5" />
-                <span className="text-body-md text-foreground">{c}</span>
+                <span className="text-body-md text-foreground">{item}</span>
               </div>
             ))}
           </div>
-
-          <h3 className="font-serif text-heading-md text-foreground mb-4">How it's implemented</h3>
-          <ul className="space-y-2">
-            {implementation.map((item, i) => (
-              <li key={i} className="text-body-md text-muted-foreground flex items-start gap-2">
-                <span className="text-mint mt-1">•</span>
-                {item}
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
-      {/* Pricing */}
       <section id="pricing" className="py-16 md:py-24 bg-muted scroll-mt-24">
         <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="Pricing" variant="poster" />
-
-          <PricingZone headline="Recommended starting points" description="Controlled-scope agent implementations.">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <RecommendedOfferCard
-                name="Agent Pilot"
-                inclusions={['One use case', 'Controlled scope', 'Approval workflows', 'Monitoring setup']}
-                timeline="10-15 business days"
-                price="Starting from EUR 4,000"
-                payHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.agent_pilot}
-              />
-              <RecommendedOfferCard
-                name="Agent Workflow Pack"
-                inclusions={['2-3 use cases', 'Cross-workflow orchestration', 'Governance setup', 'Team training']}
-                timeline="3-5 weeks"
-                price="Starting from EUR 8,000"
-                payHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.agent_pack}
-              />
-              <RecommendedOfferCard
-                name="Knowledge Agent Setup"
-                inclusions={['Permission-aware search', 'Source citation', 'Role-based access', 'Monitoring dashboard']}
-                timeline="2-4 weeks"
-                price="Starting from EUR 5,000"
-                payHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.knowledge_agent}
-              />
-            </div>
-          </PricingZone>
-
-          <PricingZone headline="Pick individual services" description="Individual agent workflows available separately.">
-            <ServiceMenuList
-              items={[
-                { name: 'Workflow triage agent', startingPrice: 'Starting from EUR 2,500', bookHref: '/book', stripePriceId: STRIPE_PRICES.triage_agent },
-                { name: 'Report summarization workflow', startingPrice: 'Starting from EUR 2,000', bookHref: '/book', stripePriceId: STRIPE_PRICES.report_summarization },
-                { name: 'Intake and routing workflow', startingPrice: 'Starting from EUR 2,000', bookHref: '/book', stripePriceId: STRIPE_PRICES.intake_routing },
-              ]}
-            />
-          </PricingZone>
-
-          <PricingZone headline="Managed Agent Retainers" description="Ongoing monitoring, tuning, and support for deployed agents.">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <RetainerCard
-                tier="Monitoring Lite"
-                inclusions={['Performance monitoring', 'Monthly review', 'Bug fixes']}
-                responseTime="Response within 3 business days"
-                price="EUR 1,000/mo"
-                subscribeHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.agents_retainer_lite}
-              />
-              <RetainerCard
-                tier="Standard"
-                inclusions={['Monitoring and tuning', 'Prompt adjustments', 'Workflow changes', 'Priority support']}
-                responseTime="Response within 1 business day"
-                price="EUR 2,000/mo"
-                subscribeHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.agents_retainer_standard}
-              />
-              <RetainerCard
-                tier="Priority"
-                inclusions={['Full management', 'New workflow builds', 'Strategy sessions', 'Same-day response']}
-                responseTime="Same-day response"
-                price="EUR 3,500/mo"
-                subscribeHref="/book"
-                bookHref="/book"
-                stripePriceId={STRIPE_PRICES.agents_retainer_priority}
-              />
-            </div>
-          </PricingZone>
-        </div>
-      </section>
-
-      {/* How we deliver */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <SectionHeader headline="How we deliver" variant="poster" />
-          <Steps
-            steps={[
-              { title: 'Discovery', description: 'Map workflows and identify automation candidates.' },
-              { title: 'Design', description: 'Define agent logic, approval gates, and failure modes.' },
-              { title: 'Build', description: 'Implement and test in a controlled environment.' },
-              { title: 'Deploy', description: 'Go live with monitoring and human-in-the-loop safeguards.' },
-              { title: 'Monitor', description: 'Ongoing tuning, logging review, and performance optimization.' },
-            ]}
+          <SectionHeader
+            eyebrow={content.pricingSection.eyebrow}
+            headline={content.pricingSection.headline}
+            subheadline={pricingTrack.pricingIntro}
+            variant="poster"
           />
+          <ServicePricingStack track={pricingTrack} />
         </div>
       </section>
 
-      {/* FAQ */}
+      <ServiceDeliverySection
+        subheadline={content.deliverySection.subheadline}
+        steps={content.deliverySection.steps.map((step, index) => ({
+          ...step,
+          icon: [Workflow, Shield, Bot, Gauge, Sparkles][index],
+        }))}
+      />
+
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <SectionHeader headline="Frequently asked questions" variant="poster" />
+          <SectionHeader
+            eyebrow={content.faqSection.eyebrow}
+            headline={content.faqSection.headline}
+            subheadline={content.faqSection.subheadline}
+            variant="poster"
+          />
           <Accordion type="single" collapsible>
-            {faqs.map((faq, i) => (
-              <AccordionItem key={i} value={`faq-${i}`}>
+            {content.faqSection.items.map((faq, index) => (
+              <AccordionItem key={faq.q} value={`faq-${index}`}>
                 <AccordionTrigger className="font-serif text-lg text-foreground">{faq.q}</AccordionTrigger>
                 <AccordionContent className="text-body-md text-muted-foreground">{faq.a}</AccordionContent>
               </AccordionItem>
@@ -273,9 +215,11 @@ const ServicesAgents = () => {
       </section>
 
       <CTABand
-        headline="Ready to automate your operations?"
-        primaryCta={{ label: 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: 'View all services', href: '/services' }}
+        headline={content.ctaBand.headline}
+        description={content.ctaBand.description}
+        primaryCta={{ label: content.ctaBand.primaryLabel, href: '/book' }}
+        secondaryCta={{ label: content.ctaBand.secondaryLabel, href: '/pricing' }}
+        visualKey="orbit-relay"
         variant="dark"
       />
     </Layout>

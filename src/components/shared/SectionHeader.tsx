@@ -1,5 +1,7 @@
 import React from 'react'; 
 import { cn } from '@/lib/utils';
+import { Reveal, MotionVariant } from '@/components/motion/Reveal';
+import { useLocale } from '@/lib/locale';
 
 interface SectionHeaderProps {
   eyebrow?: string;
@@ -8,6 +10,7 @@ interface SectionHeaderProps {
   className?: string;
   align?: 'left' | 'center';
   variant?: 'poster' | 'interface';
+  motionVariant?: MotionVariant | 'none';
 }
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
@@ -17,15 +20,11 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   className,
   align = 'left',
   variant = 'poster',
+  motionVariant = variant === 'interface' ? 'subtle' : 'default',
 }) => {
-  return (
-    <div
-      className={cn(
-        'mb-8 md:mb-12',
-        align === 'center' && 'text-center',
-        className
-      )}
-    >
+  const { isRTL } = useLocale();
+  const headerContent = (
+    <>
       {eyebrow && (
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-4">
           {eyebrow}
@@ -45,7 +44,23 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
           {subheadline}
         </p>
       )}
-    </div>
+    </>
+  );
+
+  const headerClassName = cn(
+    'mb-8 md:mb-12',
+    align === 'center' ? 'text-center' : isRTL && 'text-right',
+    className
+  );
+
+  if (motionVariant === 'none') {
+    return <div className={headerClassName}>{headerContent}</div>;
+  }
+
+  return (
+    <Reveal className={headerClassName} variant={motionVariant}>
+      {headerContent}
+    </Reveal>
   );
 };
 

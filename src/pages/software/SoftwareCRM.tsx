@@ -13,7 +13,7 @@ import { WorkflowStepper } from '@/components/sections/WorkflowStepper';
 import { RolesPermissionsMatrix } from '@/components/sections/RolesPermissionsMatrix';
 import { SetupSupportCards } from '@/components/sections/SetupSupportCards';
 import { TabbedProductPreview } from '@/components/ui/vignettes/TabbedProductPreview';
-import { MiniDashboard, defaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
+import { MiniDashboard, getDefaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
 import { SupportRequestVignette } from '@/components/ui/vignettes/SupportRequestVignette';
 import { SettingsPanel, crmSettingsConfig } from '@/components/ui/vignettes/SettingsPanel';
 import { ImportMapper, crmImportMappings } from '@/components/ui/vignettes/ImportMapper';
@@ -26,6 +26,8 @@ import {
 import { PipelineBoard } from '@/components/ui/vignettes/PipelineBoard';
 import { ContactTimeline } from '@/components/ui/vignettes/ContactTimeline';
 import { CyberHeart } from '@/components/ui/cyber-heart';
+import { useLocale } from '@/lib/locale';
+import { getSoftwarePageContent } from '@/lib/softwarePageContent';
 import {
   Users,
   FileSpreadsheet,
@@ -38,133 +40,56 @@ import {
   Mail,
 } from 'lucide-react';
 
-// Problem contrast items
-const problemItems = [
-  {
-    before: 'Deals tracked in spreadsheets',
-    after: 'Visual pipeline with clear stages',
-    icon: FileSpreadsheet,
-  },
-  {
-    before: 'Follow-ups lost in email',
-    after: 'Automated task reminders',
-    icon: MessageSquare,
-  },
-  {
-    before: 'No visibility on team activity',
-    after: 'Real-time dashboards and reports',
-    icon: Target,
-  },
-  {
-    before: 'Handovers lose context',
-    after: 'Full history travels with contacts',
-    icon: Users,
-  },
-];
-
-// Outcomes
-const outcomes = [
-  {
-    headline: 'Clear pipeline stages and ownership',
-    description: 'Every deal has a stage, an owner, and a clear next action.',
-  },
-  {
-    headline: 'Reliable follow-up and activity tracking',
-    description: 'No more lost threads—every interaction logged automatically.',
-  },
-  {
-    headline: 'Simple reporting for decisions',
-    description: 'Dashboards that show pipeline value and team activity.',
-  },
-  {
-    headline: 'Clean handover when roles change',
-    description: 'Complete history travels with contacts and deals.',
-  },
-];
-
-// Capabilities
-const capabilities = [
-  {
-    icon: GitBranch,
-    title: 'Pipeline management',
-    description: 'Visual kanban boards with customizable stages and deal values.',
-  },
-  {
-    icon: Users,
-    title: 'Contact management',
-    description: 'Unified profiles with interaction history and linked deals.',
-  },
-  {
-    icon: Clock,
-    title: 'Task automation',
-    description: 'Scheduled follow-ups, reminders, and activity logging.',
-  },
-  {
-    icon: BarChart3,
-    title: 'Reporting dashboards',
-    description: 'Pipeline value, conversion rates, and team performance.',
-  },
-  {
-    icon: Mail,
-    title: 'Email integration',
-    description: 'Log communications and sync with your email client.',
-  },
-  {
-    icon: Shield,
-    title: 'Role-based access',
-    description: 'Control who sees, edits, and approves at each level.',
-  },
-];
-
-// Workflow steps with realistic previews
-const workflowSteps = [
-  {
-    id: 'configure',
-    title: 'Configure structure',
-    description: 'Pipeline stages, custom fields, and deal values set up.',
-    content: <SettingsPanel sections={crmSettingsConfig} activeSection={0} />,
-  },
-  {
-    id: 'roles',
-    title: 'Assign roles and permissions',
-    description: 'Team visibility rules and approval chains defined.',
-    content: <SettingsPanel sections={crmSettingsConfig} activeSection={2} />,
-  },
-  {
-    id: 'import',
-    title: 'Import data',
-    description: 'Existing contacts and deals migrated cleanly.',
-    content: <ImportMapper mappings={crmImportMappings} />,
-  },
-  {
-    id: 'workflow',
-    title: 'Run day-to-day workflow',
-    description: 'Track deals, log activities, generate reports.',
-    content: <PipelineBoardRealistic />,
-  },
-];
-
-// Hero preview tabs - now using realistic previews
-const heroTabs = [
-  { id: 'pipeline', label: 'Pipeline', content: <PipelineBoardRealistic /> },
-  { id: 'contacts', label: 'Contacts', content: <ContactsTableRealistic /> },
-  { id: 'tasks', label: 'Tasks', content: <TasksListRealistic /> },
-  { id: 'reports', label: 'Reports', content: <MiniReportsRealistic /> },
-];
-
 const SoftwareCRM = () => {
+  const { locale } = useLocale();
+  const content = getSoftwarePageContent(locale).crm;
+
   const [activePersona, setActivePersona] = useState(0);
+  const problemIcons = [FileSpreadsheet, MessageSquare, Target, Users];
+  const capabilityIcons = [GitBranch, Users, Clock, BarChart3, Mail, Shield];
+  const previewTabs = [
+    { id: 'pipeline', label: content.previewSection.tabLabels[0], content: <PipelineBoardRealistic /> },
+    { id: 'contacts', label: content.previewSection.tabLabels[1], content: <ContactsTableRealistic /> },
+    { id: 'tasks', label: content.previewSection.tabLabels[2], content: <TasksListRealistic /> },
+    { id: 'reports', label: content.previewSection.tabLabels[3], content: <MiniReportsRealistic /> },
+  ];
+  const workflowSteps = [
+    {
+      id: 'configure',
+      title: content.workflowSection.steps[0].title,
+      description: content.workflowSection.steps[0].description,
+      content: <SettingsPanel sections={crmSettingsConfig} activeSection={0} />,
+    },
+    {
+      id: 'roles',
+      title: content.workflowSection.steps[1].title,
+      description: content.workflowSection.steps[1].description,
+      content: <SettingsPanel sections={crmSettingsConfig} activeSection={2} />,
+    },
+    {
+      id: 'import',
+      title: content.workflowSection.steps[2].title,
+      description: content.workflowSection.steps[2].description,
+      content: <ImportMapper mappings={crmImportMappings} />,
+    },
+    {
+      id: 'workflow',
+      title: content.workflowSection.steps[3].title,
+      description: content.workflowSection.steps[3].description,
+      content: <PipelineBoardRealistic />,
+    },
+  ];
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       {/* 1. Hero with ASCII Animation */}
       <ProductHero
         productName="Meridian"
-        productDescriptor="for CRM"
-        headline="Relationship management configured for adoption."
-        subheadline="A clean CRM system provisioned with your pipeline stages, roles, and follow-up workflows. Configuration and ongoing admin support included."
-        primaryCta={{ label: 'Request access', href: '/book?intent=crm' }}
-        secondaryCta={{ label: 'How onboarding works', href: '#onboarding' }}
+        productDescriptor={content.hero.productDescriptor}
+        headline={content.hero.headline}
+        subheadline={content.hero.subheadline}
+        primaryCta={{ label: content.hero.primaryCtaLabel, href: '/book?intent=crm' }}
+        secondaryCta={{ label: content.hero.secondaryCtaLabel, href: '#onboarding' }}
         asciiComponent={<CyberHeart color="mint" speed={0.8} />}
         plate="astral"
       />
@@ -173,19 +98,19 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Meridian in action"
-            subheadline="Unified pipeline, contacts, tasks, and reporting."
+            headline={content.previewSection.headline}
+            subheadline={content.previewSection.subheadline}
             align="center"
           />
           <div className="mt-10 max-w-5xl mx-auto">
-            <ProductPreviewFrame title="Meridian CRM" variant="browser">
+            <ProductPreviewFrame title={content.previewSection.frameTitle} variant="browser">
               <div className="h-[360px] md:h-[440px]">
                 <TabbedProductPreview 
-                  tabs={heroTabs} 
-                  searchPlaceholder="Search contacts, deals..."
+                  tabs={previewTabs}
+                  searchPlaceholder={content.previewSection.searchPlaceholder}
                   filters={[
-                    { label: 'Status', active: false },
-                    { label: 'Owner', active: false },
+                    { label: content.previewSection.filters[0], active: false },
+                    { label: content.previewSection.filters[1], active: false },
                   ]}
                 />
               </div>
@@ -198,8 +123,8 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Built for teams who sell"
-            subheadline="Whether you're tracking deals, managing accounts, or coordinating handovers."
+            headline={content.personaSection.headline}
+            subheadline={content.personaSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-8">
             <PersonaCards
@@ -219,11 +144,16 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Replace the chaos"
-            subheadline="Move from scattered tools and manual tracking to structured operations."
+            headline={content.problemSection.headline}
+            subheadline={content.problemSection.subheadline}
           />
           <div className="mt-8">
-            <ProblemContrast items={problemItems} />
+            <ProblemContrast
+              items={content.problemSection.items.map((item, index) => ({
+                ...item,
+                icon: problemIcons[index],
+              }))}
+            />
           </div>
         </div>
       </section>
@@ -232,18 +162,18 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="What changes on day one"
-            subheadline="Clear, immediate value—not promises."
+            headline={content.outcomesSection.headline}
+            subheadline={content.outcomesSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
             <div className="lg:col-span-2">
-              <OutcomeTiles outcomes={outcomes} />
+              <OutcomeTiles outcomes={content.outcomesSection.items} />
             </div>
             <ProductPreviewFrame variant="minimal" className="p-4">
               <h4 className="text-xs font-semibold text-foreground mb-4 uppercase tracking-wide">
-                Activity snapshot
+                {content.outcomesSection.snapshotLabel}
               </h4>
-              <MiniDashboard metrics={defaultMetrics.crm} />
+              <MiniDashboard metrics={getDefaultMetrics(locale).crm} />
             </ProductPreviewFrame>
           </div>
         </div>
@@ -253,11 +183,17 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Core capabilities"
-            subheadline="Everything you need, configured and ready."
+            headline={content.capabilitiesSection.headline}
+            subheadline={content.capabilitiesSection.subheadline}
           />
           <div className="mt-8">
-            <CapabilityGrid capabilities={capabilities} columns={3} />
+            <CapabilityGrid
+              capabilities={content.capabilitiesSection.items.map((item, index) => ({
+                ...item,
+                icon: capabilityIcons[index],
+              }))}
+              columns={3}
+            />
           </div>
         </div>
       </section>
@@ -266,8 +202,8 @@ const SoftwareCRM = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Your setup journey"
-            subheadline="From first login to daily operations in four steps."
+            headline={content.workflowSection.headline}
+            subheadline={content.workflowSection.subheadline}
           />
           <WorkflowStepper steps={workflowSteps} className="mt-8" />
         </div>
@@ -277,8 +213,8 @@ const SoftwareCRM = () => {
       <section id="governance" className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Control who does what"
-            subheadline="Roles, permissions, and approval chains built in from day one."
+            headline={content.governanceSection.headline}
+            subheadline={content.governanceSection.subheadline}
           />
           <div className="mt-8 max-w-4xl mx-auto">
             <ProductPreviewFrame variant="card">
@@ -292,8 +228,8 @@ const SoftwareCRM = () => {
       <section id="onboarding" className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Configured for your team, not just activated"
-            subheadline="We handle provisioning, configuration, training, and ongoing admin support."
+            headline={content.onboardingSection.headline}
+            subheadline={content.onboardingSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
             <div className="lg:col-span-2">
@@ -311,13 +247,13 @@ const SoftwareCRM = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-xl">
             <p className="text-lg text-foreground mb-2">
-              Meridian™ for CRM starts from EUR 500 per month, depending on users and configuration.
+              {content.pricingSection.note}
             </p>
             <p className="text-muted-foreground mb-6">
-              Setup is included in Foundation Build packages or available as a fixed onboarding fee.
+              {content.pricingSection.setupNote}
             </p>
             <PrimaryButton href="/book?intent=crm-pricing" textColor="astral">
-              Get CRM pricing
+              {content.pricingSection.ctaLabel}
             </PrimaryButton>
           </div>
         </div>
@@ -325,9 +261,11 @@ const SoftwareCRM = () => {
 
       {/* Final CTA */}
       <CTABand
-        headline="Ready to get started with Meridian™?"
-        primaryCta={{ label: 'Request access', href: '/book?intent=crm' }}
-        secondaryCta={{ label: 'Book a call', href: '/book' }}
+        headline={content.finalCta.headline}
+        description={content.finalCta.description}
+        primaryCta={{ label: content.finalCta.primaryLabel, href: '/book' }}
+        secondaryCta={{ label: content.finalCta.secondaryLabel, href: '/pricing' }}
+        visualKey="relation-core"
         variant="dark"
       />
     </Layout>

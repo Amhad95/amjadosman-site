@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useLocale } from '@/lib/locale';
 
 type StatusType = 'active' | 'qualified' | 'new' | 'inactive' | 'pending' | 'approved' | 'overdue' | 'won' | 'lost';
 
@@ -26,7 +27,32 @@ export const StatusChip: React.FC<StatusChipProps> = ({
   size = 'sm',
   className 
 }) => {
+  const { locale } = useLocale();
   const style = statusStyles[status];
+  const localizedLabels: Record<StatusType, string> =
+    locale === 'ar'
+      ? {
+          active: 'نشط',
+          qualified: 'مؤهل',
+          new: 'جديد',
+          inactive: 'غير نشط',
+          pending: 'معلق',
+          approved: 'مُعتمد',
+          overdue: 'متأخر',
+          won: 'مكتمل',
+          lost: 'مفقود',
+        }
+      : {
+          active: 'Active',
+          qualified: 'Qualified',
+          new: 'New',
+          inactive: 'Inactive',
+          pending: 'Pending',
+          approved: 'Approved',
+          overdue: 'Overdue',
+          won: 'Won',
+          lost: 'Lost',
+        };
   
   return (
     <span
@@ -38,7 +64,7 @@ export const StatusChip: React.FC<StatusChipProps> = ({
         className
       )}
     >
-      {style.label}
+      {localizedLabels[status]}
     </span>
   );
 };

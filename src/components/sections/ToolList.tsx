@@ -11,6 +11,7 @@ import {
   LineDashboard,
   LineTree,
 } from '@/components/ui/line-illustrations';
+import { RevealGroup } from '@/components/motion/Reveal';
 
 interface Tool {
   title: string;
@@ -67,7 +68,10 @@ export const ToolList: React.FC<ToolListProps> = ({
   // Preview variant: compact 3-column grid for homepage
   if (variant === 'preview') {
     return (
-      <div className={cn('grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6', className)}>
+      <RevealGroup
+        className={cn('grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6', className)}
+        stagger={76}
+      >
         {tools.slice(0, 3).map((tool, index) => {
           const illustrationType = tool.illustration || defaultIllustrations[index % defaultIllustrations.length];
           const Illustration = illustrations[illustrationType];
@@ -97,7 +101,7 @@ export const ToolList: React.FC<ToolListProps> = ({
                 <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
                   {tool.description}
                 </p>
-                <span className="inline-flex items-center gap-1 text-sm font-medium text-ink group-hover:text-lavender transition-colors">
+                <span className="inline-flex items-center gap-1 text-sm font-medium text-foreground group-hover:text-lavender transition-colors">
                   Try this tool
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </span>
@@ -105,13 +109,18 @@ export const ToolList: React.FC<ToolListProps> = ({
             </Link>
           );
         })}
-      </div>
+      </RevealGroup>
     );
   }
 
   // Full variant: responsive grid for Tools page (like iLovePDF)
   return (
-    <div className={cn('grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6', className)} id="tools-list">
+    <RevealGroup
+      className={cn('grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6', className)}
+      id="tools-list"
+      stagger={58}
+      variant="subtle"
+    >
       {tools.map((tool, index) => {
         const illustrationType = tool.illustration || defaultIllustrations[index % defaultIllustrations.length];
         const Illustration = illustrations[illustrationType];
@@ -141,7 +150,7 @@ export const ToolList: React.FC<ToolListProps> = ({
               <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">
                 {tool.description}
               </p>
-              <span className="inline-flex items-center gap-1 text-xs md:text-sm font-medium text-ink group-hover:text-lavender transition-colors">
+              <span className="inline-flex items-center gap-1 text-xs md:text-sm font-medium text-foreground group-hover:text-lavender transition-colors">
                 Try this tool
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </span>
@@ -149,7 +158,7 @@ export const ToolList: React.FC<ToolListProps> = ({
           </Link>
         );
       })}
-    </div>
+    </RevealGroup>
   );
 };
 

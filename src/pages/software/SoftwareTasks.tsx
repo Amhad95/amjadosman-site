@@ -13,7 +13,7 @@ import { WorkflowStepper } from '@/components/sections/WorkflowStepper';
 import { RolesPermissionsMatrix } from '@/components/sections/RolesPermissionsMatrix';
 import { SetupSupportCards } from '@/components/sections/SetupSupportCards';
 import { TabbedProductPreview } from '@/components/ui/vignettes/TabbedProductPreview';
-import { MiniDashboard, defaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
+import { MiniDashboard, getDefaultMetrics } from '@/components/ui/vignettes/MiniDashboard';
 import { SupportRequestVignette } from '@/components/ui/vignettes/SupportRequestVignette';
 import { SettingsPanel, tasksSettingsConfig } from '@/components/ui/vignettes/SettingsPanel';
 import { ImportMapper, tasksImportMappings } from '@/components/ui/vignettes/ImportMapper';
@@ -26,6 +26,8 @@ import {
   TimelineRealistic,
 } from '@/components/ui/vignettes/TasksPreviews';
 import { CyberGyroscope } from '@/components/ui/cyber-gyroscope';
+import { useLocale } from '@/lib/locale';
+import { getSoftwarePageContent } from '@/lib/softwarePageContent';
 import {
   Layout as LayoutIcon,
   Users,
@@ -39,133 +41,56 @@ import {
   Clock,
 } from 'lucide-react';
 
-// Problem contrast items
-const problemItems = [
-  {
-    before: 'Tasks tracked in chat threads',
-    after: 'Structured task boards with deadlines and owners',
-    icon: MessageSquare,
-  },
-  {
-    before: 'No clear ownership or accountability',
-    after: 'Every task assigned with visible status',
-    icon: Users,
-  },
-  {
-    before: 'Progress reported manually in meetings',
-    after: 'Real-time boards and dashboards',
-    icon: ListTodo,
-  },
-  {
-    before: 'Recurring work falls through the cracks',
-    after: 'Automated recurring tasks with reminders',
-    icon: Clock,
-  },
-];
-
-// Outcomes
-const outcomes = [
-  {
-    headline: 'Clear assignments and deadlines',
-    description: 'Every task has an owner, a due date, and a visible status.',
-  },
-  {
-    headline: 'Fewer dropped tasks',
-    description: 'Nothing lost in chat threads or scattered spreadsheets.',
-  },
-  {
-    headline: 'Better coordination across teams',
-    description: 'Cross-team visibility without micromanagement.',
-  },
-  {
-    headline: 'Visible progress without manual updates',
-    description: 'Status boards and reports update as work gets done.',
-  },
-];
-
-// Capabilities
-const capabilities = [
-  {
-    icon: LayoutIcon,
-    title: 'Kanban boards',
-    description: 'Visual boards with drag-and-drop stages and swimlanes.',
-  },
-  {
-    icon: Users,
-    title: 'Task assignments',
-    description: 'Assign owners, watchers, and due dates with notifications.',
-  },
-  {
-    icon: CheckSquare,
-    title: 'Approval workflows',
-    description: 'Built-in review and sign-off steps for deliverables.',
-  },
-  {
-    icon: CalendarClock,
-    title: 'Project timelines',
-    description: 'Gantt-style views with milestones and dependencies.',
-  },
-  {
-    icon: RotateCcw,
-    title: 'Recurring tasks',
-    description: 'Automated task creation on schedules with templates.',
-  },
-  {
-    icon: BarChart3,
-    title: 'Progress dashboards',
-    description: 'Completion rates, overdue items, and team workload views.',
-  },
-];
-
-// Workflow steps
-const workflowSteps = [
-  {
-    id: 'configure',
-    title: 'Configure structure',
-    description: 'Projects, workflow stages, and templates set up.',
-    content: <SettingsPanel sections={tasksSettingsConfig} activeSection={0} />,
-  },
-  {
-    id: 'roles',
-    title: 'Assign roles and permissions',
-    description: 'Team roles, task visibility, and approval flows defined.',
-    content: <SettingsPanel sections={tasksSettingsConfig} activeSection={2} />,
-  },
-  {
-    id: 'import',
-    title: 'Import data',
-    description: 'Existing tasks and recurring items imported.',
-    content: <ImportMapper mappings={tasksImportMappings} sourceFile="tasks_export.csv" />,
-  },
-  {
-    id: 'workflow',
-    title: 'Run day-to-day workflow',
-    description: 'Assign tasks, track progress, complete deliverables.',
-    content: <TaskBoardRealistic />,
-  },
-];
-
-// Hero preview tabs
-const heroTabs = [
-  { id: 'board', label: 'Board', content: <TaskBoardRealistic /> },
-  { id: 'list', label: 'List', content: <TaskListRealistic /> },
-  { id: 'approvals', label: 'Approvals', content: <ApprovalsFlowRealistic /> },
-  { id: 'timeline', label: 'Timeline', content: <TimelineRealistic /> },
-];
-
 const SoftwareTasks = () => {
+  const { locale } = useLocale();
+  const content = getSoftwarePageContent(locale).tasks;
+
   const [activePersona, setActivePersona] = useState(0);
+  const problemIcons = [MessageSquare, Users, ListTodo, Clock];
+  const capabilityIcons = [LayoutIcon, Users, CheckSquare, CalendarClock, RotateCcw, BarChart3];
+  const previewTabs = [
+    { id: 'board', label: content.previewSection.tabLabels[0], content: <TaskBoardRealistic /> },
+    { id: 'list', label: content.previewSection.tabLabels[1], content: <TaskListRealistic /> },
+    { id: 'approvals', label: content.previewSection.tabLabels[2], content: <ApprovalsFlowRealistic /> },
+    { id: 'timeline', label: content.previewSection.tabLabels[3], content: <TimelineRealistic /> },
+  ];
+  const workflowSteps = [
+    {
+      id: 'configure',
+      title: content.workflowSection.steps[0].title,
+      description: content.workflowSection.steps[0].description,
+      content: <SettingsPanel sections={tasksSettingsConfig} activeSection={0} />,
+    },
+    {
+      id: 'roles',
+      title: content.workflowSection.steps[1].title,
+      description: content.workflowSection.steps[1].description,
+      content: <SettingsPanel sections={tasksSettingsConfig} activeSection={2} />,
+    },
+    {
+      id: 'import',
+      title: content.workflowSection.steps[2].title,
+      description: content.workflowSection.steps[2].description,
+      content: <ImportMapper mappings={tasksImportMappings} sourceFile="tasks_export.csv" />,
+    },
+    {
+      id: 'workflow',
+      title: content.workflowSection.steps[3].title,
+      description: content.workflowSection.steps[3].description,
+      content: <TaskBoardRealistic />,
+    },
+  ];
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       {/* 1. Hero with ASCII Animation */}
       <ProductHero
         productName="Cadence"
-        productDescriptor="for Tasks"
-        headline="Task and work management configured for delivery."
-        subheadline="Plan work, assign ownership, and keep delivery visible. Provisioned with your project structures, workflows, and team roles."
-        primaryCta={{ label: 'Request access', href: '/book?intent=tasks' }}
-        secondaryCta={{ label: 'How onboarding works', href: '#onboarding' }}
+        productDescriptor={content.hero.productDescriptor}
+        headline={content.hero.headline}
+        subheadline={content.hero.subheadline}
+        primaryCta={{ label: content.hero.primaryCtaLabel, href: '/book?intent=tasks' }}
+        secondaryCta={{ label: content.hero.secondaryCtaLabel, href: '#onboarding' }}
         asciiComponent={<CyberGyroscope color="mint" speed={0.8} />}
         plate="astral"
       />
@@ -174,19 +99,19 @@ const SoftwareTasks = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Cadence in action"
-            subheadline="Boards, lists, approvals, and timelines in one workspace."
+            headline={content.previewSection.headline}
+            subheadline={content.previewSection.subheadline}
             align="center"
           />
           <div className="mt-10 max-w-5xl mx-auto">
-            <ProductPreviewFrame title="Cadence Tasks" variant="browser">
+            <ProductPreviewFrame title={content.previewSection.frameTitle} variant="browser">
               <div className="h-[360px] md:h-[440px]">
                 <TabbedProductPreview
-                  tabs={heroTabs}
-                  searchPlaceholder="Search tasks, projects..."
+                  tabs={previewTabs}
+                  searchPlaceholder={content.previewSection.searchPlaceholder}
                   filters={[
-                    { label: 'Project', active: false },
-                    { label: 'Assignee', active: false },
+                    { label: content.previewSection.filters[0], active: false },
+                    { label: content.previewSection.filters[1], active: false },
                   ]}
                 />
               </div>
@@ -199,8 +124,8 @@ const SoftwareTasks = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Built for teams who deliver"
-            subheadline="Whether you're managing projects, coordinating teams, or tracking approvals."
+            headline={content.personaSection.headline}
+            subheadline={content.personaSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-8">
             <PersonaCards
@@ -220,11 +145,16 @@ const SoftwareTasks = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Replace the chaos"
-            subheadline="Move from scattered threads and manual tracking to structured task management."
+            headline={content.problemSection.headline}
+            subheadline={content.problemSection.subheadline}
           />
           <div className="mt-8">
-            <ProblemContrast items={problemItems} />
+            <ProblemContrast
+              items={content.problemSection.items.map((item, index) => ({
+                ...item,
+                icon: problemIcons[index],
+              }))}
+            />
           </div>
         </div>
       </section>
@@ -233,18 +163,18 @@ const SoftwareTasks = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="What changes on day one"
-            subheadline="Clear, immediate value—not promises."
+            headline={content.outcomesSection.headline}
+            subheadline={content.outcomesSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
             <div className="lg:col-span-2">
-              <OutcomeTiles outcomes={outcomes} />
+              <OutcomeTiles outcomes={content.outcomesSection.items} />
             </div>
             <ProductPreviewFrame variant="minimal" className="p-4">
               <h4 className="text-xs font-semibold text-foreground mb-4 uppercase tracking-wide">
-                Activity snapshot
+                {content.outcomesSection.snapshotLabel}
               </h4>
-              <MiniDashboard metrics={defaultMetrics.tasks} />
+              <MiniDashboard metrics={getDefaultMetrics(locale).tasks} />
             </ProductPreviewFrame>
           </div>
         </div>
@@ -254,11 +184,17 @@ const SoftwareTasks = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Core capabilities"
-            subheadline="Everything you need, configured and ready."
+            headline={content.capabilitiesSection.headline}
+            subheadline={content.capabilitiesSection.subheadline}
           />
           <div className="mt-8">
-            <CapabilityGrid capabilities={capabilities} columns={3} />
+            <CapabilityGrid
+              capabilities={content.capabilitiesSection.items.map((item, index) => ({
+                ...item,
+                icon: capabilityIcons[index],
+              }))}
+              columns={3}
+            />
           </div>
         </div>
       </section>
@@ -267,8 +203,8 @@ const SoftwareTasks = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Your setup journey"
-            subheadline="From first login to daily operations in four steps."
+            headline={content.workflowSection.headline}
+            subheadline={content.workflowSection.subheadline}
           />
           <WorkflowStepper steps={workflowSteps} className="mt-8" />
         </div>
@@ -278,8 +214,8 @@ const SoftwareTasks = () => {
       <section id="governance" className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Control who does what"
-            subheadline="Roles, permissions, and approval chains built in from day one."
+            headline={content.governanceSection.headline}
+            subheadline={content.governanceSection.subheadline}
           />
           <div className="mt-8 max-w-4xl mx-auto">
             <ProductPreviewFrame variant="card">
@@ -293,8 +229,8 @@ const SoftwareTasks = () => {
       <section id="onboarding" className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            headline="Configured for your team, not just activated"
-            subheadline="We handle provisioning, configuration, training, and ongoing admin support."
+            headline={content.onboardingSection.headline}
+            subheadline={content.onboardingSection.subheadline}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
             <div className="lg:col-span-2">
@@ -312,13 +248,13 @@ const SoftwareTasks = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-xl">
             <p className="text-lg text-foreground mb-2">
-              Cadence™ for Tasks starts from EUR 500 per month, depending on users and configuration.
+              {content.pricingSection.note}
             </p>
             <p className="text-muted-foreground mb-6">
-              Setup is included in Foundation Build packages or available as a fixed onboarding fee.
+              {content.pricingSection.setupNote}
             </p>
             <PrimaryButton href="/book?intent=tasks-pricing" textColor="astral">
-              Get Tasks pricing
+              {content.pricingSection.ctaLabel}
             </PrimaryButton>
           </div>
         </div>
@@ -326,9 +262,11 @@ const SoftwareTasks = () => {
 
       {/* Final CTA */}
       <CTABand
-        headline="Ready to get started with Cadence™?"
-        primaryCta={{ label: 'Request access', href: '/book?intent=tasks' }}
-        secondaryCta={{ label: 'Book a call', href: '/book' }}
+        headline={content.finalCta.headline}
+        description={content.finalCta.description}
+        primaryCta={{ label: content.finalCta.primaryLabel, href: '/book' }}
+        secondaryCta={{ label: content.finalCta.secondaryLabel, href: '/pricing' }}
+        visualKey="task-gyre"
         variant="dark"
       />
     </Layout>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
 import { ToolInputForm } from '@/components/tools/ToolInputForm';
@@ -9,6 +9,9 @@ import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
 import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
+import { useLocale } from '@/lib/locale';
+import { usePageMeta } from '@/hooks/use-page-meta';
+import { getToolPageContent } from '@/lib/toolPageContent';
 
 const ProcessMapper = () => {
   const [workflow, setWorkflow] = useState('');
@@ -16,12 +19,13 @@ const ProcessMapper = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
+  const { locale, isRTL } = useLocale();
+  const copy = getToolPageContent(locale, 'process-mapper');
 
-  useEffect(() => {
-    document.title = 'Process Flow Mapper — Free Workflow Analysis Tool | ADSI';
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'Turn a workflow description into a structured process map with steps, decision points, and improvement opportunities. Free AI tool from ADSI.');
-  }, []);
+  usePageMeta({
+    title: copy.metaTitle,
+    description: copy.metaDescription,
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,43 +39,45 @@ const ProcessMapper = () => {
     streamTool({
       tool: 'process-mapper',
       input: { 'Workflow description': workflow },
+      locale,
       signal: abortRef.current.signal,
       onDelta: (chunk) => setOutput((prev) => prev + chunk),
       onDone: () => setIsStreaming(false),
       onError: (message) => {
         setIsStreaming(false);
-        toast({ title: 'Error', description: message, variant: 'destructive' });
+        toast({ title: copy.errorTitle, description: message, variant: 'destructive' });
       },
     });
   };
 
   return (
-    <Layout>
+    <Layout motionLevel="subtle">
       <CompactPageHeader
-        eyebrow="AI tool"
-        title="Process Flow Mapper"
-        description="Describe how a workflow actually runs. Get a structured map with steps, decision points, and bottleneck analysis."
+        eyebrow={copy.eyebrow}
+        title={copy.title}
+        description={copy.description}
         plate="emerald"
         rightElement={<ToolHeaderAnimation slug="process-mapper" />}
       />
 
       <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel="Map Process">
+          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel={copy.submitLabel}>
             <div>
               <Label htmlFor="workflow" className="text-sm font-semibold mb-2 block">
-                Describe your workflow
+                {copy.fields.workflowLabel}
               </Label>
               <p className="text-sm text-muted-foreground mb-3">
-                Describe how the process actually works — who does what, in what order, what decisions get made, what tools are used. Be as specific as possible.
+                {copy.fields.workflowHelp}
               </p>
               <Textarea
                 id="workflow"
                 value={workflow}
                 onChange={(e) => setWorkflow(e.target.value)}
-                placeholder="e.g. A client submits a support request via email. Our support team reads it and either handles it directly or escalates to the technical team. If escalated, the technical team investigates and sends a response within 24 hours. If the client isn't satisfied, the case goes to a senior..."
+                placeholder={copy.fields.workflowPlaceholder}
                 rows={8}
                 required
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
           </ToolInputForm>
@@ -85,10 +91,11 @@ const ProcessMapper = () => {
       </section>
 
       <CTABand
-        headline="Want to implement this properly?"
-        description="We turn process maps into documented SOPs, SharePoint workflows, and operational software. Fixed scope, clean handover."
-        primaryCta={{ label: 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: 'View pricing', href: '/pricing' }}
+        headline={copy.buildCtaHeadline}
+        description={copy.buildCtaDescription}
+        primaryCta={{ label: copy.primaryCtaLabel, href: '/book' }}
+        secondaryCta={{ label: copy.secondaryCtaLabel, href: '/pricing' }}
+        visualKey="route-prism"
         variant="dark"
       />
     </Layout>

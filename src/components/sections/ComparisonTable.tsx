@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useLocale } from '@/lib/locale';
 
 interface ComparisonRow {
   category: string;
@@ -43,15 +44,51 @@ const comparisonData: ComparisonRow[] = [
 const products = ['CRM', 'Accounting', 'Inventory', 'Tasks'];
 
 export const ComparisonTable: React.FC<{ className?: string }> = ({ className }) => {
+  const { locale, isRTL } = useLocale();
+  const localizedProducts =
+    locale === 'ar' ? ['CRM', 'المحاسبة', 'المخزون', 'المهام'] : products;
+  const localizedRows =
+    locale === 'ar'
+      ? [
+          {
+            category: 'المستخدمون الرئيسيون',
+            crm: 'المبيعات، مدراء الحسابات',
+            accounting: 'المالية، العمليات',
+            inventory: 'المخزن، العمليات، تقنية المعلومات',
+            tasks: 'جميع الفرق، قادة المشاريع',
+          },
+          {
+            category: 'سير العمل الأساسي',
+            crm: 'خط الأنابيب والمتابعة',
+            accounting: 'الفواتير والمصروفات',
+            inventory: 'تتبع المخزون والأصول',
+            tasks: 'التكليف والتسليم',
+          },
+          {
+            category: 'عناصر الإعداد المعتادة',
+            crm: 'المراحل والحقول والقوالب',
+            accounting: 'الفئات والموافقات',
+            inventory: 'المواقع والحدود',
+            tasks: 'سير العمل وقوائم التحقق',
+          },
+          {
+            category: 'التقارير',
+            crm: 'قيمة الخط والأنشطة',
+            accounting: 'التدفق النقدي والأعمار',
+            inventory: 'مستويات المخزون وإعادة الطلب',
+            tasks: 'الإنجاز وحجم العمل',
+          },
+        ]
+      : comparisonData;
   return (
-    <div className={cn('w-full overflow-x-auto', className)}>
+    <div className={cn('w-full overflow-x-auto', isRTL && 'text-right', className)}>
       <div className="min-w-[700px]">
         {/* Header */}
         <div className="grid grid-cols-5 gap-4 mb-4">
           <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-            Feature
+            {locale === 'ar' ? 'الميزة' : 'Feature'}
           </div>
-          {products.map((product) => (
+          {localizedProducts.map((product) => (
             <div
               key={product}
               className={cn(
@@ -66,7 +103,7 @@ export const ComparisonTable: React.FC<{ className?: string }> = ({ className })
 
         {/* Rows */}
         <div className="space-y-2">
-          {comparisonData.map((row, index) => (
+          {localizedRows.map((row, index) => (
             <div
               key={row.category}
               className={cn(
