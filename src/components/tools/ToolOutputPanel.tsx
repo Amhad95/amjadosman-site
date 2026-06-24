@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Copy, Check, Clock, FileText, ListChecks, Table2, Target, Workflow } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
@@ -105,8 +106,8 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
       {/* Content */}
       {output && (
         <div className="grid gap-3 border-b border-border bg-background px-5 py-4 sm:grid-cols-3 md:px-6">
-          <div className={cn('flex items-center gap-3 rounded-xl border border-border bg-muted/25 p-3', isRTL && 'flex-row-reverse')}>
-            <Target className="h-4 w-4 text-primary" />
+          <div className={cn('flex items-center gap-3 rounded-xl border tool-accent-border tool-accent-soft p-3', isRTL && 'flex-row-reverse')}>
+            <Target className="h-4 w-4 tool-accent-text" />
             <div>
               <div className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
                 {locale === 'ar' ? 'إجراءات' : 'Actions'}
@@ -114,8 +115,8 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
               <div className="text-lg font-semibold text-foreground">{actionItems.length}</div>
             </div>
           </div>
-          <div className={cn('flex items-center gap-3 rounded-xl border border-border bg-muted/25 p-3', isRTL && 'flex-row-reverse')}>
-            <Table2 className="h-4 w-4 text-primary" />
+          <div className={cn('flex items-center gap-3 rounded-xl border tool-accent-border tool-accent-soft p-3', isRTL && 'flex-row-reverse')}>
+            <Table2 className="h-4 w-4 tool-accent-text" />
             <div>
               <div className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
                 {locale === 'ar' ? 'جداول' : 'Tables'}
@@ -123,8 +124,8 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
               <div className="text-lg font-semibold text-foreground">{tableCount}</div>
             </div>
           </div>
-          <div className={cn('flex items-center gap-3 rounded-xl border border-border bg-muted/25 p-3', isRTL && 'flex-row-reverse')}>
-            <ListChecks className="h-4 w-4 text-primary" />
+          <div className={cn('flex items-center gap-3 rounded-xl border tool-accent-border tool-accent-soft p-3', isRTL && 'flex-row-reverse')}>
+            <ListChecks className="h-4 w-4 tool-accent-text" />
             <div>
               <div className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
                 {locale === 'ar' ? 'أقسام' : 'Sections'}
@@ -143,7 +144,7 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
             </div>
             <div className="mt-3 space-y-2">
               {headings.slice(0, 8).map((heading) => (
-                <div key={heading} className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground">
+                <div key={heading} className="rounded-lg border tool-accent-border bg-background px-3 py-2 text-sm text-foreground">
                   {heading}
                 </div>
               ))}
@@ -170,19 +171,33 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
           </div>
         )}
         {output && (
-          <div className="prose prose-sm max-w-none
-            prose-headings:font-serif prose-headings:text-foreground
-            prose-h1:text-2xl prose-h2:text-xl prose-h2:mt-6 prose-h3:text-base
-            prose-p:text-muted-foreground prose-p:leading-relaxed
-            prose-strong:text-foreground prose-strong:font-semibold
-            prose-ul:text-muted-foreground prose-ol:text-muted-foreground
-            prose-li:leading-relaxed
-            prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-foreground prose-code:text-xs
-            prose-pre:bg-muted prose-pre:border prose-pre:border-border
-            prose-blockquote:border-l-4 prose-blockquote:border-border prose-blockquote:text-muted-foreground
-            prose-hr:border-border
-            prose-table:text-sm">
-            <ReactMarkdown>{output}</ReactMarkdown>
+          <div className="max-w-none text-sm leading-relaxed text-foreground">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({ children }) => <h1 className="mb-4 mt-0 font-serif text-2xl text-foreground">{children}</h1>,
+                h2: ({ children }) => <h2 className="mb-3 mt-8 border-b border-border pb-2 font-serif text-xl text-foreground first:mt-0">{children}</h2>,
+                h3: ({ children }) => <h3 className="mb-2 mt-6 text-base font-semibold text-foreground">{children}</h3>,
+                p: ({ children }) => <p className="mb-4 text-muted-foreground">{children}</p>,
+                ul: ({ children }) => <ul className="mb-5 list-disc space-y-2 pl-5 text-muted-foreground">{children}</ul>,
+                ol: ({ children }) => <ol className="mb-5 list-decimal space-y-2 pl-5 text-muted-foreground">{children}</ol>,
+                li: ({ children }) => <li className="pl-1">{children}</li>,
+                strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+                code: ({ children }) => <code className="rounded bg-muted px-1.5 py-0.5 text-xs text-foreground">{children}</code>,
+                pre: ({ children }) => <pre className="mb-5 overflow-x-auto rounded-xl border border-border bg-muted p-4 text-sm">{children}</pre>,
+                table: ({ children }) => (
+                  <div className="mb-6 overflow-x-auto rounded-xl border border-border">
+                    <table className="w-full min-w-[720px] border-collapse text-left text-sm">{children}</table>
+                  </div>
+                ),
+                thead: ({ children }) => <thead className="tool-accent-soft text-foreground">{children}</thead>,
+                th: ({ children }) => <th className="border-b border-border px-4 py-3 font-semibold">{children}</th>,
+                td: ({ children }) => <td className="border-b border-border px-4 py-3 align-top text-muted-foreground last:border-b-0">{children}</td>,
+                blockquote: ({ children }) => <blockquote className="mb-5 border-l-4 tool-accent-border bg-muted/40 px-4 py-3 text-muted-foreground">{children}</blockquote>,
+              }}
+            >
+              {output}
+            </ReactMarkdown>
           </div>
         )}
       </div>

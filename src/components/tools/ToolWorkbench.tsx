@@ -79,39 +79,45 @@ export const ToolWorkbench: React.FC<ToolWorkbenchProps> = ({
 
   return (
     <section className="bg-background">
-      <div className={cn("relative overflow-hidden", plateClasses[plate])}>
-        <div className="container mx-auto px-4 pb-8 pt-24 md:px-6 md:pb-10 md:pt-28">
-          <Link
-            to="/tools"
+      <div className="relative bg-background pt-24 pb-8 md:pt-28 md:pb-12">
+        <div className="container mx-auto px-4 md:px-6 pt-6">
+          <div
             className={cn(
-              "mb-8 inline-flex items-center gap-2 rounded-lg border border-mint/25 bg-mint/10 px-3 py-2 text-sm font-semibold text-mint transition-colors hover:bg-mint/15",
-              isRTL && "flex-row-reverse"
+              "hero-folder-card relative min-h-[300px] px-6 py-9 md:min-h-[335px] md:px-10 md:py-11 lg:px-12",
+              plateClasses[plate]
             )}
           >
-            <ArrowLeft className={cn("h-4 w-4", isRTL && "rotate-180")} />
-            {locale === "ar" ? "العودة إلى الأدوات" : "Back to tools"}
-          </Link>
-
-          <div className={cn("grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end", isRTL && "text-right")}>
-            <div className="max-w-4xl">
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-mint/80">{eyebrow}</p>
-              <h1 className="font-serif text-heading-lg text-mint md:text-poster-lg">{title}</h1>
-              <p className="mt-5 max-w-3xl text-body-lg leading-relaxed text-offwhite/82">{description}</p>
-            </div>
-
-            <div className="rounded-xl border border-mint/20 bg-ink/20 p-4 text-mint shadow-lg backdrop-blur">
-              <div className={cn("flex items-center gap-2 text-sm font-semibold", isRTL && "flex-row-reverse")}>
-                <Bot className="h-4 w-4" />
-                Hugging Face model cascade
+            <div className={cn("relative z-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end", isRTL && "text-right")}>
+              <div className="max-w-4xl">
+                <Link
+                  to="/tools"
+                  className={cn(
+                    "mb-7 inline-flex items-center gap-2 rounded-lg border border-offwhite/20 bg-offwhite/10 px-3 py-2 text-sm font-semibold text-offwhite transition-colors hover:bg-offwhite/15",
+                    isRTL && "flex-row-reverse"
+                  )}
+                >
+                  <ArrowLeft className={cn("h-4 w-4", isRTL && "rotate-180")} />
+                  {locale === "ar" ? "العودة إلى الأدوات" : "Back to tools"}
+                </Link>
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-offwhite/70">{eyebrow}</p>
+                <h1 className="font-serif text-poster-lg text-mint md:text-poster-xl">{title}</h1>
+                <p className="mt-5 max-w-3xl text-body-lg leading-relaxed text-white/85">{description}</p>
               </div>
-              <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                <div className="rounded-lg border border-mint/15 bg-mint/10 p-3">
-                  <div className="text-2xl font-semibold">{completedInputs}</div>
-                  <div className="text-mint/70">inputs filled</div>
+
+              <div className="rounded-xl border border-offwhite/16 bg-ink/20 p-4 text-offwhite shadow-lg backdrop-blur">
+                <div className={cn("flex items-center gap-2 text-sm font-semibold", isRTL && "flex-row-reverse")}>
+                  <Bot className="h-4 w-4 text-mint" />
+                  Hugging Face model cascade
                 </div>
-                <div className="rounded-lg border border-mint/15 bg-mint/10 p-3">
-                  <div className="text-2xl font-semibold">8</div>
-                  <div className="text-mint/70">fallbacks</div>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                  <div className="rounded-lg border border-offwhite/15 bg-offwhite/10 p-3">
+                    <div className="text-2xl font-semibold text-mint">{completedInputs}</div>
+                    <div className="text-offwhite/72">inputs filled</div>
+                  </div>
+                  <div className="rounded-lg border border-offwhite/15 bg-offwhite/10 p-3">
+                    <div className="text-2xl font-semibold text-mint">8</div>
+                    <div className="text-offwhite/72">fallbacks</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -137,7 +143,7 @@ export const ToolWorkbench: React.FC<ToolWorkbenchProps> = ({
                       className={cn(
                         "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                         active
-                          ? "bg-primary text-primary-foreground"
+                          ? "tool-accent-bg text-white"
                           : "text-muted-foreground hover:bg-muted hover:text-foreground",
                         isRTL && "flex-row-reverse"
                       )}
@@ -157,7 +163,7 @@ export const ToolWorkbench: React.FC<ToolWorkbenchProps> = ({
               <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                 {brief.map((item) => (
                   <li key={item} className={cn("flex gap-2 leading-relaxed", isRTL && "flex-row-reverse")}>
-                    <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                    <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 tool-accent-text" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -171,7 +177,7 @@ export const ToolWorkbench: React.FC<ToolWorkbenchProps> = ({
                 <div className={cn("flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between", isRTL && "lg:flex-row-reverse")}>
                   <div>
                     <div className={cn("flex items-center gap-2 text-sm font-semibold text-foreground", isRTL && "flex-row-reverse")}>
-                      <FileText className="h-4 w-4 text-primary" />
+                      <FileText className="h-4 w-4 tool-accent-text" />
                       Working canvas
                     </div>
                     <p className="mt-1 text-sm text-muted-foreground">
@@ -185,7 +191,7 @@ export const ToolWorkbench: React.FC<ToolWorkbenchProps> = ({
                         className={cn(
                           "rounded-full border px-3 py-1 text-xs font-medium",
                           item.value.trim()
-                            ? "border-primary/25 bg-primary/10 text-primary"
+                            ? "tool-accent-border tool-accent-soft tool-accent-text"
                             : "border-border bg-muted text-muted-foreground"
                         )}
                       >
@@ -200,12 +206,12 @@ export const ToolWorkbench: React.FC<ToolWorkbenchProps> = ({
                 <div className="space-y-5 p-5 md:p-6">{children}</div>
                 <div className="border-t border-border bg-muted/20 p-5 2xl:border-l 2xl:border-t-0">
                   <div className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                    Output will include
+                    Artifact package
                   </div>
                   <div className="mt-3 space-y-2 text-sm text-foreground">
-                    <div className="rounded-lg border border-border bg-background p-3">Score or readiness snapshot</div>
-                    <div className="rounded-lg border border-border bg-background p-3">Prioritized table of actions</div>
-                    <div className="rounded-lg border border-border bg-background p-3">Implementation-ready next steps</div>
+                    <div className="rounded-lg border tool-accent-border bg-background p-3">Diagnostic scorecard and failure points</div>
+                    <div className="rounded-lg border tool-accent-border bg-background p-3">Prioritized implementation table</div>
+                    <div className="rounded-lg border tool-accent-border bg-background p-3">Reusable copy, workflow, or metric templates</div>
                   </div>
                 </div>
               </div>
