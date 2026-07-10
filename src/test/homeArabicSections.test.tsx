@@ -1,6 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { MemoryRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Shield } from "lucide-react";
 import Index from "@/pages/Index";
 import { LocaleProvider, LOCALE_STORAGE_KEY } from "@/lib/locale";
@@ -8,12 +9,22 @@ import { OutcomeTiles } from "@/components/sections/OutcomeTiles";
 import { CapabilityGrid } from "@/components/sections/CapabilityGrid";
 
 const renderArabic = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
   window.localStorage.setItem(LOCALE_STORAGE_KEY, "ar");
 
   return render(
-    <MemoryRouter>
-      <LocaleProvider>{ui}</LocaleProvider>
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <LocaleProvider>{ui}</LocaleProvider>
+      </MemoryRouter>
+    </QueryClientProvider>
   );
 };
 

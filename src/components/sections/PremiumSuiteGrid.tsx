@@ -15,6 +15,7 @@ interface SuiteProduct {
 
 interface PremiumSuiteGridProps {
   products: SuiteProduct[];
+  exploreLabel?: string;
   className?: string;
 }
 
@@ -32,8 +33,10 @@ const productGradients: Record<string, string> = {
   tasks: 'from-magenta/20 to-magenta/5',
 };
 
-export const PremiumSuiteGrid: React.FC<PremiumSuiteGridProps> = ({ products, className }) => {
+export const PremiumSuiteGrid: React.FC<PremiumSuiteGridProps> = ({ products, exploreLabel, className }) => {
   const { locale, isRTL } = useLocale();
+  const resolvedExploreLabel =
+    exploreLabel ?? (locale === 'ar' ? 'استكشف' : 'Explore');
   return (
     <RevealGroup className={cn('grid grid-cols-1 md:grid-cols-2 gap-6', className)} variant="subtle" stagger={70}>
       {products.map((product) => {
@@ -103,7 +106,7 @@ export const PremiumSuiteGrid: React.FC<PremiumSuiteGridProps> = ({ products, cl
                 'group-hover:bg-mint group-hover:shadow-lg group-hover:shadow-mint/30',
                 'transition-all duration-300'
               )}>
-                {locale === 'ar' ? `استكشف ${product.name}` : `Explore ${product.name}`}
+                {resolvedExploreLabel} {product.name}
                 <ArrowRight
                   size={18}
                   className={cn(

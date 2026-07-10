@@ -27,7 +27,8 @@ import {
 } from '@/components/ui/vignettes/AccountingPreviews';
 import { CyberPercentage } from '@/components/ui/cyber-percentage';
 import { useLocale } from '@/lib/locale';
-import { getSoftwarePageContent } from '@/lib/softwarePageContent';
+import { usePageMeta } from '@/hooks/use-page-meta';
+import { getSoftwarePageContent, getSoftwareSectionEyebrows } from '@/lib/softwarePageContent';
 import {
   FileSpreadsheet,
   Calculator,
@@ -43,6 +44,8 @@ import {
 const SoftwareAccounting = () => {
   const { locale } = useLocale();
   const content = getSoftwarePageContent(locale).accounting;
+  usePageMeta({ title: `${content.hero.headline} | Amjad Osman`, description: content.hero.subheadline });
+  const sectionEyebrows = getSoftwareSectionEyebrows(locale);
 
   const [activePersona, setActivePersona] = useState(0);
   const problemIcons = [FileText, FileSpreadsheet, CheckCircle, TrendingUp];
@@ -98,6 +101,7 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={sectionEyebrows.preview}
             headline={content.previewSection.headline}
             subheadline={content.previewSection.subheadline}
             align="center"
@@ -123,6 +127,7 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={sectionEyebrows.personas}
             headline={content.personaSection.headline}
             subheadline={content.personaSection.subheadline}
           />
@@ -144,6 +149,7 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={sectionEyebrows.problems}
             headline={content.problemSection.headline}
             subheadline={content.problemSection.subheadline}
           />
@@ -162,6 +168,7 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={sectionEyebrows.outcomes}
             headline={content.outcomesSection.headline}
             subheadline={content.outcomesSection.subheadline}
           />
@@ -183,6 +190,7 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={sectionEyebrows.capabilities}
             headline={content.capabilitiesSection.headline}
             subheadline={content.capabilitiesSection.subheadline}
           />
@@ -202,6 +210,7 @@ const SoftwareAccounting = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={sectionEyebrows.workflow}
             headline={content.workflowSection.headline}
             subheadline={content.workflowSection.subheadline}
           />
@@ -213,6 +222,7 @@ const SoftwareAccounting = () => {
       <section id="governance" className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={sectionEyebrows.governance}
             headline={content.governanceSection.headline}
             subheadline={content.governanceSection.subheadline}
           />
@@ -228,6 +238,7 @@ const SoftwareAccounting = () => {
       <section id="onboarding" className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={sectionEyebrows.onboarding}
             headline={content.onboardingSection.headline}
             subheadline={content.onboardingSection.subheadline}
           />

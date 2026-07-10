@@ -22,7 +22,7 @@ const itemsByLocale = {
 export const InventoryList: React.FC = () => {
   const { locale, isRTL } = useLocale();
   const reducedMotion = useReducedMotion();
-  const items = itemsByLocale[locale];
+  const items = itemsByLocale[locale as keyof typeof itemsByLocale] || itemsByLocale.en;
   const [stocks, setStocks] = useState(items.map((item) => item.stock));
   const [filterActive, setFilterActive] = useState(false);
   const [searchText, setSearchText] = useState('');

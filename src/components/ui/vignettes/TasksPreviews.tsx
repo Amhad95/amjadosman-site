@@ -76,7 +76,7 @@ export const TaskBoardRealistic: React.FC<{ className?: string }> = ({ className
 
   return (
     <div
-      className={cn('flex gap-2 p-3 h-full overflow-x-auto', isRTL && 'flex-row-reverse text-right', className)}
+      className={cn('grid grid-cols-2 gap-2 p-3 h-full md:flex md:overflow-x-auto', isRTL && 'flex-row-reverse text-right', className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -84,7 +84,7 @@ export const TaskBoardRealistic: React.FC<{ className?: string }> = ({ className
         <div
           key={column.id}
           className={cn(
-            'flex-1 min-w-[140px] flex flex-col rounded-lg transition-all duration-300',
+            'min-w-0 flex min-h-0 flex-col rounded-lg transition-all duration-300 md:min-w-[140px] md:flex-1',
             highlightedColumn === column.id ? 'bg-gray-100' : 'bg-gray-50'
           )}
         >
@@ -197,6 +197,8 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
       {/* Toggle */}
       <div className={cn('flex items-center gap-1 mb-3', isRTL && 'flex-row-reverse')}>
         <button
+          aria-pressed={filter === 'my'}
+          aria-label={locale === 'ar' ? 'عرض مهامي' : 'Show my tasks'}
           onClick={() => setFilter('my')}
           className={cn(
             'px-3 py-1.5 text-[11px] font-medium rounded-md transition-colors',
@@ -206,6 +208,8 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
           {locale === 'ar' ? 'مهامي' : 'My Tasks'}
         </button>
         <button
+          aria-pressed={filter === 'team'}
+          aria-label={locale === 'ar' ? 'عرض مهام الفريق' : 'Show team tasks'}
           onClick={() => setFilter('team')}
           className={cn(
             'px-3 py-1.5 text-[11px] font-medium rounded-md transition-colors',
@@ -229,6 +233,7 @@ export const TaskListRealistic: React.FC<{ className?: string }> = ({ className 
             )}
           >
             <button
+              aria-label={task.completed ? (locale === 'ar' ? 'إلغاء إكمال المهمة' : 'Mark task incomplete') : (locale === 'ar' ? 'إكمال المهمة' : 'Mark task complete')}
               onClick={() => toggleComplete(task.id)}
               className={cn(
                 'w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0',

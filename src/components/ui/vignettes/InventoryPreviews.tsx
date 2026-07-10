@@ -52,7 +52,7 @@ export const ItemsTableRealistic: React.FC<{ className?: string }> = ({ classNam
           <Package className="w-3 h-3 text-gray-400" />
           <span className="text-[11px] text-gray-400">{locale === 'ar' ? 'ابحث في العناصر...' : 'Search items...'}</span>
         </div>
-        <button className="px-3 py-1.5 text-[11px] font-medium bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200 transition-colors">
+        <button aria-label={locale === 'ar' ? 'تصفية العناصر' : 'Filter items'} className="px-3 py-1.5 text-[11px] font-medium bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200 transition-colors">
           {locale === 'ar' ? 'فلاتر' : 'Filters'}
         </button>
       </div>
@@ -282,6 +282,7 @@ export const ReorderQueueRealistic: React.FC<{ className?: string }> = ({ classN
               </span>
               {item.status !== 'ordered' && (
                 <button
+                  aria-label={locale === 'ar' ? `طلب ${item.name}` : `Order ${item.name}`}
                   onClick={() => setItems(prev => prev.map(i => i.id === item.id ? { ...i, status: 'ordered' as const } : i))}
                   className="px-2 py-1 text-[10px] font-medium bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors"
                 >

@@ -2,20 +2,29 @@ import React from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { ServiceCardGrid } from '@/components/sections/ServiceCardGrid';
-import { ProofTiles } from '@/components/sections/ProofTiles';
 import { ToolList } from '@/components/sections/ToolList';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
 import { NeuralLattice } from '@/components/shared/NeuralLattice';
+import { MatrixCodeBackground } from '@/components/shared/MatrixCodeBackground';
 import { useSiteContent } from '@/lib/content';
 import { OutcomesImpactSection } from '@/components/sections/OutcomesImpactSection';
 import { DeliveryProcessInteractive } from '@/components/sections/DeliveryProcessInteractive';
+import { WorkCaseCard } from '@/components/sections/WorkCaseCard';
+import { resolveLocalizedWorkCase } from '@/lib/fallbackContent';
+import { getFeaturedWorkCases } from '@/data/workCasesDatabase';
+import { RevealGroup } from '@/components/motion/Reveal';
+import { useLocale } from '@/lib/locale';
 
 
 const Index = () => {
   const { home } = useSiteContent();
+  const { locale } = useLocale();
+  const featuredCases = getFeaturedWorkCases()
+    .slice(0, 3)
+    .map((item) => resolveLocalizedWorkCase(item, locale));
 
   return (
     <Layout>
@@ -55,7 +64,7 @@ const Index = () => {
       {/* How We Work */}
       <DeliveryProcessInteractive />
 
-      {/* Proof Tiles */}
+      {/* Featured Case Studies */}
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
@@ -64,13 +73,11 @@ const Index = () => {
             subheadline={home.proofTiles.subheadline}
             variant="poster"
           />
-          <ProofTiles
-            tiles={home.proofTiles.tiles.map((tile) => ({
-              ...tile,
-              cta: home.proofTiles.tileCta,
-              href: '/work',
-            }))}
-          />
+          <RevealGroup className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10" stagger={78}>
+            {featuredCases.map((item) => (
+              <WorkCaseCard key={item.id} item={item} />
+            ))}
+          </RevealGroup>
           <div className="mt-8 text-center">
             <SecondaryButton href={home.proofTiles.cta.href}>
               {home.proofTiles.cta.label}
@@ -80,8 +87,9 @@ const Index = () => {
       </section>
 
       {/* AI Tools Preview */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
+      <section className="relative overflow-hidden py-16 md:py-24 bg-background">
+        <MatrixCodeBackground fontSize={19} color="hsla(275, 100%, 50%, 0.16)" speed={0.55} />
+        <div className="container relative z-10 mx-auto px-4 md:px-6">
           <SectionHeader
             eyebrow={home.aiTools.eyebrow}
             headline={home.aiTools.headline}
@@ -98,8 +106,9 @@ const Index = () => {
       </section>
 
       {/* Pricing Teaser */}
-      <section className="py-16 md:py-24 bg-plate-navy">
+      <section className="py-10 md:py-14 bg-background">
         <div className="container mx-auto px-4 md:px-6">
+          <div className="rounded-[34px] bg-plate-navy px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
           <div className="max-w-2xl">
             <h2 className="font-serif text-poster-lg text-mint mb-4">
               {home.pricingTeaser.headline}
@@ -110,6 +119,7 @@ const Index = () => {
             <PrimaryButton href={home.pricingTeaser.cta.href} textColor="navy">
               {home.pricingTeaser.cta.label}
             </PrimaryButton>
+          </div>
           </div>
         </div>
       </section>

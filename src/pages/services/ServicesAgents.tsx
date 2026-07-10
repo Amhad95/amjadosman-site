@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { SectionHeader } from '@/components/shared/SectionHeader';
+import { MatrixCodeBackground } from '@/components/shared/MatrixCodeBackground';
 import { ServicePricingStack } from '@/components/sections/ServicePricingStack';
 import { ServiceDeliverySection } from '@/components/sections/ServiceDeliverySection';
 import { CTABand } from '@/components/sections/CTABand';
@@ -12,6 +13,7 @@ import { usePricingContent } from '@/lib/pricingContent';
 import { useLocale } from '@/lib/locale';
 import { getServicePageContent } from '@/lib/servicePageContent';
 import { cn } from '@/lib/utils';
+import { usePageMeta } from '@/hooks/use-page-meta';
 
 const outcomeMotions: OutcomeMotionVariant[] = [
   'agents-admin',
@@ -28,6 +30,7 @@ const ServicesAgents = () => {
   const { servicePricingTracks } = usePricingContent();
   const pricingTrack = servicePricingTracks.agents;
   const content = getServicePageContent(locale).agents;
+  usePageMeta({ title: `${content.hero.headline} | Amjad Osman`, description: content.hero.subheadline });
 
   return (
     <Layout>
@@ -69,8 +72,9 @@ const ServicesAgents = () => {
         }
       />
 
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
+      <section className="relative overflow-hidden py-16 md:py-24 bg-background">
+        <MatrixCodeBackground fontSize={18} color="hsla(275, 100%, 50%, 0.13)" speed={0.5} />
+        <div className="container relative z-10 mx-auto px-4 md:px-6">
           <SectionHeader
             eyebrow={content.outcomesSection.eyebrow}
             headline={content.outcomesSection.headline}
@@ -135,8 +139,9 @@ const ServicesAgents = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
+      <section className="relative overflow-hidden py-16 md:py-24 bg-background">
+        <MatrixCodeBackground fontSize={18} color="hsla(275, 100%, 50%, 0.12)" speed={0.45} />
+        <div className="container relative z-10 mx-auto px-4 md:px-6">
           <SectionHeader
             eyebrow={content.signalSection.eyebrow}
             headline={content.signalSection.headline}

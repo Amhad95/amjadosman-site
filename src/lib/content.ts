@@ -2,16 +2,16 @@ import { useLocale, type Locale } from "@/lib/locale";
 
 const siteContentEn = {
   meta: {
-    title: "ADSI - Applied Design and Strategy Institute",
+    title: "Amjad Osman - Brand, Operations, Software, and AI Systems",
     description:
-      "ADSI helps growing teams improve brand, websites, internal operations, and practical AI workflows with clear scope and clean handover.",
+      "Amjad Osman helps growing teams improve brand, websites, internal operations, and practical AI workflows with clear scope and clean handover.",
   },
 
   navigation: {
     primary: [
       { label: "Services", href: "/services" },
       { label: "Software", href: "/software" },
-      { label: "AI Tools", href: "/tools" },
+      { label: "Resources", href: "/resources" },
       { label: "Work", href: "/work" },
       { label: "Pricing", href: "/pricing" },
       { label: "About", href: "/about" },
@@ -22,10 +22,15 @@ const siteContentEn = {
       { label: "Internal Operations Systems", href: "/services/ops" },
       { label: "AI Agents and Automation", href: "/services/agents" },
     ],
+    resourcesDropdown: [
+      { label: "Insight notes", href: "/resources" },
+      { label: "Self-help tools", href: "/tools" },
+    ],
     cta: { label: "Book a Call", href: "/book" },
     footer: [
       { label: "Delivery Process", href: "/process" },
-      { label: "Resources", href: "/resources" },
+      { label: "Insights", href: "/resources" },
+      { label: "Self-help tools", href: "/tools" },
       { label: "Contact", href: "/contact" },
       { label: "Privacy", href: "/privacy" },
       { label: "Terms", href: "/terms" },
@@ -39,7 +44,7 @@ const siteContentEn = {
 
   footer: {
     tagline:
-      "ADSI designs the brand, operations, and AI systems that help growing teams move with more clarity.",
+      "Amjad Osman designs brand, operations, software, and AI systems that help growing teams move with more clarity.",
     pagesLabel: "Pages",
     legalLabel: "Legal",
     copyright: "All rights reserved.",
@@ -55,7 +60,7 @@ const siteContentEn = {
     caseStudyUnavailable: "The case study you requested is not available right now.",
     readArticle: "Read article",
     caseStudies: "Case studies",
-    caseStudiesSubheadline: "Sample deliverables from real projects.",
+    caseStudiesSubheadline: "Real projects, outcomes, and implementation lessons.",
     lastUpdatedLabel: "Last updated",
     workSectionHeadline: "What we built",
     workApproachLabel: "Approach",
@@ -65,7 +70,7 @@ const siteContentEn = {
     challengeLabel: "Challenge",
     resourceCtaHeadline: "Turn this into delivery.",
     resourceCtaDescription:
-      "We'll implement the system behind the guide and show the pricing.",
+      "I can implement the system behind the guide and show the pricing.",
   },
 
   home: {
@@ -73,14 +78,14 @@ const siteContentEn = {
       headline:
         "Sharper brand, cleaner operations, and practical AI systems for growing teams.",
       subheadline:
-        "ADSI helps ambitious teams improve how they show up, how they operate, and how they scale. Brand systems, websites, SOPs, workflow design, and automation delivered with clear scope and clean handover.",
+        "I help ambitious teams improve how they show up, how they operate, and how they scale. Brand systems, websites, SOPs, workflow design, and automation delivered with clear scope and clean handover.",
       credibilityStrip:
         "Clear scope. Faster decisions. Clean handover. Ongoing support if you need it.",
       primaryCta: { label: "Book a Call", href: "/book" },
       secondaryCta: { label: "Run a Free Audit", href: "/tools" },
     },
     whatWeDeliver: {
-      headline: "Where ADSI usually steps in.",
+      headline: "Where I usually step in.",
       subheadline:
         "Brand, web, operations, and software support delivered as one practical system.",
       eyebrow: "Services",
@@ -241,36 +246,32 @@ const siteContentEn = {
       cta: { label: "See how delivery works", href: "/process" },
     },
     proofTiles: {
-      headline: "Proof you can evaluate quickly.",
+      headline: "Case studies you can evaluate quickly.",
       subheadline:
-        "Review tangible samples quickly so decisions are based on evidence, not promises.",
-      eyebrow: "Proof",
+        "Selected real projects from strategy, systems, product, and delivery work.",
+      eyebrow: "Work",
       tiles: [
         {
-          title: "SharePoint walkthrough",
-          description: "See a sample architecture in action.",
+          title: "Radiance Co. Ltd.",
+          description: "Solar power systems for health facilities in Red Sea and Kassala.",
         },
         {
-          title: "SOP pack",
-          description: "Table of contents and excerpt from a real pack.",
+          title: "TadmeenPro",
+          description: "An operations core for insurers that is ready for AI.",
         },
         {
-          title: "Before and after",
-          description: "Landing page with rationale.",
-        },
-        {
-          title: "Brand excerpt",
-          description: "Guideline pages from a delivered system.",
+          title: "National Trade Facilitation Platform",
+          description: "A single-window platform with A4 Group for a confidential authority.",
         },
       ],
-      tileCta: "View sample",
-      cta: { label: "See work", href: "/work" },
+      tileCta: "View case study",
+      cta: { label: "See all case studies", href: "/work" },
     },
     aiTools: {
-      eyebrow: "AI tools",
+      eyebrow: "Self-help tools",
       headline: "Get a useful output in minutes.",
       subheadline:
-        "Our free tools generate drafts and audits. Use them now, or let us implement the results.",
+        "These free tools give surface-level drafts and audits. Use them now, or let me implement the results properly.",
       tools: [
         {
           title: "SOP Draft Builder",
@@ -287,7 +288,7 @@ const siteContentEn = {
           description: "Receive conversion friction notes and hierarchy fixes.",
         },
       ],
-      cta: { label: "Explore AI tools", href: "/tools" },
+      cta: { label: "Explore self-help tools", href: "/tools" },
     },
     pricingTeaser: {
       headline: "Clear packages. No vague billing.",
@@ -297,7 +298,7 @@ const siteContentEn = {
     },
     finalCta: {
       headline: "Book the right next step.",
-      description: "We'll help you choose the starting package and show the pricing.",
+      description: "I can help you choose the starting package and show the pricing.",
       primaryCta: { label: "Book a Call", href: "/book" },
       secondaryCta: { label: "View pricing", href: "/pricing" },
     },
@@ -307,7 +308,7 @@ const siteContentEn = {
     hero: {
       headline: "Choose the service track that fits your next bottleneck.",
       subheadline:
-        "Whether you need a stronger market presence, cleaner internal operations, or practical automation, ADSI scopes the work around usable deliverables your team can keep building on.",
+        "Whether you need a stronger market presence, cleaner internal operations, or practical automation, I scope the work around usable deliverables your team can keep building on.",
       primaryCta: { label: "Book a Call", href: "/book" },
     },
     tracks: [
@@ -370,7 +371,7 @@ const siteContentEn = {
       headline:
         "Operational software configured around how your team actually works.",
       subheadline:
-        "ADSI deploys focused CRM, operations, and document workflows so your team gets a usable system, not another tool to figure out alone.",
+        "I deploy focused CRM, operations, and document workflows so your team gets a usable system, not another tool to figure out alone.",
       primaryCta: { label: "Book a Demo", href: "/book" },
       secondaryCta: { label: "Book a Call", href: "/book" },
     },
@@ -412,7 +413,7 @@ const siteContentEn = {
         },
       ],
       keyLine:
-        "We only offer modules we can implement properly and support long-term.",
+        "I only offer modules I can implement properly and support long-term.",
     },
     differentiator: {
       headline: "Software without adoption failure.",
@@ -433,9 +434,9 @@ const siteContentEn = {
 
   tools: {
     hero: {
-      headline: "Tools that turn messy inputs into structured outputs.",
+      headline: "Self-help tools that turn messy inputs into structured outputs.",
       subheadline:
-        "Run an audit or generate a draft. Get a useful output in minutes. Then decide if you want us to implement it properly.",
+        "Run a surface-level audit or generate a practical draft. Get a useful starting point in minutes. Then decide if you want me to implement it properly.",
       primaryCta: { label: "Run a Free Audit", href: "#tools-list" },
       secondaryCta: { label: "Book a Call", href: "/book" },
     },
@@ -481,12 +482,12 @@ const siteContentEn = {
       },
     ],
     emailCapture: {
-      headline: "Download the full report as a PDF.",
+      headline: "Download the self-help tools starter pack.",
       description:
-        "Enter your email and receive a downloadable report plus a one-page implementation plan.",
-      buttonLabel: "Get the PDF",
-      successMessage: "Check your inbox for the report.",
-      downloadLabel: "Download PDF",
+        "Enter your email to unlock a practical input checklist and a one-page implementation review guide.",
+      buttonLabel: "Unlock the pack",
+      successMessage: "Your starter pack is ready to download.",
+      downloadLabel: "Download starter pack",
       followUpCta: { label: "Book a Call", href: "/book" },
     },
   },
@@ -627,48 +628,48 @@ const siteContentEn = {
 
   work: {
     hero: {
-      headline: "Proof you can evaluate.",
+      headline: "Case studies you can evaluate.",
       subheadline:
-        "Sample deliverables from real projects. Review the quality before you commit.",
+        "Real projects across strategy, systems, product, and delivery. Review the work before you commit.",
     },
     tiles: [
       {
-        title: "SharePoint Architecture Walkthrough",
+        title: "Radiance Co. Ltd.",
         description:
-          "Interactive tour of intranet structure, document libraries, and permissions.",
+          "Solar power systems for health facilities in Red Sea and Kassala.",
         thumbnail: null,
-        href: "/work/sharepoint-case-study",
+        href: "/work/radiance-co-ltd-solar-power-for-health-facilities-in-red-sea-and-kassala",
         cta: "View case study",
       },
       {
-        title: "SOP Library Implementation",
+        title: "TadmeenPro",
         description:
-          "Complete procedure library with table of contents and role mapping.",
+          "An operations core for insurers that is ready for AI.",
         thumbnail: null,
-        href: "/work/sop-case-study",
+        href: "/work/tadmeenpro-an-operations-core-for-insurers-that-is-ready-for-ai",
         cta: "View case study",
       },
       {
-        title: "Landing Page Redesign",
+        title: "Talya Properties",
         description:
-          "Conversion-focused redesign with before/after comparison and rationale.",
+          "Steering a real estate business through a cooling market.",
         thumbnail: null,
-        href: "/work/landing-page-case-study",
+        href: "/work/talya-properties-steering-a-real-estate-business-through-a-cooling-market",
         cta: "View case study",
       },
       {
-        title: "Brand System Delivery",
+        title: "National Trade Facilitation Platform",
         description:
-          "Complete identity system from logo to guidelines to template pack.",
+          "A single-window platform with A4 Group for a confidential authority.",
         thumbnail: null,
-        href: "/work/brand-case-study",
+        href: "/work/national-trade-facilitation-platform-with-a4-group-for-a-confidential-authority",
         cta: "View case study",
       },
     ],
     requestCta: {
       headline: "Scope similar work.",
       description:
-        "We'll shape the first engagement around your bottleneck, timeline, and price.",
+        "I can shape the first engagement around your bottleneck, timeline, and price.",
       primaryCta: { label: "Book a Call", href: "/book" },
       secondaryCta: { label: "View pricing", href: "/pricing" },
     },
@@ -676,30 +677,30 @@ const siteContentEn = {
 
   about: {
     hero: {
-      eyebrow: "About ADSI",
-      headline: "ADSI builds the business layer around growing teams.",
+      eyebrow: "How I work",
+      headline: "I build the business layer around growing teams.",
       subheadline:
-        "We help companies close the gap between strong underlying work and the brand, operations, and workflow systems that support it.",
+        "I help companies close the gap between strong underlying work and the brand, operations, and workflow systems that support it.",
       credibilityStrip:
         "Clear scope. Practical delivery. Clean handover. Ongoing support if useful.",
       primaryCta: { label: "Book a Call", href: "/book" },
       secondaryCta: { label: "View pricing", href: "/pricing" },
     },
     story: {
-      eyebrow: "About us",
+      eyebrow: "About me",
       headline:
-        "ADSI exists because growing businesses often outgrow the systems around good work.",
+        "I do this work because growing businesses often outgrow the systems around good work.",
       subheadline:
         "The business may already be delivering strong outcomes, but the surrounding layer often starts falling behind as the company grows.",
       paragraphs: [
         "That gap can show up externally. The website, brand, or sales materials are not creating enough clarity or trust for buyers.",
         "It can also show up internally. Files are harder to find, SOPs are too thin, onboarding depends on memory, and repeat work keeps getting rebuilt from scratch.",
-        "ADSI exists to close that gap with practical systems. We help teams strengthen how the business shows up, how it operates, and where automation can remove repeat work without creating more confusion.",
+        "I close that gap with practical systems. I help teams strengthen how the business shows up, how it operates, and where automation can remove repeat work without creating more confusion.",
       ],
     },
     drivers: {
-      eyebrow: "Our why",
-      headline: "What drives the way ADSI works.",
+      eyebrow: "My why",
+      headline: "What drives the way I work.",
       subheadline:
         "The work is shaped by a few practical beliefs about what actually helps growing teams move better.",
       items: [
@@ -722,11 +723,11 @@ const siteContentEn = {
       ],
     },
     fit: {
-      eyebrow: "Who we work best with",
+      eyebrow: "Who I work best with",
       headline:
         "The fit is usually strongest when the business already has momentum.",
       subheadline:
-        "ADSI is usually most useful when the company is already doing meaningful work, but the business layer around that work needs catching up.",
+        "I am usually most useful when the company is already doing meaningful work, but the business layer around that work needs catching up.",
       items: [
         {
           title: "Teams with strong underlying work",
@@ -747,7 +748,7 @@ const siteContentEn = {
       ],
     },
     workingWithUs: {
-      eyebrow: "Working with ADSI",
+      eyebrow: "Working together",
       headline: "The work is structured to stay clear, calm, and useful.",
       subheadline:
         "Clients usually want fewer meetings, faster decisions, and a final system they can actually keep using. That is how the work is set up.",
@@ -782,9 +783,9 @@ const siteContentEn = {
       ],
     },
     cta: {
-      headline: "See if we're the fit.",
+      headline: "See if I am the fit.",
       description:
-        "Book a short call and we'll tell you the right starting package.",
+        "Book a short call and I will tell you the right starting package.",
       primaryCta: { label: "Book a Call", href: "/book" },
       secondaryCta: { label: "View pricing", href: "/pricing" },
     },
@@ -792,7 +793,7 @@ const siteContentEn = {
 
   book: {
     hero: {
-      headline: "Book a short call with ADSI",
+      headline: "Book a short call with Amjad",
       subheadline:
         "You will be redirected to the live Google Meet booking page to pick a time directly.",
     },
@@ -803,8 +804,11 @@ const siteContentEn = {
 
   process: {
     hero: {
+      eyebrow: "Delivery process",
       headline: "How we deliver",
       subheadline: "Structured process. Minimal meetings. Clean handover.",
+      credibilityStrip:
+        "Clear entry point. Working milestones. Clean handover. Support only when useful.",
     },
     steps: [
       {
@@ -846,7 +850,7 @@ const siteContentEn = {
     cta: {
       headline: "Start with a clear scope.",
       description:
-        "We'll match the delivery process to the first problem you need to fix.",
+        "I will match the delivery process to the first problem you need to fix.",
       primaryCta: { label: "Book a Call", href: "/book" },
       secondaryCta: { label: "View pricing", href: "/pricing" },
     },
@@ -854,22 +858,28 @@ const siteContentEn = {
 
   resources: {
     hero: {
-      headline: "Resources",
+      eyebrow: "Insight notes",
+      headline: "Practical resources for clearer delivery.",
       subheadline:
-        "Practical guides for teams improving brand, operations, and automation.",
+        "Articles and notes for teams improving brand, operations, software, and automation.",
+      credibilityStrip:
+        "Useful context. No theatre. Practical next steps when you are ready to build.",
     },
     emptyState: {
       message:
-        "More guides are on the way. If you need something specific, reach out and we can point you in the right direction.",
-      cta: { label: "Contact us", href: "/contact" },
+        "More guides are on the way. If you need something specific, reach out and I can point you in the right direction.",
+      cta: { label: "Contact", href: "/contact" },
     },
   },
 
   contact: {
     hero: {
-      headline: "Tell us what you are trying to fix",
+      eyebrow: "Contact",
+      headline: "Tell me what you are trying to fix",
       subheadline:
         "Questions, project requests, and sample requests are all welcome.",
+      credibilityStrip:
+        "Short message. Clear next step. No pressure to start before the fit is obvious.",
     },
     form: {
       fields: [
@@ -892,30 +902,280 @@ const siteContentEn = {
   },
 
   privacy: {
+    eyebrow: "Legal",
     title: "Privacy Policy",
-    lastUpdated: "January 2025",
-    placeholder: "Privacy policy content will be added here.",
+    lastUpdated: "June 2026",
+    subheadline:
+      "How contact details, booking information, and site messages are handled.",
+    credibilityStrip:
+      "Minimal collection. Practical use. No resale of personal data.",
+    sections: [
+      {
+        title: "Who is responsible for your data",
+        body: [
+          "This website is operated by Amjad Osman / ADSI as an EU-based independent service provider, unless a specific proposal or contract names a different contracting entity. For privacy questions, requests, or deletion enquiries, contact hello@adsi.io.",
+          "For normal website enquiries, project discussions, bookings, and delivery communication, I act as the controller of the personal data I decide to collect and use. For client systems, documents, or datasets handled inside a paid engagement, the signed scope or data processing terms may define a different role, including processor or subcontractor.",
+        ],
+      },
+      {
+        title: "What this policy covers",
+        body: [
+          "This policy covers personal data processed through this website, booking links, email conversations, free self-help tools, project enquiries, and ordinary service delivery communication.",
+          "It does not replace a project-specific data processing agreement, non-disclosure agreement, statement of work, or client security requirement. Where a signed project document conflicts with this website policy, the signed project document controls for that engagement.",
+        ],
+      },
+      {
+        title: "Personal data I may collect",
+        body: [
+          "I try to collect only what is needed to understand a request, reply properly, and deliver agreed work. Depending on how you interact with the site or services, this may include:",
+        ],
+        bullets: [
+          "Contact details such as name, email address, company, role, country, and preferred communication channel.",
+          "Project information you choose to send, including business goals, website URLs, brand assets, process descriptions, operational documents, or examples of current workflows.",
+          "Booking information such as selected meeting time, meeting notes, calendar metadata, and any message you add to the booking form.",
+          "Free tool inputs and outputs, such as text you paste into an audit, SOP builder, KPI audit, dashboard builder, or page critique tool.",
+          "Technical information normally sent by browsers and hosting providers, such as IP address, device/browser type, approximate location, pages visited, timestamps, and security logs.",
+          "Billing and commercial information if you become a client, such as proposal details, invoices, payment status, tax or business registration details, and contract records.",
+        ],
+      },
+      {
+        title: "Sensitive and confidential information",
+        body: [
+          "Please do not submit passwords, payment card numbers, government ID numbers, health information, special-category data, children’s data, or highly confidential client data through public forms or free tools unless I have specifically agreed a secure method with you.",
+          "If a project requires sensitive, regulated, or confidential data, we should agree the handling method, access controls, retention period, and any data processing agreement before the data is shared.",
+        ],
+      },
+      {
+        title: "Why I use personal data",
+        body: [
+          "I use personal data for practical business purposes connected to this website and services:",
+        ],
+        bullets: [
+          "To respond to enquiries, prepare proposals, and decide whether a project is a good fit.",
+          "To schedule calls and manage calendar invitations.",
+          "To run free self-help tools and return the requested output.",
+          "To deliver agreed services, manage project communication, prepare documents, configure systems, and provide handover support.",
+          "To maintain business records, invoices, accounting, compliance, and tax documentation.",
+          "To protect the website, prevent abuse, debug errors, monitor service availability, and maintain security.",
+          "To improve content, services, and tools based on aggregated or non-identifying usage patterns.",
+        ],
+      },
+      {
+        title: "Legal bases for EU/EEA users",
+        body: [
+          "Where the GDPR or similar EU/EEA data protection rules apply, I rely on one or more legal bases depending on the context:",
+        ],
+        bullets: [
+          "Contract or pre-contract steps: when you ask for a proposal, book a call, or engage me to deliver services.",
+          "Legitimate interests: to respond to business enquiries, maintain records, secure the website, improve services, and communicate with existing or prospective clients in a proportionate way.",
+          "Consent: where I ask for optional permission, such as optional marketing emails or optional cookies if they are added later.",
+          "Legal obligation: where records must be kept for accounting, tax, compliance, dispute, or regulatory reasons.",
+        ],
+      },
+      {
+        title: "Free tools and AI-assisted outputs",
+        body: [
+          "The free self-help tools are intended to provide surface-level audits, drafts, and structured starting points. They are not legal, financial, security, HR, or compliance advice. You should review outputs before using them operationally.",
+          "Some tool or automation features may use third-party infrastructure or AI services to process the text you submit. Do not paste confidential, regulated, or sensitive data into free tools unless you are comfortable with that processing and the data is appropriate for the tool.",
+        ],
+      },
+      {
+        title: "Third-party services",
+        body: [
+          "This website and service workflow may rely on trusted third-party providers for hosting, analytics or diagnostics, calendar booking, email, document storage, payments, project management, automation, and AI-assisted processing. These providers process data only for the relevant operational purpose.",
+          "Examples may include website hosting providers, calendar and meeting platforms, email providers, cloud document tools, payment or invoicing providers, and AI API providers. Each provider may also have its own privacy terms when you interact with it directly.",
+        ],
+      },
+      {
+        title: "International transfers",
+        body: [
+          "Because I work with clients in the EU, GCC, and other regions, and because common cloud providers may operate internationally, personal data may be processed outside your country. When EU/EEA personal data is transferred internationally, I aim to use appropriate safeguards such as reputable providers, contractual protections, EU adequacy decisions where available, or standard contractual clauses where relevant.",
+          "For GCC clients, I aim to handle data in a way that respects applicable local privacy expectations and any project-specific requirements agreed in writing, including restrictions on cross-border transfers where they apply.",
+        ],
+      },
+      {
+        title: "How long I keep data",
+        body: [
+          "I keep personal data only as long as reasonably needed for the purpose it was collected, unless a longer period is required for legal, tax, accounting, dispute, or legitimate business reasons.",
+        ],
+        bullets: [
+          "Enquiry and contact messages: usually kept for up to 24 months unless they become part of a client record.",
+          "Project and delivery records: usually kept for up to 7 years where needed for business, tax, warranty, or dispute records.",
+          "Free tool inputs and outputs: kept only as needed to provide the output, debug abuse or errors, or improve the tool, unless a tool states otherwise.",
+          "Invoices, contracts, and accounting records: kept for the period required by applicable tax and accounting law.",
+          "Security logs: kept for a limited period appropriate to security, debugging, and abuse prevention.",
+        ],
+      },
+      {
+        title: "Your rights",
+        body: [
+          "Depending on where you are located, you may have rights to access, correct, delete, restrict, object to, or receive a copy of your personal data. EU/EEA users also have GDPR rights, including the right to complain to a supervisory authority.",
+          "GCC privacy laws, including frameworks such as the UAE Personal Data Protection Law and Saudi Arabia’s Personal Data Protection Law, also recognise transparency and individual rights in various contexts. If those laws apply to your data, I will handle requests in line with the applicable project and legal context.",
+          "To make a request, email hello@adsi.io. I may need to verify your identity before acting on the request. I aim to respond within one month where GDPR applies, unless the request is complex or the law allows more time.",
+        ],
+      },
+      {
+        title: "Security",
+        body: [
+          "I use reasonable technical and organisational measures to protect personal data, including controlled access, reputable hosting and cloud providers, account security practices, and project-specific access controls where needed.",
+          "No website, email system, or cloud service can be guaranteed completely secure. If you believe information has been sent to me by mistake or there is a security issue, contact hello@adsi.io promptly.",
+        ],
+      },
+      {
+        title: "Cookies and analytics",
+        body: [
+          "This site currently aims to keep tracking minimal. If optional analytics, advertising pixels, or non-essential cookies are added later, the site should provide a clear notice and, where required, a consent choice.",
+          "Essential technical storage may be used where needed for security, language preferences, routing, forms, or normal website operation.",
+        ],
+      },
+      {
+        title: "Changes to this policy",
+        body: [
+          "I may update this policy when the website, services, tools, providers, or legal requirements change. The latest version will be posted on this page with the updated date.",
+        ],
+      },
+    ],
   },
 
   terms: {
+    eyebrow: "Legal",
     title: "Terms of Service",
-    lastUpdated: "January 2025",
-    placeholder: "Terms of service content will be added here.",
+    lastUpdated: "June 2026",
+    subheadline:
+      "Plain-language terms for using this website and starting a project conversation.",
+    credibilityStrip:
+      "Website use is simple. Paid work is governed by a separate written scope.",
+    sections: [
+      {
+        title: "Who these terms apply to",
+        body: [
+          "These terms apply when you use this website, read articles, use free self-help tools, contact me, book a call, or discuss a potential project with Amjad Osman / ADSI.",
+          "Paid services are governed by the written proposal, statement of work, invoice terms, data processing terms, or contract agreed for that engagement. If those documents conflict with these website terms, the signed project documents control for the paid engagement.",
+        ],
+      },
+      {
+        title: "Website content is general information",
+        body: [
+          "The articles, examples, tools, pricing descriptions, and page content on this website are provided for general business information. They are not legal, tax, financial, investment, employment, cybersecurity, procurement, medical, or regulated professional advice.",
+          "You are responsible for reviewing outputs, decisions, workflows, documents, and recommendations before using them in your organisation.",
+        ],
+      },
+      {
+        title: "Free self-help tools",
+        body: [
+          "The free tools are designed to create surface-level audits, drafts, checklists, and structured starting points. They may be incomplete, inaccurate, or unsuitable for your specific context.",
+          "Do not submit passwords, secret keys, payment details, special-category personal data, children’s data, regulated information, or confidential client material into free tools unless I have specifically agreed a secure process with you.",
+          "Tool outputs do not create a client relationship, warranty, or obligation for me to implement anything unless we agree a paid scope in writing.",
+        ],
+      },
+      {
+        title: "Project enquiries and proposals",
+        body: [
+          "A call, email exchange, audit result, or proposal discussion does not create a paid engagement by itself. A project starts only when the scope, deliverables, price, payment terms, timeline, and handover expectations are agreed in writing.",
+          "I may decline a project if the scope is unclear, outside my service area, legally sensitive without proper review, conflicts with another commitment, or requires access or assurances I cannot responsibly provide.",
+        ],
+      },
+      {
+        title: "Services I provide",
+        body: [
+          "Services may include brand systems, communication materials, websites and CMS work, internal operations systems, SOPs, workflow design, software configuration, dashboards, automation, and practical AI-agent workflows.",
+          "Unless agreed otherwise, services are delivered as professional design, operations, software, and implementation support. They are not a replacement for legal counsel, tax advice, regulated financial advice, formal cybersecurity certification, or statutory compliance sign-off.",
+        ],
+      },
+      {
+        title: "Client responsibilities",
+        body: [
+          "For a project to succeed, you are responsible for providing accurate information, timely feedback, access to necessary systems, decision-maker availability, and the right to use any materials you provide.",
+        ],
+        bullets: [
+          "You must not provide unlawful, infringing, misleading, or unauthorised material.",
+          "You are responsible for final business approval of public claims, legal statements, pricing, compliance language, and operational policies.",
+          "You are responsible for reviewing deliverables before publishing or relying on them operationally.",
+          "You must maintain your own backups, access controls, internal approvals, and account security unless the written scope says otherwise.",
+        ],
+      },
+      {
+        title: "Payment and scheduling",
+        body: [
+          "Prices, deposits, milestones, subscription fees, taxes, expenses, renewal terms, and payment deadlines are defined in the relevant proposal or invoice. Unless agreed otherwise, work may pause if invoices are overdue or required feedback/access is delayed.",
+          "Delivery timelines depend on timely client input, access, approvals, and third-party platform availability. A timeline is a working plan, not a guarantee, unless the written agreement explicitly says otherwise.",
+        ],
+      },
+      {
+        title: "Intellectual property and usage rights",
+        body: [
+          "Unless a project agreement says otherwise, you receive the right to use final paid deliverables for your own business once the relevant invoices are paid. Drafts, unused concepts, internal methods, reusable templates, code patterns, know-how, tool logic, and pre-existing materials remain mine or belong to their existing owners.",
+          "You may not copy, resell, repackage, or offer this website’s content, free tools, prompts, workflows, visuals, or outputs as a competing service without written permission.",
+          "Open-source libraries, third-party platforms, fonts, stock assets, plugins, and external tools remain subject to their own licences and terms.",
+        ],
+      },
+      {
+        title: "Portfolio use",
+        body: [
+          "Unless confidentiality terms or a written agreement say otherwise, I may reference non-sensitive project work in a portfolio, case study, proposal, or capability discussion after delivery. If a project is confidential, sensitive, or under NDA, the written confidentiality terms control.",
+        ],
+      },
+      {
+        title: "Confidentiality",
+        body: [
+          "I treat non-public client information shared for a project as confidential and use it only for the relevant discussion or engagement. If stronger confidentiality terms are required, we should sign an NDA or include confidentiality language in the project agreement before sensitive material is shared.",
+        ],
+      },
+      {
+        title: "Third-party platforms",
+        body: [
+          "Many projects depend on third-party platforms such as hosting providers, CMS tools, email services, payment processors, analytics, cloud storage, automation platforms, AI providers, CRM systems, accounting tools, or client-owned infrastructure.",
+          "I am not responsible for outages, pricing changes, policy changes, data loss, security incidents, or feature changes caused by third-party platforms. I can help configure or manage them only within the agreed scope.",
+        ],
+      },
+      {
+        title: "No guarantee of results",
+        body: [
+          "I aim to deliver useful, practical work with clear scope and clean handover. However, I do not guarantee revenue, investment, ranking, conversion rate, funding, regulatory approval, procurement success, operational adoption, or AI performance unless a specific written guarantee is included in the project agreement.",
+        ],
+      },
+      {
+        title: "Limitation of liability",
+        body: [
+          "To the maximum extent allowed by applicable law, I am not liable for indirect, incidental, consequential, special, punitive, or lost-profit damages arising from website use, free tool use, or service discussions.",
+          "For paid engagements, any liability cap or remedy should be defined in the signed proposal or contract. Nothing in these terms limits liability where the law does not allow it to be limited.",
+        ],
+      },
+      {
+        title: "Regional legal and compliance review",
+        body: [
+          "Because clients may operate in the EU, GCC, and other jurisdictions, final legal, tax, regulatory, employment, procurement, data protection, and sector-specific compliance review remains the client’s responsibility unless separately agreed with qualified counsel.",
+          "If a deliverable will be used in a regulated sector, public procurement, healthcare, finance, insurance, education, government, or cross-border data environment, you should flag that early so the scope can include the right review path.",
+        ],
+      },
+      {
+        title: "Governing terms and disputes",
+        body: [
+          "The governing law, venue, dispute process, and contracting entity for paid work should be stated in the relevant proposal or contract. If no separate written agreement exists, any dispute should first be handled by good-faith discussion using the contact details on this site.",
+        ],
+      },
+      {
+        title: "Changes to these terms",
+        body: [
+          "I may update these terms when services, tools, providers, or legal requirements change. The latest version will be posted on this page with the updated date.",
+        ],
+      },
+    ],
   },
 };
 
 const siteContentAr: typeof siteContentEn = {
   meta: {
-    title: "ADSI | أنظمة التصميم والعمليات والذكاء الاصطناعي للفرق المتنامية",
+    title: "أمجد عثمان | أنظمة التصميم والعمليات والذكاء الاصطناعي للفرق المتنامية",
     description:
-      "تساعد ADSI الفرق المتنامية على تطوير الهوية والمواقع والعمليات الداخلية وتدفقات الذكاء الاصطناعي العملية ضمن نطاق واضح وتسليم نظيف.",
+      "يساعد أمجد عثمان الفرق المتنامية على تطوير الهوية والمواقع والعمليات الداخلية وتدفقات الذكاء الاصطناعي العملية ضمن نطاق واضح وتسليم نظيف.",
   },
 
   navigation: {
     primary: [
       { label: "الخدمات", href: "/services" },
       { label: "البرمجيات", href: "/software" },
-      { label: "أدوات الذكاء الاصطناعي", href: "/tools" },
+      { label: "الموارد", href: "/resources" },
       { label: "الأعمال", href: "/work" },
       { label: "الأسعار", href: "/pricing" },
       { label: "من نحن", href: "/about" },
@@ -926,10 +1186,15 @@ const siteContentAr: typeof siteContentEn = {
       { label: "أنظمة العمليات الداخلية", href: "/services/ops" },
       { label: "الوكلاء والعمليات المؤتمتة", href: "/services/agents" },
     ],
+    resourcesDropdown: [
+      { label: "مقالات وأفكار", href: "/resources" },
+      { label: "أدوات مساعدة ذاتية", href: "/tools" },
+    ],
     cta: { label: "احجز مكالمة", href: "/book" },
     footer: [
       { label: "آلية التسليم", href: "/process" },
-      { label: "الموارد", href: "/resources" },
+      { label: "مقالات وأفكار", href: "/resources" },
+      { label: "أدوات مساعدة ذاتية", href: "/tools" },
       { label: "تواصل معنا", href: "/contact" },
       { label: "الخصوصية", href: "/privacy" },
       { label: "الشروط", href: "/terms" },
@@ -943,7 +1208,7 @@ const siteContentAr: typeof siteContentEn = {
 
   footer: {
     tagline:
-      "تصمم ADSI أنظمة الهوية والعمليات والذكاء الاصطناعي التي تساعد الفرق المتنامية على التحرك بوضوح أكبر.",
+      "يصمم أمجد عثمان أنظمة الهوية والعمليات والبرمجيات والذكاء الاصطناعي التي تساعد الفرق المتنامية على التحرك بوضوح أكبر.",
     pagesLabel: "الصفحات",
     legalLabel: "قانوني",
     copyright: "جميع الحقوق محفوظة.",
@@ -959,7 +1224,7 @@ const siteContentAr: typeof siteContentEn = {
     caseStudyUnavailable: "دراسة الحالة المطلوبة غير متاحة حالياً.",
     readArticle: "اقرأ المقال",
     caseStudies: "دراسات حالة",
-    caseStudiesSubheadline: "نماذج عملية من مشاريع حقيقية.",
+    caseStudiesSubheadline: "مشاريع حقيقية ونتائج ودروس تنفيذية.",
     lastUpdatedLabel: "آخر تحديث",
     workSectionHeadline: "ما الذي قمنا ببنائه",
     workApproachLabel: "المنهج",
@@ -969,7 +1234,7 @@ const siteContentAr: typeof siteContentEn = {
     challengeLabel: "التحدي",
     resourceCtaHeadline: "حوّل هذا إلى تنفيذ فعلي.",
     resourceCtaDescription:
-      "سننفذ النظام الكامن وراء الدليل ونوضح لك التسعير.",
+      "يمكنني تنفيذ النظام الكامن وراء الدليل وتوضيح التسعير.",
   },
 
   home: {
@@ -977,14 +1242,14 @@ const siteContentAr: typeof siteContentEn = {
       headline:
         "هوية أوضح، عمليات أنظف، وأنظمة ذكاء اصطناعي عملية للفرق المتنامية.",
       subheadline:
-        "تساعد ADSI الفرق الطموحة على تحسين صورتها، وطريقة عملها، وكيفية توسعها. أنظمة الهوية، المواقع، أدلة الإجراءات، تصميم سير العمل، والأتمتة ضمن نطاق واضح وتسليم منظم.",
+        "أساعد الفرق الطموحة على تحسين صورتها، وطريقة عملها، وكيفية توسعها. أنظمة الهوية، المواقع، أدلة الإجراءات، تصميم سير العمل، والأتمتة ضمن نطاق واضح وتسليم منظم.",
       credibilityStrip:
         "نطاق واضح. قرارات أسرع. تسليم نظيف. ودعم مستمر إذا احتجته.",
       primaryCta: { label: "احجز مكالمة", href: "/book" },
       secondaryCta: { label: "شغّل تدقيقاً مجانياً", href: "/tools" },
     },
     whatWeDeliver: {
-      headline: "أين تتدخل ADSI عادة.",
+      headline: "أين أتدخل عادة.",
       subheadline:
         "الهوية، الويب، العمليات، ودعم البرمجيات ضمن نظام عملي واحد.",
       eyebrow: "الخدمات",
@@ -1145,24 +1410,23 @@ const siteContentAr: typeof siteContentEn = {
       cta: { label: "شاهد كيف يتم التسليم", href: "/process" },
     },
     proofTiles: {
-      headline: "أدلة يمكنك تقييمها بسرعة.",
+      headline: "دراسات حالة يمكنك تقييمها بسرعة.",
       subheadline:
-        "راجع نماذج ملموسة بسرعة حتى تُبنى القرارات على أدلة لا على وعود.",
-      eyebrow: "الأدلة",
+        "مشاريع حقيقية مختارة من أعمال الاستراتيجية والأنظمة والمنتجات والتنفيذ.",
+      eyebrow: "الأعمال",
       tiles: [
-        { title: "استعراض SharePoint", description: "شاهد بنية نموذجية أثناء العمل." },
-        { title: "حزمة SOP", description: "فهرس ومقتطف من حزمة حقيقية." },
-        { title: "قبل وبعد", description: "صفحة هبوط مع التبرير." },
-        { title: "مقتطف من الهوية", description: "صفحات إرشادية من نظام تم تسليمه." },
+        { title: "Radiance Co. Ltd.", description: "أنظمة طاقة شمسية لمرافق صحية في البحر الأحمر وكسلا." },
+        { title: "TadmeenPro", description: "نظام تشغيل أساسي لشركات التأمين جاهز للذكاء الاصطناعي." },
+        { title: "منصة وطنية لتسهيل التجارة", description: "منصة نافذة واحدة مع A4 Group لجهة سرية." },
       ],
-      tileCta: "عرض النموذج",
-      cta: { label: "شاهد الأعمال", href: "/work" },
+      tileCta: "عرض دراسة الحالة",
+      cta: { label: "شاهد كل دراسات الحالة", href: "/work" },
     },
     aiTools: {
-      eyebrow: "أدوات الذكاء الاصطناعي",
+      eyebrow: "أدوات مساعدة ذاتية",
       headline: "احصل على مخرجات مفيدة خلال دقائق.",
       subheadline:
-        "أدواتنا المجانية تولّد مسودات وتقارير تدقيق. استخدمها الآن أو دعنا ننفذ النتائج بالشكل الصحيح.",
+        "هذه الأدوات المجانية تعطيك مسودات وتدقيقات أولية. استخدمها الآن أو دعني أنفذ النتائج بالشكل الصحيح.",
       tools: [
         {
           title: "منشئ مسودة SOP",
@@ -1177,7 +1441,7 @@ const siteContentAr: typeof siteContentEn = {
           description: "احصل على ملاحظات حول عوائق التحويل وتحسين التسلسل البصري.",
         },
       ],
-      cta: { label: "استكشف الأدوات", href: "/tools" },
+      cta: { label: "استكشف أدوات المساعدة الذاتية", href: "/tools" },
     },
     pricingTeaser: {
       headline: "باقات واضحة. بلا فواتير ضبابية.",
@@ -1197,7 +1461,7 @@ const siteContentAr: typeof siteContentEn = {
     hero: {
       headline: "اختر مسار الخدمة المناسب للاختناق التالي في عملك.",
       subheadline:
-        "سواء كنت تحتاج إلى حضور أقوى في السوق أو عمليات داخلية أنظف أو أتمتة عملية، تقوم ADSI بتحديد العمل حول مخرجات قابلة للاستخدام يمكن لفريقك البناء عليها.",
+        "سواء كنت تحتاج إلى حضور أقوى في السوق أو عمليات داخلية أنظف أو أتمتة عملية، أحدد العمل حول مخرجات قابلة للاستخدام يمكن لفريقك البناء عليها.",
       primaryCta: { label: "احجز مكالمة", href: "/book" },
     },
     tracks: [
@@ -1260,7 +1524,7 @@ const siteContentAr: typeof siteContentEn = {
       headline:
         "برمجيات تشغيلية مهيأة حول طريقة عمل فريقك فعلاً.",
       subheadline:
-        "تقوم ADSI بنشر أنظمة CRM وعمليات ومستندات مركزة حتى يحصل فريقك على نظام قابل للاستخدام، لا أداة إضافية عليهم فهمها وحدهم.",
+        "أنشر أنظمة CRM وعمليات ومستندات مركزة حتى يحصل فريقك على نظام قابل للاستخدام، لا أداة إضافية عليهم فهمها وحدهم.",
       primaryCta: { label: "احجز عرضاً", href: "/book" },
       secondaryCta: { label: "احجز مكالمة", href: "/book" },
     },
@@ -1323,9 +1587,9 @@ const siteContentAr: typeof siteContentEn = {
 
   tools: {
     hero: {
-      headline: "أدوات تحوّل المدخلات المبعثرة إلى مخرجات منظمة.",
+      headline: "أدوات مساعدة ذاتية تحوّل المدخلات المبعثرة إلى مخرجات منظمة.",
       subheadline:
-        "شغّل تدقيقاً أو ولّد مسودة. احصل على مخرجات مفيدة خلال دقائق، ثم قرر إن كنت تريدنا أن ننفذها بالشكل الصحيح.",
+        "شغّل تدقيقاً أولياً أو ولّد مسودة عملية. احصل على نقطة بداية مفيدة خلال دقائق، ثم قرر إن كنت تريدني أن أنفذها بالشكل الصحيح.",
       primaryCta: { label: "شغّل تدقيقاً مجانياً", href: "#tools-list" },
       secondaryCta: { label: "احجز مكالمة", href: "/book" },
     },
@@ -1368,12 +1632,12 @@ const siteContentAr: typeof siteContentEn = {
       },
     ],
     emailCapture: {
-      headline: "حمّل التقرير الكامل بصيغة PDF.",
+      headline: "حمّل حزمة البدء لأدوات المساعدة الذاتية.",
       description:
-        "أدخل بريدك الإلكتروني لتصلك نسخة قابلة للتنزيل مع خطة تنفيذ من صفحة واحدة.",
-      buttonLabel: "احصل على PDF",
-      successMessage: "تحقق من بريدك لاستلام التقرير.",
-      downloadLabel: "تحميل PDF",
+        "أدخل بريدك الإلكتروني لفتح قائمة عملية لتحسين المدخلات ودليل مراجعة من صفحة واحدة.",
+      buttonLabel: "افتح الحزمة",
+      successMessage: "حزمة البدء جاهزة للتنزيل.",
+      downloadLabel: "تحميل حزمة البدء",
       followUpCta: { label: "احجز مكالمة", href: "/book" },
     },
   },
@@ -1514,40 +1778,40 @@ const siteContentAr: typeof siteContentEn = {
 
   work: {
     hero: {
-      headline: "أدلة يمكنك تقييمها.",
+      headline: "دراسات حالة يمكنك تقييمها.",
       subheadline:
-        "نماذج تسليم من مشاريع حقيقية. راجع الجودة قبل أن تلتزم.",
+        "مشاريع حقيقية في الاستراتيجية والأنظمة والمنتجات والتنفيذ. راجع العمل قبل أن تلتزم.",
     },
     tiles: [
       {
-        title: "استعراض بنية SharePoint",
+        title: "Radiance Co. Ltd.",
         description:
-          "جولة تفاعلية في بنية الإنترانت ومكتبات المستندات والصلاحيات.",
+          "أنظمة طاقة شمسية لمرافق صحية في البحر الأحمر وكسلا.",
         thumbnail: null,
-        href: "/work/sharepoint-case-study",
+        href: "/work/radiance-co-ltd-solar-power-for-health-facilities-in-red-sea-and-kassala",
         cta: "عرض دراسة الحالة",
       },
       {
-        title: "تنفيذ مكتبة SOP",
-        description: "مكتبة إجراءات كاملة مع فهرس وتوزيع أدوار.",
+        title: "TadmeenPro",
+        description: "نظام تشغيل أساسي لشركات التأمين جاهز للذكاء الاصطناعي.",
         thumbnail: null,
-        href: "/work/sop-case-study",
+        href: "/work/tadmeenpro-an-operations-core-for-insurers-that-is-ready-for-ai",
         cta: "عرض دراسة الحالة",
       },
       {
-        title: "إعادة تصميم صفحة هبوط",
+        title: "Talya Properties",
         description:
-          "إعادة تصميم تركّز على التحويل مع مقارنة قبل وبعد وتبرير.",
+          "توجيه شركة عقارية خلال سوق بدأ يهدأ.",
         thumbnail: null,
-        href: "/work/landing-page-case-study",
+        href: "/work/talya-properties-steering-a-real-estate-business-through-a-cooling-market",
         cta: "عرض دراسة الحالة",
       },
       {
-        title: "تسليم نظام هوية",
+        title: "منصة وطنية لتسهيل التجارة",
         description:
-          "نظام هوية كامل من الشعار إلى الإرشادات إلى القوالب.",
+          "منصة نافذة واحدة مع A4 Group لجهة سرية.",
         thumbnail: null,
-        href: "/work/brand-case-study",
+        href: "/work/national-trade-facilitation-platform-with-a4-group-for-a-confidential-authority",
         cta: "عرض دراسة الحالة",
       },
     ],
@@ -1562,8 +1826,8 @@ const siteContentAr: typeof siteContentEn = {
 
   about: {
     hero: {
-      eyebrow: "عن ADSI",
-      headline: "تبني ADSI طبقة الأعمال المحيطة بالفرق المتنامية.",
+      eyebrow: "كيف أعمل",
+      headline: "أبني طبقة الأعمال المحيطة بالفرق المتنامية.",
       subheadline:
         "نساعد الشركات على ردم الفجوة بين العمل القوي في جوهره وبين أنظمة الهوية والعمليات وسير العمل التي يجب أن تدعمه.",
       credibilityStrip:
@@ -1574,18 +1838,18 @@ const siteContentAr: typeof siteContentEn = {
     story: {
       eyebrow: "من نحن",
       headline:
-        "توجد ADSI لأن الشركات المتنامية غالباً ما تتجاوز الأنظمة المحيطة بالعمل الجيد.",
+        "أقوم بهذا العمل لأن الشركات المتنامية غالباً ما تتجاوز الأنظمة المحيطة بالعمل الجيد.",
       subheadline:
         "قد تكون الشركة تحقق نتائج قوية بالفعل، لكن الطبقة المحيطة بذلك العمل تبدأ غالباً بالتأخر مع نمو الشركة.",
       paragraphs: [
         "يمكن أن تظهر هذه الفجوة خارجياً. فالموقع أو الهوية أو مواد البيع لا تخلق القدر الكافي من الوضوح والثقة لدى المشترين.",
         "ويمكن أن تظهر داخلياً أيضاً. يصبح العثور على الملفات أصعب، وتبقى أدلة الإجراءات سطحية، ويعتمد الانضمام على الذاكرة، ويُعاد بناء العمل المتكرر من الصفر.",
-        "توجد ADSI لسد هذه الفجوة بأنظمة عملية. نحن نساعد الفرق على تقوية صورة العمل، وطريقة تشغيله، وأين يمكن للأتمتة أن تزيل العمل المتكرر دون خلق مزيد من الالتباس.",
+        "أسد هذه الفجوة بأنظمة عملية. أساعد الفرق على تقوية صورة العمل، وطريقة تشغيله، وأين يمكن للأتمتة أن تزيل العمل المتكرر دون خلق مزيد من الالتباس.",
       ],
     },
     drivers: {
       eyebrow: "لماذا نعمل بهذه الطريقة",
-      headline: "ما الذي يقود طريقة عمل ADSI.",
+      headline: "ما الذي يقود طريقة عملي.",
       subheadline:
         "يتشكل العمل وفق مجموعة من القناعات العملية حول ما يساعد الفرق المتنامية فعلاً على التحرك بشكل أفضل.",
       items: [
@@ -1611,7 +1875,7 @@ const siteContentAr: typeof siteContentEn = {
       eyebrow: "من يناسبه العمل معنا",
       headline: "يكون التوافق أقوى عادة عندما يكون لدى الشركة زخم فعلي.",
       subheadline:
-        "تكون ADSI أكثر فائدة عادة عندما تكون الشركة تقوم بعمل مهم بالفعل، لكن طبقة الأعمال المحيطة بذلك العمل تحتاج إلى اللحاق.",
+        "أكون أكثر فائدة عادة عندما تكون الشركة تقوم بعمل مهم بالفعل، لكن طبقة الأعمال المحيطة بذلك العمل تحتاج إلى اللحاق.",
       items: [
         {
           title: "فرق تملك عملاً قوياً في الأساس",
@@ -1632,7 +1896,7 @@ const siteContentAr: typeof siteContentEn = {
       ],
     },
     workingWithUs: {
-      eyebrow: "العمل مع ADSI",
+      eyebrow: "العمل معاً",
       headline: "نُنظّم العمل ليبقى واضحاً وهادئاً ومفيداً.",
       subheadline:
         "يريد العملاء عادة اجتماعات أقل وقرارات أسرع ونظاماً نهائياً يمكنهم الاستمرار في استخدامه. لذلك نُعدّ العمل بهذه الطريقة.",
@@ -1676,7 +1940,7 @@ const siteContentAr: typeof siteContentEn = {
 
   book: {
     hero: {
-      headline: "احجز مكالمة قصيرة مع ADSI",
+      headline: "احجز مكالمة قصيرة مع أمجد",
       subheadline:
         "سيتم تحويلك إلى صفحة الحجز المباشرة في Google Meet لاختيار الوقت مباشرة.",
     },
@@ -1686,8 +1950,11 @@ const siteContentAr: typeof siteContentEn = {
 
   process: {
     hero: {
+      eyebrow: "عملية التسليم",
       headline: "كيف نُسلّم",
       subheadline: "عملية منظمة. اجتماعات أقل. وتسليم نظيف.",
+      credibilityStrip:
+        "نقطة بداية واضحة. مراحل عمل ملموسة. تسليم نظيف. دعم فقط عندما يكون مفيداً.",
     },
     steps: [
       {
@@ -1736,9 +2003,12 @@ const siteContentAr: typeof siteContentEn = {
 
   resources: {
     hero: {
-      headline: "الموارد",
+      eyebrow: "مقالات وأفكار",
+      headline: "موارد عملية لتسليم أوضح.",
       subheadline:
-        "أدلة عملية للفرق التي تطور الهوية والعمليات والأتمتة.",
+        "مقالات وملاحظات للفرق التي تطور الهوية والعمليات والبرمجيات والأتمتة.",
+      credibilityStrip:
+        "سياق مفيد. بلا استعراض. وخطوات عملية عندما تكون جاهزاً للبناء.",
     },
     emptyState: {
       message:
@@ -1749,9 +2019,12 @@ const siteContentAr: typeof siteContentEn = {
 
   contact: {
     hero: {
+      eyebrow: "التواصل",
       headline: "أخبرنا بما تحاول إصلاحه",
       subheadline:
         "الأسئلة وطلبات المشاريع وطلبات النماذج كلها مرحب بها.",
+      credibilityStrip:
+        "رسالة قصيرة. خطوة تالية واضحة. بلا ضغط قبل أن يكون التوافق واضحاً.",
     },
     form: {
       fields: [
@@ -1774,23 +2047,280 @@ const siteContentAr: typeof siteContentEn = {
   },
 
   privacy: {
+    eyebrow: "قانوني",
     title: "سياسة الخصوصية",
-    lastUpdated: "يناير 2025",
-    placeholder: "سيتم إضافة محتوى سياسة الخصوصية هنا.",
+    lastUpdated: "يونيو 2026",
+    subheadline:
+      "كيف يتم التعامل مع بيانات التواصل والحجوزات ورسائل الموقع.",
+    credibilityStrip:
+      "جمع محدود. استخدام عملي. لا بيع للبيانات الشخصية.",
+    sections: [
+      {
+        title: "من المسؤول عن بياناتك",
+        body: [
+          "يتم تشغيل هذا الموقع بواسطة أمجد عثمان / ADSI كمقدم خدمات مستقل مقره في الاتحاد الأوروبي، ما لم يذكر عرض أو عقد محدد جهة تعاقد مختلفة. للاستفسارات المتعلقة بالخصوصية أو الحذف أو الوصول إلى البيانات، راسل hello@adsi.io.",
+          "في استفسارات الموقع والحجوزات ومناقشات المشاريع والتواصل المعتاد، أتعامل مع البيانات الشخصية بصفتي الجهة التي تحدد سبب استخدامها وطريقة استخدامها. أما بيانات العملاء داخل مشروع مدفوع فقد يحدد نطاق العمل أو اتفاق معالجة البيانات دوراً مختلفاً، مثل معالج بيانات أو متعاقد فرعي.",
+        ],
+      },
+      {
+        title: "ما الذي تغطيه هذه السياسة",
+        body: [
+          "تغطي هذه السياسة البيانات الشخصية التي تتم معالجتها من خلال الموقع، وروابط الحجز، ورسائل البريد، والأدوات المجانية، واستفسارات المشاريع، وتواصل تسليم الخدمات.",
+          "لا تستبدل هذه السياسة أي اتفاق معالجة بيانات أو اتفاق سرية أو نطاق عمل أو متطلبات أمنية خاصة بالعميل. إذا تعارض مستند مشروع موقع مع هذه السياسة، فيسري المستند الموقع على ذلك المشروع.",
+        ],
+      },
+      {
+        title: "البيانات التي قد يتم جمعها",
+        body: [
+          "أحاول جمع الحد الأدنى اللازم لفهم الطلب والرد عليه وتسليم العمل المتفق عليه. وقد يشمل ذلك:",
+        ],
+        bullets: [
+          "بيانات التواصل مثل الاسم والبريد الإلكتروني والشركة والدور والدولة وقناة التواصل المفضلة.",
+          "معلومات المشروع التي ترسلها، مثل أهداف العمل وروابط المواقع وملفات الهوية ووصف العمليات أو أمثلة سير العمل.",
+          "معلومات الحجز مثل وقت الاجتماع وملاحظاته وبيانات التقويم وأي رسالة تضيفها.",
+          "مدخلات ومخرجات الأدوات المجانية مثل نصوص التدقيق أو بناء الإجراءات أو مراجعة مؤشرات الأداء أو نقد الصفحات.",
+          "معلومات تقنية عادية مثل عنوان IP ونوع الجهاز والمتصفح والموقع التقريبي والصفحات التي تمت زيارتها وسجلات الأمان.",
+          "معلومات تجارية أو فواتير إذا أصبحت عميلاً، مثل العروض والفواتير وحالة الدفع والبيانات الضريبية أو التعاقدية.",
+        ],
+      },
+      {
+        title: "المعلومات الحساسة والسرية",
+        body: [
+          "لا ترسل كلمات مرور أو أرقام بطاقات دفع أو وثائق هوية أو معلومات صحية أو بيانات خاصة أو بيانات أطفال أو معلومات شديدة السرية عبر النماذج العامة أو الأدوات المجانية ما لم نتفق على طريقة آمنة لذلك.",
+          "إذا احتاج المشروع إلى بيانات حساسة أو منظمة أو سرية، يجب الاتفاق مسبقاً على طريقة التعامل معها وضوابط الوصول ومدة الاحتفاظ وأي اتفاق لمعالجة البيانات.",
+        ],
+      },
+      {
+        title: "أسباب استخدام البيانات",
+        body: [
+          "أستخدم البيانات الشخصية لأغراض عملية مرتبطة بالموقع والخدمات:",
+        ],
+        bullets: [
+          "الرد على الاستفسارات وإعداد العروض وتقييم ملاءمة المشروع.",
+          "جدولة المكالمات وإدارة دعوات التقويم.",
+          "تشغيل الأدوات المجانية وإرجاع المخرجات المطلوبة.",
+          "تسليم الخدمات المتفق عليها وإدارة التواصل والوثائق والأنظمة والتسليم النهائي.",
+          "الاحتفاظ بسجلات الأعمال والفواتير والمحاسبة والضرائب والامتثال.",
+          "حماية الموقع ومنع إساءة الاستخدام ومعالجة الأخطاء ومراقبة التوفر والأمان.",
+          "تحسين المحتوى والخدمات والأدوات بناءً على أنماط مجمعة أو غير معرفة.",
+        ],
+      },
+      {
+        title: "الأسس القانونية لمستخدمي الاتحاد الأوروبي والمنطقة الاقتصادية الأوروبية",
+        body: [
+          "عندما تنطبق قواعد حماية البيانات الأوروبية، أعتمد على أساس قانوني واحد أو أكثر حسب السياق:",
+        ],
+        bullets: [
+          "العقد أو خطوات ما قبل العقد عند طلب عرض أو حجز مكالمة أو بدء خدمة.",
+          "المصلحة المشروعة للرد على استفسارات الأعمال وحفظ السجلات وتأمين الموقع وتحسين الخدمات.",
+          "الموافقة عندما أطلب إذناً اختيارياً، مثل الرسائل التسويقية أو ملفات تعريف الارتباط غير الضرورية إذا أضيفت لاحقاً.",
+          "الالتزام القانوني عندما يلزم الاحتفاظ بسجلات للضرائب أو المحاسبة أو الامتثال أو النزاعات.",
+        ],
+      },
+      {
+        title: "الأدوات المجانية والمخرجات المدعومة بالذكاء الاصطناعي",
+        body: [
+          "الأدوات المجانية تقدم تدقيقات ومسودات ونقاط بداية سطحية. هي ليست مشورة قانونية أو مالية أو أمنية أو موارد بشرية أو امتثال. يجب مراجعة المخرجات قبل استخدامها تشغيلياً.",
+          "قد تستخدم بعض الأدوات بنية تحتية أو خدمات ذكاء اصطناعي خارجية لمعالجة النص الذي ترسله. لا تلصق بيانات سرية أو منظمة أو حساسة في الأدوات المجانية إلا إذا كان ذلك مناسباً ومقبولاً لك.",
+        ],
+      },
+      {
+        title: "الخدمات الخارجية",
+        body: [
+          "قد يعتمد الموقع وسير العمل على مزودين موثوقين للاستضافة والتحليلات أو التشخيص والحجز والبريد وتخزين الوثائق والمدفوعات وإدارة المشاريع والأتمتة والمعالجة المدعومة بالذكاء الاصطناعي.",
+          "قد تكون لهذه الخدمات سياسات خصوصية خاصة بها عندما تتفاعل معها مباشرة.",
+        ],
+      },
+      {
+        title: "نقل البيانات دولياً",
+        body: [
+          "لأنني أعمل مع عملاء في الاتحاد الأوروبي ودول مجلس التعاون ومناطق أخرى، ولأن خدمات السحابة قد تعمل دولياً، قد تتم معالجة البيانات خارج بلدك. عند نقل بيانات من الاتحاد الأوروبي أو المنطقة الاقتصادية الأوروبية، أسعى لاستخدام ضمانات مناسبة مثل مزودين موثوقين أو شروط تعاقدية أو قرارات ملاءمة أوروبية حيث تنطبق.",
+          "لعملاء دول مجلس التعاون، أسعى لاحترام توقعات الخصوصية والمتطلبات الخاصة بالمشروع، بما في ذلك قيود النقل عبر الحدود إذا تم الاتفاق عليها أو فرضها القانون.",
+        ],
+      },
+      {
+        title: "مدة الاحتفاظ",
+        body: [
+          "أحتفظ بالبيانات فقط للمدة اللازمة للغرض الذي جُمعت من أجله، ما لم تتطلب أسباب قانونية أو ضريبية أو محاسبية أو نزاعية أو تجارية مدة أطول.",
+        ],
+        bullets: [
+          "رسائل الاستفسار والتواصل: غالباً حتى 24 شهراً ما لم تصبح جزءاً من سجل عميل.",
+          "سجلات المشاريع والتسليم: غالباً حتى 7 سنوات لأغراض الأعمال أو الضرائب أو النزاعات.",
+          "مدخلات ومخرجات الأدوات المجانية: فقط بقدر الحاجة لتقديم المخرج أو إصلاح الأخطاء أو منع الإساءة أو تحسين الأداة.",
+          "الفواتير والعقود والسجلات المحاسبية: حسب المدد المطلوبة بالقانون.",
+          "سجلات الأمان: لمدة محدودة مناسبة للتشخيص والأمان ومنع الإساءة.",
+        ],
+      },
+      {
+        title: "حقوقك",
+        body: [
+          "بحسب موقعك، قد يكون لك حق الوصول إلى بياناتك أو تصحيحها أو حذفها أو تقييدها أو الاعتراض على استخدامها أو الحصول على نسخة منها. لمستخدمي الاتحاد الأوروبي والمنطقة الاقتصادية الأوروبية حقوق بموجب GDPR، بما في ذلك حق الشكوى إلى جهة رقابية.",
+          "تتضمن أطر الخصوصية في دول مجلس التعاون، مثل قانون حماية البيانات الشخصية في الإمارات ونظام حماية البيانات الشخصية في السعودية، مبادئ للشفافية وحقوق الأفراد في سياقات مختلفة.",
+          "لتقديم طلب، راسل hello@adsi.io. قد أحتاج إلى التحقق من هويتك قبل تنفيذ الطلب. أهدف للرد خلال شهر عندما ينطبق GDPR، ما لم يكن الطلب معقداً أو يسمح القانون بمدة أطول.",
+        ],
+      },
+      {
+        title: "الأمان",
+        body: [
+          "أستخدم إجراءات تقنية وتنظيمية معقولة لحماية البيانات، مثل تقييد الوصول واستخدام مزودين موثوقين وممارسات أمان الحسابات وضوابط خاصة بالمشروع عند الحاجة.",
+          "لا يمكن ضمان أمان أي موقع أو بريد أو خدمة سحابية بالكامل. إذا اعتقدت أن معلومات أُرسلت بالخطأ أو توجد مشكلة أمنية، راسل hello@adsi.io فوراً.",
+        ],
+      },
+      {
+        title: "ملفات تعريف الارتباط والتحليلات",
+        body: [
+          "يهدف هذا الموقع إلى إبقاء التتبع في حدوده الدنيا. إذا أضيفت تحليلات اختيارية أو بكسلات إعلانية أو ملفات تعريف ارتباط غير ضرورية لاحقاً، يجب عرض إشعار واضح وخيار موافقة حيث يلزم.",
+          "قد يستخدم الموقع تخزيناً تقنياً ضرورياً للأمان أو اللغة أو التوجيه أو النماذج أو التشغيل العادي.",
+        ],
+      },
+      {
+        title: "تحديثات السياسة",
+        body: [
+          "قد يتم تحديث هذه السياسة عند تغير الموقع أو الخدمات أو الأدوات أو المزودين أو المتطلبات القانونية. ستُنشر النسخة الأحدث في هذه الصفحة مع تاريخ التحديث.",
+        ],
+      },
+    ],
   },
 
   terms: {
+    eyebrow: "قانوني",
     title: "شروط الخدمة",
-    lastUpdated: "يناير 2025",
-    placeholder: "سيتم إضافة محتوى شروط الخدمة هنا.",
+    lastUpdated: "يونيو 2026",
+    subheadline:
+      "شروط مبسطة لاستخدام هذا الموقع وبدء محادثة مشروع.",
+    credibilityStrip:
+      "استخدام الموقع بسيط. والعمل المدفوع يخضع لنطاق مكتوب منفصل.",
+    sections: [
+      {
+        title: "على من تنطبق هذه الشروط",
+        body: [
+          "تنطبق هذه الشروط عند استخدامك للموقع أو قراءة المقالات أو استخدام الأدوات المجانية أو التواصل أو حجز مكالمة أو مناقشة مشروع محتمل مع أمجد عثمان / ADSI.",
+          "الخدمات المدفوعة تخضع للعرض أو نطاق العمل أو الفاتورة أو العقد أو شروط معالجة البيانات المتفق عليها. إذا تعارضت تلك المستندات مع شروط الموقع، تسري مستندات المشروع الموقع على العمل المدفوع.",
+        ],
+      },
+      {
+        title: "محتوى الموقع معلومات عامة",
+        body: [
+          "المقالات والأمثلة والأدوات ووصف الأسعار والمحتوى المنشور على الموقع هي معلومات عامة للأعمال. ليست مشورة قانونية أو ضريبية أو مالية أو استثمارية أو توظيفية أو أمن سيبراني أو مشورة مهنية منظمة.",
+          "أنت مسؤول عن مراجعة المخرجات والقرارات وسير العمل والوثائق والتوصيات قبل استخدامها داخل مؤسستك.",
+        ],
+      },
+      {
+        title: "الأدوات المجانية",
+        body: [
+          "الأدوات المجانية مصممة لإنتاج تدقيقات ومسودات وقوائم بداية سطحية، وقد تكون غير مكتملة أو غير دقيقة أو غير مناسبة لسياقك.",
+          "لا ترسل كلمات مرور أو مفاتيح سرية أو بيانات دفع أو بيانات شخصية خاصة أو بيانات أطفال أو معلومات منظمة أو مواد سرية عبر الأدوات المجانية ما لم نتفق على عملية آمنة.",
+          "مخرجات الأدوات لا تنشئ علاقة عميل ولا ضماناً ولا التزاماً بالتنفيذ ما لم نتفق على نطاق مدفوع كتابةً.",
+        ],
+      },
+      {
+        title: "الاستفسارات والعروض",
+        body: [
+          "لا تنشئ المكالمة أو البريد أو نتيجة التدقيق أو مناقشة العرض مشروعاً مدفوعاً بحد ذاتها. يبدأ المشروع فقط عندما يتم الاتفاق كتابةً على النطاق والمخرجات والسعر وشروط الدفع والجدول والتسليم.",
+          "يجوز لي رفض مشروع إذا كان نطاقه غير واضح أو خارج مجال الخدمة أو حساساً قانونياً دون مراجعة مناسبة أو يتعارض مع التزام آخر أو يتطلب وصولاً أو ضمانات لا أستطيع تقديمها بمسؤولية.",
+        ],
+      },
+      {
+        title: "الخدمات المقدمة",
+        body: [
+          "قد تشمل الخدمات أنظمة الهوية والاتصال، المواقع وأنظمة إدارة المحتوى، أنظمة العمليات الداخلية، إجراءات العمل، تصميم التدفقات، إعداد البرمجيات، اللوحات، الأتمتة، وتدفقات الذكاء الاصطناعي العملية.",
+          "ما لم يُتفق خلاف ذلك، تُقدّم الخدمات كدعم مهني في التصميم والعمليات والبرمجيات والتنفيذ، وليست بديلاً عن محامٍ أو مستشار ضريبي أو مشورة مالية منظمة أو اعتماد أمن سيبراني أو توقيع امتثال قانوني.",
+        ],
+      },
+      {
+        title: "مسؤوليات العميل",
+        body: [
+          "لنجاح المشروع، أنت مسؤول عن تقديم معلومات دقيقة وردود في الوقت المناسب ووصول للأنظمة اللازمة وتوفر أصحاب القرار وحق استخدام المواد التي تقدمها.",
+        ],
+        bullets: [
+          "يجب ألا تقدم مواد غير قانونية أو منتهكة للحقوق أو مضللة أو غير مصرح بها.",
+          "أنت مسؤول عن الموافقة النهائية على الادعاءات العامة والنصوص القانونية والأسعار وسياسات التشغيل.",
+          "أنت مسؤول عن مراجعة المخرجات قبل نشرها أو الاعتماد عليها تشغيلياً.",
+          "يجب أن تحافظ على النسخ الاحتياطية وضوابط الوصول والموافقات الداخلية وأمان الحسابات ما لم ينص النطاق المكتوب على خلاف ذلك.",
+        ],
+      },
+      {
+        title: "الدفع والجدولة",
+        body: [
+          "تحدد العروض أو الفواتير الأسعار والدفعات والمراحل والاشتراكات والضرائب والمصاريف والتجديدات ومواعيد الدفع. ما لم يُتفق خلاف ذلك، قد يتوقف العمل إذا تأخرت الفواتير أو الملاحظات أو صلاحيات الوصول.",
+          "تعتمد الجداول الزمنية على مدخلات العميل والموافقات وتوفر منصات الأطراف الثالثة. الجدول خطة عمل وليس ضماناً إلا إذا نص الاتفاق كتابة على ذلك.",
+        ],
+      },
+      {
+        title: "الملكية الفكرية وحقوق الاستخدام",
+        body: [
+          "ما لم ينص اتفاق المشروع على خلاف ذلك، تحصل على حق استخدام المخرجات النهائية المدفوعة لأعمالك بعد سداد الفواتير ذات الصلة. تبقى المسودات والمفاهيم غير المستخدمة والطرق الداخلية والقوالب القابلة لإعادة الاستخدام وأنماط الكود والمعرفة والمواد السابقة ملكاً لي أو لأصحابها.",
+          "لا يجوز نسخ أو إعادة بيع أو إعادة تغليف محتوى الموقع أو الأدوات أو المطالبات أو التدفقات أو المرئيات أو المخرجات كخدمة منافسة دون إذن مكتوب.",
+          "تخضع المكتبات مفتوحة المصدر والمنصات والخطوط والأصول والإضافات والأدوات الخارجية لتراخيصها وشروطها الخاصة.",
+        ],
+      },
+      {
+        title: "استخدام الأعمال في المعرض",
+        body: [
+          "ما لم تنص السرية أو اتفاق مكتوب على خلاف ذلك، قد أشير إلى أعمال غير حساسة ضمن المعرض أو دراسة حالة أو عرض قدرات بعد التسليم. إذا كان المشروع سرياً أو حساساً أو خاضعاً لاتفاق عدم إفشاء، تسري شروط السرية المكتوبة.",
+        ],
+      },
+      {
+        title: "السرية",
+        body: [
+          "أتعامل مع معلومات العملاء غير العامة التي تُشارك لمشروع باعتبارها سرية وأستخدمها فقط للنقاش أو المشروع المعني. إذا كانت هناك حاجة لشروط أقوى، يجب توقيع اتفاق سرية أو إدراجها في اتفاق المشروع قبل مشاركة المواد الحساسة.",
+        ],
+      },
+      {
+        title: "منصات الأطراف الثالثة",
+        body: [
+          "تعتمد مشاريع كثيرة على منصات خارجية مثل الاستضافة وأنظمة المحتوى والبريد والمدفوعات والتحليلات والتخزين السحابي والأتمتة ومزودي الذكاء الاصطناعي وCRM والمحاسبة أو بنية العميل.",
+          "لست مسؤولاً عن الانقطاعات أو تغير الأسعار أو السياسات أو فقدان البيانات أو الحوادث الأمنية أو تغير الميزات لدى تلك المنصات. يمكنني المساعدة في إعدادها أو إدارتها فقط ضمن النطاق المتفق عليه.",
+        ],
+      },
+      {
+        title: "لا ضمان للنتائج",
+        body: [
+          "أهدف إلى تقديم عمل عملي ومفيد بنطاق واضح وتسليم نظيف، لكنني لا أضمن الإيرادات أو الاستثمار أو الترتيب في البحث أو معدل التحويل أو التمويل أو الموافقة التنظيمية أو نجاح المشتريات أو تبني العمليات أو أداء الذكاء الاصطناعي ما لم يتضمن الاتفاق ضماناً مكتوباً محدداً.",
+        ],
+      },
+      {
+        title: "حدود المسؤولية",
+        body: [
+          "إلى أقصى حد يسمح به القانون، لا أتحمل مسؤولية الأضرار غير المباشرة أو العرضية أو اللاحقة أو الخاصة أو العقابية أو خسارة الأرباح الناتجة عن استخدام الموقع أو الأدوات المجانية أو مناقشات الخدمات.",
+          "في المشاريع المدفوعة، يجب تحديد أي حد للمسؤولية أو علاج في العرض أو العقد الموقع. لا تحد هذه الشروط أي مسؤولية لا يسمح القانون بتقييدها.",
+        ],
+      },
+      {
+        title: "المراجعة القانونية والامتثالية الإقليمية",
+        body: [
+          "لأن العملاء قد يعملون في الاتحاد الأوروبي ودول مجلس التعاون ومناطق أخرى، تبقى المراجعة القانونية والضريبية والتنظيمية والتوظيفية وحماية البيانات والامتثال القطاعي مسؤولية العميل، ما لم يُتفق بشكل منفصل مع مستشار مؤهل.",
+          "إذا كان المخرج سيستخدم في قطاع منظم أو مشتريات عامة أو صحة أو تمويل أو تأمين أو تعليم أو حكومة أو بيئة بيانات عابرة للحدود، يجب توضيح ذلك مبكراً حتى يتضمن النطاق مسار المراجعة المناسب.",
+        ],
+      },
+      {
+        title: "الشروط الحاكمة والنزاعات",
+        body: [
+          "يجب أن يحدد العرض أو العقد القانون الحاكم ومكان التقاضي وآلية حل النزاعات والجهة المتعاقدة للعمل المدفوع. إذا لم يوجد اتفاق مكتوب منفصل، يجب محاولة حل أي نزاع أولاً بحسن نية عبر بيانات التواصل في الموقع.",
+        ],
+      },
+      {
+        title: "تحديثات الشروط",
+        body: [
+          "قد يتم تحديث هذه الشروط عند تغير الخدمات أو الأدوات أو المزودين أو المتطلبات القانونية. ستُنشر النسخة الأحدث في هذه الصفحة مع تاريخ التحديث.",
+        ],
+      },
+    ],
   },
 };
 
 export type SiteContent = typeof siteContentEn;
 
+import { siteContentDe } from "./contentDe";
+import { siteContentFr } from "./contentFr";
+import { siteContentBg } from "./contentBg";
+
 export const siteContentByLocale: Record<Locale, SiteContent> = {
   en: siteContentEn,
   ar: siteContentAr,
+  de: siteContentDe,
+  fr: siteContentFr,
+  bg: siteContentBg,
 };
 
 export const siteContent = siteContentEn;

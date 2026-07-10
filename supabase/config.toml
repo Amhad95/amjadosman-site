@@ -1,7 +1,0 @@
-project_id = "wzaryblkrphzjooxtppz"
-
-[functions.ai-tool]
-verify_jwt = false
-
-[functions.create-checkout]
-verify_jwt = false

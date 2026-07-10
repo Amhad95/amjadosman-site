@@ -200,17 +200,17 @@ export const PipelineBoardRealistic: React.FC<{ className?: string }> = ({ class
   }, [reducedMotion]);
 
   return (
-    <div className={cn('flex gap-2 p-3 h-full overflow-x-auto', isRTL && 'flex-row-reverse text-right', className)}>
+    <div className={cn('grid grid-cols-2 gap-2 p-3 h-full md:flex md:overflow-x-auto', isRTL && 'flex-row-reverse text-right', className)}>
       {orderedPipelineData.map((column) => (
         <div
           key={column.id}
           className={cn(
-            'flex-1 min-w-[140px] flex flex-col rounded-lg transition-all duration-300',
+            'min-w-0 flex min-h-0 flex-col rounded-lg transition-all duration-300 md:min-w-[140px] md:flex-1',
             highlightedColumn === column.id ? 'bg-gray-100' : 'bg-gray-50'
           )}
         >
           <div className="flex items-center justify-between px-2 py-2 border-b border-gray-200">
-            <span className="text-[11px] font-semibold text-gray-700">{column.label}</span>
+            <span className="min-w-0 truncate text-[11px] font-semibold text-gray-700">{column.label}</span>
             <span className="px-1.5 py-0.5 text-[10px] bg-gray-200 text-gray-600 rounded-full">
               {column.count}
             </span>
@@ -296,8 +296,8 @@ export const ContactsTableRealistic: React.FC<{ className?: string }> = ({ class
     return () => clearInterval(interval);
   }, [reducedMotion, isHovered]);
 
-  const handleRowClick = (row: Record<string, any>) => {
-    setSelectedContact(row.id);
+  const handleRowClick = (row: Record<string, unknown>) => {
+    setSelectedContact(String(row.id ?? ''));
     setDrawerOpen(true);
   };
 
@@ -448,6 +448,8 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
       {/* Toggle */}
       <div className={cn('flex items-center gap-1 mb-3', isRTL && 'flex-row-reverse')}>
         <button
+          aria-pressed={filter === 'my'}
+          aria-label={locale === 'ar' ? 'عرض مهامي' : 'Show my tasks'}
           onClick={() => setFilter('my')}
           className={cn(
             'px-3 py-1.5 text-[11px] font-medium rounded-md transition-colors',
@@ -457,6 +459,8 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
           {locale === 'ar' ? 'مهامي' : 'My Tasks'}
         </button>
         <button
+          aria-pressed={filter === 'team'}
+          aria-label={locale === 'ar' ? 'عرض مهام الفريق' : 'Show team tasks'}
           onClick={() => setFilter('team')}
           className={cn(
             'px-3 py-1.5 text-[11px] font-medium rounded-md transition-colors',
@@ -480,6 +484,7 @@ export const TasksListRealistic: React.FC<{ className?: string }> = ({ className
             )}
           >
             <button
+              aria-label={task.completed ? (locale === 'ar' ? 'إلغاء إكمال المهمة' : 'Mark task incomplete') : (locale === 'ar' ? 'إكمال المهمة' : 'Mark task complete')}
               onClick={() => toggleComplete(task.id)}
               className={cn(
                 'w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0',

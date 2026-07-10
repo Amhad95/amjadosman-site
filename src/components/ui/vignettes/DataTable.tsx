@@ -16,11 +16,13 @@ interface Pagination {
   perPage: number;
 }
 
+type DataRow = Record<string, unknown> & { id?: string };
+
 interface DataTableProps {
   columns: Column[];
-  data: Record<string, any>[];
+  data: DataRow[];
   selectedRow?: string;
-  onRowClick?: (row: Record<string, any>) => void;
+  onRowClick?: (row: DataRow) => void;
   pagination?: Pagination;
   className?: string;
 }
@@ -37,11 +39,11 @@ export const DataTable: React.FC<DataTableProps> = ({
   const PreviousIcon = isRTL ? ChevronRight : ChevronLeft;
   const NextIcon = isRTL ? ChevronLeft : ChevronRight;
 
-  const renderCell = (row: Record<string, any>, column: Column) => {
+  const renderCell = (row: DataRow, column: Column) => {
     const value = row[column.key];
     
     if (column.key === 'status' && typeof value === 'string') {
-      return <StatusChip status={value as any} size="sm" />;
+      return <StatusChip status={value as React.ComponentProps<typeof StatusChip>["status"]} size="sm" />;
     }
     
     if (column.key === 'owner' && typeof value === 'string') {

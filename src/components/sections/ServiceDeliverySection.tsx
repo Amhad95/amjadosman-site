@@ -44,9 +44,10 @@ export const ServiceDeliverySection: React.FC<ServiceDeliverySectionProps> = ({
   return (
     <section
       aria-labelledby={headingId}
-      className={cn('bg-plate-violet py-14 text-offwhite md:py-18', className)}
+      className={cn('bg-background py-10 text-offwhite md:py-14', className)}
     >
       <div className="container mx-auto px-4 md:px-6">
+        <div className="rounded-[34px] bg-plate-violet px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
         <Reveal className="mb-8 max-w-3xl md:mb-10" variant="subtle">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-offwhite/55">
             {resolvedEyebrow}
@@ -286,6 +287,7 @@ export const ServiceDeliverySection: React.FC<ServiceDeliverySectionProps> = ({
             </RevealGroup>
           </div>
         </Reveal>
+        </div>
       </div>
     </section>
   );

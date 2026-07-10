@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import tailwindAnimate from "tailwindcss-animate";
+import typography from "@tailwindcss/typography";
 
 export default {
   darkMode: ["class"],
@@ -20,6 +22,7 @@ export default {
       fontFamily: {
         sans: ["Inter", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"],
         serif: ["Instrument Serif", "Georgia", "serif"],
+        "pixelify-sans": ["'Pixelify Sans'", "sans-serif"],
       },
       colors: {
         // Plate colors
@@ -119,5 +122,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate, typography],
 } satisfies Config;

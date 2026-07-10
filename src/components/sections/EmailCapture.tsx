@@ -29,6 +29,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
   const [error, setError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState('/downloads/self-help-tools-starter-pack.md');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,21 +55,37 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
     }
 
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    setIsSubmitted(true);
+    try {
+      const response = await fetch('/api/email-capture', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: result.data.email }),
+      });
+      const payload = (await response.json().catch(() => null)) as { error?: string; downloadUrl?: string } | null;
+      if (!response.ok) throw new Error(payload?.error ?? 'The download could not be prepared.');
+      if (payload?.downloadUrl) setDownloadUrl(payload.downloadUrl);
+      setIsSubmitted(true);
+    } catch (submissionError) {
+      setError(submissionError instanceof Error ? submissionError.message : 'The download could not be prepared.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSubmitted) {
     return (
-      <div className={cn('bg-plate-emerald rounded-2xl p-8 md:p-12', className)}>
+      <div 
+        className={cn('bg-plate-emerald rounded-[34px] p-8 md:p-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.22)]', className)}
+        dir={isRTL ? 'rtl' : 'ltr'}
+      >
         <div className={cn('text-center', isRTL && 'text-right')}>
           <p className="text-mint text-lg font-medium mb-6">{successMessage}</p>
-          <div className={cn('flex flex-col sm:flex-row items-center justify-center gap-4', isRTL && 'sm:flex-row-reverse')}>
-            <PrimaryButton href="#">
-              {downloadLabel}
-            </PrimaryButton>
+          <div className={cn('flex flex-col sm:flex-row items-center justify-center gap-4')}>
+            <a
+              href={downloadUrl}
+              download
+              className="inline-flex h-12 items-center justify-center rounded-lg bg-mint px-5 text-base font-semibold text-plate-emerald transition-colors hover:bg-mint/90 focus:outline-none focus:ring-2 focus:ring-lavender focus:ring-offset-2"
+            >{downloadLabel}</a>
             {followUpCta && (
               <SecondaryButton href={followUpCta.href} variant="dark">
                 {followUpCta.label}
@@ -81,7 +98,10 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
   }
 
   return (
-    <div className={cn('bg-plate-emerald rounded-2xl p-8 md:p-12', className)}>
+    <div 
+      className={cn('bg-plate-emerald rounded-[34px] p-8 md:p-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.22)]', className)}
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
       <div className={cn('max-w-xl mx-auto text-center', isRTL && 'text-right')}>
         <h3 className="font-serif text-heading-md text-mint mb-3">
           {headline}
@@ -90,7 +110,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
           {description}
         </p>
         
-        <form onSubmit={handleSubmit} className={cn('flex flex-col sm:flex-row gap-3', isRTL && 'sm:flex-row-reverse')}>
+        <form onSubmit={handleSubmit} className={cn('flex flex-col sm:flex-row gap-3')}>
           <div className="flex-1">
             <input
               type="email"

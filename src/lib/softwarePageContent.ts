@@ -70,6 +70,63 @@ export interface SoftwareDetailContent {
   };
 }
 
+export const getSoftwareSectionEyebrows = (locale: Locale) => {
+  const labels = {
+    en: {
+      preview: "Product preview",
+      personas: "Best fit",
+      problems: "What it replaces",
+      outcomes: "Day-one value",
+      capabilities: "Capabilities",
+      workflow: "Setup journey",
+      governance: "Controls",
+      onboarding: "Onboarding",
+    },
+    ar: {
+      preview: "معاينة المنتج",
+      personas: "الأنسب له",
+      problems: "ما الذي يستبدله",
+      outcomes: "قيمة من اليوم الأول",
+      capabilities: "القدرات",
+      workflow: "رحلة الإعداد",
+      governance: "الضوابط",
+      onboarding: "التشغيل الأولي",
+    },
+    de: {
+      preview: "Produktvorschau",
+      personas: "Beste Passung",
+      problems: "Was es ersetzt",
+      outcomes: "Wert ab Tag eins",
+      capabilities: "Funktionen",
+      workflow: "Einrichtungsweg",
+      governance: "Kontrollen",
+      onboarding: "Onboarding",
+    },
+    fr: {
+      preview: "Aperçu produit",
+      personas: "Meilleure adéquation",
+      problems: "Ce que cela remplace",
+      outcomes: "Valeur dès le premier jour",
+      capabilities: "Capacités",
+      workflow: "Parcours de configuration",
+      governance: "Contrôles",
+      onboarding: "Onboarding",
+    },
+    bg: {
+      preview: "Преглед на продукта",
+      personas: "Най-добро съответствие",
+      problems: "Какво заменя",
+      outcomes: "Стойност от първия ден",
+      capabilities: "Възможности",
+      workflow: "Път на настройка",
+      governance: "Контроли",
+      onboarding: "Въвеждане",
+    },
+  } satisfies Record<Locale, Record<string, string>>;
+
+  return labels[locale];
+};
+
 const softwarePageContentEn: Record<SoftwareDetailId, SoftwareDetailContent> = {
   crm: {
     hero: {
@@ -1109,12 +1166,19 @@ const softwarePageContentAr: Record<SoftwareDetailId, SoftwareDetailContent> = {
   },
 };
 
+import { softwarePageContentDe } from "./softwarePageContentDe";
+import { softwarePageContentFr } from "./softwarePageContentFr";
+import { softwarePageContentBg } from "./softwarePageContentBg";
+
 const softwarePageContentByLocale: Record<
   Locale,
   Record<SoftwareDetailId, SoftwareDetailContent>
 > = {
   en: softwarePageContentEn,
   ar: softwarePageContentAr,
+  de: softwarePageContentDe,
+  fr: softwarePageContentFr,
+  bg: softwarePageContentBg,
 };
 
 export const getSoftwarePageContent = (locale: Locale) =>

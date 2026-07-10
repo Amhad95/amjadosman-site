@@ -6,9 +6,13 @@ import { Steps } from '@/components/sections/Steps';
 import { CTABand } from '@/components/sections/CTABand';
 import { useSiteContent } from '@/lib/content';
 import { CyberHeart } from '@/components/ui/cyber-heart';
+import { usePageMeta } from '@/hooks/use-page-meta';
+import { useLocale } from '@/lib/locale';
 
 const About = () => {
   const { about } = useSiteContent();
+  const { locale } = useLocale();
+  usePageMeta({ title: `${about.hero.headline} | Amjad Osman`, description: about.hero.subheadline });
 
   return (
     <Layout>
@@ -48,8 +52,9 @@ const About = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-plate-burgundy">
+      <section className="py-10 md:py-14 bg-background">
         <div className="container mx-auto px-4 md:px-6">
+          <div className="rounded-[34px] bg-plate-burgundy px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
           <div className="grid grid-cols-1 lg:grid-cols-[0.92fr_1.08fr] gap-10 lg:gap-14 items-start">
             <div className="max-w-2xl">
               <p className="text-xs uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-4">
@@ -58,7 +63,7 @@ const About = () => {
               <h2 className="font-serif text-poster-lg text-mint mb-5">
                 {about.drivers.headline}
               </h2>
-              <p className="text-subheadline text-offwhite/78">
+              <p className="text-subheadline text-mint/80">
                 {about.drivers.subheadline}
               </p>
             </div>
@@ -79,6 +84,7 @@ const About = () => {
                 </div>
               ))}
             </div>
+          </div>
           </div>
         </div>
       </section>
@@ -128,7 +134,7 @@ const About = () => {
               <Steps steps={about.workingWithUs.steps} />
             </div>
 
-            <div className="rounded-[30px] border border-ink/10 bg-white p-6 md:p-8">
+            <div className="rounded-[30px] border border-ink/10 bg-card p-6 md:p-8">
               <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground font-semibold mb-4">
                 {about.workingWithUs.expectationsTitle}
               </p>

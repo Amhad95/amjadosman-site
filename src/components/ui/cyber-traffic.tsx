@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
-const W = 60;
-const H = 35;
-const RAMP = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+const W = 50;
+const H = 18;
 
 const COLOR_MAP: Record<string, string> = {
   mint: "#00FFD9",
@@ -20,176 +19,135 @@ interface CyberTrafficProps {
   density?: number;
 }
 
-interface Car {
-  lane: number;
-  z: number;
-  speed: number;
-  type: "truck" | "car";
-}
+const playerCar = ["  ▄▄▄▄▄▄▄   ", "▄█▀█████▀█▄ ", "▀◉▀▀▀▀▀◉▀  "];
+const rivalCar = [" ▄▄▄▄▄  ", "█▀███▀█>", "▀◉▀▀◉▀ "];
+
+const put = (grid: string[][], x: number, y: number, text: string) => {
+  const xx = Math.round(x);
+  const yy = Math.round(y);
+  if (yy < 0 || yy >= H) return;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const targetX = xx + i;
+    if (targetX >= 0 && targetX < W) {
+      grid[yy][targetX] = text[i];
+    }
+  }
+};
+
+const drawSprite = (grid: string[][], sprite: string[], x: number, y: number) => {
+  sprite.forEach((line, index) => put(grid, x, y + index, line));
+};
+
+const loopX = (frame: number, spriteWidth: number, speed: number, phase: number, gap: number) => {
+  const travelRange = W + spriteWidth + gap;
+  const travel = (frame * speed + phase) % travelRange;
+  return W - travel;
+};
+
+const drawRoad = (grid: string[][], frame: number) => {
+  for (let i = 0; i < 16; i += 1) {
+    const x = ((i * 13 - Math.floor(frame * (0.7 + (i % 3) * 0.25))) % W + W) % W;
+    const y = 1 + ((i * 5) % 4);
+    grid[y][x] = i % 6 === 0 ? "╶" : "·";
+  }
+
+  put(grid, 0, 5, "▔".repeat(W));
+
+  for (let y = 6; y <= 16; y += 1) {
+    for (let x = 0; x < W; x += 1) {
+      grid[y][x] = y % 2 === 0 ? "░" : "▒";
+    }
+  }
+
+  for (let x = 0; x < W; x += 1) {
+    const topDash = (x + frame * 2) % 12;
+    const bottomDash = (x + frame * 2 + 5) % 12;
+    grid[9][x] = topDash < 5 ? "═" : " ";
+    grid[13][x] = bottomDash < 5 ? "═" : " ";
+    grid[17][x] = x % 2 === 0 ? "▀" : "▄";
+  }
+};
 
 export const CyberTraffic: React.FC<CyberTrafficProps> = ({
   speed = 1,
   color = "mint",
-  density = 1.0,
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
-  const rafRef = useRef<number>(0);
-  const carsRef = useRef<Car[]>([]);
-  const lanes = [-8, -3, 3, 8];
-
+  const intervalRef = useRef<number>(0);
+  const frameRef = useRef(0);
   const themeColor = COLOR_MAP[color] || COLOR_MAP.mint;
 
-  useEffect(() => {
-    const initialCars: Car[] = [];
-    for (let i = 0; i < 8; i++) {
-      initialCars.push({
-        lane: Math.floor(Math.random() * 4),
-        z: Math.random() * 60 + 10,
-        speed: 0.2 + Math.random() * 0.4,
-        type: Math.random() > 0.6 ? "truck" : "car",
-      });
-    }
-    carsRef.current = initialCars;
-  }, []);
+  const fitToWidth = () => {
+    const container = containerRef.current;
+    const pre = preRef.current;
+    if (!container || !pre || !pre.textContent) return;
+
+    const availableWidth = Math.max(1, container.clientWidth - 8);
+    pre.style.fontSize = "10px";
+    const measuredWidth = pre.scrollWidth;
+    if (measuredWidth <= 0) return;
+
+    const nextSize = Math.max(6, Math.min(24, (availableWidth / measuredWidth) * 10));
+    pre.style.fontSize = `${nextSize}px`;
+  };
 
   useEffect(() => {
     const pre = preRef.current;
     if (!pre) return;
 
     const render = () => {
-      const zBuffer = new Float32Array(W * H).fill(0);
-      const charBuffer = new Array(W * H).fill(" ");
-      const time = performance.now() * 0.001 * speed;
+      const frame = frameRef.current;
+      const grid = Array.from({ length: H }, () => Array(W).fill(" "));
 
-      const drawPoint = (
-        px: number,
-        py: number,
-        pz: number,
-        charOverride: string | null = null,
-        brightness = 1.0
-      ) => {
-        const camY = 5;
-        const camZ = -4;
-        const relX = px;
-        const relY = py - camY;
-        const relZ = pz - camZ;
+      drawRoad(grid, frame);
 
-        if (relZ < 1) return;
+      const topX = loopX(frame, rivalCar[1].length, 1, 0, 28);
+      const middleX = loopX(frame, rivalCar[1].length, 1, 38, 32);
 
-        const fov = 50;
-        const ooz = 1 / relZ;
-        const xp = Math.floor(W / 2 + relX * ooz * fov * 1.5);
-        const yp = Math.floor(H / 2 - relY * ooz * fov);
+      drawSprite(grid, rivalCar, topX, 6);
+      drawSprite(grid, rivalCar, middleX, 10);
 
-        if (xp >= 0 && xp < W && yp >= 0 && yp < H) {
-          const idx = xp + yp * W;
-          if (ooz > zBuffer[idx]) {
-            zBuffer[idx] = ooz;
-            if (charOverride) {
-              charBuffer[idx] = charOverride;
-            } else {
-              const fog = Math.max(0, 1 - relZ / 80);
-              const lIdx = Math.floor(fog * brightness * (RAMP.length - 1));
-              charBuffer[idx] = RAMP[lIdx];
-            }
-          }
-        }
-      };
+      const playerBob = Math.floor(frame / 5) % 2 === 0 ? 0 : -1;
+      const playerY = 14 + playerBob;
+      drawSprite(grid, playerCar, 4, playerY);
 
-      const roadW = 12;
-      const segmentLen = 12;
-      const scrollZ = (time * 25) % segmentLen;
+      put(grid, 0, playerY + 1, frame % 4 < 2 ? "≋≋" : "▒▒");
+      put(grid, 1, playerY + 2, "━━");
 
-      for (let z = 5; z < 70; z += segmentLen) {
-        const drawZ = z - scrollZ;
-        if (drawZ < 2) continue;
-        for (let x = -roadW; x <= roadW; x += 0.8) {
-          drawPoint(x, 0, drawZ, "-");
-        }
-      }
-
-      for (let x = -roadW; x <= roadW; x += 5.5) {
-        for (let z = 5; z < 70; z += 1.5) {
-          const isEdge = Math.abs(x) > roadW - 1;
-          if (!isEdge && Math.sin(z * 0.5 - time * 5) < -0.5) continue;
-          drawPoint(x, 0, z, isEdge ? "|" : ":");
-        }
-      }
-
-      carsRef.current.forEach((car) => {
-        car.z += car.speed;
-        if (car.z > 65) {
-          car.z = 5;
-          car.lane = Math.floor(Math.random() * 4);
-          car.type = Math.random() > 0.7 ? "truck" : "car";
-          car.speed = 0.2 + Math.random() * 0.4;
-        }
-
-        const laneX = lanes[car.lane];
-        const carW = 1.8;
-        const carH = car.type === "truck" ? 2.5 : 1.0;
-        const carL = car.type === "truck" ? 5.0 : 3.0;
-        const yPos = 0.2;
-        const step = 0.7 / density;
-
-        for (let dx = -carW / 2; dx <= carW / 2; dx += step) {
-          for (let dy = 0; dy <= carH; dy += step) {
-            for (let dz = 0; dz <= carL; dz += step * 1.5) {
-              const px = laneX + dx;
-              const py = yPos + dy;
-              const pz = car.z + dz;
-
-              const isBack = dz < step;
-              const isTop = dy > carH - step;
-              const isSide = Math.abs(dx) > carW / 2 - step;
-
-              if (isBack || isTop || isSide) {
-                let char = "8";
-                if (isBack) char = "#";
-                if (isTop) char = "=";
-                drawPoint(px, py, pz, char);
-              }
-            }
-          }
-        }
-      });
-
-      const gantryDist = 35;
-      const gantryScroll = (time * 25) % gantryDist;
-
-      for (let z = 15; z < 80; z += gantryDist) {
-        const gz = z - gantryScroll;
-        if (gz < 2) continue;
-        for (let y = 0; y < 7; y += 0.8) {
-          drawPoint(-roadW - 1.5, y, gz, "H");
-          drawPoint(roadW + 1.5, y, gz, "H");
-        }
-        for (let x = -roadW - 1.5; x <= roadW + 1.5; x += 0.5) {
-          drawPoint(x, 7, gz, "/");
-        }
-      }
-
-      const lines: string[] = [];
-      for (let i = 0; i < H; i++) {
-        lines.push(charBuffer.slice(i * W, (i + 1) * W).join(""));
-      }
-      pre.textContent = lines.join("\n");
-
-      rafRef.current = requestAnimationFrame(render);
+      pre.textContent = grid.map((row) => row.join("")).join("\n");
     };
 
-    rafRef.current = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [speed, density]);
+    render();
+    fitToWidth();
+    intervalRef.current = window.setInterval(() => {
+      frameRef.current += 2;
+      render();
+    }, Math.max(30, 55 / Math.max(0.25, speed)));
+
+    return () => window.clearInterval(intervalRef.current);
+  }, [speed]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver(() => fitToWidth());
+    resizeObserver.observe(container);
+    requestAnimationFrame(fitToWidth);
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   return (
-    <div className="flex items-center justify-center overflow-hidden w-full h-full">
+    <div ref={containerRef} className="flex h-full w-full items-end justify-center overflow-hidden px-1">
       <pre
         ref={preRef}
-        className="text-[6px] sm:text-[8px] md:text-[9px] leading-[1.0] font-mono select-none whitespace-pre"
+        className="select-none whitespace-pre font-mono font-black leading-[1.04] tracking-[-0.1em]"
         style={{
           color: themeColor,
-          textShadow: `0 0 8px ${themeColor}66`,
+          textShadow: `0 0 4px ${themeColor}cc, 0 0 12px ${themeColor}73`,
         }}
       />
     </div>

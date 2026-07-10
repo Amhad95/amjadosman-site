@@ -99,7 +99,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
       eyebrow: "Brand and Growth Systems",
       headline: "Give buyers a clearer reason to trust you.",
       subheadline:
-        "We shape the brand, website, and sales materials so the business feels sharper, more established, and easier to choose.",
+        "I shape the brand, website, and sales materials so the business feels sharper, more established, and easier to choose.",
       primaryCtaLabel: "See pricing",
       secondaryCtaLabel: "Book a call",
     },
@@ -256,7 +256,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
         },
         {
           q: "Do you write the copy?",
-          a: "We can shape the messaging framework, page structure, and page-level direction. Full copywriting can also be included if needed.",
+          a: "I can shape the messaging framework, page structure, and page-level direction. Full copywriting can also be included if needed.",
         },
         {
           q: "Will we be able to update things after launch?",
@@ -268,7 +268,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
         },
         {
           q: "Can you work with an existing brand?",
-          a: "Yes. We can refine what already exists, build the missing pieces around it, or create a cleaner system if the current one is getting in the way.",
+          a: "Yes. I can refine what already exists, build the missing pieces around it, or create a cleaner system if the current one is getting in the way.",
         },
         {
           q: "What is included in a retainer?",
@@ -279,7 +279,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
     ctaBand: {
       headline: "Sharpen buyer trust.",
       description:
-        "We'll scope the first brand, website, or sales fix and show the pricing.",
+        "I will scope the first brand, website, or sales fix and show the pricing.",
       primaryLabel: "Book a Call",
       secondaryLabel: "View pricing",
     },
@@ -289,7 +289,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
       eyebrow: "Internal Operations Systems",
       headline: "Replace scattered files and tribal knowledge with a cleaner operating system.",
       subheadline:
-        "We structure the systems behind the business so information is easier to find, recurring work is easier to follow, and onboarding creates less daily drag.",
+        "I structure the systems behind the business so information is easier to find, recurring work is easier to follow, and onboarding creates less daily drag.",
       primaryCtaLabel: "See pricing",
       secondaryCtaLabel: "Book a call",
     },
@@ -434,7 +434,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
       items: [
         {
           q: "Do you work with an existing SharePoint setup?",
-          a: "Yes. We can restructure what already exists, simplify it, or build a cleaner operating layer around the parts that are worth keeping.",
+          a: "Yes. I can restructure what already exists, simplify it, or build a cleaner operating layer around the parts that are worth keeping.",
         },
         {
           q: "How many SOPs are usually included?",
@@ -446,7 +446,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
         },
         {
           q: "What if we use Google Workspace or another platform?",
-          a: "The same operating principles still apply. We can adapt the structure to the platform your business actually uses.",
+          a: "The same operating principles still apply. I can adapt the structure to the platform your business actually uses.",
         },
         {
           q: "How long does a setup usually take?",
@@ -460,7 +460,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
     },
     ctaBand: {
       headline: "Clean up operations.",
-      description: "We'll scope the first operational reset and show the pricing.",
+      description: "I will scope the first operational reset and show the pricing.",
       primaryLabel: "Book a Call",
       secondaryLabel: "View pricing",
     },
@@ -470,7 +470,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
       eyebrow: "AI Agents and Automation",
       headline: "Automate repeat work without giving up control.",
       subheadline:
-        "We design practical agent workflows for routing, drafting, reporting, and knowledge support, with approvals, boundaries, and safer failure handling built in from the start.",
+        "I design practical agent workflows for routing, drafting, reporting, and knowledge support, with approvals, boundaries, and safer failure handling built in from the start.",
       primaryCtaLabel: "See pricing",
       secondaryCtaLabel: "Book a call",
     },
@@ -641,7 +641,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
     ctaBand: {
       headline: "Pilot automation safely.",
       description:
-        "We'll identify the first workflow worth automating and show the pricing.",
+        "I will identify the first workflow worth automating and show the pricing.",
       primaryLabel: "Book a Call",
       secondaryLabel: "View pricing",
     },
@@ -1188,12 +1188,19 @@ const servicePageContentAr: Record<ServiceDetailId, ServiceDetailContent> = {
   },
 };
 
+import { servicePageContentDe } from "./servicePageContentDe";
+import { servicePageContentFr } from "./servicePageContentFr";
+import { servicePageContentBg } from "./servicePageContentBg";
+
 const servicePageContentByLocale: Record<
   Locale,
   Record<ServiceDetailId, ServiceDetailContent>
 > = {
   en: servicePageContentEn,
   ar: servicePageContentAr,
+  de: servicePageContentDe,
+  fr: servicePageContentFr,
+  bg: servicePageContentBg,
 };
 
 export const getServicePageContent = (locale: Locale) =>

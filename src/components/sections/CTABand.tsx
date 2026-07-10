@@ -4,6 +4,7 @@ import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
 import { BottomCTAAsciiObject, type BottomCTAVisualKey } from '@/components/sections/ctaObjects/BottomCTAAsciiObject';
 import { useLocale } from '@/lib/locale';
+import { MatrixCodeBackground } from '@/components/shared/MatrixCodeBackground';
 
 type PlateColor = 'violet' | 'navy' | 'emerald' | 'blue' | 'astral' | 'burgundy' | 'ink';
 
@@ -17,6 +18,7 @@ interface CTABandProps {
   size?: 'default' | 'large';
   className?: string;
   plateColor?: PlateColor;
+  canvasColor?: string;
 }
 
 export const CTABand: React.FC<CTABandProps> = ({
@@ -29,22 +31,29 @@ export const CTABand: React.FC<CTABandProps> = ({
   size = 'default',
   className,
   plateColor,
+  canvasColor,
 }) => {
   const { isRTL } = useLocale();
   return (
     <section
       className={cn(
-        size === 'large' ? 'py-16 md:py-20' : 'py-14 md:py-16',
-        variant === 'dark' ? 'bg-[#373737] text-offwhite' : 'bg-muted',
-        'overflow-hidden',
+        'relative overflow-hidden',
+        size === 'large' ? 'py-12 md:py-16' : 'py-10 md:py-14',
+        (!className || !className.includes('bg-')) && 'bg-background',
         className
       )}
+      dir={isRTL ? 'rtl' : 'ltr'}
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <MatrixCodeBackground fontSize={18} color={canvasColor || "hsla(275, 100%, 50%, 0.12)"} speed={0.45} />
+      <div className="container relative z-10 mx-auto px-4 md:px-6">
         <div
           className={cn(
+            'rounded-[34px] px-6 py-10 md:px-10 md:py-12 lg:px-12',
             'flex flex-col gap-8 lg:items-center lg:justify-between',
-            isRTL ? 'lg:flex-row-reverse' : 'lg:flex-row',
+            variant === 'dark'
+              ? 'bg-[hsl(var(--page-cta-bg))] text-offwhite shadow-[0_24px_64px_-46px_rgba(8,15,32,0.34)]'
+              : 'bg-muted text-foreground border border-ink/8 shadow-[0_20px_54px_-44px_rgba(8,15,32,0.16)]',
+            isRTL ? 'lg:flex-row' : 'lg:flex-row',
             size === 'large' ? 'lg:gap-16' : 'lg:gap-12'
           )}
         >
@@ -54,7 +63,7 @@ export const CTABand: React.FC<CTABandProps> = ({
                 className={cn(
                   'font-serif',
                   size === 'large' ? 'text-poster-xl mb-5' : 'text-poster-lg md:text-poster-xl mb-4',
-                  variant === 'dark' ? 'text-mint' : 'text-foreground'
+                  variant === 'dark' ? 'text-offwhite' : 'text-foreground'
                 )}
               >
                 {headline}

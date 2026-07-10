@@ -1,100 +1,105 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useMemo, useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Hero } from '@/components/sections/Hero';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
-import { SecondaryButton } from '@/components/shared/SecondaryButton';
 import { useSiteContent } from '@/lib/content';
 import { CyberPyramid } from '@/components/ui/cyber-pyramid';
-import { fallbackWorkCases, resolveLocalizedWorkCase, type ResolvedWorkCase } from '@/lib/fallbackContent';
-import { RevealGroup } from '@/components/motion/Reveal';
+import { resolveLocalizedWorkCase } from '@/lib/fallbackContent';
+import { getPublishedWorkCases } from '@/data/workCasesDatabase';
 import { useLocale } from '@/lib/locale';
 import { usePageMeta } from '@/hooks/use-page-meta';
+import { WorkCaseCard } from '@/components/sections/WorkCaseCard';
 import { cn } from '@/lib/utils';
+import { pickLocaleCopy, simplePageCopy } from '@/lib/pageCopy';
 
-interface WorkCase {
-  id: string;
-  title: string;
-  title_ar?: string | null;
-  description: string;
-  description_ar?: string | null;
-  thumbnail_url: string | null;
-  href: string;
-  cta_label: string;
-  cta_label_ar?: string | null;
-  category: string | null;
-  category_ar?: string | null;
-}
+const workFilters = [
+  { id: 'all', label: 'All', serviceIds: [] },
+  { id: 'brand', label: 'Brand & Growth', serviceIds: ['brand'] },
+  { id: 'ops', label: 'Internal Operations', serviceIds: ['ops'] },
+  {
+    id: 'software',
+    label: 'Software/Product',
+    serviceIds: ['software-crm', 'software-accounting', 'software-inventory', 'software-tasks', 'agents'],
+  },
+  { id: 'strategy', label: 'Strategy & Finance', categories: ['Strategy & Financial Model'] },
+] as const;
 
-const WorkCaseCard: React.FC<{ item: ResolvedWorkCase }> = ({ item }) => {
-  const { isRTL } = useLocale();
-
-  return (
-  <div className="group bg-card border border-border rounded-2xl overflow-hidden flex flex-col hover:shadow-md transition-shadow duration-200">
-    <div className="aspect-video bg-muted flex items-center justify-center overflow-hidden">
-      {item.thumbnail_url ? (
-        <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-cover" />
-      ) : (
-        <div className="w-full h-full bg-gradient-to-br from-muted to-muted/60 flex items-center justify-center">
-          {item.category && (
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">
-              {item.category}
-            </span>
-          )}
-        </div>
-      )}
-    </div>
-    <div className={cn("p-6 flex flex-col flex-1", isRTL && "text-right")}>
-      {item.category && (
-        <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
-          {item.category}
-        </span>
-      )}
-      <h3 className="font-serif text-heading-sm text-foreground mb-3 group-hover:text-foreground/80 transition-colors">
-        {item.title}
-      </h3>
-      <p className="text-body-sm text-muted-foreground mb-6 flex-1">{item.description}</p>
-      <SecondaryButton href={item.href} variant="light">
-        {item.cta_label}
-      </SecondaryButton>
-    </div>
-  </div>
-  );
-};
+const workFilterLabels = {
+  en: {
+    all: 'All',
+    brand: 'Brand & Growth',
+    ops: 'Internal Operations',
+    software: 'Software/Product',
+    strategy: 'Strategy & Finance',
+  },
+  ar: {
+    all: 'الكل',
+    brand: 'الهوية والنمو',
+    ops: 'العمليات الداخلية',
+    software: 'البرمجيات/المنتج',
+    strategy: 'الاستراتيجية والمالية',
+  },
+  de: {
+    all: 'Alle',
+    brand: 'Marke & Wachstum',
+    ops: 'Interne Abläufe',
+    software: 'Software/Produkt',
+    strategy: 'Strategie & Finanzen',
+  },
+  fr: {
+    all: 'Tous',
+    brand: 'Marque & croissance',
+    ops: 'Opérations internes',
+    software: 'Logiciel/produit',
+    strategy: 'Stratégie & finance',
+  },
+  bg: {
+    all: 'Всички',
+    brand: 'Бранд и растеж',
+    ops: 'Вътрешни операции',
+    software: 'Софтуер/продукт',
+    strategy: 'Стратегия и финанси',
+  },
+} as const;
 
 const Work = () => {
   const { work, common } = useSiteContent();
   const { locale } = useLocale();
+  const copy = pickLocaleCopy(simplePageCopy, locale);
+  const filterLabels = workFilterLabels[locale] ?? workFilterLabels.en;
+  const [activeFilter, setActiveFilter] = useState<(typeof workFilters)[number]['id']>('all');
 
   usePageMeta({
-    title: locale === 'ar' ? 'الأعمال | ADSI' : 'Work | ADSI',
+    title: copy.workTitle,
     description: work.hero.subheadline,
   });
 
-  const { data: dbCases, isLoading } = useQuery({
-    queryKey: ['work_cases', locale],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('work_cases')
-        .select('id, title, title_ar, description, description_ar, thumbnail_url, href, cta_label, cta_label_ar, category, category_ar')
-        .eq('published', true)
-        .order('sort_order', { ascending: true });
-      if (error) throw error;
-      return data as WorkCase[];
-    },
-  });
-
-  const cases = (dbCases && dbCases.length > 0 ? dbCases : fallbackWorkCases).map((item) =>
+  const workCaseSources = getPublishedWorkCases();
+  const cases = workCaseSources.map((item) =>
     resolveLocalizedWorkCase(item, locale)
   );
+  const filteredCases = useMemo(() => {
+    const filter = workFilters.find((item) => item.id === activeFilter) ?? workFilters[0];
+
+    if (filter.id === 'all') return cases;
+
+    return cases.filter((item) => {
+      const serviceIds = item.service_line_ids ?? [];
+      const matchesService = 'serviceIds' in filter && filter.serviceIds.some((id) => serviceIds.includes(id));
+      const matchesCategory = 'categories' in filter && filter.categories.includes(item.category ?? '');
+
+      return matchesService || matchesCategory;
+    });
+  }, [activeFilter, cases]);
 
   return (
-    <Layout>
+    <Layout motionLevel="none">
       <Hero
+        eyebrow={copy.workEyebrow}
         headline={work.hero.headline}
         subheadline={work.hero.subheadline}
+        credibilityStrip={copy.workStrip}
         plate="blue"
         rightElement={<CyberPyramid speed={0.8} />}
       />
@@ -102,22 +107,44 @@ const Work = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
+            eyebrow={copy.selectedWork}
             headline={common.caseStudies}
             subheadline={common.caseStudiesSubheadline}
+            motionVariant="none"
           />
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-muted rounded-2xl animate-pulse aspect-[4/3]" />
-              ))}
+          {copy.workTranslationNotice && (
+            <div className="mt-6 rounded-2xl border border-ink/10 bg-muted px-5 py-4 text-sm text-muted-foreground">
+              {copy.workTranslationNotice}
             </div>
-          ) : (
-            <RevealGroup className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10" stagger={78}>
-              {cases.map((item) => (
-                <WorkCaseCard key={item.id} item={item} />
-              ))}
-            </RevealGroup>
           )}
+          <div className="mt-8 flex flex-wrap justify-center gap-2" role="tablist" aria-label="Filter case studies">
+            {workFilters.map((filter) => {
+              const isActive = activeFilter === filter.id;
+
+              return (
+                <button
+                  key={filter.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveFilter(filter.id)}
+                  className={cn(
+                    'rounded-full border px-4 py-2 text-sm font-semibold transition-colors',
+                    isActive
+                      ? 'border-plate-violet bg-plate-violet text-white'
+                      : 'border-ink/10 bg-card text-muted-foreground hover:border-plate-violet/40 hover:text-foreground'
+                  )}
+                >
+                  {filterLabels[filter.id]}
+                </button>
+              );
+            })}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+            {filteredCases.map((item) => (
+              <WorkCaseCard key={item.id} item={item} />
+            ))}
+          </div>
         </div>
       </section>
 

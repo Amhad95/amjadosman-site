@@ -1,0 +1,499 @@
+import type { Locale } from "@/lib/locale";
+
+type LocaleMap<T> = Record<Locale, T>;
+
+export const pickLocaleCopy = <T,>(copy: LocaleMap<T>, locale: Locale): T =>
+  copy[locale] ?? copy.en;
+
+export const legalPageCopy = {
+  en: {
+    overview: "Overview",
+    sections: "Sections",
+    effective: "Effective",
+    scope: "Scope",
+    contact: "Contact",
+    privacyScope: "Website, bookings, free tools, enquiries, and service communication.",
+    termsScope: "Website use, free tools, project conversations, and paid-work boundaries.",
+    contactValue: "hello@adsi.io",
+  },
+  ar: {
+    overview: "نظرة عامة",
+    sections: "الأقسام",
+    effective: "ساري من",
+    scope: "النطاق",
+    contact: "التواصل",
+    privacyScope: "الموقع والحجوزات والأدوات المجانية والاستفسارات وتواصل الخدمات.",
+    termsScope: "استخدام الموقع والأدوات المجانية ومحادثات المشاريع وحدود العمل المدفوع.",
+    contactValue: "hello@adsi.io",
+  },
+  de: {
+    overview: "Überblick",
+    sections: "Abschnitte",
+    effective: "Gültig ab",
+    scope: "Umfang",
+    contact: "Kontakt",
+    privacyScope: "Website, Buchungen, kostenlose Tools, Anfragen und Servicekommunikation.",
+    termsScope: "Website-Nutzung, kostenlose Tools, Projektgespräche und Grenzen bezahlter Arbeit.",
+    contactValue: "hello@adsi.io",
+  },
+  fr: {
+    overview: "Aperçu",
+    sections: "Sections",
+    effective: "En vigueur",
+    scope: "Champ",
+    contact: "Contact",
+    privacyScope: "Site, réservations, outils gratuits, demandes et communication de service.",
+    termsScope: "Utilisation du site, outils gratuits, conversations de projet et limites du travail payé.",
+    contactValue: "hello@adsi.io",
+  },
+  bg: {
+    overview: "Преглед",
+    sections: "Раздели",
+    effective: "В сила от",
+    scope: "Обхват",
+    contact: "Контакт",
+    privacyScope: "Сайт, резервации, безплатни инструменти, запитвания и комуникация по услуги.",
+    termsScope: "Използване на сайта, безплатни инструменти, проектни разговори и граници на платена работа.",
+    contactValue: "hello@adsi.io",
+  },
+} satisfies LocaleMap<Record<string, string>>;
+
+export const pricingPageCopy = {
+  en: {
+    heroEyebrow: "Pricing",
+    viewServices: "View services",
+    howPricingWorks: "How pricing works",
+    startWithPackage: "Start with a contained package or go straight to the service you already know you need.",
+    scanTracks:
+      "Each service category is organized the same way so you can scan starter offers, single-service pricing, and retainers without bouncing between pages.",
+    managedSoftware: "Managed software",
+    servicePricing: "Service pricing",
+    fullServicePage: "See full service page",
+    availableProducts: "Available products",
+    availableProductsBody:
+      "Use software when the business needs an operating workspace with setup, structure, and ongoing support around it.",
+    supportIncludes: "What setup and support can include",
+    finalHeadline: "Choose the right package.",
+    finalDescription: "We'll help you compare entry points and pick the fastest sensible start.",
+    viewPricing: "View pricing",
+    metaTitle: "Pricing | Amjad Osman",
+  },
+  ar: {
+    heroEyebrow: "الأسعار",
+    viewServices: "عرض الخدمات",
+    howPricingWorks: "كيف يعمل التسعير",
+    startWithPackage: "ابدأ بباقة واضحة أو انتقل مباشرة إلى الخدمة التي تعرف أنك تحتاجها.",
+    scanTracks:
+      "كل فئة خدمة منظمة بالطريقة نفسها حتى تتمكن من مقارنة باقات البداية والخدمات الفردية والعقود المستمرة دون التنقل بين صفحات كثيرة.",
+    managedSoftware: "برمجيات مُدارة",
+    servicePricing: "تسعير الخدمات",
+    fullServicePage: "عرض صفحة الخدمة الكاملة",
+    availableProducts: "المنتجات المتاحة",
+    availableProductsBody:
+      "نستخدم البرمجيات عندما تحتاج الشركة إلى مساحة تشغيل مضبوطة مع إعداد وهيكل ودعم مستمر حولها.",
+    supportIncludes: "ما الذي يمكن أن يشمله الإعداد والدعم",
+    finalHeadline: "اختر الباقة المناسبة.",
+    finalDescription: "سنساعدك في مقارنة نقاط البداية واختيار أسرع بداية منطقية.",
+    viewPricing: "عرض الأسعار",
+    metaTitle: "الأسعار | أمجد عثمان",
+  },
+  de: {
+    heroEyebrow: "Preise",
+    viewServices: "Services ansehen",
+    howPricingWorks: "So funktioniert die Preisstruktur",
+    startWithPackage: "Beginnen Sie mit einem klar begrenzten Paket oder direkt mit dem Service, den Sie brauchen.",
+    scanTracks:
+      "Jede Service-Kategorie ist gleich aufgebaut, damit Startpakete, Einzelservices und Retainer schnell vergleichbar bleiben.",
+    managedSoftware: "Managed Software",
+    servicePricing: "Service-Preise",
+    fullServicePage: "Vollständige Service-Seite ansehen",
+    availableProducts: "Verfügbare Produkte",
+    availableProductsBody:
+      "Software ist sinnvoll, wenn das Unternehmen einen operativen Arbeitsbereich mit Einrichtung, Struktur und laufender Unterstützung braucht.",
+    supportIncludes: "Was Einrichtung und Support enthalten können",
+    finalHeadline: "Wählen Sie das passende Paket.",
+    finalDescription: "Wir vergleichen Einstiegspunkte und wählen den schnellsten sinnvollen Start.",
+    viewPricing: "Preise ansehen",
+    metaTitle: "Preise | Amjad Osman",
+  },
+  fr: {
+    heroEyebrow: "Tarifs",
+    viewServices: "Voir les services",
+    howPricingWorks: "Fonctionnement des tarifs",
+    startWithPackage: "Commencez par un package cadré ou allez directement vers le service dont vous avez besoin.",
+    scanTracks:
+      "Chaque catégorie de service est structurée de la même façon pour comparer facilement offres de départ, services individuels et abonnements.",
+    managedSoftware: "Logiciels managés",
+    servicePricing: "Tarifs des services",
+    fullServicePage: "Voir la page service complète",
+    availableProducts: "Produits disponibles",
+    availableProductsBody:
+      "Le logiciel convient quand l'entreprise a besoin d'un espace opérationnel avec configuration, structure et support continu.",
+    supportIncludes: "Ce que la configuration et le support peuvent inclure",
+    finalHeadline: "Choisissez le bon package.",
+    finalDescription: "Nous comparerons les points d'entrée et choisirons le départ le plus logique.",
+    viewPricing: "Voir les tarifs",
+    metaTitle: "Tarifs | Amjad Osman",
+  },
+  bg: {
+    heroEyebrow: "Цени",
+    viewServices: "Вижте услугите",
+    howPricingWorks: "Как работи ценообразуването",
+    startWithPackage: "Започнете с ясен пакет или директно с услугата, от която вече знаете, че имате нужда.",
+    scanTracks:
+      "Всяка категория услуги е структурирана еднакво, за да сравнявате стартови оферти, единични услуги и абонаменти без обикаляне.",
+    managedSoftware: "Управляван софтуер",
+    servicePricing: "Цени на услуги",
+    fullServicePage: "Вижте пълната страница на услугата",
+    availableProducts: "Налични продукти",
+    availableProductsBody:
+      "Използвайте софтуер, когато бизнесът има нужда от работно пространство с настройка, структура и постоянна поддръжка.",
+    supportIncludes: "Какво може да включват настройката и поддръжката",
+    finalHeadline: "Изберете правилния пакет.",
+    finalDescription: "Ще сравним началните точки и ще изберем най-бързия разумен старт.",
+    viewPricing: "Вижте цените",
+    metaTitle: "Цени | Amjad Osman",
+  },
+} satisfies LocaleMap<Record<string, string>>;
+
+export const softwareOverviewCopy = {
+  en: {
+    metaTitle: "Software | Amjad Osman",
+    metaDescription: "A focused operational software suite configured and managed around how your team actually works.",
+    heroEyebrow: "Managed software",
+    heroHeadline: "A focused enterprise suite, configured and managed for your team.",
+    heroSubheadline:
+      "Four cloud softwares, provisioned and configured with governance, permissions, templates, data import, training, and ongoing admin support.",
+    bookDemo: "Book a Demo",
+    bookCall: "Book a Call",
+    credibility: "Clear setup. Controlled permissions. Ongoing admin support when useful.",
+    productsEyebrow: "Products",
+    productsHeadline: "The Suite",
+    productsSubheadline: "Four focused products. Each one configured for adoption, not just access.",
+    fitEyebrow: "Product fit",
+    fitHeadline: "Compare at a glance",
+    fitSubheadline: "Understand where each product fits in your operations.",
+    adoptionHeadline: "Configured for adoption, not just access.",
+    adoptionBody: "Every product in the suite is provisioned with your team structure, workflows, and governance in place.",
+    timelineTitle: "Typical setup timeline",
+    expansionNote: "I start with four core products and expand into industry-specific systems over time.",
+    pricingNote: "Software subscription starts from EUR 500 per month per product, depending on users and configuration.",
+    setupNote: "Setup is included in some packages or offered as a fixed onboarding fee.",
+    pricingCall: "Book a Pricing Call",
+    finalHeadline: "Choose the right Meridian setup.",
+    finalDescription: "I will match the product, onboarding scope, and starting price to your team.",
+    viewPricing: "View pricing",
+    explorePrefix: "Explore",
+    products: [
+      { id: "crm", name: "CRM", oneLiner: "Manage relationships, pipeline, and follow-up without chaos.", outcomes: ["Clear pipeline stages", "Reliable follow-up", "Simple reporting"], href: "/software/crm" },
+      { id: "accounting", name: "Accounting", oneLiner: "Invoicing, expenses, and basic finance visibility in a clean workflow.", outcomes: ["Faster invoicing", "Cleaner expense capture", "Readable dashboards"], href: "/software/accounting" },
+      { id: "inventory", name: "Inventory and Assets", oneLiner: "Track items and assets with controlled access and auditability.", outcomes: ["Know what exists", "Reorder alerts", "Clear accountability"], href: "/software/inventory" },
+      { id: "tasks", name: "Tasks and Work Management", oneLiner: "Plan work, assign ownership, and keep delivery visible.", outcomes: ["Clear assignments", "Fewer dropped tasks", "Better coordination"], href: "/software/tasks" },
+    ],
+    foundation: [
+      { title: "Roles and permissions", description: "Team structure, access levels, and approval chains set up from day one." },
+      { title: "Templates and workflows", description: "Pipeline stages, document formats, and automation rules configured." },
+      { title: "Data import", description: "Existing records migrated and validated in clean structure." },
+      { title: "Ongoing admin support", description: "Controlled change requests and admin support included." },
+    ],
+  },
+  ar: {
+    metaTitle: "البرمجيات | أمجد عثمان",
+    metaDescription: "مجموعة برمجيات تشغيلية مركزة يتم إعدادها وإدارتها حول طريقة عمل فريقك فعلياً.",
+    heroEyebrow: "برمجيات مُدارة",
+    heroHeadline: "مجموعة تشغيلية مركزة يتم إعدادها وإدارتها لفريقك.",
+    heroSubheadline:
+      "أربع برمجيات سحابية يتم تجهيزها وإعدادها مع الحوكمة والصلاحيات والقوالب واستيراد البيانات والتدريب والدعم الإداري المستمر.",
+    bookDemo: "احجز عرضاً",
+    bookCall: "احجز مكالمة",
+    credibility: "إعداد واضح. صلاحيات مضبوطة. دعم إداري مستمر عند الحاجة.",
+    productsEyebrow: "المنتجات",
+    productsHeadline: "المجموعة",
+    productsSubheadline: "أربعة منتجات مركزة. كل واحد منها مهيأ للتبني لا لمجرد الوصول.",
+    fitEyebrow: "اختيار المنتج",
+    fitHeadline: "مقارنة سريعة",
+    fitSubheadline: "افهم أين يناسب كل منتج داخل عملياتك.",
+    adoptionHeadline: "مهيأة للتبني لا لمجرد الوصول.",
+    adoptionBody: "كل منتج في المجموعة يُجهز مع هيكل فريقك وسير العمل والحوكمة المطلوبة.",
+    timelineTitle: "الجدول المعتاد للإعداد",
+    expansionNote: "نبدأ بأربعة منتجات أساسية ثم نتوسع مع الوقت إلى أنظمة أكثر تخصصاً حسب القطاع.",
+    pricingNote: "يبدأ اشتراك البرمجيات من 500 يورو شهرياً لكل منتج، بحسب عدد المستخدمين والإعداد.",
+    setupNote: "قد يكون الإعداد مشمولاً في بعض الباقات أو متاحاً كرسوم تهيئة ثابتة.",
+    pricingCall: "احجز مكالمة تسعير",
+    finalHeadline: "اختر الإعداد المناسب.",
+    finalDescription: "سنطابق المنتج ونطاق التهيئة وسعر البداية مع فريقك.",
+    viewPricing: "عرض الأسعار",
+    explorePrefix: "استكشف",
+    products: [
+      { id: "crm", name: "CRM", oneLiner: "إدارة العلاقات ومسار المبيعات والمتابعة دون فوضى.", outcomes: ["مراحل مسار واضحة", "متابعة موثوقة", "تقارير بسيطة"], href: "/software/crm" },
+      { id: "accounting", name: "المحاسبة", oneLiner: "الفوترة والمصروفات ورؤية أساسية للمالية ضمن سير عمل نظيف.", outcomes: ["فوترة أسرع", "التقاط أنظف للمصروفات", "لوحات مقروءة"], href: "/software/accounting" },
+      { id: "inventory", name: "المخزون والأصول", oneLiner: "تتبع العناصر والأصول مع وصول مضبوط وقابلية تدقيق.", outcomes: ["اعرف ما الموجود", "تنبيهات إعادة طلب", "مساءلة أوضح"], href: "/software/inventory" },
+      { id: "tasks", name: "المهام وإدارة العمل", oneLiner: "خطط العمل ووزع الملكية وأبقِ التسليم مرئياً.", outcomes: ["تكليفات واضحة", "مهام ضائعة أقل", "تنسيق أفضل"], href: "/software/tasks" },
+    ],
+    foundation: [
+      { title: "الأدوار والصلاحيات", description: "هيكل الفريق ومستويات الوصول وسلاسل الاعتماد مُعدة من اليوم الأول." },
+      { title: "القوالب وسير العمل", description: "تهيئة مراحل العمل وصيغ المستندات وقواعد الأتمتة." },
+      { title: "استيراد البيانات", description: "نقل السجلات الحالية والتحقق منها داخل هيكل نظيف." },
+      { title: "دعم إداري مستمر", description: "يشمل ذلك طلبات التغيير المضبوطة والدعم الإداري." },
+    ],
+  },
+  de: {
+    metaTitle: "Software | Amjad Osman",
+    metaDescription: "Eine fokussierte operative Software-Suite, eingerichtet und betreut rund um die tatsächliche Arbeitsweise Ihres Teams.",
+    heroEyebrow: "Betreute Software",
+    heroHeadline: "Eine fokussierte Unternehmenssuite, eingerichtet und betreut für Ihr Team.",
+    heroSubheadline:
+      "Vier Cloud-Produkte, eingerichtet mit Governance, Berechtigungen, Vorlagen, Datenimport, Training und laufendem Admin-Support.",
+    bookDemo: "Demo buchen",
+    bookCall: "Call buchen",
+    credibility: "Klare Einrichtung. Kontrollierte Berechtigungen. Laufender Admin-Support bei Bedarf.",
+    productsEyebrow: "Produkte",
+    productsHeadline: "Die Suite",
+    productsSubheadline: "Vier fokussierte Produkte. Jedes für Adoption eingerichtet, nicht nur für Zugriff.",
+    fitEyebrow: "Produkt-Fit",
+    fitHeadline: "Schnell vergleichen",
+    fitSubheadline: "Verstehen Sie, wo jedes Produkt in Ihre Abläufe passt.",
+    adoptionHeadline: "Für Adoption eingerichtet, nicht nur für Zugriff.",
+    adoptionBody: "Jedes Produkt wird mit Teamstruktur, Workflows und Governance eingerichtet.",
+    timelineTitle: "Typischer Einrichtungsplan",
+    expansionNote: "Ich beginne mit vier Kernprodukten und erweitere später in branchenspezifische Systeme.",
+    pricingNote: "Software-Abos starten ab 500 EUR pro Monat und Produkt, abhängig von Nutzern und Konfiguration.",
+    setupNote: "Einrichtung ist in manchen Paketen enthalten oder als feste Onboarding-Gebühr verfügbar.",
+    pricingCall: "Pricing-Call buchen",
+    finalHeadline: "Wählen Sie das passende Meridian-Setup.",
+    finalDescription: "Ich gleiche Produkt, Onboarding-Umfang und Startpreis mit Ihrem Team ab.",
+    viewPricing: "Preise ansehen",
+    explorePrefix: "Entdecken",
+    products: [
+      { id: "crm", name: "CRM", oneLiner: "Beziehungen, Pipeline und Follow-up ohne Chaos verwalten.", outcomes: ["Klare Pipeline-Stufen", "Zuverlässiges Follow-up", "Einfache Reports"], href: "/software/crm" },
+      { id: "accounting", name: "Buchhaltung", oneLiner: "Rechnungen, Ausgaben und Finanzüberblick in einem sauberen Workflow.", outcomes: ["Schnellere Rechnungen", "Sauberere Ausgaben", "Lesbare Dashboards"], href: "/software/accounting" },
+      { id: "inventory", name: "Inventar und Assets", oneLiner: "Bestände und Assets mit kontrolliertem Zugriff und Nachvollziehbarkeit verfolgen.", outcomes: ["Bestände kennen", "Nachbestell-Hinweise", "Klare Verantwortung"], href: "/software/inventory" },
+      { id: "tasks", name: "Aufgaben und Arbeit", oneLiner: "Arbeit planen, Verantwortung zuweisen und Lieferung sichtbar halten.", outcomes: ["Klare Zuständigkeit", "Weniger verlorene Aufgaben", "Bessere Koordination"], href: "/software/tasks" },
+    ],
+    foundation: [
+      { title: "Rollen und Berechtigungen", description: "Teamstruktur, Zugriffsebenen und Freigabeketten ab Tag eins." },
+      { title: "Vorlagen und Workflows", description: "Pipeline-Stufen, Dokumentformate und Automationsregeln eingerichtet." },
+      { title: "Datenimport", description: "Bestehende Datensätze in eine saubere Struktur migriert und validiert." },
+      { title: "Laufender Admin-Support", description: "Kontrollierte Änderungsanfragen und Admin-Unterstützung inklusive." },
+    ],
+  },
+  fr: {
+    metaTitle: "Logiciels | Amjad Osman",
+    metaDescription: "Une suite logicielle opérationnelle ciblée, configurée et gérée autour de la manière dont votre équipe travaille réellement.",
+    heroEyebrow: "Logiciels managés",
+    heroHeadline: "Une suite opérationnelle ciblée, configurée et gérée pour votre équipe.",
+    heroSubheadline:
+      "Quatre logiciels cloud configurés avec gouvernance, permissions, modèles, import de données, formation et support admin continu.",
+    bookDemo: "Réserver une démo",
+    bookCall: "Réserver un appel",
+    credibility: "Configuration claire. Permissions contrôlées. Support admin continu si utile.",
+    productsEyebrow: "Produits",
+    productsHeadline: "La suite",
+    productsSubheadline: "Quatre produits ciblés. Chacun configuré pour l'adoption, pas seulement l'accès.",
+    fitEyebrow: "Adéquation produit",
+    fitHeadline: "Comparer rapidement",
+    fitSubheadline: "Comprenez où chaque produit s'insère dans vos opérations.",
+    adoptionHeadline: "Configuré pour l'adoption, pas seulement l'accès.",
+    adoptionBody: "Chaque produit est préparé avec votre structure d'équipe, vos workflows et votre gouvernance.",
+    timelineTitle: "Calendrier type de configuration",
+    expansionNote: "Je commence avec quatre produits clés et j'étends ensuite vers des systèmes spécialisés par secteur.",
+    pricingNote: "L'abonnement logiciel commence à 500 EUR par mois et par produit, selon les utilisateurs et la configuration.",
+    setupNote: "La configuration est incluse dans certains packages ou proposée comme frais d'intégration fixe.",
+    pricingCall: "Réserver un appel tarifaire",
+    finalHeadline: "Choisissez la bonne configuration Meridian.",
+    finalDescription: "J'alignerai le produit, le périmètre d'onboarding et le prix de départ avec votre équipe.",
+    viewPricing: "Voir les tarifs",
+    explorePrefix: "Explorer",
+    products: [
+      { id: "crm", name: "CRM", oneLiner: "Gérer relations, pipeline et suivi sans chaos.", outcomes: ["Étapes de pipeline claires", "Suivi fiable", "Reporting simple"], href: "/software/crm" },
+      { id: "accounting", name: "Comptabilité", oneLiner: "Factures, dépenses et visibilité financière dans un workflow propre.", outcomes: ["Facturation plus rapide", "Dépenses mieux capturées", "Tableaux lisibles"], href: "/software/accounting" },
+      { id: "inventory", name: "Stock et actifs", oneLiner: "Suivre éléments et actifs avec accès contrôlé et auditabilité.", outcomes: ["Savoir ce qui existe", "Alertes de réapprovisionnement", "Responsabilité claire"], href: "/software/inventory" },
+      { id: "tasks", name: "Tâches et travail", oneLiner: "Planifier le travail, attribuer la responsabilité et garder la livraison visible.", outcomes: ["Attributions claires", "Moins de tâches perdues", "Meilleure coordination"], href: "/software/tasks" },
+    ],
+    foundation: [
+      { title: "Rôles et permissions", description: "Structure d'équipe, niveaux d'accès et chaînes d'approbation dès le départ." },
+      { title: "Modèles et workflows", description: "Étapes, formats de documents et règles d'automatisation configurés." },
+      { title: "Import de données", description: "Données existantes migrées et validées dans une structure propre." },
+      { title: "Support admin continu", description: "Demandes de changement contrôlées et support admin inclus." },
+    ],
+  },
+  bg: {
+    metaTitle: "Софтуер | Amjad Osman",
+    metaDescription: "Фокусирана оперативна софтуерна suite, конфигурирана и управлявана около реалната работа на вашия екип.",
+    heroEyebrow: "Управляван софтуер",
+    heroHeadline: "Фокусирана оперативна suite, конфигурирана и управлявана за вашия екип.",
+    heroSubheadline:
+      "Четири cloud продукта, настроени с governance, права, шаблони, импорт на данни, обучение и постоянна admin поддръжка.",
+    bookDemo: "Резервирайте демо",
+    bookCall: "Резервирайте разговор",
+    credibility: "Ясна настройка. Контролирани права. Постоянна admin поддръжка при нужда.",
+    productsEyebrow: "Продукти",
+    productsHeadline: "Suite",
+    productsSubheadline: "Четири фокусирани продукта. Всеки настроен за приемане, не само за достъп.",
+    fitEyebrow: "Подходящ продукт",
+    fitHeadline: "Сравнение с един поглед",
+    fitSubheadline: "Разберете къде всеки продукт пасва във вашите операции.",
+    adoptionHeadline: "Настроено за приемане, не само за достъп.",
+    adoptionBody: "Всеки продукт се подготвя с вашата екипна структура, процеси и governance.",
+    timelineTitle: "Типичен график за настройка",
+    expansionNote: "Започвам с четири основни продукта и с времето разширявам към секторни системи.",
+    pricingNote: "Софтуерният абонамент започва от 500 EUR на месец за продукт, според потребители и конфигурация.",
+    setupNote: "Настройката е включена в някои пакети или се предлага като фиксирана onboarding такса.",
+    pricingCall: "Резервирайте ценови разговор",
+    finalHeadline: "Изберете правилната Meridian настройка.",
+    finalDescription: "Ще съобразя продукта, onboarding обхвата и началната цена с вашия екип.",
+    viewPricing: "Вижте цените",
+    explorePrefix: "Разгледайте",
+    products: [
+      { id: "crm", name: "CRM", oneLiner: "Управлявайте връзки, pipeline и follow-up без хаос.", outcomes: ["Ясни pipeline етапи", "Надежден follow-up", "Прости отчети"], href: "/software/crm" },
+      { id: "accounting", name: "Счетоводство", oneLiner: "Фактури, разходи и финансова видимост в чист процес.", outcomes: ["По-бързо фактуриране", "По-чисти разходи", "Четими табла"], href: "/software/accounting" },
+      { id: "inventory", name: "Инвентар и активи", oneLiner: "Следете артикули и активи с контролиран достъп и auditability.", outcomes: ["Знаете какво има", "Сигнали за презареждане", "Ясна отговорност"], href: "/software/inventory" },
+      { id: "tasks", name: "Задачи и работа", oneLiner: "Планирайте работа, задавайте отговорност и дръжте доставката видима.", outcomes: ["Ясни задачи", "По-малко изпуснати задачи", "По-добра координация"], href: "/software/tasks" },
+    ],
+    foundation: [
+      { title: "Роли и права", description: "Екипна структура, нива на достъп и вериги за одобрение от първия ден." },
+      { title: "Шаблони и процеси", description: "Етапи, документни формати и автоматизационни правила са настроени." },
+      { title: "Импорт на данни", description: "Съществуващи записи мигрирани и валидирани в чиста структура." },
+      { title: "Постоянна admin поддръжка", description: "Контролирани заявки за промени и admin поддръжка са включени." },
+    ],
+  },
+} satisfies LocaleMap<{
+  metaTitle: string;
+  metaDescription: string;
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroSubheadline: string;
+  bookDemo: string;
+  bookCall: string;
+  credibility: string;
+  productsEyebrow: string;
+  productsHeadline: string;
+  productsSubheadline: string;
+  fitEyebrow: string;
+  fitHeadline: string;
+  fitSubheadline: string;
+  adoptionHeadline: string;
+  adoptionBody: string;
+  timelineTitle: string;
+  expansionNote: string;
+  pricingNote: string;
+  setupNote: string;
+  pricingCall: string;
+  finalHeadline: string;
+  finalDescription: string;
+  viewPricing: string;
+  explorePrefix: string;
+  products: Array<{ id: string; name: string; oneLiner: string; outcomes: string[]; href: string }>;
+  foundation: Array<{ title: string; description: string }>;
+}>;
+
+export const simplePageCopy = {
+  en: {
+    bookCall: "Book a Call",
+    viewPricing: "View pricing",
+    workTitle: "Work | Amjad Osman",
+    workEyebrow: "Case studies",
+    workStrip: "Real projects. Clear deliverables. Practical implementation lessons.",
+    selectedWork: "Selected work",
+    workTranslationNotice: "",
+    resourcesTitle: "Resources | Amjad Osman",
+    readArticle: "Read article",
+    insightsEyebrow: "Insights",
+    insightsHeadline: "Notes you can use quickly.",
+    toolsEyebrow: "Self-help tools",
+    toolsStrip: "Surface-level insight. Practical drafts. Proper implementation when useful.",
+    toolsStart: "Start here",
+    toolsAvailable: "Available tools",
+    toolsSubheadline: "Select a tool to get started",
+    toolsCtaHeadline: "Move from audit to build.",
+    toolsCtaDescription:
+      "Use a free tool for first-pass clarity, then turn the useful result into a scoped delivery when you are ready.",
+  },
+  ar: {
+    bookCall: "احجز مكالمة",
+    viewPricing: "عرض الأسعار",
+    workTitle: "الأعمال | أمجد عثمان",
+    workEyebrow: "دراسات الحالة",
+    workStrip: "مشاريع حقيقية. مخرجات واضحة. دروس تنفيذ عملية.",
+    selectedWork: "الأعمال المختارة",
+    workTranslationNotice: "",
+    resourcesTitle: "الموارد | أمجد عثمان",
+    readArticle: "اقرأ المقال",
+    insightsEyebrow: "المقالات",
+    insightsHeadline: "ملاحظات يمكنك استخدامها بسرعة.",
+    toolsEyebrow: "أدوات مساعدة ذاتية",
+    toolsStrip: "تدقيق أولي. مسودات عملية. تنفيذ صحيح عند الحاجة.",
+    toolsStart: "ابدأ من هنا",
+    toolsAvailable: "الأدوات المتاحة",
+    toolsSubheadline: "اختر أداة للبدء",
+    toolsCtaHeadline: "انتقل من التدقيق إلى التنفيذ.",
+    toolsCtaDescription:
+      "استخدم الأداة المجانية لوضوح أولي، ثم حوّل النتيجة المفيدة إلى تنفيذ محدد النطاق عندما تكون جاهزاً.",
+  },
+  de: {
+    bookCall: "Call buchen",
+    viewPricing: "Preise ansehen",
+    workTitle: "Arbeit | Amjad Osman",
+    workEyebrow: "Fallstudien",
+    workStrip: "Echte Projekte. Klare Ergebnisse. Praktische Umsetzungslektionen.",
+    selectedWork: "Ausgewählte Arbeit",
+    workTranslationNotice:
+      "Hinweis: Die Fallstudien-Daten werden derzeit abschnittsweise übersetzt. Einige Projektbeschreibungen erscheinen vorübergehend auf Englisch.",
+    resourcesTitle: "Ressourcen | Amjad Osman",
+    readArticle: "Artikel lesen",
+    insightsEyebrow: "Einblicke",
+    insightsHeadline: "Notizen, die schnell nutzbar sind.",
+    toolsEyebrow: "Selbsthilfe-Tools",
+    toolsStrip: "Ersteinschätzung. Praktische Entwürfe. Saubere Umsetzung bei Bedarf.",
+    toolsStart: "Hier starten",
+    toolsAvailable: "Verfügbare Tools",
+    toolsSubheadline: "Wählen Sie ein Tool zum Starten",
+    toolsCtaHeadline: "Vom Audit zur Umsetzung.",
+    toolsCtaDescription:
+      "Nutzen Sie ein kostenloses Tool für erste Klarheit und verwandeln Sie das brauchbare Ergebnis später in eine klar begrenzte Umsetzung.",
+  },
+  fr: {
+    bookCall: "Réserver un appel",
+    viewPricing: "Voir les tarifs",
+    workTitle: "Réalisations | Amjad Osman",
+    workEyebrow: "Études de cas",
+    workStrip: "Projets réels. Livrables clairs. Leçons pratiques d’implémentation.",
+    selectedWork: "Travaux sélectionnés",
+    workTranslationNotice:
+      "Note : les données des études de cas sont en cours de traduction section par section. Certaines descriptions de projet peuvent encore apparaître en anglais.",
+    resourcesTitle: "Ressources | Amjad Osman",
+    readArticle: "Lire l’article",
+    insightsEyebrow: "Analyses",
+    insightsHeadline: "Notes utilisables rapidement.",
+    toolsEyebrow: "Outils d’auto-assistance",
+    toolsStrip: "Aperçu de surface. Brouillons pratiques. Mise en œuvre correcte si utile.",
+    toolsStart: "Commencer ici",
+    toolsAvailable: "Outils disponibles",
+    toolsSubheadline: "Choisissez un outil pour commencer",
+    toolsCtaHeadline: "Passer de l’audit à la construction.",
+    toolsCtaDescription:
+      "Utilisez un outil gratuit pour une première clarté, puis transformez le résultat utile en prestation cadrée quand vous êtes prêt.",
+  },
+  bg: {
+    bookCall: "Резервирайте разговор",
+    viewPricing: "Вижте цените",
+    workTitle: "Проекти | Amjad Osman",
+    workEyebrow: "Казуси",
+    workStrip: "Реални проекти. Ясни резултати. Практични уроци от изпълнението.",
+    selectedWork: "Избрани проекти",
+    workTranslationNotice:
+      "Бележка: данните за казусите се превеждат поетапно. Някои проектни описания временно може да останат на английски.",
+    resourcesTitle: "Ресурси | Amjad Osman",
+    readArticle: "Прочетете статията",
+    insightsEyebrow: "Анализи",
+    insightsHeadline: "Бележки, които можете да използвате бързо.",
+    toolsEyebrow: "Инструменти за самопомощ",
+    toolsStrip: "Първоначална яснота. Практични чернови. Правилно изпълнение при нужда.",
+    toolsStart: "Започнете тук",
+    toolsAvailable: "Налични инструменти",
+    toolsSubheadline: "Изберете инструмент, за да започнете",
+    toolsCtaHeadline: "От одит към изграждане.",
+    toolsCtaDescription:
+      "Използвайте безплатен инструмент за първа яснота, после превърнете полезния резултат в ясно ограничено изпълнение.",
+  },
+} satisfies LocaleMap<Record<string, string>>;

@@ -1,22 +1,34 @@
 import React from 'react';
 import { Layout } from '@/components/layout/Layout';
+import { Hero } from '@/components/sections/Hero';
 import { useSiteContent } from '@/lib/content';
+import { LegalDocument } from '@/components/sections/LegalDocument';
+import { legalPageCopy, pickLocaleCopy } from '@/lib/pageCopy';
+import { useLocale } from '@/lib/locale';
+import { usePageMeta } from '@/hooks/use-page-meta';
 
 const Terms = () => {
   const { terms, common } = useSiteContent();
+  const { locale } = useLocale();
+  const legalCopy = pickLocaleCopy(legalPageCopy, locale);
+  usePageMeta({ title: `${terms.title} | Amjad Osman`, description: terms.subheadline });
   return (
-    <Layout>
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <h1 className="font-serif text-poster-lg text-foreground mb-4">{terms.title}</h1>
-          <p className="text-sm text-muted-foreground mb-8">
-            {common.lastUpdatedLabel}: {terms.lastUpdated}
-          </p>
-          <div className="prose prose-lg">
-            <p className="text-muted-foreground">{terms.placeholder}</p>
-          </div>
-        </div>
-      </section>
+    <Layout motionLevel="none">
+      <Hero
+        eyebrow={terms.eyebrow}
+        headline={terms.title}
+        subheadline={terms.subheadline}
+        credibilityStrip={terms.credibilityStrip}
+        plate="burgundy"
+        size="compact"
+      />
+      <LegalDocument
+        lastUpdatedLabel={common.lastUpdatedLabel}
+        lastUpdated={terms.lastUpdated}
+        sections={terms.sections}
+        scopeText={legalCopy.termsScope}
+        tone="terms"
+      />
     </Layout>
   );
 };

@@ -1,26 +1,39 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import adsiFullLogo from '@/assets/adsi-full-logo.svg';
 
 interface LogoProps {
   variant?: 'logmark' | 'wordmark';
-  colorScheme?: 'mint-lavender' | 'mint-blue' | 'magenta' | 'ink' | 'offwhite';
+  colorScheme?:
+    | 'mint-violet'
+    | 'mint-navy'
+    | 'mint-emerald'
+    | 'mint-blue'
+    | 'mint-astral'
+    | 'mint-burgundy'
+    | 'ink'
+    | 'offwhite';
   className?: string;
 }
 
-const getColors = (colorScheme: LogoProps['colorScheme']) => {
+export const getColors = (colorScheme: LogoProps['colorScheme']) => {
   switch (colorScheme) {
-    case 'mint-lavender':
-      return { primary: '#00FFD9', secondary: '#AD68E9' };
+    case 'mint-violet':
+      return { primary: '#00FFD9', secondary: 'hsl(var(--plate-violet))' };
+    case 'mint-navy':
+      return { primary: '#00FFD9', secondary: 'hsl(var(--plate-navy))' };
+    case 'mint-emerald':
+      return { primary: '#00FFD9', secondary: 'hsl(var(--plate-emerald))' };
     case 'mint-blue':
-      return { primary: '#00FFD9', secondary: '#015AE8' };
-    case 'magenta':
-      return { primary: '#BE0347', secondary: '#BE0347' };
+      return { primary: '#00FFD9', secondary: 'hsl(var(--plate-blue))' };
+    case 'mint-astral':
+      return { primary: '#00FFD9', secondary: 'hsl(var(--plate-astral))' };
+    case 'mint-burgundy':
+      return { primary: '#00FFD9', secondary: 'hsl(var(--plate-burgundy))' };
     case 'offwhite':
-      return { primary: '#F6F4EF', secondary: '#F6F4EF' };
+      return { primary: 'rgba(246, 244, 239, 0.42)', secondary: '#F6F4EF' };
     case 'ink':
     default:
-      return { primary: '#0B0F14', secondary: '#0B0F14' };
+      return { primary: '#00FFD9', secondary: '#0B0F14' };
   }
 };
 
@@ -28,16 +41,9 @@ const Logomark = ({ colorScheme = 'ink', className = '' }: Pick<LogoProps, 'colo
   const colors = getColors(colorScheme);
 
   return (
-    <svg viewBox="0 0 359.74 359.74" className={className} aria-hidden="true">
-      <rect fill={colors.primary} width="359.74" height="359.74" />
-      <path
-        fill={colors.secondary}
-        d="M0,211.26V0h211.26v79.22L79.22,211.26H0ZM158.45,52.82H52.82v105.63l105.63-105.63Z"
-      />
-      <polygon
-        fill={colors.secondary}
-        points="359.47 121.21 359.47 201.84 278.84 201.84 237.23 243.44 237.23 243.45 120.95 359.74 0 359.74 0 279.1 80.63 279.1 238.52 121.21 359.47 121.21"
-      />
+    <svg viewBox="0 0 120 120" className={className} aria-hidden="true">
+      <circle cx="60" cy="60" r="58" fill={colors.primary} />
+      <circle cx="60" cy="60" r="34" fill={colors.secondary} />
     </svg>
   );
 };
@@ -47,8 +53,6 @@ export const Logo: React.FC<LogoProps> = ({
   colorScheme = 'ink',
   className = '',
 }) => {
-  const colors = getColors(colorScheme);
-
   if (variant === 'logmark') {
     return (
       <Logomark
@@ -58,26 +62,41 @@ export const Logo: React.FC<LogoProps> = ({
     );
   }
 
+  const colors = getColors(colorScheme);
+
   return (
-    <img
-      src={adsiFullLogo}
-      alt="Applied Design and Strategy Institute logo"
-      className={cn('h-11 md:h-12 w-auto', className)}
-    />
+    <span
+      className={cn(
+        'inline-flex h-11 md:h-12 w-auto items-center gap-2.5',
+        className
+      )}
+      aria-label="Amjad Osman"
+    >
+      <Logomark colorScheme={colorScheme} className="h-9 md:h-10 w-auto shrink-0" />
+      <span 
+        className="font-pixelify-sans font-bold text-2xl md:text-3xl leading-none whitespace-nowrap"
+        style={{ color: colors.secondary }}
+      >
+        Amjad Osman
+      </span>
+    </span>
   );
 };
 
 export const getLogoColorScheme = (plate: string): LogoProps['colorScheme'] => {
   switch (plate) {
     case 'violet':
-    case 'astral':
-    case 'emerald':
-      return 'mint-lavender';
+      return 'mint-violet';
     case 'navy':
+      return 'mint-navy';
+    case 'emerald':
+      return 'mint-emerald';
     case 'blue':
       return 'mint-blue';
+    case 'astral':
+      return 'mint-astral';
     case 'burgundy':
-      return 'magenta';
+      return 'mint-burgundy';
     default:
       return 'ink';
   }

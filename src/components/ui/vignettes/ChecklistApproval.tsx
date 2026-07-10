@@ -31,11 +31,13 @@ const itemsByLocale = {
 export const ChecklistApproval: React.FC = () => {
   const { locale, isRTL } = useLocale();
   const reducedMotion = useReducedMotion();
-  const [items, setItems] = useState(itemsByLocale[locale]);
+  const [items, setItems] = useState(
+    itemsByLocale[locale as keyof typeof itemsByLocale] || itemsByLocale.en
+  );
   const [currentToggle, setCurrentToggle] = useState<string | null>(null);
 
   useEffect(() => {
-    setItems(itemsByLocale[locale]);
+    setItems(itemsByLocale[locale as keyof typeof itemsByLocale] || itemsByLocale.en);
   }, [locale]);
 
   useEffect(() => {
@@ -59,7 +61,7 @@ export const ChecklistApproval: React.FC = () => {
             setCurrentToggle(null);
           }, 500);
         } else {
-          setItems(itemsByLocale[locale]);
+          setItems(itemsByLocale[locale as keyof typeof itemsByLocale] || itemsByLocale.en);
         }
         return prev;
       });

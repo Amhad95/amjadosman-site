@@ -1,15 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
-import { ToolInputForm } from '@/components/tools/ToolInputForm';
-import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
+import { ToolWorkbench } from '@/components/tools/ToolWorkbench';
 import { CTABand } from '@/components/sections/CTABand';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 import { useLocale } from '@/lib/locale';
 import { usePageMeta } from '@/hooks/use-page-meta';
 import { getToolPageContent } from '@/lib/toolPageContent';
@@ -56,18 +53,27 @@ const PageCritique = () => {
   };
 
   return (
-    <Layout motionLevel="subtle">
-      <CompactPageHeader
-        eyebrow={toolCopy.eyebrow}
+    <Layout motionLevel="none">
+      <ToolWorkbench
+        tool="page-critique"
         title={toolCopy.title}
         description={toolCopy.description}
+        eyebrow={toolCopy.eyebrow}
         plate="blue"
-        rightElement={<ToolHeaderAnimation slug="page-critique" />}
-      />
-
-      <section className="py-12 md:py-16 bg-background">
-        <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel={toolCopy.submitLabel}>
+        submitLabel={toolCopy.submitLabel}
+        isLoading={isStreaming}
+        output={output}
+        onSubmit={handleSubmit}
+        inputsSummary={[
+          { label: 'URL', value: url },
+          { label: 'Copy', value: copy },
+        ]}
+        brief={[
+          'Paste above-the-fold copy and all CTA labels.',
+          'Include the target customer and conversion goal.',
+          'Mention traffic source if the page is campaign-specific.',
+        ]}
+      >
             <div>
               <Label htmlFor="url" className="text-sm font-semibold mb-2 block">
                 {toolCopy.fields.urlLabel} <span className="font-normal text-muted-foreground">{toolCopy.fields.optional}</span>
@@ -98,15 +104,7 @@ const PageCritique = () => {
               />
             </div>
             <p className="text-xs text-muted-foreground">{toolCopy.fields.note}</p>
-          </ToolInputForm>
-
-          {(output || isStreaming) && (
-            <div className="mt-6">
-              <ToolOutputPanel output={output} isStreaming={isStreaming} />
-            </div>
-          )}
-        </div>
-      </section>
+      </ToolWorkbench>
 
       <CTABand
         headline={toolCopy.buildCtaHeadline}

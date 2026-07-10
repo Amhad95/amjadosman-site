@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" role="img" aria-labelledby="title">
+  <title id="title">Amjad Osman</title>
+  <rect width="720" height="220" fill="#F6F4EF"/>
+  <g transform="translate(48 40)">
+    <circle cx="70" cy="70" r="70" fill="#00FFD9"/>
+    <circle cx="70" cy="70" r="41" fill="#AD68E9"/>
+  </g>
+  <text
+    x="220"
+    y="126"
+    fill="#0B0F14"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="58"
+    font-weight="700"
+    letter-spacing="0"
+  >
+    Amjad Osman
+  </text>
+</svg>

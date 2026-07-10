@@ -13,6 +13,7 @@ import {
   Workflow,
 } from 'lucide-react';
 import { AnimatedIcon } from '@/components/shared/AnimatedIcon';
+import { MatrixCodeBackground } from '@/components/shared/MatrixCodeBackground';
 import { cn } from '@/lib/utils';
 import { useLocale } from '@/lib/locale';
 import { useSiteContent } from '@/lib/content';
@@ -50,8 +51,14 @@ export const DeliveryProcessInteractive: React.FC = () => {
   const currentStep = deliverySteps[resolvedActiveStep];
 
   return (
-    <section className="py-16 md:py-24 bg-plate-navy" aria-labelledby="delivery-heading">
-      <div className="container mx-auto px-4 md:px-6">
+    <section 
+      className="relative overflow-hidden py-10 md:py-14 bg-background" 
+      aria-labelledby="delivery-heading"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
+      <MatrixCodeBackground fontSize={18} color="hsla(275, 100%, 50%, 0.12)" speed={0.45} />
+      <div className="container relative z-10 mx-auto px-4 md:px-6">
+        <div className="rounded-[34px] bg-plate-navy px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
         <div className={cn('max-w-3xl mb-10 md:mb-14', isRTL && 'mr-auto text-right')}>
           <p className="text-xs uppercase tracking-[0.2em] text-mint/60 font-semibold mb-4">
             {deliveryProcess.eyebrow}
@@ -100,12 +107,12 @@ export const DeliveryProcessInteractive: React.FC = () => {
                     isActive
                       ? 'border border-mint/45 bg-white/10'
                       : 'border border-transparent hover:bg-white/5',
-                    isRTL && 'text-right'
+                    isRTL ? 'text-right' : 'text-left'
                   )}
                   aria-expanded={isActive}
                   aria-controls={`delivery-panel-${index}`}
                 >
-                  <div className={cn('flex items-center gap-4', isRTL && 'flex-row-reverse')}>
+                  <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl bg-mint/10 border border-mint/25 flex items-center justify-center flex-shrink-0">
                       <AnimatedIcon icon={step.icon} color="mint" size={20} animation="pulse" />
                     </div>
@@ -144,7 +151,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
                     <p className="text-xs uppercase tracking-[0.16em] text-offwhite/50 font-semibold mb-3">
                       {isRTL ? 'المخرجات' : 'Artifacts'}
                     </p>
-                    <div className={cn('flex flex-wrap gap-2 mb-4', isRTL && 'justify-end')}>
+                    <div className="flex flex-wrap gap-2 mb-4">
                       {step.artifacts.map((artifact) => (
                         <span
                           key={artifact}
@@ -154,7 +161,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
                         </span>
                       ))}
                     </div>
-                    <div className={cn('flex items-center gap-2', isRTL && 'justify-end')}>
+                    <div className="flex items-center gap-2">
                       <span className="rounded-full bg-mint/20 text-mint text-xs font-semibold px-3 py-1">
                         {step.touchpoints}
                       </span>
@@ -181,17 +188,16 @@ export const DeliveryProcessInteractive: React.FC = () => {
                   type="button"
                   onClick={() => setActiveStep(isActive ? -1 : index)}
                   className={cn(
-                    'w-full px-4 py-4 flex items-center justify-between gap-3 focus:outline-none focus:ring-2 focus:ring-mint/40 focus:ring-inset',
-                    isRTL && 'flex-row-reverse'
+                    'w-full px-4 py-4 flex items-center justify-between gap-3 focus:outline-none focus:ring-2 focus:ring-mint/40 focus:ring-inset'
                   )}
                   aria-expanded={isActive}
                   aria-controls={`delivery-mobile-panel-${index}`}
                 >
-                  <div className={cn('flex items-center gap-3', isRTL && 'flex-row-reverse')}>
+                  <div className="flex items-center gap-3">
                     <div className="w-11 h-11 rounded-xl bg-mint/10 border border-mint/25 flex items-center justify-center flex-shrink-0">
                       <AnimatedIcon icon={step.icon} color="mint" size={18} animation="pulse" />
                     </div>
-                    <div>
+                    <div className={cn(isRTL ? 'text-right' : 'text-left')}>
                       <p className="font-serif text-base text-offwhite">
                         <span className={cn('font-mono text-xs text-mint', isRTL ? 'ml-1' : 'mr-1')}>
                           {String(index + 1).padStart(2, '0')}
@@ -222,7 +228,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
                         {step.ascii}
                       </p>
                       <p className="text-body-lg text-offwhite/75 mb-3">{step.summary}</p>
-                      <div className={cn('flex flex-wrap gap-2', isRTL && 'justify-end')}>
+                      <div className="flex flex-wrap gap-2">
                         {step.artifacts.map((artifact) => (
                           <span
                             key={artifact}
@@ -252,7 +258,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
                   key={label}
                   className={cn(
                     'rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 flex items-center gap-2 text-sm text-offwhite/90',
-                    isRTL && 'flex-row-reverse text-right'
+                    isRTL && 'text-right'
                   )}
                 >
                   <Icon size={14} className="text-mint flex-shrink-0" aria-hidden="true" />
@@ -261,6 +267,7 @@ export const DeliveryProcessInteractive: React.FC = () => {
               );
             })}
           </ul>
+        </div>
         </div>
       </div>
 

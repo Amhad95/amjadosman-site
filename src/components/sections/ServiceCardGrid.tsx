@@ -1,5 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 import { CyberMatrix } from "@/components/ui/cyber-matrix";
 import { CyberSpaceImpact } from "@/components/ui/cyber-space-impact";
 import { CyberTraffic } from "@/components/ui/cyber-traffic";
@@ -7,10 +9,12 @@ import { CyberCircuit } from "@/components/ui/cyber-circuit";
 import { CyberMario } from "@/components/ui/cyber-mario";
 import { CyberRelay } from "@/components/ui/cyber-relay";
 import { RevealGroup } from "@/components/motion/Reveal";
+import { useLocale } from "@/lib/locale";
 
 interface ServiceCardItem {
   title: string;
   description: string;
+  href?: string;
 }
 
 interface ServiceCardGridProps {
@@ -21,19 +25,22 @@ interface ServiceCardGridProps {
 const CARD_CONFIGS: {
   bg: string;
   Animation: React.FC<{ color?: string; speed?: number }>;
+  href: string;
 }[] = [
-  { bg: "bg-plate-violet", Animation: CyberMario },      // Brand and Communications
-  { bg: "bg-plate-emerald", Animation: CyberMatrix },    // Web and CMS
-  { bg: "bg-plate-blue", Animation: CyberSpaceImpact },  // Digital Apps
-  { bg: "bg-plate-burgundy", Animation: CyberTraffic },  // Internal Operations
-  { bg: "bg-plate-navy", Animation: CyberCircuit },      // Subscription Software
-  { bg: "bg-plate-astral", Animation: CyberRelay },      // AI Agents
+  { bg: "bg-plate-violet", Animation: CyberMario, href: "/services/brand" },
+  { bg: "bg-plate-emerald", Animation: CyberMatrix, href: "/software" },
+  { bg: "bg-plate-blue", Animation: CyberSpaceImpact, href: "/software" },
+  { bg: "bg-plate-burgundy", Animation: CyberTraffic, href: "/services/ops" },
+  { bg: "bg-plate-navy", Animation: CyberCircuit, href: "/software" },
+  { bg: "bg-plate-astral", Animation: CyberRelay, href: "/services/agents" },
 ];
 
 export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
   items,
   className,
 }) => {
+  const { locale, isRTL } = useLocale();
+
   return (
     <RevealGroup
       className={cn(
@@ -45,29 +52,48 @@ export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
       {items.map((item, index) => {
         const config = CARD_CONFIGS[index % CARD_CONFIGS.length];
         const Animation = config.Animation;
+        const href = item.href || config.href;
 
         return (
           <div
             key={index}
             className={cn(
-              "rounded-2xl overflow-hidden transition-all duration-200",
-              "hover:shadow-xl hover:-translate-y-1",
-              config.bg
+              "media-pop-card relative group h-full rounded-[34px] bg-card border border-ink/10 p-4 md:p-5 flex flex-col",
+              "shadow-[0_22px_54px_-42px_rgba(8,15,32,0.18)] hover:border-ink/18 hover:shadow-xl"
             )}
+            dir={isRTL ? "rtl" : "ltr"}
           >
             {/* Animation Thumbnail */}
-            <div className="aspect-[16/9] relative overflow-hidden border-b border-mint">
-              <Animation color="mint" speed={0.8} />
+            <div className={cn("aspect-[16/9] relative overflow-hidden rounded-[26px]", config.bg)}>
+              <div className="media-pop-target absolute inset-0 pointer-events-none">
+                <Animation color="mint" speed={0.8} />
+              </div>
             </div>
 
             {/* Content */}
-            <div className="p-6 md:p-8">
-              <h3 className="font-serif text-heading-md font-semibold text-mint mb-3">
-                {item.title}
+            <div className="px-1 pt-6 pb-1 md:px-2 md:pt-7 flex flex-1 flex-col">
+              <h3 className="font-serif text-heading-md font-semibold text-foreground mb-3 transition-colors group-hover:text-lavender">
+                <Link to={href} className="relative z-10 before:absolute before:inset-0 before:z-0">
+                  {item.title}
+                </Link>
               </h3>
-              <p className="text-body-md text-offwhite/80 leading-relaxed">
+              <p className="text-body-md text-muted-foreground leading-relaxed mb-6">
                 {item.description}
               </p>
+              <span
+                className={cn(
+                  "mt-auto inline-flex self-start items-center gap-2 text-sm font-medium text-foreground transition-colors group-hover:text-lavender relative z-10"
+                )}
+              >
+                {locale === "ar" ? "اعرف المزيد" : "Learn more"}
+                <ArrowRight
+                  size={16}
+                  className={cn(
+                    "transition-transform",
+                    isRTL ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"
+                  )}
+                />
+              </span>
             </div>
           </div>
         );

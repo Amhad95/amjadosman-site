@@ -25,7 +25,7 @@ export const ServiceMenuList: React.FC<ServiceMenuListProps> = ({ items }) => {
       {items.map((item, i) => (
         <div
           key={i}
-          className="rounded-[24px] border border-lavender/16 bg-white p-5 md:p-6 shadow-[0_18px_44px_-40px_rgba(8,15,32,0.14)]"
+          className="rounded-[24px] border border-lavender/16 bg-card p-5 md:p-6 shadow-[0_18px_44px_-40px_rgba(8,15,32,0.14)]"
         >
           <div className={cn('flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between', isRTL && 'text-right')}>
             <div className="min-w-0">

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
-const W = 60;
-const H = 35;
+const W = 58;
+const H = 23;
 
 const COLOR_MAP: Record<string, string> = {
   mint: "#00FFD9",
@@ -19,204 +19,143 @@ interface CyberCircuitProps {
   density?: number;
 }
 
-interface Signal {
-  pathId: number;
-  progress: number;
-  speed: number;
-  val: string;
-  dir: number;
-}
+const put = (grid: string[][], x: number, y: number, text: string) => {
+  const xx = Math.round(x);
+  const yy = Math.round(y);
+  if (yy < 0 || yy >= H) return;
 
-export const CyberCircuit: React.FC<CyberCircuitProps> = ({
-  speed = 1,
-  color = "mint",
-  density = 1.0,
-}) => {
+  for (let i = 0; i < text.length; i += 1) {
+    const targetX = xx + i;
+    if (targetX >= 0 && targetX < W) grid[yy][targetX] = text[i];
+  }
+};
+
+const box = (grid: string[][], x: number, y: number, w: number, h: number, title: string, lines: string[] = []) => {
+  put(grid, x, y, "╭" + "─".repeat(w - 2) + "╮");
+  for (let r = 1; r < h - 1; r += 1) put(grid, x, y + r, "│" + " ".repeat(w - 2) + "│");
+  put(grid, x, y + h - 1, "╰" + "─".repeat(w - 2) + "╯");
+
+  put(grid, x + Math.max(1, Math.floor((w - title.length) / 2)), y + 1, title);
+  lines.forEach((line, index) => put(grid, x + Math.max(1, Math.floor((w - line.length) / 2)), y + 3 + index, line));
+};
+
+const hline = (grid: string[][], x1: number, x2: number, y: number, ch = "═") => {
+  const a = Math.min(x1, x2);
+  const b = Math.max(x1, x2);
+  for (let x = a; x <= b; x += 1) if (x >= 0 && x < W && y >= 0 && y < H) grid[y][x] = ch;
+};
+
+const vline = (grid: string[][], x: number, y1: number, y2: number, ch = "║") => {
+  const a = Math.min(y1, y2);
+  const b = Math.max(y1, y2);
+  for (let y = a; y <= b; y += 1) if (x >= 0 && x < W && y >= 0 && y < H) grid[y][x] = ch;
+};
+
+const pulseH = (grid: string[][], frame: number, x1: number, x2: number, y: number, phase: number, period: number, ch = "●") => {
+  const a = Math.min(x1, x2);
+  const b = Math.max(x1, x2);
+  const len = b - a + 1;
+  const t = (frame + phase) % period;
+  const idx = Math.floor((t / period) * len);
+  const x = x1 <= x2 ? a + idx : b - idx;
+  put(grid, x, y, ch);
+};
+
+const pulseV = (grid: string[][], frame: number, x: number, y1: number, y2: number, phase: number, period: number, ch = "●") => {
+  const a = Math.min(y1, y2);
+  const b = Math.max(y1, y2);
+  const len = b - a + 1;
+  const t = (frame + phase) % period;
+  const idx = Math.floor((t / period) * len);
+  const y = y1 <= y2 ? a + idx : b - idx;
+  put(grid, x, y, ch);
+};
+
+export const CyberCircuit: React.FC<CyberCircuitProps> = ({ speed = 1, color = "mint" }) => {
   const preRef = useRef<HTMLPreElement>(null);
-  const rafRef = useRef<number>(0);
-  const signalsRef = useRef<Signal[]>([]);
-
+  const intervalRef = useRef<number>(0);
+  const frameRef = useRef(0);
   const themeColor = COLOR_MAP[color] || COLOR_MAP.mint;
-
-  useEffect(() => {
-    const packetCount = Math.floor(18 * density);
-    const initialSignals: Signal[] = [];
-    for (let i = 0; i < packetCount; i++) {
-      initialSignals.push({
-        pathId: Math.floor(Math.random() * 12),
-        progress: Math.random(),
-        speed: 0.005 + Math.random() * 0.015,
-        val: Math.random() > 0.5 ? "1" : "0",
-        dir: Math.random() > 0.5 ? 1 : -1,
-      });
-    }
-    signalsRef.current = initialSignals;
-  }, [density]);
 
   useEffect(() => {
     const pre = preRef.current;
     if (!pre) return;
 
     const render = () => {
-      const charBuffer = new Array(W * H).fill(" ");
-      const time = performance.now() * 0.001 * speed;
+      const frame = frameRef.current;
+      const grid = Array.from({ length: H }, () => Array(W).fill(" "));
 
-      const drawChar = (x: number, y: number, char: string) => {
-        if (x < 0 || x >= W || y < 0 || y >= H) return;
-        const idx = Math.floor(x) + Math.floor(y) * W;
-        charBuffer[idx] = char;
-      };
-
-      const centerX = Math.floor(W / 2);
-      const centerY = Math.floor(H / 2);
-
-      // CPU
-      const cpuW = 9;
-      const cpuH = 5;
-      for (let dy = -cpuH; dy <= cpuH; dy++) {
-        for (let dx = -cpuW; dx <= cpuW; dx++) {
-          const x = centerX + dx;
-          const y = centerY + dy;
-          const isBorder = Math.abs(dx) === cpuW || Math.abs(dy) === cpuH;
-
-          if (isBorder) {
-            drawChar(x, y, "#");
-          } else if (Math.abs(dx) < 5 && Math.abs(dy) < 3) {
-            const pulse = Math.sin(time * 8 + dx + dy * 2) > 0.2;
-            drawChar(x, y, pulse ? "▓" : "░");
-          } else {
-            drawChar(x, y, ".");
-          }
-        }
+      for (let i = 0; i < 18; i += 1) {
+        const x = ((i * 19 - Math.floor(frame * (0.35 + (i % 3) * 0.14))) % W + W) % W;
+        const y = 1 + ((i * 7) % (H - 2));
+        grid[y][x] = i % 6 === 0 ? "·" : " ";
       }
 
-      const label = "CORE";
-      for (let i = 0; i < label.length; i++) {
-        drawChar(centerX - 2 + i, centerY, label[i]);
-      }
+      box(grid, 2, 2, 13, 5, "SALES", ["orders"]);
+      box(grid, 2, 9, 13, 5, "STOCK", ["items"]);
+      box(grid, 2, 16, 13, 5, "HR", ["payroll"]);
+      box(grid, 22, 7, 15, 8, "ERP CORE", ["workflow", "rules"]);
+      box(grid, 43, 2, 13, 5, "FINANCE", ["ledger"]);
+      box(grid, 43, 9, 13, 5, "CRM", ["clients"]);
+      box(grid, 43, 16, 13, 5, "REPORTS", ["KPIs"]);
+      box(grid, 23, 18, 13, 4, "DATABASE", ["records"]);
 
-      // Memory Banks
-      const memX_L = centerX - 22;
-      const memX_R = centerX + 22;
-      const memH = 10;
-      const memW = 3;
+      hline(grid, 15, 21, 4);
+      put(grid, 20, 4, "▶");
+      hline(grid, 15, 21, 11);
+      put(grid, 20, 11, "▶");
+      hline(grid, 15, 21, 18);
+      put(grid, 20, 18, "▶");
+      hline(grid, 37, 42, 4);
+      put(grid, 41, 4, "▶");
+      hline(grid, 37, 42, 11);
+      put(grid, 41, 11, "▶");
+      hline(grid, 37, 42, 18);
+      put(grid, 41, 18, "▶");
 
-      [memX_L, memX_R].forEach((mx, i) => {
-        for (let dy = -memH; dy <= memH; dy++) {
-          for (let dx = -memW; dx <= memW; dx++) {
-            const isBorder = Math.abs(dx) === memW || Math.abs(dy) === memH;
-            if (isBorder) {
-              drawChar(mx + dx, centerY + dy, "+");
-            } else {
-              const isActive = Math.sin(time * 20 + dy) > 0.8 && Math.random() > 0.7;
-              drawChar(mx + dx, centerY + dy, isActive ? "=" : " ");
-            }
-          }
-        }
-        const memLabel = i === 0 ? "RAM0" : "RAM1";
-        for (let k = 0; k < memLabel.length; k++) {
-          drawChar(mx - 2 + k, centerY - memH - 1, memLabel[k]);
-        }
-      });
+      vline(grid, 29, 15, 17);
+      put(grid, 29, 17, "▼");
+      vline(grid, 35, 15, 17);
+      put(grid, 35, 15, "▲");
 
-      // Trace Geometry
-      const getTraceCoords = (id: number) => {
-        let sx: number, sy: number, ex: number, ey: number;
-        if (id < 3) {
-          const idx = id;
-          const yOff = (idx - 1) * 3;
-          sx = centerX - cpuW - 1;
-          sy = centerY + yOff;
-          ex = memX_L + memW + 1;
-          ey = centerY + yOff;
-        } else if (id < 6) {
-          const idx = id - 3;
-          const yOff = (idx - 1) * 3;
-          sx = centerX + cpuW + 1;
-          sy = centerY + yOff;
-          ex = memX_R - memW - 1;
-          ey = centerY + yOff;
-        } else if (id < 9) {
-          const idx = id - 6;
-          const xOff = (idx - 1) * 5;
-          sx = centerX + xOff;
-          sy = centerY - cpuH - 1;
-          ex = centerX + xOff;
-          ey = 2;
-        } else {
-          const idx = id - 9;
-          const xOff = (idx - 1) * 5;
-          sx = centerX + xOff;
-          sy = centerY + cpuH + 1;
-          ex = centerX + xOff;
-          ey = H - 3;
-        }
-        return { sx, sy, ex, ey };
-      };
+      put(grid, 26, 10, "VALIDATE");
+      put(grid, 29, 11, "↓");
+      put(grid, 27, 12, "POST");
+      put(grid, 29, 13, "↓");
+      put(grid, 26, 14, "SYNC");
 
-      const drawLine = (x1: number, y1: number, x2: number, y2: number, char: string) => {
-        const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-        const steps = Math.ceil(dist);
-        for (let i = 0; i <= steps; i++) {
-          const t = i / steps;
-          const x = Math.floor(x1 + (x2 - x1) * t);
-          const y = Math.floor(y1 + (y2 - y1) * t);
-          drawChar(x, y, char);
-        }
-      };
+      pulseH(grid, frame, 15, 21, 4, 0, 26, "●");
+      pulseH(grid, frame, 15, 21, 11, 8, 26, "●");
+      pulseH(grid, frame, 15, 21, 18, 16, 26, "●");
+      pulseH(grid, frame, 37, 42, 4, 5, 24, "◆");
+      pulseH(grid, frame, 37, 42, 11, 13, 24, "◆");
+      pulseH(grid, frame, 37, 42, 18, 21, 24, "◆");
+      pulseV(grid, frame, 29, 15, 17, 4, 22, "●");
+      pulseV(grid, frame, 35, 17, 15, 14, 22, "◆");
 
-      for (let i = 0; i < 12; i++) {
-        const { sx, sy, ex, ey } = getTraceCoords(i);
-        const isVert = Math.abs(ey - sy) > Math.abs(ex - sx);
-        drawLine(sx, sy, ex, ey, isVert ? "|" : "-");
-        drawChar(sx, sy, "o");
-        drawChar(ex, ey, "o");
-      }
+      put(grid, 32, 11, ["◌", "●", "◍", "●"][frame % 4]);
+      put(grid, 28, 20, frame % 6 < 3 ? "▰▰▰" : "▱▰▱");
 
-      // Moving signals
-      signalsRef.current.forEach((sig) => {
-        sig.progress += sig.speed * speed;
-        if (sig.progress >= 1) {
-          sig.progress = 0;
-          sig.val = Math.random() > 0.5 ? "1" : "0";
-          sig.pathId = Math.floor(Math.random() * 12);
-          sig.dir = Math.random() > 0.5 ? 1 : -1;
-        }
-
-        const { sx, sy, ex, ey } = getTraceCoords(sig.pathId);
-        const t = sig.dir === 1 ? sig.progress : 1 - sig.progress;
-        const px = Math.floor(sx + (ex - sx) * t);
-        const py = Math.floor(sy + (ey - sy) * t);
-        drawChar(px, py, sig.val);
-      });
-
-      // I/O Ports
-      for (let x = centerX - 8; x <= centerX + 8; x += 5) {
-        drawChar(x, 1, "V");
-        drawChar(x, H - 2, "A");
-      }
-
-      const lines: string[] = [];
-      for (let i = 0; i < H; i++) {
-        lines.push(charBuffer.slice(i * W, (i + 1) * W).join(""));
-      }
-      pre.textContent = lines.join("\n");
-
-      rafRef.current = requestAnimationFrame(render);
+      pre.textContent = grid.map((row) => row.join("")).join("\n");
     };
 
-    rafRef.current = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [speed, density]);
+    render();
+    intervalRef.current = window.setInterval(() => {
+      frameRef.current += 1;
+      render();
+    }, Math.max(50, 72 / Math.max(0.25, speed)));
+
+    return () => window.clearInterval(intervalRef.current);
+  }, [speed]);
 
   return (
-    <div className="flex items-center justify-center overflow-hidden w-full h-full">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden">
       <pre
         ref={preRef}
-        className="text-[6px] sm:text-[8px] md:text-[9px] leading-[1.0] font-mono select-none whitespace-pre"
+        className="select-none whitespace-pre font-mono text-[5.4px] font-black leading-[1.02] tracking-[-0.09em] sm:text-[6.3px] md:text-[7.2px] lg:text-[7.9px]"
         style={{
           color: themeColor,
-          textShadow: `0 0 8px ${themeColor}66`,
+          textShadow: `0 0 4px ${themeColor}cc, 0 0 12px ${themeColor}73`,
         }}
       />
     </div>

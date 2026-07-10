@@ -38,61 +38,79 @@ export const ProductHero: React.FC<ProductHeroProps> = ({
   plate = 'astral',
   className,
 }) => {
-  const { isRTL } = useLocale();
+  const { locale, isRTL } = useLocale();
+  const credibilityStrip = {
+    en: 'Clear setup. Practical workflows. Clean handover. Ongoing admin support if useful.',
+    ar: 'إعداد واضح. سير عمل عملي. تسليم نظيف. دعم إداري عند الحاجة.',
+    de: 'Klare Einrichtung. Praktische Workflows. Saubere Übergabe. Laufende Administration, wenn sinnvoll.',
+    fr: 'Configuration claire. Flux de travail pratiques. Transition propre. Support admin si utile.',
+    bg: 'Ясна настройка. Практични работни процеси. Чисто предаване. Текуща админ поддръжка, ако е полезна.',
+  }[locale];
+
   return (
     <section
       className={cn(
-        'relative min-h-[70vh] md:min-h-[80vh] flex items-end',
-        plateClasses[plate],
+        'relative bg-background pt-24 md:pt-28 pb-8 md:pb-12',
         className
       )}
     >
-      <div className="container mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-12 md:pb-16 lg:pb-24">
+      <div className="container mx-auto px-4 md:px-6 pt-6">
         <div
           className={cn(
-            'flex flex-col lg:items-center lg:justify-between gap-8 lg:gap-12',
-            isRTL ? 'lg:flex-row-reverse text-right' : 'lg:flex-row'
+            'hero-folder-card relative min-h-[440px] md:min-h-[500px] lg:min-h-[560px] px-6 md:px-10 lg:px-12 py-10 md:py-12 lg:py-14 flex items-center',
+            plateClasses[plate]
           )}
         >
-          {/* Left: Text content */}
-          <div className="max-w-2xl">
-            {/* Product Name with TM */}
-            <div className="mb-4">
-              <span className="text-mint font-semibold text-sm uppercase tracking-wider">
+          <div
+            className={cn(
+              'relative z-10 flex w-full flex-col lg:items-center lg:justify-between gap-8 lg:gap-12',
+              isRTL ? 'lg:flex-row-reverse text-right' : 'lg:flex-row'
+            )}
+          >
+            {/* Left: Text content */}
+            <div className="motion-hero-copy max-w-4xl lg:max-w-2xl">
+              <p className="text-xs uppercase tracking-[0.22em] text-offwhite/70 font-semibold mb-4 md:mb-5">
                 {productDescriptor}
-              </span>
+              </p>
+              <div className="flex items-baseline gap-2 mb-6">
+                <h1 className="font-serif text-poster-xl text-mint">
+                  {productName}
+                </h1>
+                <span className="text-mint/70 text-sm align-super">™</span>
+              </div>
+
+              {/* Headline */}
+              <h2 className="font-serif text-heading-lg text-offwhite mb-4">
+                {headline}
+              </h2>
+
+              {/* Subheadline */}
+              <p className="text-body-lg text-offwhite/80 max-w-xl mb-8">
+                {subheadline}
+              </p>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-4 mb-8 md:mb-12">
+                <PrimaryButton href={primaryCta.href} textColor={plate}>
+                  {primaryCta.label}
+                </PrimaryButton>
+                <SecondaryButton href={secondaryCta.href} variant="dark">
+                  {secondaryCta.label}
+                </SecondaryButton>
+              </div>
+
+              <p className="text-sm text-mint/70 font-medium tracking-wide">
+                {credibilityStrip}
+              </p>
             </div>
-            <div className="flex items-baseline gap-2 mb-6">
-              <h1 className="font-serif text-poster-xl text-mint">
-                {productName}
-              </h1>
-              <span className="text-mint/70 text-sm align-super">™</span>
-            </div>
 
-            {/* Headline */}
-            <h2 className="font-serif text-heading-lg text-offwhite mb-4">
-              {headline}
-            </h2>
-
-            {/* Subheadline */}
-            <p className="text-body-lg text-offwhite/80 max-w-xl mb-8">
-              {subheadline}
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-wrap gap-4">
-              <PrimaryButton href={primaryCta.href} textColor={plate}>
-                {primaryCta.label}
-              </PrimaryButton>
-              <SecondaryButton href={secondaryCta.href} variant="dark">
-                {secondaryCta.label}
-              </SecondaryButton>
-            </div>
-          </div>
-
-          {/* Right: ASCII Animation */}
-          <div className={cn('w-full lg:w-auto lg:flex-shrink-0 flex justify-center', isRTL ? 'lg:justify-start' : 'lg:justify-end')}>
-            <div className="w-full max-w-md lg:max-w-lg">
+            {/* Right: ASCII Animation */}
+            <div
+              className={cn(
+                'motion-hero-visual w-full lg:w-auto lg:max-w-[460px] lg:flex-shrink-0 flex justify-center mt-8 lg:mt-0 overflow-hidden [&_pre]:!text-[7px] sm:[&_pre]:!text-[8px] md:[&_pre]:!text-[9px] lg:[&_pre]:!text-[10px]',
+                isRTL ? 'lg:justify-start' : 'lg:justify-end'
+              )}
+            >
               {asciiComponent}
             </div>
           </div>

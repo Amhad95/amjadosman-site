@@ -33,7 +33,7 @@ export const RetainerCard: React.FC<RetainerCardProps> = ({
   };
 
   return (
-    <div className={cn('h-full rounded-[28px] border border-ink/12 bg-white p-6 md:p-7 shadow-[0_22px_52px_-42px_rgba(8,15,32,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-ink/20 flex flex-col', isRTL && 'text-right')}>
+    <div className={cn('h-full rounded-[28px] border border-ink/12 bg-card p-6 md:p-7 shadow-[0_22px_52px_-42px_rgba(8,15,32,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-ink/20 flex flex-col', isRTL && 'text-right')}>
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-ink/12 bg-ink/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground mb-4">

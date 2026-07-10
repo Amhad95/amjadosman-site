@@ -6,31 +6,31 @@ describe("streamTool", () => {
     vi.restoreAllMocks();
   });
 
-  it("includes locale in the AI tool payload", async () => {
-    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      new Response("data: [DONE]\n", {
-        status: 200,
-        headers: { "Content-Type": "text/event-stream" },
-      })
-    );
-
+  it("streams the local API response", async () => {
+    const onDelta = vi.fn();
+    const onDone = vi.fn();
+    const onError = vi.fn();
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const body = new ReadableStream({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode('data: {"choices":[{"delta":{"content":"ok"}}]}\n\ndata: [DONE]\n\n'));
+        controller.close();
+      },
+    });
+    fetchSpy.mockResolvedValue(new Response(body, { status: 200, headers: { "Content-Type": "text/event-stream" } }));
+  
     await streamTool({
       tool: "page-critique",
       input: { "Page URL": "https://example.com" },
       locale: "ar",
-      onDelta: vi.fn(),
-      onDone: vi.fn(),
-      onError: vi.fn(),
+      onDelta,
+      onDone,
+      onError,
     });
 
-    expect(fetchSpy).toHaveBeenCalledTimes(1);
-    const [, init] = fetchSpy.mock.calls[0];
-    expect(init?.body).toBe(
-      JSON.stringify({
-        tool: "page-critique",
-        input: { "Page URL": "https://example.com" },
-        locale: "ar",
-      })
-    );
+    expect(fetchSpy).toHaveBeenCalledWith("/api/ai-tool", expect.objectContaining({ method: "POST" }));
+    expect(onDelta).toHaveBeenCalled();
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(onError).not.toHaveBeenCalled();
   });
 });

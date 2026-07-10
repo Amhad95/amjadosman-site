@@ -1,7 +1,11 @@
 import React, { useEffect, useRef } from "react";
 
-const W = 60;
-const H = 35;
+const W = 64;
+const H = 20;
+const groundY = 16;
+const runnerX = 15;
+const baseY = groundY - 5;
+const cycleLen = 64;
 
 const COLOR_MAP: Record<string, string> = {
   mint: "#00FFD9",
@@ -17,266 +21,157 @@ interface CyberMarioProps {
   density?: number;
 }
 
-interface Tile {
-  type: string;
-  height: number;
-  entity?: string | null;
-}
+const put = (grid: string[][], x: number, y: number, text: string) => {
+  const xx = Math.round(x);
+  const yy = Math.round(y);
+  if (yy < 0 || yy >= H) return;
 
-interface Cloud {
-  x: number;
-  y: number;
-  speed: number;
-}
+  for (let i = 0; i < text.length; i += 1) {
+    const targetX = xx + i;
+    if (targetX >= 0 && targetX < W) {
+      grid[yy][targetX] = text[i];
+    }
+  }
+};
 
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  life: number;
-}
+const heroFrame = (jumping: boolean, step: number) => {
+  if (jumping) {
+    return [" ▄██▄ ", " ████ ", "▐████▌", " ▟██▙ ", "▟▘  ▝▙"];
+  }
 
-interface GameState {
-  tick: number;
-  cameraX: number;
-  player: {
-    x: number;
-    y: number;
-    dy: number;
-    grounded: boolean;
-    state: string;
-  };
-  terrain: Tile[];
-  clouds: Cloud[];
-  particles: Particle[];
-}
+  if (step % 2 === 0) {
+    return [" ▄██▄ ", " ████ ", "▐████▌", " ▟██▙ ", "▟▘  ▜ "];
+  }
+
+  return [" ▄██▄ ", " ████ ", "▐████▌", " ▟██▙ ", " ▛  ▝▙"];
+};
+
+const drawPipe = (grid: string[][], x: number, height: number) => {
+  const topY = groundY - height;
+  put(grid, x - 1, topY, "▟█████▙");
+  put(grid, x - 1, topY + 1, "███████");
+
+  for (let y = topY + 2; y < groundY; y += 1) {
+    put(grid, x, y, "█████");
+  }
+};
+
+const drawGoomba = (grid: string[][], x: number) => {
+  put(grid, x, groundY - 2, "▄██▄");
+  put(grid, x, groundY - 1, "▟▙▟▙");
+};
+
+const drawCloud = (grid: string[][], x: number, y: number) => {
+  put(grid, x, y, "  ▄▄▄  ");
+  put(grid, x, y + 1, "▟█████▙");
+  put(grid, x, y + 2, " ▔▔▔▔▔ ");
+};
 
 export const CyberMario: React.FC<CyberMarioProps> = ({
   speed = 1,
   color = "mint",
-  density = 1.0,
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
-  const rafRef = useRef<number>(0);
-  const stateRef = useRef<GameState>({
-    tick: 0,
-    cameraX: 0,
-    player: { x: 12, y: 0, dy: 0, grounded: true, state: "run" },
-    terrain: [],
-    clouds: [],
-    particles: [],
-  });
+  const intervalRef = useRef<number>(0);
+  const frameRef = useRef(0);
 
   const themeColor = COLOR_MAP[color] || COLOR_MAP.mint;
-
-  useEffect(() => {
-    const terrain: Tile[] = [];
-    for (let i = 0; i < W + 15; i++) {
-      terrain.push({ type: "ground", height: 4 });
-    }
-    stateRef.current.terrain = terrain;
-
-    for (let i = 0; i < 8; i++) {
-      stateRef.current.clouds.push({
-        x: Math.random() * W,
-        y: Math.random() * (H / 2),
-        speed: 0.1 + Math.random() * 0.2,
-      });
-    }
-  }, []);
 
   useEffect(() => {
     const pre = preRef.current;
     if (!pre) return;
 
-    const update = () => {
-      const state = stateRef.current;
-      const timeScale = speed;
+    const render = () => {
+      const frame = frameRef.current;
+      const grid = Array.from({ length: H }, () => Array(W).fill(" "));
 
-      state.tick++;
-      state.cameraX += 0.5 * timeScale;
+      const local = frame % cycleLen;
+      const jumping = local >= 8 && local <= 35;
+      let jumpLift = 0;
 
-      if (state.cameraX > 1) {
-        state.cameraX -= 1;
-        state.terrain.shift();
-
-        const lastBlock = state.terrain[state.terrain.length - 1];
-        let nextType = "ground";
-        let nextHeight = 4;
-        let entity: string | null = null;
-
-        const r = Math.random();
-        if (lastBlock.type === "pit") {
-          nextType = "ground";
-        } else if (r < 0.05) {
-          nextType = "pit";
-          nextHeight = -10;
-        } else if (r < 0.08) {
-          nextType = "pipe";
-          nextHeight = 7;
-        } else if (r < 0.15) {
-          entity = "brick";
-        } else if (r < 0.2) {
-          entity = "enemy";
-        }
-        state.terrain.push({ type: nextType, height: nextHeight, entity });
+      if (jumping) {
+        const u = (local - 8) / 27;
+        jumpLift = Math.round(Math.sin(u * Math.PI) * 8);
       }
 
-      const p = state.player;
-      p.dy -= 0.15 * timeScale;
-      p.y += p.dy * timeScale;
+      const runnerY = baseY - jumpLift;
 
-      const currentTile = state.terrain[12];
-      const nextTile = state.terrain[16];
-
-      if (p.grounded) {
-        let shouldJump = false;
-        if (nextTile?.type === "pit") shouldJump = true;
-        if (nextTile?.type === "pipe") shouldJump = true;
-        if (nextTile?.entity === "enemy") shouldJump = true;
-        if (nextTile?.entity === "brick" && Math.random() > 0.5) shouldJump = true;
-
-        if (shouldJump) {
-          p.dy = 1.8;
-          p.grounded = false;
-          p.state = "jump";
-        }
+      for (let i = 0; i < 30; i += 1) {
+        const x = ((i * 17 - Math.floor(frame / (2 + (i % 4)))) % W + W) % W;
+        const y = 1 + ((i * 7) % 9);
+        grid[y][x] = i % 6 === 0 ? "+" : "·";
       }
 
-      const floorY = currentTile?.type === "pit" ? -10 : (currentTile?.height || 4);
-      if (p.y <= floorY) {
-        p.y = floorY;
-        p.dy = 0;
-        p.grounded = true;
-        p.state = "run";
+      drawCloud(grid, ((8 - Math.floor(frame / 9)) % (W + 18) + W + 18) % (W + 18) - 10, 2);
+      drawCloud(grid, ((39 - Math.floor(frame / 12)) % (W + 18) + W + 18) % (W + 18) - 10, 4);
+
+      const pipeX = runnerX + 30 - local;
+      const goombaX = runnerX + 58 - local;
+      const platformX = runnerX + 86 - local;
+
+      put(grid, ((24 - Math.floor(frame * 0.45)) % 96 + 96) % 96, 2, "▣▣▣");
+      put(grid, ((31 - Math.floor(frame * 0.45)) % 96 + 96) % 96, 2, "▣?▣");
+      put(grid, ((38 - Math.floor(frame * 0.45)) % 96 + 96) % 96, 2, "▣▣▣");
+
+      const coinSpark = Math.floor(frame / 5) % 2 === 0 ? "●" : "◍";
+      put(grid, runnerX + 9, 8, coinSpark);
+      put(grid, runnerX + 13, 6, coinSpark);
+      put(grid, runnerX + 17, 8, coinSpark);
+
+      if (pipeX > -8 && pipeX < W + 8) {
+        drawPipe(grid, pipeX, 3);
+      }
+
+      if (goombaX > -6 && goombaX < W + 6) {
+        drawGoomba(grid, goombaX);
+      }
+
+      if (platformX > -12 && platformX < W + 8) {
+        put(grid, platformX, groundY - 4, "▛▀▀▀▀▀▜");
+        put(grid, platformX, groundY - 3, "███████");
+      }
+
+      for (let x = 0; x < W; x += 1) {
+        grid[groundY][x] = "▀";
+        grid[groundY + 1][x] = x % 2 === 0 ? "▓" : "▒";
+        grid[groundY + 2][x] = x % 3 === 0 ? "█" : "▓";
+      }
+
+      for (let x = 0; x < W; x += 5) {
+        const xx = ((x - Math.floor(frame * 0.8)) % W + W) % W;
+        grid[groundY][xx] = "▄";
+      }
+
+      const sprite = heroFrame(jumping, Math.floor(frame / 5));
+      sprite.forEach((line, i) => put(grid, runnerX, runnerY + i, line));
+
+      if (jumping) {
+        put(grid, runnerX - 4, runnerY + 3, "⋱⋱");
+        put(grid, runnerX + 7, runnerY + 1, "⋰");
       } else {
-        p.grounded = false;
+        put(grid, runnerX - 4, runnerY + 4, "▒▒");
       }
 
-      state.particles.forEach((pt) => {
-        pt.x -= 0.5 * timeScale;
-        pt.x += pt.vx;
-        pt.y += pt.vy;
-        pt.vy -= 0.1;
-        pt.life--;
-      });
-      state.particles = state.particles.filter((pt) => pt.life > 0);
-
-      state.clouds.forEach((c) => {
-        c.x -= c.speed * timeScale;
-        if (c.x < -10) {
-          c.x = W + 10;
-          c.y = Math.random() * (H / 2);
-        }
-      });
+      pre.textContent = grid.map((row) => row.join("") + " ").join("\n");
     };
 
-    const draw = () => {
-      const state = stateRef.current;
-      const charBuffer = new Array(W * H).fill(" ");
+    render();
+    intervalRef.current = window.setInterval(() => {
+      frameRef.current += 2;
+      render();
+    }, Math.max(26, 32 / Math.max(0.25, speed)));
 
-      const drawChar = (x: number, y: number, char: string) => {
-        if (x < 0 || x >= W || y < 0 || y >= H) return;
-        const screenY = H - 1 - Math.floor(y);
-        if (screenY < 0 || screenY >= H) return;
-        const idx = Math.floor(x) + screenY * W;
-        charBuffer[idx] = char;
-      };
-
-      state.clouds.forEach((c) => {
-        const cx = Math.floor(c.x);
-        const cy = Math.floor(c.y) + 12;
-        drawChar(cx, cy, "(");
-        drawChar(cx + 1, cy + 1, "_");
-        drawChar(cx + 2, cy + 1, "_");
-        drawChar(cx + 3, cy, ")");
-      });
-
-      state.terrain.forEach((tile, i) => {
-        if (tile.type !== "pit") {
-          for (let y = 0; y < tile.height; y++) {
-            let char = y === tile.height - 1 ? "=" : "#";
-            if (tile.type === "pipe") char = y === tile.height - 1 ? "T" : "|";
-            drawChar(i, y, char);
-          }
-        }
-
-        if (tile.entity === "brick") {
-          drawChar(i, 13, "[");
-          drawChar(i + 1, 13, "?");
-          drawChar(i + 2, 13, "]");
-        }
-
-        if (tile.entity === "enemy") {
-          const ey = tile.height;
-          const frame = Math.floor(state.tick / 10) % 2;
-          drawChar(i, ey, frame ? "/" : "\\");
-          drawChar(i + 1, ey, frame ? "\\" : "/");
-          drawChar(i, ey + 1, "o");
-          drawChar(i + 1, ey + 1, "o");
-        }
-      });
-
-      const px = Math.floor(state.player.x);
-      const py = Math.floor(state.player.y);
-      const isJump = state.player.state === "jump";
-
-      drawChar(px, py + 4, "m");
-      drawChar(px + 1, py + 4, "m");
-      drawChar(px + 2, py + 4, "m");
-      drawChar(px, py + 3, "C");
-      drawChar(px + 1, py + 3, "(");
-      drawChar(px + 2, py + 3, "o");
-      drawChar(px + 3, py + 3, ")");
-
-      if (isJump) {
-        drawChar(px - 1, py + 2, "/");
-        drawChar(px + 3, py + 2, "\\");
-      } else {
-        drawChar(px - 1, py + 2, "\\");
-        drawChar(px + 3, py + 2, "/");
-      }
-      drawChar(px, py + 2, "|");
-      drawChar(px + 1, py + 2, "|");
-      drawChar(px + 2, py + 2, "|");
-
-      if (isJump) {
-        drawChar(px, py + 1, "`");
-        drawChar(px + 2, py + 1, "'");
-      } else {
-        const runFrame = Math.floor(state.tick / 5) % 2;
-        drawChar(px, py + 1, runFrame ? "/" : "|");
-        drawChar(px + 2, py + 1, runFrame ? "\\" : "|");
-      }
-
-      state.particles.forEach((pt) => drawChar(pt.x, pt.y, "#"));
-
-      const lines: string[] = [];
-      for (let i = 0; i < H; i++) {
-        lines.push(charBuffer.slice(i * W, (i + 1) * W).join(""));
-      }
-      pre.textContent = lines.join("\n");
-    };
-
-    const loop = () => {
-      update();
-      draw();
-      rafRef.current = requestAnimationFrame(loop);
-    };
-
-    rafRef.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [speed, density]);
+    return () => window.clearInterval(intervalRef.current);
+  }, [speed]);
 
   return (
-    <div className="flex items-center justify-center overflow-hidden w-full h-full">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden">
       <pre
         ref={preRef}
-        className="text-[6px] sm:text-[8px] md:text-[9px] leading-[1.0] font-mono select-none whitespace-pre"
+        className="select-none whitespace-pre font-mono text-[7.6px] font-black leading-[1.04] tracking-[-0.1em] sm:text-[8.8px] md:text-[10px] lg:text-[11px]"
         style={{
           color: themeColor,
-          textShadow: `0 0 5px ${themeColor}66`,
+          textShadow: `0 0 4px ${themeColor}cc, 0 0 12px ${themeColor}73`,
         }}
       />
     </div>

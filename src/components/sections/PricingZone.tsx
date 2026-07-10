@@ -41,7 +41,7 @@ const zoneStyles: Record<
   retainer: {
     label: 'Ongoing support',
     icon: Repeat2,
-    shell: 'border-ink/12 bg-white',
+    shell: 'border-ink/12 bg-card',
     badge: 'border-ink/12 bg-ink/5 text-foreground',
     number: 'bg-ink text-offwhite',
   },

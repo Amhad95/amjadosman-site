@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 
-export const SUPPORTED_LOCALES = ["en", "ar"] as const;
+export const SUPPORTED_LOCALES = ["en", "ar", "de", "fr", "bg"] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 export const DEFAULT_LOCALE: Locale = "en";
@@ -24,12 +24,19 @@ const canUseDOM = () =>
   typeof window !== "undefined" && typeof document !== "undefined";
 
 export const isLocale = (value: string | null | undefined): value is Locale =>
-  value === "en" || value === "ar";
+  value === "en" || value === "ar" || value === "de" || value === "fr" || value === "bg";
 
 export const getDirection = (locale: Locale) => (locale === "ar" ? "rtl" : "ltr");
 
-export const getIntlLocale = (locale: Locale) =>
-  locale === "ar" ? "ar-EG" : "en-US";
+export const getIntlLocale = (locale: Locale) => {
+  switch (locale) {
+    case "ar": return "ar-EG";
+    case "de": return "de-DE";
+    case "fr": return "fr-FR";
+    case "bg": return "bg-BG";
+    default: return "en-US";
+  }
+};
 
 const getStoredLocale = (): Locale => {
   if (!canUseDOM()) return DEFAULT_LOCALE;

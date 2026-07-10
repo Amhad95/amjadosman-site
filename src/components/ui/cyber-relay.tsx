@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 const W = 60;
-const H = 35;
+const H = 20;
 
 const COLOR_MAP: Record<string, string> = {
   mint: "#00FFD9",
@@ -18,216 +18,118 @@ interface CyberRelayProps {
   density?: number;
 }
 
-interface Packet {
-  pathId: number;
-  progress: number;
-  velocity: number;
-  char: string;
-}
+const put = (grid: string[][], x: number, y: number, text: string) => {
+  const xx = Math.round(x);
+  const yy = Math.round(y);
+  if (yy < 0 || yy >= H) return;
 
-type Point = { x: number; y: number };
-
-const PATHS: Point[][] = [
-  [
-    { x: 14, y: 7 },
-    { x: 20, y: 7 },
-    { x: 20, y: 17 },
-    { x: 24, y: 17 },
-  ],
-  [
-    { x: 36, y: 15 },
-    { x: 40, y: 15 },
-    { x: 40, y: 7 },
-    { x: 45, y: 7 },
-  ],
-  [
-    { x: 30, y: 21 },
-    { x: 30, y: 24 },
-    { x: 30, y: 27 },
-  ],
-  [
-    { x: 45, y: 7 },
-    { x: 49, y: 7 },
-    { x: 49, y: 17 },
-    { x: 36, y: 17 },
-  ],
-  [
-    { x: 30, y: 27 },
-    { x: 30, y: 24 },
-    { x: 36, y: 24 },
-    { x: 36, y: 19 },
-  ],
-];
-
-const pathLengths = PATHS.map((points) => {
-  let total = 0;
-  for (let i = 0; i < points.length - 1; i += 1) {
-    total += Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y);
+  for (let i = 0; i < text.length; i += 1) {
+    const targetX = xx + i;
+    if (targetX >= 0 && targetX < W) grid[yy][targetX] = text[i];
   }
-  return total;
-});
+};
 
-function pointAlongPath(points: Point[], progress: number): Point {
-  const clamped = Math.max(0, Math.min(0.999, progress));
-  const target = pathLengths[PATHS.indexOf(points)] * clamped;
-  let walked = 0;
+const drawBox = (
+  grid: string[][],
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  title: string,
+  active = false,
+  body: string[] = []
+) => {
+  const tl = active ? "╔" : "┌";
+  const tr = active ? "╗" : "┐";
+  const bl = active ? "╚" : "└";
+  const br = active ? "╝" : "┘";
+  const hz = active ? "═" : "─";
+  const vt = active ? "║" : "│";
 
-  for (let i = 0; i < points.length - 1; i += 1) {
-    const from = points[i];
-    const to = points[i + 1];
-    const length = Math.hypot(to.x - from.x, to.y - from.y);
+  put(grid, x, y, tl + hz.repeat(w - 2) + tr);
+  for (let i = 1; i < h - 1; i += 1) put(grid, x, y + i, vt + " ".repeat(w - 2) + vt);
+  put(grid, x, y + h - 1, bl + hz.repeat(w - 2) + br);
 
-    if (walked + length >= target) {
-      const local = (target - walked) / length;
-      return {
-        x: from.x + (to.x - from.x) * local,
-        y: from.y + (to.y - from.y) * local,
-      };
-    }
+  const label = active ? `● ${title} ●` : title;
+  put(grid, x + Math.max(1, Math.floor((w - label.length) / 2)), y + 1, label);
+  body.forEach((line, i) => put(grid, x + 2, y + 2 + i, line.slice(0, w - 4)));
+};
 
-    walked += length;
+const drawArrow = (
+  grid: string[][],
+  path: { base: [number, number, string][]; pulse: [number, number][] },
+  pulseStep: number,
+  pulseChar = "●"
+) => {
+  for (const [x, y, ch] of path.base) {
+    if (x >= 0 && x < W && y >= 0 && y < H) grid[y][x] = ch;
   }
+  const point = path.pulse[pulseStep % path.pulse.length];
+  if (point) put(grid, point[0], point[1], pulseChar);
+};
 
-  return points[points.length - 1];
-}
-
-export const CyberRelay: React.FC<CyberRelayProps> = ({
-  speed = 1,
-  color = "mint",
-  density = 1,
-}) => {
+export const CyberRelay: React.FC<CyberRelayProps> = ({ speed = 1, color = "mint" }) => {
   const preRef = useRef<HTMLPreElement>(null);
-  const rafRef = useRef<number>(0);
-  const packetsRef = useRef<Packet[]>([]);
-
+  const intervalRef = useRef<number>(0);
+  const frameRef = useRef(0);
   const themeColor = COLOR_MAP[color] || COLOR_MAP.mint;
 
   useEffect(() => {
-    const packetCount = Math.max(8, Math.floor(10 * density));
-    packetsRef.current = Array.from({ length: packetCount }, (_, index) => ({
-      pathId: index % PATHS.length,
-      progress: Math.random(),
-      velocity: 0.004 + Math.random() * 0.008,
-      char: index % 3 === 0 ? "@" : index % 3 === 1 ? "*" : "o",
-    }));
-  }, [density]);
-
-  useEffect(() => {
     const pre = preRef.current;
-    if (!pre) return undefined;
-
-    const drawChar = (buffer: string[], x: number, y: number, char: string) => {
-      if (x < 0 || x >= W || y < 0 || y >= H) return;
-      buffer[Math.floor(x) + Math.floor(y) * W] = char;
-    };
-
-    const drawText = (buffer: string[], x: number, y: number, text: string) => {
-      text.split("").forEach((char, index) => drawChar(buffer, x + index, y, char));
-    };
-
-    const drawLine = (buffer: string[], from: Point, to: Point, char: string) => {
-      const steps = Math.max(Math.abs(to.x - from.x), Math.abs(to.y - from.y)) * 2 + 1;
-      for (let i = 0; i <= steps; i += 1) {
-        const t = i / steps;
-        drawChar(
-          buffer,
-          from.x + (to.x - from.x) * t,
-          from.y + (to.y - from.y) * t,
-          char
-        );
-      }
-    };
-
-    const drawBox = (buffer: string[], x: number, y: number, width: number, height: number) => {
-      for (let dx = 0; dx < width; dx += 1) {
-        drawChar(buffer, x + dx, y, dx === 0 || dx === width - 1 ? "+" : "-");
-        drawChar(buffer, x + dx, y + height - 1, dx === 0 || dx === width - 1 ? "+" : "-");
-      }
-      for (let dy = 1; dy < height - 1; dy += 1) {
-        drawChar(buffer, x, y + dy, "|");
-        drawChar(buffer, x + width - 1, y + dy, "|");
-      }
-    };
+    if (!pre) return;
 
     const render = () => {
-      const buffer = new Array(W * H).fill(" ");
-      const time = performance.now() * 0.001 * speed;
+      const frame = frameRef.current;
+      const grid = Array.from({ length: H }, () => Array(W).fill(" "));
 
-      for (let y = 0; y < H; y += 6) {
-        for (let x = (y / 3) % 2; x < W; x += 8) {
-          drawChar(buffer, x, y, ".");
-        }
+      for (let i = 0; i < 20; i += 1) {
+        const x = ((i * 11 - Math.floor(frame * (0.6 + (i % 3) * 0.2))) % W + W) % W;
+        const y = 1 + ((i * 3) % 3);
+        grid[y][x] = i % 5 === 0 ? "·" : "˙";
       }
 
-      drawBox(buffer, 4, 4, 11, 6);
-      drawText(buffer, 7, 6, "KNOW");
-      drawText(buffer, 6, 8, "DOCS");
+      const phase = Math.floor(frame / 4) % 6;
+      drawBox(grid, 22, 1, 16, 4, "GOAL", phase === 0, ["task / policy"]);
+      drawBox(grid, 1, 7, 16, 4, "USER INPUT", phase === 1, ["prompt"]);
+      drawBox(grid, 22, 7, 16, 6, "AI AGENT", phase === 2, ["reason", "plan", "act"]);
+      drawBox(grid, 43, 5, 15, 4, "TOOLS", phase === 3, ["api / code"]);
+      drawBox(grid, 43, 10, 15, 4, "MEMORY", phase === 4, ["state / docs"]);
+      drawBox(grid, 22, 15, 16, 4, "OUTPUT", phase === 5, ["answer / action"]);
 
-      drawBox(buffer, 45, 4, 11, 6);
-      drawText(buffer, 47, 6, "CHECK");
-      drawText(buffer, 47, 8, "HUMAN");
+      const paths = [
+        { base: [[29, 5, "│"], [29, 6, "▼"]] as [number, number, string][], pulse: [[29, 5], [29, 6]] as [number, number][] },
+        { base: [[17, 8, "─"], [18, 8, "─"], [19, 8, "─"], [20, 8, "─"], [21, 8, "▶"]] as [number, number, string][], pulse: [[17, 8], [18, 8], [19, 8], [20, 8], [21, 8]] as [number, number][] },
+        { base: [[38, 8, "─"], [39, 8, "─"], [40, 8, "─"], [41, 8, "─"], [42, 8, "▶"]] as [number, number, string][], pulse: [[38, 8], [39, 8], [40, 8], [41, 8], [42, 8]] as [number, number][] },
+        { base: [[42, 9, "◀"], [41, 9, "─"], [40, 9, "─"], [39, 9, "─"], [38, 9, "─"]] as [number, number, string][], pulse: [[42, 9], [41, 9], [40, 9], [39, 9], [38, 9]] as [number, number][] },
+        { base: [[38, 11, "─"], [39, 11, "─"], [40, 11, "─"], [41, 11, "─"], [42, 11, "▶"]] as [number, number, string][], pulse: [[38, 11], [39, 11], [40, 11], [41, 11], [42, 11]] as [number, number][] },
+        { base: [[42, 12, "◀"], [41, 12, "─"], [40, 12, "─"], [39, 12, "─"], [38, 12, "─"]] as [number, number, string][], pulse: [[42, 12], [41, 12], [40, 12], [39, 12], [38, 12]] as [number, number][] },
+        { base: [[29, 13, "│"], [29, 14, "▼"]] as [number, number, string][], pulse: [[29, 13], [29, 14]] as [number, number][] },
+      ];
 
-      drawBox(buffer, 19, 27, 23, 5);
-      drawText(buffer, 27, 29, "FLOW");
+      paths.forEach((path, index) => drawArrow(grid, path, frame % path.pulse.length, index === 3 || index === 5 ? "•" : "●"));
+      put(grid, 16, 0, "AI AGENT WORKFLOW");
+      put(grid, 18, 19, "observe  →  reason  →  use tools  →  respond");
 
-      drawBox(buffer, 24, 13, 12, 9);
-      drawText(buffer, 27, 16, "AGENT");
-      drawText(buffer, 27, 18, "CORE");
-
-      PATHS.forEach((points, index) => {
-        for (let i = 0; i < points.length - 1; i += 1) {
-          drawLine(buffer, points[i], points[i + 1], index % 2 === 0 ? "=" : "-");
-        }
-        points.forEach((point) => drawChar(buffer, point.x, point.y, "o"));
-      });
-
-      for (let i = 0; i < 4; i += 1) {
-        const x = 27 + i * 2;
-        const pulseChar = Math.sin(time * 3 + i) > 0 ? ":" : ".";
-        drawChar(buffer, x, 14, pulseChar);
-        drawChar(buffer, x, 20, pulseChar);
-      }
-
-      ["IN", "OK", "RUN"].forEach((label, index) => {
-        drawText(buffer, 9 + index * 19, 2, label);
-      });
-
-      packetsRef.current.forEach((packet, index) => {
-        packet.progress += packet.velocity * speed;
-        if (packet.progress >= 1) {
-          packet.progress = 0;
-          packet.pathId = (packet.pathId + 1 + (index % 2)) % PATHS.length;
-          packet.char = packet.char === "@" ? "*" : packet.char === "*" ? "o" : "@";
-        }
-
-        const point = pointAlongPath(PATHS[packet.pathId], packet.progress);
-        drawChar(buffer, point.x, point.y, packet.char);
-      });
-
-      const status = Math.sin(time * 2.4) > 0 ? "LIVE" : "SYNC";
-      drawText(buffer, 26, 24, status);
-
-      const lines: string[] = [];
-      for (let y = 0; y < H; y += 1) {
-        lines.push(buffer.slice(y * W, (y + 1) * W).join(""));
-      }
-
-      pre.textContent = lines.join("\n");
-      rafRef.current = requestAnimationFrame(render);
+      pre.textContent = grid.map((row) => row.join("")).join("\n");
     };
 
-    rafRef.current = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(rafRef.current);
+    render();
+    intervalRef.current = window.setInterval(() => {
+      frameRef.current += 1;
+      render();
+    }, Math.max(60, 100 / Math.max(0.25, speed)));
+
+    return () => window.clearInterval(intervalRef.current);
   }, [speed]);
 
   return (
     <div className="flex h-full w-full items-center justify-center overflow-hidden">
       <pre
         ref={preRef}
-        className="text-[6px] leading-[1.0] font-mono select-none whitespace-pre sm:text-[8px] md:text-[9px]"
+        className="select-none whitespace-pre font-mono text-[6.2px] font-black leading-[1.04] tracking-[-0.08em] sm:text-[7.2px] md:text-[8.2px] lg:text-[9px]"
         style={{
           color: themeColor,
-          textShadow: `0 0 8px ${themeColor}66`,
+          textShadow: `0 0 4px ${themeColor}cc, 0 0 12px ${themeColor}73`,
         }}
       />
     </div>

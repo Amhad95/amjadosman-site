@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
-const W = 60;
-const H = 35;
+const W = 64;
+const H = 20;
 
 const COLOR_MAP: Record<string, string> = {
   mint: "#00FFD9",
@@ -17,43 +17,33 @@ interface CyberSpaceImpactProps {
   density?: number;
 }
 
-interface Bullet {
-  x: number;
-  y: number;
-  active: boolean;
-}
-
-interface Enemy {
-  x: number;
-  y: number;
-  hp: number;
-  type: "heavy" | "squid" | "rock";
-  active: boolean;
-}
-
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  life: number;
-}
-
 interface Star {
   x: number;
   y: number;
   speed: number;
+  ch: string;
 }
 
-interface GameState {
-  playerY: number;
-  playerDir: number;
-  bullets: Bullet[];
-  enemies: Enemy[];
-  particles: Particle[];
-  stars: Star[];
-  tick: number;
-}
+const ship = ["   ▲▲", "◀████▶", "   ▼▼"];
+
+const enemies = [
+  { x: 60, y: 4, kind: "◀▓●▓▶", phase: 0 },
+  { x: 78, y: 13, kind: "◀▒◆▒▶", phase: 7 },
+  { x: 94, y: 8, kind: "◀▓▼▓▶", phase: 14 },
+];
+
+const boomFrames = ["   ", " ✹ ", "╲█╱", "━█━", "╱█╲", " ✹ ", "   "];
+
+const put = (grid: string[][], x: number, y: number, text: string) => {
+  if (y < 0 || y >= H) return;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const xx = x + i;
+    if (xx >= 0 && xx < W) {
+      grid[y][xx] = text[i];
+    }
+  }
+};
 
 export const CyberSpaceImpact: React.FC<CyberSpaceImpactProps> = ({
   speed = 1,
@@ -62,192 +52,92 @@ export const CyberSpaceImpact: React.FC<CyberSpaceImpactProps> = ({
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
   const rafRef = useRef<number>(0);
-  const stateRef = useRef<GameState>({
-    playerY: H / 2,
-    playerDir: 1,
-    bullets: [],
-    enemies: [],
-    particles: [],
-    stars: [],
-    tick: 0,
-  });
+  const tickRef = useRef(0);
+  const lastFrameRef = useRef(0);
+
+  const stars = useMemo<Star[]>(
+    () =>
+      Array.from({ length: Math.round(90 * density) }, (_, i) => ({
+        x: Math.floor(Math.random() * W),
+        y: Math.floor(Math.random() * H),
+        speed: 1 + (i % 3),
+        ch: i % 7 === 0 ? "+" : i % 4 === 0 ? "." : "·",
+      })),
+    [density]
+  );
 
   const themeColor = COLOR_MAP[color] || COLOR_MAP.mint;
-
-  useEffect(() => {
-    const initialStars: Star[] = [];
-    for (let i = 0; i < 40; i++) {
-      initialStars.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        speed: 0.1 + Math.random() * 0.4,
-      });
-    }
-    stateRef.current.stars = initialStars;
-  }, []);
 
   useEffect(() => {
     const pre = preRef.current;
     if (!pre) return;
 
-    const update = () => {
-      const state = stateRef.current;
-      const timeScale = speed;
-
-      state.tick++;
-
-      const targetY = state.enemies.length > 0 ? state.enemies[0].y : H / 2;
-      const diff = targetY - state.playerY;
-      state.playerY += Math.sign(diff) * 0.2 * timeScale;
-      state.playerY = Math.max(2, Math.min(H - 3, state.playerY));
-
-      if (state.tick % Math.floor(10 / speed) === 0) {
-        state.bullets.push({ x: 12, y: Math.floor(state.playerY), active: true });
-      }
-
-      state.bullets.forEach((b) => {
-        b.x += 1.5 * timeScale;
-        if (b.x > W) b.active = false;
-      });
-      state.bullets = state.bullets.filter((b) => b.active);
-
-      if (Math.random() < 0.05 * density) {
-        const type = Math.random();
-        state.enemies.push({
-          x: W,
-          y: Math.floor(Math.random() * (H - 4) + 2),
-          hp: type > 0.8 ? 3 : 1,
-          type: type > 0.8 ? "heavy" : type > 0.4 ? "squid" : "rock",
-          active: true,
-        });
-      }
-
-      state.enemies.forEach((e) => {
-        e.x -= (e.type === "heavy" ? 0.2 : 0.5) * timeScale;
-        if (e.x < 0) e.active = false;
-      });
-
-      state.bullets.forEach((b) => {
-        state.enemies.forEach((e) => {
-          if (b.active && e.active) {
-            if (Math.abs(b.x - e.x) < 2 && Math.abs(b.y - e.y) < 2) {
-              b.active = false;
-              e.hp--;
-              if (e.hp <= 0) {
-                e.active = false;
-                for (let i = 0; i < 6; i++) {
-                  state.particles.push({
-                    x: e.x,
-                    y: e.y,
-                    vx: (Math.random() - 0.5) * 2,
-                    vy: (Math.random() - 0.5) * 2,
-                    life: 1.0,
-                  });
-                }
-              }
-            }
-          }
-        });
-      });
-      state.enemies = state.enemies.filter((e) => e.active);
-
-      state.particles.forEach((p) => {
-        p.x += p.vx * timeScale;
-        p.y += p.vy * timeScale;
-        p.life -= 0.05 * timeScale;
-      });
-      state.particles = state.particles.filter((p) => p.life > 0);
-
-      state.stars.forEach((s) => {
-        s.x -= s.speed * timeScale;
-        if (s.x < 0) {
-          s.x = W;
-          s.y = Math.random() * H;
-        }
-      });
-    };
-
     const draw = () => {
-      const state = stateRef.current;
-      const charBuffer = new Array(W * H).fill(" ");
+      const t = tickRef.current;
+      const grid = Array.from({ length: H }, () => Array(W).fill(" "));
 
-      const drawChar = (x: number, y: number, char: string) => {
-        if (x < 0 || x >= W || y < 0 || y >= H) return;
-        const idx = Math.floor(x) + Math.floor(y) * W;
-        charBuffer[idx] = char;
-      };
-
-      state.stars.forEach((s) => drawChar(s.x, s.y, "."));
-
-      const py = Math.floor(state.playerY);
-      const px = 7;
-
-      drawChar(px + 1, py - 1, "/");
-      drawChar(px + 2, py - 1, "#");
-      drawChar(px, py, "[");
-      drawChar(px + 1, py, "#");
-      drawChar(px + 2, py, "#");
-      drawChar(px + 3, py, "#");
-      drawChar(px + 4, py, ">");
-      drawChar(px + 1, py + 1, "\\");
-      drawChar(px + 2, py + 1, "#");
-      if (Math.random() > 0.5) drawChar(px - 1, py, "=");
-
-      state.enemies.forEach((e) => {
-        const ex = Math.floor(e.x);
-        const ey = Math.floor(e.y);
-        if (e.type === "squid") {
-          drawChar(ex, ey, "<");
-          drawChar(ex + 1, ey, "O");
-          drawChar(ex + 2, ey, ">");
-        } else if (e.type === "heavy") {
-          drawChar(ex, ey, "[");
-          drawChar(ex + 1, ey, "X");
-          drawChar(ex + 2, ey, "]");
-        } else {
-          drawChar(ex, ey, "*");
-        }
-      });
-
-      state.bullets.forEach((b) => {
-        drawChar(b.x, b.y, "=");
-        drawChar(b.x + 1, b.y, ">");
-      });
-
-      state.particles.forEach((p) => {
-        drawChar(p.x, p.y, p.life > 0.5 ? "#" : ".");
-      });
-
-      for (let x = 0; x < W; x++) {
-        drawChar(x, 0, "=");
-        drawChar(x, H - 1, "=");
+      for (const star of stars) {
+        const x = ((star.x - Math.floor(t / star.speed)) % W + W) % W;
+        grid[star.y][x] = star.ch;
       }
 
-      const lines: string[] = [];
-      for (let i = 0; i < H; i++) {
-        lines.push(charBuffer.slice(i * W, (i + 1) * W).join(""));
+      const moonX = W - 12 - Math.floor((t * 0.22) % (W + 12));
+      put(grid, moonX, 1, "     .-.");
+      put(grid, moonX, 2, "   .'   '.");
+      put(grid, moonX, 3, "  /  .-.  \\");
+      put(grid, moonX, 4, "  | (   ) |");
+      put(grid, moonX, 5, "  \\  '-'  /");
+      put(grid, moonX, 6, "   '.   .'");
+      put(grid, moonX, 7, "     '-'");
+
+      const sy = 9 + Math.round(Math.sin(t / 7) * 2);
+      ship.forEach((line, i) => put(grid, 3, sy + i, line));
+      put(grid, 0, sy + 1, t % 4 < 2 ? "≋≋" : "◁◁");
+
+      for (let b = 0; b < 5; b += 1) {
+        const bx = 12 + ((t * 2 + b * 16) % (W - 12));
+        const by = sy + 1 + Math.round(Math.sin((t + b * 5) / 9));
+        put(grid, bx, by, b % 2 === 0 ? "━━" : "▰▰");
       }
-      pre.textContent = lines.join("\n");
+
+      for (const enemy of enemies) {
+        const ex = W - ((t + enemy.phase) % 96);
+        const ey = enemy.y + Math.round(Math.sin((t + enemy.phase) / 8) * 2);
+        put(grid, ex, ey, enemy.kind);
+        put(grid, ex - ((t + enemy.phase) % 18), ey, "✹");
+      }
+
+      const boomX = 49 - Math.floor((t % 80) / 3);
+      const boomY = 6 + Math.round(Math.sin(t / 11) * 4);
+      const frame = Math.floor((t % 28) / 4);
+      put(grid, boomX, boomY, boomFrames[frame]);
+
+      pre.textContent = grid.map((row) => row.join("")).join("\n");
     };
 
-    const loop = () => {
-      update();
-      draw();
+    const loop = (now: number) => {
+      const frameMs = Math.max(34, 70 / Math.max(0.25, speed));
+      if (now - lastFrameRef.current >= frameMs) {
+        draw();
+        tickRef.current += 2;
+        lastFrameRef.current = now;
+      }
       rafRef.current = requestAnimationFrame(loop);
     };
 
+    draw();
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [speed, density]);
+  }, [speed, stars]);
 
   return (
-    <div className="flex items-center justify-center overflow-hidden w-full h-full">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden">
       <pre
         ref={preRef}
-        className="text-[6px] sm:text-[8px] md:text-[9px] leading-[1.0] font-mono select-none whitespace-pre"
+        className="select-none whitespace-pre font-mono text-[7.4px] font-black leading-[1.04] tracking-[-0.1em] sm:text-[8.6px] md:text-[9.8px] lg:text-[10.8px]"
         style={{
           color: themeColor,
-          textShadow: `0 0 5px ${themeColor}66`,
+          textShadow: `0 0 4px ${themeColor}cc, 0 0 12px ${themeColor}73`,
         }}
       />
     </div>

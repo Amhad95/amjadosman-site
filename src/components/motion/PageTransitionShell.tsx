@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface PageTransitionShellProps {
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
 export const PageTransitionShell: React.FC<PageTransitionShellProps> = ({ children }) => {
   const location = useLocation();
-  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -33,7 +32,7 @@ export const PageTransitionShell: React.FC<PageTransitionShellProps> = ({ childr
   return (
     <div
       key={`${location.pathname}${location.search}`}
-      className={reducedMotion ? undefined : 'page-transition-shell'}
+      className="page-transition-shell"
     >
       {children}
     </div>

@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
 import Software from "./pages/Software";
@@ -26,6 +26,8 @@ import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancel from "./pages/PaymentCancel";
 // Tool pages
 import SopBuilder from "./pages/tools/SopBuilder";
 import PageCritique from "./pages/tools/PageCritique";
@@ -36,13 +38,8 @@ import KpiAudit from "./pages/tools/KpiAudit";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
+export const AppRoutes = () => (
+  <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<Services />} />
           <Route path="/services/brand" element={<ServicesBrand />} />
@@ -65,6 +62,8 @@ const App = () => (
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/about" element={<About />} />
           <Route path="/book" element={<Book />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/cancel" element={<PaymentCancel />} />
           <Route path="/process" element={<Process />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/resources/:slug" element={<ArticleDetail />} />
@@ -72,8 +71,17 @@ const App = () => (
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+  </Routes>
+);
+
+interface AppProps { ssrPath?: string }
+
+const App = ({ ssrPath }: AppProps) => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      {ssrPath ? <MemoryRouter initialEntries={[ssrPath]}><AppRoutes /></MemoryRouter> : <BrowserRouter><AppRoutes /></BrowserRouter>}
     </TooltipProvider>
   </QueryClientProvider>
 );

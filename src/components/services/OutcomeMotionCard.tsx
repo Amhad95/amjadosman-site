@@ -563,7 +563,7 @@ const OutcomeMotionCardComponent: React.FC<OutcomeMotionCardProps> = ({
   return (
     <div
       className={cn(
-        'outcome-motion-card group rounded-[28px] border border-ink/10 bg-card p-4 md:p-5 shadow-[0_24px_50px_-34px_rgba(8,15,32,0.28)] transition-all duration-300 hover:-translate-y-1 hover:border-ink/18 hover:shadow-[0_26px_60px_-32px_rgba(8,15,32,0.34)]',
+        'media-pop-card outcome-motion-card group rounded-[28px] border border-ink/10 bg-card p-4 md:p-5 shadow-[0_24px_50px_-34px_rgba(8,15,32,0.28)] hover:border-ink/18 hover:shadow-[0_26px_60px_-32px_rgba(8,15,32,0.34)]',
         className
       )}
     >
@@ -584,7 +584,7 @@ const OutcomeMotionCardComponent: React.FC<OutcomeMotionCardProps> = ({
           <span>{String(sequence).padStart(2, '0')}</span>
         </div>
 
-        <div className="relative h-full w-full px-3 pb-3 pt-9">
+        <div className="media-pop-target relative h-full w-full px-3 pb-3 pt-9">
           <Visual animate={!prefersReducedMotion} />
         </div>
       </div>

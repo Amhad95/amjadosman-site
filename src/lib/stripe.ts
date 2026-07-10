@@ -1,14 +1,22 @@
-import { supabase } from "@/integrations/supabase/client";
-
-export async function startCheckout(priceId: string, mode: "payment" | "subscription" = "payment") {
-  const { data, error } = await supabase.functions.invoke("create-checkout", {
-    body: { priceId, mode },
+export async function startCheckout(
+  priceId: string,
+  mode: "payment" | "subscription" = "payment"
+) {
+  const response = await fetch("/api/create-checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ priceId, mode }),
   });
 
-  if (error) throw error;
-  if (data?.url) {
-    window.open(data.url, "_blank");
+  const payload = (await response.json().catch(() => null)) as
+    | { url?: string; error?: string }
+    | null;
+
+  if (!response.ok || !payload?.url) {
+    throw new Error(payload?.error ?? "Checkout could not be started.");
   }
+
+  window.location.assign(payload.url);
 }
 
 // ── Track A: Brand ──

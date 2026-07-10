@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Settings, Users, Database, GraduationCap, Check } from 'lucide-react';
-import { useLocale } from '@/lib/locale';
+import { Locale, useLocale } from '@/lib/locale';
 
 interface TimelineStep {
   week: string;
@@ -11,65 +11,44 @@ interface TimelineStep {
   icon: React.ElementType;
 }
 
-const stepsEn: TimelineStep[] = [
-  {
-    week: 'Week 1',
-    title: 'Roles and permissions',
-    description: 'Team structure, access levels, and approval workflows configured.',
-    icon: Users,
-  },
-  {
-    week: 'Week 2',
-    title: 'Templates and workflows',
-    description: 'Pipeline stages, document templates, and automation rules set up.',
-    icon: Settings,
-  },
-  {
-    week: 'Week 3',
-    title: 'Data import',
-    description: 'Existing records migrated and validated in clean structure.',
-    icon: Database,
-  },
-  {
-    week: 'Week 4',
-    title: 'Training and handover',
-    description: 'Team onboarding, documentation, and admin support begins.',
-    icon: GraduationCap,
-  },
-];
-
-const stepsAr: TimelineStep[] = [
-  {
-    week: 'الأسبوع 1',
-    title: 'الأدوار والصلاحيات',
-    description: 'تهيئة هيكل الفريق ومستويات الوصول ومسارات الاعتماد.',
-    icon: Users,
-  },
-  {
-    week: 'الأسبوع 2',
-    title: 'القوالب وسير العمل',
-    description: 'إعداد مراحل العمل وقوالب المستندات وقواعد الأتمتة.',
-    icon: Settings,
-  },
-  {
-    week: 'الأسبوع 3',
-    title: 'استيراد البيانات',
-    description: 'نقل السجلات الحالية والتحقق منها داخل هيكل نظيف.',
-    icon: Database,
-  },
-  {
-    week: 'الأسبوع 4',
-    title: 'التدريب والتسليم',
-    description: 'بدء تأهيل الفريق والتوثيق ودعم الإدارة.',
-    icon: GraduationCap,
-  },
-];
+const stepsByLocale: Record<Locale, TimelineStep[]> = {
+  en: [
+    { week: 'Week 1', title: 'Roles and permissions', description: 'Team structure, access levels, and approval workflows configured.', icon: Users },
+    { week: 'Week 2', title: 'Templates and workflows', description: 'Pipeline stages, document templates, and automation rules set up.', icon: Settings },
+    { week: 'Week 3', title: 'Data import', description: 'Existing records migrated and validated in clean structure.', icon: Database },
+    { week: 'Week 4', title: 'Training and handover', description: 'Team onboarding, documentation, and admin support begins.', icon: GraduationCap },
+  ],
+  ar: [
+    { week: 'الأسبوع 1', title: 'الأدوار والصلاحيات', description: 'تهيئة هيكل الفريق ومستويات الوصول ومسارات الاعتماد.', icon: Users },
+    { week: 'الأسبوع 2', title: 'القوالب وسير العمل', description: 'إعداد مراحل العمل وقوالب المستندات وقواعد الأتمتة.', icon: Settings },
+    { week: 'الأسبوع 3', title: 'استيراد البيانات', description: 'نقل السجلات الحالية والتحقق منها داخل هيكل نظيف.', icon: Database },
+    { week: 'الأسبوع 4', title: 'التدريب والتسليم', description: 'بدء تأهيل الفريق والتوثيق ودعم الإدارة.', icon: GraduationCap },
+  ],
+  de: [
+    { week: 'Woche 1', title: 'Rollen und Berechtigungen', description: 'Teamstruktur, Zugriffsebenen und Freigabe-Workflows werden eingerichtet.', icon: Users },
+    { week: 'Woche 2', title: 'Vorlagen und Workflows', description: 'Pipeline-Stufen, Dokumentvorlagen und Automationsregeln werden konfiguriert.', icon: Settings },
+    { week: 'Woche 3', title: 'Datenimport', description: 'Bestehende Datensätze werden migriert und in sauberer Struktur validiert.', icon: Database },
+    { week: 'Woche 4', title: 'Training und Übergabe', description: 'Team-Onboarding, Dokumentation und Admin-Support beginnen.', icon: GraduationCap },
+  ],
+  fr: [
+    { week: 'Semaine 1', title: 'Rôles et permissions', description: "Structure d'équipe, accès et validations sont configurés.", icon: Users },
+    { week: 'Semaine 2', title: 'Modèles et workflows', description: 'Étapes, modèles de documents et règles d’automatisation sont mis en place.', icon: Settings },
+    { week: 'Semaine 3', title: 'Import de données', description: 'Les données existantes sont migrées et validées dans une structure propre.', icon: Database },
+    { week: 'Semaine 4', title: 'Formation et remise', description: "Onboarding de l'équipe, documentation et support admin commencent.", icon: GraduationCap },
+  ],
+  bg: [
+    { week: 'Седмица 1', title: 'Роли и права', description: 'Екипна структура, нива на достъп и процеси за одобрение се настройват.', icon: Users },
+    { week: 'Седмица 2', title: 'Шаблони и процеси', description: 'Етапи, документни шаблони и правила за автоматизация се конфигурират.', icon: Settings },
+    { week: 'Седмица 3', title: 'Импорт на данни', description: 'Съществуващи записи се мигрират и валидират в чиста структура.', icon: Database },
+    { week: 'Седмица 4', title: 'Обучение и предаване', description: 'Започват onboarding на екипа, документация и admin поддръжка.', icon: GraduationCap },
+  ],
+};
 
 export const SetupTimeline: React.FC<{ className?: string }> = ({ className }) => {
   const { locale, isRTL } = useLocale();
   const reducedMotion = useReducedMotion();
   const [activeStep, setActiveStep] = useState(0);
-  const steps = locale === 'ar' ? stepsAr : stepsEn;
+  const steps = stepsByLocale[locale] ?? stepsByLocale.en;
 
   useEffect(() => {
     if (reducedMotion) return;

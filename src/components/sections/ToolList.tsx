@@ -12,6 +12,7 @@ import {
   LineTree,
 } from '@/components/ui/line-illustrations';
 import { RevealGroup } from '@/components/motion/Reveal';
+import { useLocale } from '@/lib/locale';
 
 interface Tool {
   title: string;
@@ -65,6 +66,15 @@ export const ToolList: React.FC<ToolListProps> = ({
   plateColor,
   className,
 }) => {
+  const { locale } = useLocale();
+  const tryLabel = {
+    en: 'Try this tool',
+    ar: 'جرّب الأداة',
+    de: 'Tool testen',
+    fr: 'Essayer l’outil',
+    bg: 'Пробвайте инструмента',
+  }[locale];
+
   // Preview variant: compact 3-column grid for homepage
   if (variant === 'preview') {
     return (
@@ -81,28 +91,28 @@ export const ToolList: React.FC<ToolListProps> = ({
             <Link
               key={tool.title}
               to={tool.href || '/tools'}
-              className="group relative bg-card rounded-2xl border border-ink/10 hover:border-ink/20 transition-all duration-200 hover:shadow-lg overflow-hidden"
+              className="media-pop-card group relative bg-card rounded-[34px] border border-ink/10 p-4 md:p-5 hover:border-ink/18 hover:shadow-xl shadow-[0_22px_54px_-42px_rgba(8,15,32,0.18)] flex h-full flex-col"
             >
               {/* Illustration thumbnail */}
               <div className={cn(
-                "aspect-square border-b border-ink/5 flex items-center justify-center p-4",
+                "aspect-square rounded-[26px] flex items-center justify-center p-4 overflow-hidden",
                 plateClasses[cardColor]
               )}>
-              <div className="w-28 h-28 text-mint">
+              <div className="media-pop-target w-28 h-28 text-mint">
                   <Illustration delay={index * 100} />
                 </div>
               </div>
               
               {/* Content */}
-              <div className="p-4">
+              <div className="px-1 pt-5 pb-1 md:px-2 flex flex-1 flex-col">
                 <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
                   {tool.title}
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                <p className="text-sm text-muted-foreground line-clamp-2 mb-5">
                   {tool.description}
                 </p>
-                <span className="inline-flex items-center gap-1 text-sm font-medium text-foreground group-hover:text-lavender transition-colors">
-                  Try this tool
+                <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-foreground group-hover:text-lavender transition-colors">
+                  {tryLabel}
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </span>
               </div>
@@ -130,28 +140,28 @@ export const ToolList: React.FC<ToolListProps> = ({
           <Link
             key={tool.title}
             to={tool.href || '#'}
-            className="group relative bg-card rounded-2xl border border-ink/10 hover:border-ink/20 transition-all duration-200 hover:shadow-lg overflow-hidden flex flex-col"
+            className="media-pop-card group relative bg-card rounded-[30px] border border-ink/10 p-3 md:p-4 hover:border-ink/18 hover:shadow-xl shadow-[0_20px_48px_-40px_rgba(8,15,32,0.18)] flex flex-col"
           >
             {/* Illustration thumbnail */}
             <div className={cn(
-              "aspect-square border-b border-ink/5 flex items-center justify-center p-4",
+              "aspect-square rounded-[22px] flex items-center justify-center p-4 overflow-hidden",
               plateClasses[cardColor]
             )}>
-              <div className="w-20 h-20 md:w-24 md:h-24 text-mint">
+              <div className="media-pop-target w-20 h-20 md:w-24 md:h-24 text-mint">
                 <Illustration delay={index * 80} />
               </div>
             </div>
             
             {/* Content */}
-            <div className="p-4 flex-1 flex flex-col">
+            <div className="px-1 pt-4 pb-1 flex-1 flex flex-col">
               <h3 className="font-serif text-lg md:text-xl font-semibold text-foreground mb-2">
                 {tool.title}
               </h3>
-              <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-3 flex-1">
+              <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-4 flex-1">
                 {tool.description}
               </p>
               <span className="inline-flex items-center gap-1 text-xs md:text-sm font-medium text-foreground group-hover:text-lavender transition-colors">
-                Try this tool
+                {tryLabel}
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </span>
             </div>

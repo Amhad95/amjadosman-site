@@ -1,14 +1,17 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { SectionHeader } from '@/components/shared/SectionHeader';
+import { Hero } from '@/components/sections/Hero';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { useSiteContent } from '@/lib/content';
 import { buildMailtoHref } from '@/lib/mailto';
 import { useLocale } from '@/lib/locale';
+import { KnotAnimation } from '@/components/ui/knot-animation';
+import { usePageMeta } from '@/hooks/use-page-meta';
 
 const Contact = () => {
   const { contact } = useSiteContent();
   const { isRTL } = useLocale();
+  usePageMeta({ title: `${contact.hero.headline} | Amjad Osman`, description: contact.hero.subheadline });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,13 +43,21 @@ const Contact = () => {
 
   return (
     <Layout>
+      <Hero
+        eyebrow={contact.hero.eyebrow}
+        headline={contact.hero.headline}
+        subheadline={contact.hero.subheadline}
+        credibilityStrip={contact.hero.credibilityStrip}
+        plate="astral"
+        rightElement={<KnotAnimation speedA={0.018} speedB={0.011} />}
+      />
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-2xl">
-          <SectionHeader headline={contact.hero.headline} subheadline={contact.hero.subheadline} variant="poster" />
           <form className="space-y-6 mb-8" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-medium mb-2">{contact.form.fields[0].label}</label>
+              <label htmlFor="contact-name" className="block text-sm font-medium mb-2">{contact.form.fields[0].label}</label>
               <input
+                id="contact-name"
                 dir={isRTL ? 'rtl' : 'ltr'}
                 type="text"
                 value={formData.name}
@@ -56,8 +67,9 @@ const Contact = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">{contact.form.fields[1].label}</label>
+              <label htmlFor="contact-email" className="block text-sm font-medium mb-2">{contact.form.fields[1].label}</label>
               <input
+                id="contact-email"
                 dir="ltr"
                 type="email"
                 value={formData.email}
@@ -67,8 +79,9 @@ const Contact = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">{contact.form.fields[2].label}</label>
+              <label htmlFor="contact-message" className="block text-sm font-medium mb-2">{contact.form.fields[2].label}</label>
               <textarea
+                id="contact-message"
                 dir={isRTL ? 'rtl' : 'ltr'}
                 value={formData.message}
                 onChange={handleChange('message')}

@@ -1,15 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
-import { ToolInputForm } from '@/components/tools/ToolInputForm';
-import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
+import { ToolWorkbench } from '@/components/tools/ToolWorkbench';
 import { CTABand } from '@/components/sections/CTABand';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 import { useLocale } from '@/lib/locale';
 import { usePageMeta } from '@/hooks/use-page-meta';
 import { getToolPageContent } from '@/lib/toolPageContent';
@@ -58,18 +55,28 @@ const DashboardBuilder = () => {
   };
 
   return (
-    <Layout motionLevel="subtle">
-      <CompactPageHeader
-        eyebrow={copy.eyebrow}
+    <Layout motionLevel="none">
+      <ToolWorkbench
+        tool="dashboard-builder"
         title={copy.title}
         description={copy.description}
+        eyebrow={copy.eyebrow}
         plate="astral"
-        rightElement={<ToolHeaderAnimation slug="dashboard-builder" />}
-      />
-
-      <section className="py-12 md:py-16 bg-background">
-        <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel={copy.submitLabel}>
+        submitLabel={copy.submitLabel}
+        isLoading={isStreaming}
+        output={output}
+        onSubmit={handleSubmit}
+        inputsSummary={[
+          { label: 'Audience', value: audience },
+          { label: 'Needs', value: needs },
+          { label: 'Sources', value: dataSources },
+        ]}
+        brief={[
+          'Name the meeting or decision this dashboard supports.',
+          'List current tools, spreadsheets, and data owners.',
+          'Mention targets, thresholds, or alerts you already use.',
+        ]}
+      >
             <div>
               <Label htmlFor="audience" className="text-sm font-semibold mb-2 block">
                 {copy.fields.audienceLabel} <span className="font-normal text-muted-foreground">{copy.fields.optional}</span>
@@ -112,15 +119,7 @@ const DashboardBuilder = () => {
                 dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
-          </ToolInputForm>
-
-          {(output || isStreaming) && (
-            <div className="mt-6">
-              <ToolOutputPanel output={output} isStreaming={isStreaming} />
-            </div>
-          )}
-        </div>
-      </section>
+      </ToolWorkbench>
 
       <CTABand
         headline={copy.buildCtaHeadline}

@@ -1,14 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { CompactPageHeader } from '@/components/shared/CompactPageHeader';
-import { ToolInputForm } from '@/components/tools/ToolInputForm';
-import { ToolOutputPanel } from '@/components/tools/ToolOutputPanel';
+import { ToolWorkbench } from '@/components/tools/ToolWorkbench';
 import { CTABand } from '@/components/sections/CTABand';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { streamTool } from '@/lib/streamTool';
 import { useToast } from '@/hooks/use-toast';
-import { ToolHeaderAnimation } from '@/components/tools/ToolHeaderAnimation';
 import { useLocale } from '@/lib/locale';
 import { usePageMeta } from '@/hooks/use-page-meta';
 import { getToolPageContent } from '@/lib/toolPageContent';
@@ -51,18 +48,26 @@ const ProcessMapper = () => {
   };
 
   return (
-    <Layout motionLevel="subtle">
-      <CompactPageHeader
-        eyebrow={copy.eyebrow}
+    <Layout motionLevel="none">
+      <ToolWorkbench
+        tool="process-mapper"
         title={copy.title}
         description={copy.description}
+        eyebrow={copy.eyebrow}
         plate="emerald"
-        rightElement={<ToolHeaderAnimation slug="process-mapper" />}
-      />
-
-      <section className="py-12 md:py-16 bg-background">
-        <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-          <ToolInputForm onSubmit={handleSubmit} isLoading={isStreaming} submitLabel={copy.submitLabel}>
+        submitLabel={copy.submitLabel}
+        isLoading={isStreaming}
+        output={output}
+        onSubmit={handleSubmit}
+        inputsSummary={[
+          { label: 'Workflow', value: workflow },
+        ]}
+        brief={[
+          'Describe the real workflow, including messy handoffs.',
+          'Name each role, tool, and approval point.',
+          'Add what usually delays or breaks the process.',
+        ]}
+      >
             <div>
               <Label htmlFor="workflow" className="text-sm font-semibold mb-2 block">
                 {copy.fields.workflowLabel}
@@ -80,15 +85,7 @@ const ProcessMapper = () => {
                 dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
-          </ToolInputForm>
-
-          {(output || isStreaming) && (
-            <div className="mt-6">
-              <ToolOutputPanel output={output} isStreaming={isStreaming} />
-            </div>
-          )}
-        </div>
-      </section>
+      </ToolWorkbench>
 
       <CTABand
         headline={copy.buildCtaHeadline}

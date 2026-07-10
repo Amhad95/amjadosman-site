@@ -35,15 +35,26 @@ describe("localized fallback resolvers", () => {
   });
 
   it("uses Arabic fields when available for work cases", () => {
-    const workCase = resolveLocalizedWorkCase(fallbackWorkCases[0], "ar");
+    const localizedSource = {
+      ...fallbackWorkCases[0],
+      title_ar: "عنوان عربي",
+      description_ar: "وصف عربي",
+      cta_label_ar: "دعوة عربية",
+      clientProfile_ar: "ملف عربي",
+      challenge_ar: "تحد عربي",
+      approach_ar: ["نهج عربي"],
+      deliverables_ar: ["تسليم عربي"],
+      outcomes_ar: ["نتيجة عربية"],
+    };
+    const workCase = resolveLocalizedWorkCase(localizedSource, "ar");
 
-    expect(workCase.title).toBe(fallbackWorkCases[0].title_ar);
-    expect(workCase.description).toBe(fallbackWorkCases[0].description_ar);
-    expect(workCase.cta_label).toBe(fallbackWorkCases[0].cta_label_ar);
-    expect(workCase.clientProfile).toBe(fallbackWorkCases[0].clientProfile_ar);
-    expect(workCase.challenge).toBe(fallbackWorkCases[0].challenge_ar);
-    expect(workCase.approach).toEqual(fallbackWorkCases[0].approach_ar);
-    expect(workCase.deliverables).toEqual(fallbackWorkCases[0].deliverables_ar);
-    expect(workCase.outcomes).toEqual(fallbackWorkCases[0].outcomes_ar);
+    expect(workCase.title).toBe(localizedSource.title_ar);
+    expect(workCase.description).toBe(localizedSource.description_ar);
+    expect(workCase.cta_label).toBe(localizedSource.cta_label_ar);
+    expect(workCase.clientProfile).toBe(localizedSource.clientProfile_ar);
+    expect(workCase.challenge).toBe(localizedSource.challenge_ar);
+    expect(workCase.approach).toEqual(localizedSource.approach_ar);
+    expect(workCase.deliverables).toEqual(localizedSource.deliverables_ar);
+    expect(workCase.outcomes).toEqual(localizedSource.outcomes_ar);
   });
 });

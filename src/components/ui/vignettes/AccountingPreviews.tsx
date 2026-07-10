@@ -290,12 +290,13 @@ export const ApprovalsQueueRealistic: React.FC<{ className?: string }> = ({ clas
             {item.status === 'pending' ? (
               <div className={cn('flex items-center gap-1', isRTL && 'flex-row-reverse')}>
                 <button
+                  aria-label={locale === 'ar' ? 'اعتماد المصروف' : 'Approve expense'}
                   onClick={() => handleApprove(item.id)}
                   className="w-6 h-6 rounded-md bg-emerald-100 flex items-center justify-center hover:bg-emerald-200 transition-colors"
                 >
                   <Check className="w-3 h-3 text-emerald-700" />
                 </button>
-                <button className="w-6 h-6 rounded-md bg-red-100 flex items-center justify-center hover:bg-red-200 transition-colors">
+                <button aria-label={locale === 'ar' ? 'رفض المصروف' : 'Reject expense'} className="w-6 h-6 rounded-md bg-red-100 flex items-center justify-center hover:bg-red-200 transition-colors">
                   <X className="w-3 h-3 text-red-700" />
                 </button>
               </div>

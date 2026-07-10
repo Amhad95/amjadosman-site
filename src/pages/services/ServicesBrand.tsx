@@ -12,6 +12,7 @@ import { usePricingContent } from '@/lib/pricingContent';
 import { useLocale } from '@/lib/locale';
 import { getServicePageContent } from '@/lib/servicePageContent';
 import { cn } from '@/lib/utils';
+import { usePageMeta } from '@/hooks/use-page-meta';
 
 const outcomeMotions: OutcomeMotionVariant[] = [
   'brand-impression',
@@ -28,6 +29,7 @@ const ServicesBrand = () => {
   const { servicePricingTracks } = usePricingContent();
   const pricingTrack = servicePricingTracks.brand;
   const content = getServicePageContent(locale).brand;
+  usePageMeta({ title: `${content.hero.headline} | Amjad Osman`, description: content.hero.subheadline });
 
   return (
     <Layout>

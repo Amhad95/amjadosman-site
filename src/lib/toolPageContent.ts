@@ -8,7 +8,7 @@ export type ToolPageKey =
   | "dashboard-builder"
   | "kpi-audit";
 
-interface ToolPageContent {
+export interface ToolPageContent {
   metaTitle: string;
   metaDescription: string;
   eyebrow: string;
@@ -25,18 +25,18 @@ interface ToolPageContent {
 
 const toolPageContentEn: Record<ToolPageKey, ToolPageContent> = {
   "sop-builder": {
-    metaTitle: "SOP Draft Builder — Free SOP Generator | ADSI",
+    metaTitle: "SOP Draft Builder — Free SOP Generator | Amjad Osman",
     metaDescription:
-      "Generate a complete, structured Standard Operating Procedure from a messy process description. Free AI tool from ADSI.",
-    eyebrow: "AI tool",
+      "Generate a complete, structured Standard Operating Procedure from a messy process description. Free self-help tool from Amjad Osman.",
+    eyebrow: "Self-help tool",
     title: "SOP Draft Builder",
     description:
       "Describe any process in plain English. Get a complete, structured SOP document in seconds.",
     submitLabel: "Build SOP",
     errorTitle: "Error",
-    buildCtaHeadline: "Want us to build it?",
+    buildCtaHeadline: "Want me to build it?",
     buildCtaDescription:
-      "We can turn this tool output into a scoped delivery with pricing.",
+      "I can turn this tool output into a scoped delivery with pricing.",
     primaryCtaLabel: "Book a Call",
     secondaryCtaLabel: "View pricing",
     fields: {
@@ -48,18 +48,18 @@ const toolPageContentEn: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "brand-audit": {
-    metaTitle: "Brand Consistency Audit — Free Brand Audit Tool | ADSI",
+    metaTitle: "Brand Consistency Audit — Free Brand Audit Tool | Amjad Osman",
     metaDescription:
-      "Get a free AI-powered brand consistency audit. Identify visual inconsistencies, tone issues, and priority fixes for your brand. Free tool from ADSI.",
-    eyebrow: "AI tool",
+      "Get a free AI-powered brand consistency audit. Identify visual inconsistencies, tone issues, and priority fixes for your brand. Free tool from Amjad Osman.",
+    eyebrow: "Self-help tool",
     title: "Brand Consistency Audit",
     description:
       "Describe your brand and your assets. Get a consistency report with visual, tone, and priority fixes.",
     submitLabel: "Audit Brand",
     errorTitle: "Error",
-    buildCtaHeadline: "Want us to build it?",
+    buildCtaHeadline: "Want me to build it?",
     buildCtaDescription:
-      "We can turn this tool output into a scoped delivery with pricing.",
+      "I can turn this tool output into a scoped delivery with pricing.",
     primaryCtaLabel: "Book a Call",
     secondaryCtaLabel: "View pricing",
     fields: {
@@ -77,18 +77,18 @@ const toolPageContentEn: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "page-critique": {
-    metaTitle: "Landing Page Critique — Free Conversion Audit | ADSI",
+    metaTitle: "Landing Page Critique — Free Conversion Audit | Amjad Osman",
     metaDescription:
-      "Get a free AI-powered conversion audit of your landing page. Hierarchy analysis, CTA review, friction points, and priority fixes. Free tool from ADSI.",
-    eyebrow: "AI tool",
+      "Get a free AI-powered conversion audit of your landing page. Hierarchy analysis, CTA review, friction points, and priority fixes. Free tool from Amjad Osman.",
+    eyebrow: "Self-help tool",
     title: "Landing Page Critique",
     description:
       "Paste your page URL or copy. Get a conversion audit with hierarchy notes, CTA fixes, and ranked priority actions.",
     submitLabel: "Critique Page",
     errorTitle: "Error",
-    buildCtaHeadline: "Want us to build it?",
+    buildCtaHeadline: "Want me to build it?",
     buildCtaDescription:
-      "We can turn this tool output into a scoped delivery with pricing.",
+      "I can turn this tool output into a scoped delivery with pricing.",
     primaryCtaLabel: "Book a Call",
     secondaryCtaLabel: "View pricing",
     fields: {
@@ -104,18 +104,18 @@ const toolPageContentEn: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "process-mapper": {
-    metaTitle: "Process Flow Mapper — Free Workflow Analysis Tool | ADSI",
+    metaTitle: "Process Flow Mapper — Free Workflow Analysis Tool | Amjad Osman",
     metaDescription:
-      "Turn a workflow description into a structured process map with steps, decision points, and improvement opportunities. Free AI tool from ADSI.",
-    eyebrow: "AI tool",
+      "Turn a workflow description into a structured process map with steps, decision points, and improvement opportunities. Free self-help tool from Amjad Osman.",
+    eyebrow: "Self-help tool",
     title: "Process Flow Mapper",
     description:
       "Describe how a workflow actually runs. Get a structured map with steps, decision points, and bottleneck analysis.",
     submitLabel: "Map Process",
     errorTitle: "Error",
-    buildCtaHeadline: "Want us to build it?",
+    buildCtaHeadline: "Want me to build it?",
     buildCtaDescription:
-      "We can turn this tool output into a scoped delivery with pricing.",
+      "I can turn this tool output into a scoped delivery with pricing.",
     primaryCtaLabel: "Book a Call",
     secondaryCtaLabel: "View pricing",
     fields: {
@@ -127,18 +127,18 @@ const toolPageContentEn: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "dashboard-builder": {
-    metaTitle: "Dashboard Requirements Builder — Free Dashboard Spec Tool | ADSI",
+    metaTitle: "Dashboard Requirements Builder — Free Dashboard Spec Tool | Amjad Osman",
     metaDescription:
-      "Generate a complete dashboard specification from your reporting needs. KPIs, data sources, layout recommendations. Free AI tool from ADSI.",
-    eyebrow: "AI tool",
+      "Generate a complete dashboard specification from your reporting needs. KPIs, data sources, layout recommendations. Free self-help tool from Amjad Osman.",
+    eyebrow: "Self-help tool",
     title: "Dashboard Requirements Builder",
     description:
       "Describe what you need to see and why. Get a complete dashboard specification with KPIs, data sources, and layout recommendations.",
     submitLabel: "Build Spec",
     errorTitle: "Error",
-    buildCtaHeadline: "Want us to build it?",
+    buildCtaHeadline: "Want me to build it?",
     buildCtaDescription:
-      "We can turn this tool output into a scoped delivery with pricing.",
+      "I can turn this tool output into a scoped delivery with pricing.",
     primaryCtaLabel: "Book a Call",
     secondaryCtaLabel: "View pricing",
     fields: {
@@ -156,18 +156,18 @@ const toolPageContentEn: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "kpi-audit": {
-    metaTitle: "KPI Audit — Free Metrics Review Tool | ADSI",
+    metaTitle: "KPI Audit — Free Metrics Review Tool | Amjad Osman",
     metaDescription:
-      "Get a free AI-powered KPI audit. Identify vanity metrics, missing indicators, and build a healthier measurement framework. Free tool from ADSI.",
-    eyebrow: "AI tool",
+      "Get a free AI-powered KPI audit. Identify vanity metrics, missing indicators, and build a healthier measurement framework. Free tool from Amjad Osman.",
+    eyebrow: "Self-help tool",
     title: "KPI Audit",
     description:
       "List the metrics you currently track. Get a brutally honest audit — what's vanity, what's missing, and what to actually measure.",
     submitLabel: "Audit KPIs",
     errorTitle: "Error",
-    buildCtaHeadline: "Want us to build it?",
+    buildCtaHeadline: "Want me to build it?",
     buildCtaDescription:
-      "We can turn this tool output into a scoped delivery with pricing.",
+      "I can turn this tool output into a scoped delivery with pricing.",
     primaryCtaLabel: "Book a Call",
     secondaryCtaLabel: "View pricing",
     fields: {
@@ -186,18 +186,18 @@ const toolPageContentEn: Record<ToolPageKey, ToolPageContent> = {
 
 const toolPageContentAr: Record<ToolPageKey, ToolPageContent> = {
   "sop-builder": {
-    metaTitle: "منشئ مسودة SOP | أداة مجانية من ADSI",
+    metaTitle: "منشئ مسودة SOP | أداة مجانية من أمجد عثمان",
     metaDescription:
-      "أنشئ إجراء تشغيلياً معيارياً كاملاً ومنظماً انطلاقاً من وصف غير مرتب للعملية. أداة ذكاء اصطناعي مجانية من ADSI.",
-    eyebrow: "أداة ذكاء اصطناعي",
+      "أنشئ إجراء تشغيلياً معيارياً كاملاً ومنظماً انطلاقاً من وصف غير مرتب للعملية. أداة مساعدة ذاتية مجانية من أمجد عثمان.",
+    eyebrow: "أداة مساعدة ذاتية",
     title: "منشئ مسودة SOP",
     description:
       "صف أي عملية باللغة الطبيعية. واحصل خلال ثوانٍ على مستند SOP كامل ومنظم.",
     submitLabel: "إنشاء SOP",
     errorTitle: "خطأ",
-    buildCtaHeadline: "هل تريدنا أن ننفذه؟",
+    buildCtaHeadline: "هل تريد أن أنفذه؟",
     buildCtaDescription:
-      "يمكننا تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
+      "يمكنني تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
     primaryCtaLabel: "احجز مكالمة",
     secondaryCtaLabel: "عرض الأسعار",
     fields: {
@@ -209,18 +209,18 @@ const toolPageContentAr: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "brand-audit": {
-    metaTitle: "تدقيق اتساق الهوية | أداة مجانية من ADSI",
+    metaTitle: "تدقيق اتساق الهوية | أداة مجانية من أمجد عثمان",
     metaDescription:
       "احصل على تدقيق مجاني مدعوم بالذكاء الاصطناعي لاتساق الهوية. حدّد التباينات البصرية ومشكلات النبرة وأولويات الإصلاح.",
-    eyebrow: "أداة ذكاء اصطناعي",
+    eyebrow: "أداة مساعدة ذاتية",
     title: "تدقيق اتساق الهوية",
     description:
       "صف هويتك وموادك الحالية. واحصل على تقرير اتساق يتضمن المظهر والنبرة وأولويات الإصلاح.",
     submitLabel: "تدقيق الهوية",
     errorTitle: "خطأ",
-    buildCtaHeadline: "هل تريدنا أن ننفذه؟",
+    buildCtaHeadline: "هل تريد أن أنفذه؟",
     buildCtaDescription:
-      "يمكننا تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
+      "يمكنني تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
     primaryCtaLabel: "احجز مكالمة",
     secondaryCtaLabel: "عرض الأسعار",
     fields: {
@@ -238,18 +238,18 @@ const toolPageContentAr: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "page-critique": {
-    metaTitle: "مراجعة صفحة الهبوط | تدقيق تحويل مجاني من ADSI",
+    metaTitle: "مراجعة صفحة الهبوط | تدقيق تحويل مجاني من أمجد عثمان",
     metaDescription:
       "احصل على تدقيق مجاني مدعوم بالذكاء الاصطناعي لصفحة الهبوط: تحليل الهرمية، ومراجعة الدعوات إلى الإجراء، ونقاط الاحتكاك، وأولويات الإصلاح.",
-    eyebrow: "أداة ذكاء اصطناعي",
+    eyebrow: "أداة مساعدة ذاتية",
     title: "مراجعة صفحة الهبوط",
     description:
       "ألصق رابط الصفحة أو النص. واحصل على تدقيق تحويل يتضمن ملاحظات الهرمية وإصلاحات CTA وأولويات التنفيذ.",
     submitLabel: "مراجعة الصفحة",
     errorTitle: "خطأ",
-    buildCtaHeadline: "هل تريدنا أن ننفذه؟",
+    buildCtaHeadline: "هل تريد أن أنفذه؟",
     buildCtaDescription:
-      "يمكننا تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
+      "يمكنني تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
     primaryCtaLabel: "احجز مكالمة",
     secondaryCtaLabel: "عرض الأسعار",
     fields: {
@@ -265,18 +265,18 @@ const toolPageContentAr: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "process-mapper": {
-    metaTitle: "مخطط سير العملية | أداة مجانية من ADSI",
+    metaTitle: "مخطط سير العملية | أداة مجانية من أمجد عثمان",
     metaDescription:
-      "حوّل وصف سير العمل إلى خريطة عملية منظمة تتضمن الخطوات ونقاط القرار وفرص التحسين. أداة ذكاء اصطناعي مجانية من ADSI.",
-    eyebrow: "أداة ذكاء اصطناعي",
+      "حوّل وصف سير العمل إلى خريطة عملية منظمة تتضمن الخطوات ونقاط القرار وفرص التحسين. أداة مساعدة ذاتية مجانية من أمجد عثمان.",
+    eyebrow: "أداة مساعدة ذاتية",
     title: "مخطط سير العملية",
     description:
       "صف كيف تسير العملية فعلاً. واحصل على خريطة منظمة تتضمن الخطوات ونقاط القرار وتحليل الاختناقات.",
     submitLabel: "رسم العملية",
     errorTitle: "خطأ",
-    buildCtaHeadline: "هل تريدنا أن ننفذه؟",
+    buildCtaHeadline: "هل تريد أن أنفذه؟",
     buildCtaDescription:
-      "يمكننا تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
+      "يمكنني تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
     primaryCtaLabel: "احجز مكالمة",
     secondaryCtaLabel: "عرض الأسعار",
     fields: {
@@ -288,18 +288,18 @@ const toolPageContentAr: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "dashboard-builder": {
-    metaTitle: "منشئ متطلبات لوحة التحكم | أداة مجانية من ADSI",
+    metaTitle: "منشئ متطلبات لوحة التحكم | أداة مجانية من أمجد عثمان",
     metaDescription:
       "أنشئ مواصفة كاملة للوحة التحكم انطلاقاً من احتياجاتك في التقارير، بما يشمل مؤشرات الأداء ومصادر البيانات وتوصيات التخطيط.",
-    eyebrow: "أداة ذكاء اصطناعي",
+    eyebrow: "أداة مساعدة ذاتية",
     title: "منشئ متطلبات لوحة التحكم",
     description:
       "اشرح ما الذي تحتاج إلى رؤيته ولماذا. واحصل على مواصفة كاملة للوحة التحكم تتضمن KPIs ومصادر البيانات وتوصيات التخطيط.",
     submitLabel: "إنشاء المواصفة",
     errorTitle: "خطأ",
-    buildCtaHeadline: "هل تريدنا أن ننفذه؟",
+    buildCtaHeadline: "هل تريد أن أنفذه؟",
     buildCtaDescription:
-      "يمكننا تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
+      "يمكنني تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
     primaryCtaLabel: "احجز مكالمة",
     secondaryCtaLabel: "عرض الأسعار",
     fields: {
@@ -317,18 +317,18 @@ const toolPageContentAr: Record<ToolPageKey, ToolPageContent> = {
     },
   },
   "kpi-audit": {
-    metaTitle: "تدقيق مؤشرات الأداء | أداة مجانية من ADSI",
+    metaTitle: "تدقيق مؤشرات الأداء | أداة مجانية من أمجد عثمان",
     metaDescription:
       "احصل على تدقيق مجاني لمؤشرات الأداء لتحديد مؤشرات الزينة والثغرات وبناء إطار قياس أكثر صحة.",
-    eyebrow: "أداة ذكاء اصطناعي",
+    eyebrow: "أداة مساعدة ذاتية",
     title: "تدقيق مؤشرات الأداء",
     description:
       "اكتب المؤشرات التي تتابعونها حالياً. واحصل على مراجعة صريحة لما هو سطحي وما هو ناقص وما الذي يجب قياسه فعلاً.",
     submitLabel: "تدقيق المؤشرات",
     errorTitle: "خطأ",
-    buildCtaHeadline: "هل تريدنا أن ننفذه؟",
+    buildCtaHeadline: "هل تريد أن أنفذه؟",
     buildCtaDescription:
-      "يمكننا تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
+      "يمكنني تحويل مخرجات هذه الأداة إلى تنفيذ محدد النطاق مع تسعير واضح.",
     primaryCtaLabel: "احجز مكالمة",
     secondaryCtaLabel: "عرض الأسعار",
     fields: {
@@ -345,5 +345,16 @@ const toolPageContentAr: Record<ToolPageKey, ToolPageContent> = {
   },
 };
 
-export const getToolPageContent = (locale: Locale, tool: ToolPageKey) =>
-  locale === "ar" ? toolPageContentAr[tool] : toolPageContentEn[tool];
+import { toolPageContentDe } from "./toolPageContentDe";
+import { toolPageContentFr } from "./toolPageContentFr";
+import { toolPageContentBg } from "./toolPageContentBg";
+
+export const getToolPageContent = (locale: Locale, tool: ToolPageKey) => {
+  switch (locale) {
+    case "ar": return toolPageContentAr[tool];
+    case "de": return toolPageContentDe[tool];
+    case "fr": return toolPageContentFr[tool];
+    case "bg": return toolPageContentBg[tool];
+    default: return toolPageContentEn[tool];
+  }
+};

@@ -780,17 +780,27 @@ const softwarePricingSummaryAr: SoftwarePricingSummary = {
   },
 };
 
+import { servicePricingTracksDe, softwarePricingSummaryDe } from "./pricingContentDe";
+import { servicePricingTracksFr, softwarePricingSummaryFr } from "./pricingContentFr";
+import { servicePricingTracksBg, softwarePricingSummaryBg } from "./pricingContentBg";
+
 const servicePricingTracksByLocale: Record<
   Locale,
   Record<ServicePricingTrack["id"], ServicePricingTrack>
 > = {
   en: servicePricingTracksEn,
   ar: servicePricingTracksAr,
+  de: servicePricingTracksDe,
+  fr: servicePricingTracksFr,
+  bg: servicePricingTracksBg,
 };
 
 const softwarePricingSummaryByLocale: Record<Locale, SoftwarePricingSummary> = {
   en: softwarePricingSummaryEn,
   ar: softwarePricingSummaryAr,
+  de: softwarePricingSummaryDe,
+  fr: softwarePricingSummaryFr,
+  bg: softwarePricingSummaryBg,
 };
 
 // Compatibility export for existing service pages that still read the

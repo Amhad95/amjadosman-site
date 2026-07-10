@@ -6,9 +6,11 @@ import { SectionHeader } from '@/components/shared/SectionHeader';
 import { CTABand } from '@/components/sections/CTABand';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
+import { MatrixCodeBackground } from '@/components/shared/MatrixCodeBackground';
 import { ArrowRight, Bot, BrainCircuit, Briefcase, CheckCircle2, ClipboardCheck, LayoutPanelTop, LifeBuoy, LucideIcon, ShieldCheck, Sparkles, Workflow } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
 import { usePageMeta } from '@/hooks/use-page-meta';
+import { getServicesOverviewCopy, servicePreviewTranslations } from '@/lib/servicesOverviewContent';
 
 interface PreviewFeature {
   icon: LucideIcon;
@@ -33,16 +35,14 @@ interface ServicePreview {
 
 const Services = () => {
   const { locale, isRTL } = useLocale();
+  const ui = getServicesOverviewCopy(locale);
 
   usePageMeta({
-    title: locale === 'ar' ? 'الخدمات | ADSI' : 'Services | ADSI',
-    description:
-      locale === 'ar'
-        ? 'اختر مسار الخدمة الذي يطابق الاختناق الحالي في فريقك.'
-        : 'Choose the service track that matches the bottleneck in front of your team.',
+    title: `${ui.eyebrow} | Amjad Osman`,
+    description: ui.heroSubheadline,
   });
 
-  const servicePreviews: ServicePreview[] = locale === 'ar'
+  const servicePreviewsBase: ServicePreview[] = locale === 'ar'
     ? [
         {
           id: 'brand-growth',
@@ -175,7 +175,7 @@ const Services = () => {
           name: 'Internal Operations Systems',
           headline: 'Replace scattered files and tribal knowledge with a cleaner operating layer.',
           summary:
-            'We structure the systems behind the business so information is easier to find, recurring work is easier to follow, and onboarding creates less manager dependency.',
+            'I structure the systems behind the business so information is easier to find, recurring work is easier to follow, and onboarding creates less manager dependency.',
           signal: 'Best when the business has grown faster than its internal structure.',
           accentText: 'text-lavender',
           accentBorder: 'border-lavender/25',
@@ -206,7 +206,7 @@ const Services = () => {
           name: 'AI Agents and Automation',
           headline: 'Automate repeat work without giving up visibility or control.',
           summary:
-            'We design practical agent workflows for routing, drafting, reporting, and knowledge support, with approvals, boundaries, and safer failure handling built in from the start.',
+            'I design practical agent workflows for routing, drafting, reporting, and knowledge support, with approvals, boundaries, and safer failure handling built in from the start.',
           signal: 'Best when the same repetitive work is eating time across support, operations, or reporting.',
           accentText: 'text-mint',
           accentBorder: 'border-mint/25',
@@ -234,7 +234,7 @@ const Services = () => {
         },
       ];
 
-  const engagementBasics = locale === 'ar'
+  const engagementBasicsBase = locale === 'ar'
     ? [
         {
           icon: ClipboardCheck,
@@ -280,54 +280,24 @@ const Services = () => {
         },
       ];
 
-  const overviewCards = locale === 'ar'
-    ? [
-        {
-          eyebrow: 'الظهور',
-          title: 'الهوية والموقع ومواد المبيعات',
-          body: 'للشركات التي تحتاج أن تبدو أكثر رسوخاً واتساقاً وأسهل في كسب الثقة.',
-        },
-        {
-          eyebrow: 'العمليات',
-          title: 'الهيكل والإجراءات وأنظمة الانضمام',
-          body: 'للشركات التي نمت وتحتاج الآن إلى طريقة أنظف لمشاركة المعلومات وتشغيل الأعمال المتكررة.',
-        },
-        {
-          eyebrow: 'الأتمتة',
-          title: 'تدفقات ذكاء اصطناعي مع ضوابط',
-          body: 'للشركات الجاهزة لإزالة العمل المتكرر دون تفويض الحكم إلى سير عمل غير آمن.',
-        },
-      ]
-    : [
-        {
-          eyebrow: 'Visibility',
-          title: 'Brand, website, and sales materials',
-          body: 'For companies that need to look more established, more coherent, or easier to trust.',
-        },
-        {
-          eyebrow: 'Operations',
-          title: 'Structure, SOPs, and onboarding systems',
-          body: 'For companies that have grown and now need a cleaner way to share information and run repeat work.',
-        },
-        {
-          eyebrow: 'Automation',
-          title: 'AI workflows with controls',
-          body: 'For companies ready to remove repetitive work without outsourcing judgment to an unsafe workflow.',
-        },
-      ];
+  const translations = servicePreviewTranslations[locale];
+  const servicePreviews = servicePreviewsBase.map((service, index) => {
+    const translation = translations?.[index];
+    return translation
+      ? { ...service, ...translation, features: service.features.map((feature, featureIndex) => ({ ...feature, ...translation.features[featureIndex] })) }
+      : service;
+  });
+  const engagementBasics = engagementBasicsBase.map((item, index) => ({ ...item, ...(ui.engagement[index] ?? {}) }));
+  const overviewCards = ui.overviewCards;
 
   return (
     <Layout>
       <Hero
-        eyebrow={locale === 'ar' ? 'الخدمات' : 'Services'}
-        headline={locale === 'ar'
-          ? 'ثلاث طرق تساعد بها ADSI الفرق على الظهور بشكل أقوى والعمل بشكل أنظف وأتمتة العمل المتكرر.'
-          : 'Three ways ADSI helps teams look sharper, run cleaner, and automate repeat work.'}
-        subheadline={locale === 'ar'
-          ? 'اختر الخدمة التي تطابق الاختناق الذي أمامك الآن. كل صفحة تشرح ما الذي تصلحه الخدمة وما الذي يتم تسليمه وكيف يبدأ العملاء عادة.'
-          : 'Choose the service that matches the bottleneck in front of you right now. Each page explains what the service fixes, what gets delivered, and how clients usually get started.'}
-        primaryCta={{ label: locale === 'ar' ? 'استكشف الخدمات' : 'Explore services', href: '#service-brand-growth' }}
-        secondaryCta={{ label: locale === 'ar' ? 'احجز مكالمة' : 'Book a call', href: '/book' }}
+        eyebrow={ui.eyebrow}
+        headline={ui.heroHeadline}
+        subheadline={ui.heroSubheadline}
+        primaryCta={{ label: ui.exploreServices, href: '#service-brand-growth' }}
+        secondaryCta={{ label: ui.bookCall, href: '/book' }}
         plate="navy"
         rightElement={
           <div className="w-full max-w-xl">
@@ -369,9 +339,12 @@ const Services = () => {
         <section
           key={service.id}
           id={`service-${service.id}`}
-          className={index % 2 === 0 ? 'py-16 md:py-24 bg-background scroll-mt-24' : 'py-16 md:py-24 bg-muted scroll-mt-24'}
+          className={index % 2 === 0 ? 'relative overflow-hidden py-16 md:py-24 bg-background scroll-mt-24' : 'relative overflow-hidden py-16 md:py-24 bg-muted scroll-mt-24'}
         >
-          <div className="container mx-auto px-4 md:px-6">
+          {service.id === 'automation' && (
+            <MatrixCodeBackground fontSize={18} color="hsla(275, 100%, 50%, 0.13)" speed={0.5} />
+          )}
+          <div className="container relative z-10 mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-start">
               <div>
                 <p className={`text-xs uppercase tracking-[0.22em] font-semibold mb-4 ${service.accentText}`}>
@@ -405,7 +378,7 @@ const Services = () => {
 
               <div className={`${service.accentSurface} rounded-[30px] p-6 md:p-8 text-offwhite border ${service.accentBorder} shadow-xl`}>
                 <p className="text-xs uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-4">
-                  {locale === 'ar' ? 'يشمل' : 'Included'}
+                  {ui.included}
                 </p>
                 <div className="space-y-4 mb-8">
                   {service.includes.map((item, itemIndex) => (
@@ -416,9 +389,7 @@ const Services = () => {
                       <div>
                         <p className="font-serif text-2xl text-mint leading-none mb-1">{item}</p>
                         <p className="text-sm text-offwhite/70">
-                          {locale === 'ar'
-                            ? 'محددة لحل مشكلة خدمة واحدة بوضوح، لا لصنع باقة عامة ومبهمة.'
-                            : 'Scoped to solve one service problem clearly, not to create a vague all-in-one package.'}
+                          {ui.includedDescription}
                         </p>
                       </div>
                     </div>
@@ -427,10 +398,10 @@ const Services = () => {
 
                 <div className="flex flex-wrap gap-3">
                   <PrimaryButton href={service.href} textColor="ink">
-                    {locale === 'ar' ? 'عرض صفحة الخدمة' : 'View service page'}
+                    {ui.viewService}
                   </PrimaryButton>
                   <SecondaryButton href={service.pricingHref} variant="dark">
-                    {locale === 'ar' ? 'عرض الأسعار' : 'See pricing'}
+                    {ui.seePricing}
                   </SecondaryButton>
                 </div>
               </div>
@@ -442,11 +413,9 @@ const Services = () => {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            eyebrow={locale === 'ar' ? 'العمل مع ADSI' : 'Working with ADSI'}
-            headline={locale === 'ar' ? 'ما الذي يتضمنه كل ارتباط خدمة' : 'What every service engagement includes'}
-            subheadline={locale === 'ar'
-              ? 'قد تتغير الخدمة، لكن طريقة تحديد العمل وتسليمه تبقى منضبطة.'
-              : 'The service changes, but the way the work is scoped and delivered stays disciplined.'}
+            eyebrow={ui.workingEyebrow}
+            headline={ui.workingHeadline}
+            subheadline={ui.workingSubheadline}
             variant="poster"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -469,40 +438,22 @@ const Services = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <SectionHeader
-            eyebrow={locale === 'ar' ? 'التسليم' : 'Delivery'}
-            headline={locale === 'ar' ? 'كيف يبدأ الارتباط' : 'How an engagement starts'}
-            subheadline={locale === 'ar'
-              ? 'لا تحتاج إلى تحديد خارطة الطريق كاملة قبل التواصل. نبدأ بالاختناق الذي يهم الآن، ونحدده بوضوح، ثم ننطلق منه.'
-              : 'You do not need to define the whole roadmap before reaching out. We start with the bottleneck that matters now, scope it clearly, and move from there.'}
+            eyebrow={ui.deliveryEyebrow}
+            headline={ui.deliveryHeadline}
+            subheadline={ui.deliverySubheadline}
             variant="poster"
           />
           <Steps
-            steps={locale === 'ar'
-              ? [
-                  { title: 'شاركنا الاختناق', description: 'أخبرنا ما الذي يبطئ العمل أو ما الذي يجب أن يبدو أقوى.' },
-                  { title: 'احصل على توصية مركزة', description: 'نوجهك إلى الخدمة الصحيحة وشكل البداية المحتمل وما الذي يجب معالجته أولاً.' },
-                  { title: 'اعتمد الموجز', description: 'تصلك حدود العمل والتوقيت وتعريف عملي قبل بدء التنفيذ.' },
-                  { title: 'تحرك عبر المراحل', description: 'يجري التسليم ضمن مراحل واضحة حتى تحدث القرارات قبل تراكم إعادة العمل.' },
-                  { title: 'سلّم أو واصل التحسين', description: 'أنهِ العمل بتسليم نظيف أو استمر بالدعم إذا كانت الخدمة تستفيد من التكرار.' },
-                ]
-              : [
-                  { title: 'Share the bottleneck', description: 'Tell us what is slowing the business down or what needs to feel stronger.' },
-                  { title: 'Get a focused recommendation', description: 'We point you to the right service, likely starting shape, and what to tackle first.' },
-                  { title: 'Approve the brief', description: 'You receive scope, timing, and a practical definition of the work before build starts.' },
-                  { title: 'Move through milestones', description: 'Delivery runs in clear stages so decisions happen before rework piles up.' },
-                  { title: 'Hand over or keep improving', description: 'Finish with a clean handover or continue with support if the work benefits from iteration.' },
-                ]}
+            steps={ui.steps}
           />
         </div>
       </section>
 
       <CTABand
-        headline={locale === 'ar' ? 'اختر الخدمة المناسبة.' : 'Choose the right service.'}
-        description={locale === 'ar'
-          ? 'سنساعدك في اختيار أفضل مسار بداية ونوضح لك التسعير.'
-          : "We'll help you pick the best starting track and show the pricing."}
-        primaryCta={{ label: locale === 'ar' ? 'احجز مكالمة' : 'Book a Call', href: '/book' }}
-        secondaryCta={{ label: locale === 'ar' ? 'عرض الأسعار' : 'View pricing', href: '/pricing' }}
+        headline={ui.ctaHeadline}
+        description={ui.ctaDescription}
+        primaryCta={{ label: ui.ctaBook, href: '/book' }}
+        secondaryCta={{ label: ui.ctaPricing, href: '/pricing' }}
         visualKey="tri-axis-hub"
         variant="dark"
       />

@@ -5,20 +5,27 @@ import { ToolList } from '@/components/sections/ToolList';
 import { EmailCapture } from '@/components/sections/EmailCapture';
 import { CTABand } from '@/components/sections/CTABand';
 import { SectionHeader } from '@/components/shared/SectionHeader';
+import { MatrixCodeBackground } from '@/components/shared/MatrixCodeBackground';
 import { KnotAnimation } from '@/components/ui/knot-animation';
 import { useSiteContent } from '@/lib/content';
 import { useLocale } from '@/lib/locale';
+import { pickLocaleCopy, simplePageCopy } from '@/lib/pageCopy';
+import { usePageMeta } from '@/hooks/use-page-meta';
 
 const Tools = () => {
   const { tools } = useSiteContent();
   const { locale } = useLocale();
+  const copy = pickLocaleCopy(simplePageCopy, locale);
+  usePageMeta({ title: `${copy.toolsEyebrow} | Amjad Osman`, description: tools.hero.subheadline });
 
   return (
     <Layout motionLevel="subtle">
       {/* Hero */}
       <Hero
+        eyebrow={copy.toolsEyebrow}
         headline={tools.hero.headline}
         subheadline={tools.hero.subheadline}
+        credibilityStrip={copy.toolsStrip}
         primaryCta={tools.hero.primaryCta}
         secondaryCta={tools.hero.secondaryCta}
         plate="emerald"
@@ -26,11 +33,13 @@ const Tools = () => {
       />
 
       {/* Tool Listing */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
+      <section className="relative overflow-hidden py-16 md:py-24 bg-background">
+        <MatrixCodeBackground fontSize={18} color="hsla(275, 100%, 50%, 0.15)" speed={0.55} />
+        <div className="container relative z-10 mx-auto px-4 md:px-6">
           <SectionHeader
-            headline={locale === 'ar' ? 'الأدوات المتاحة' : 'Available tools'}
-            subheadline={locale === 'ar' ? 'اختر أداة للبدء' : 'Select a tool to get started'}
+            eyebrow={copy.toolsStart}
+            headline={copy.toolsAvailable}
+            subheadline={copy.toolsSubheadline}
           />
           <ToolList
             tools={tools.list.map((tool) => ({
@@ -60,14 +69,10 @@ const Tools = () => {
 
       {/* Final CTA */}
       <CTABand
-        headline={locale === 'ar' ? 'انتقل من التدقيق إلى التنفيذ.' : 'Move from audit to build.'}
-        description={
-          locale === 'ar'
-            ? 'استخدم الأداة الآن، ثم احجز مكالمة إذا أردت أن ننفذها لك.'
-            : 'Use the tool now, then book a call if you want us to implement it.'
-        }
-        primaryCta={{ label: locale === 'ar' ? 'احجز مكالمة' : 'Book a Call', href: "/book" }}
-        secondaryCta={{ label: locale === 'ar' ? 'عرض الأسعار' : 'View pricing', href: "/pricing" }}
+        headline={copy.toolsCtaHeadline}
+        description={copy.toolsCtaDescription}
+        primaryCta={{ label: copy.bookCall, href: "/book" }}
+        secondaryCta={{ label: copy.viewPricing, href: "/pricing" }}
         visualKey="logic-knot"
         variant="dark"
       />

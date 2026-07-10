@@ -12,51 +12,16 @@ import { useLocale } from '@/lib/locale';
 import { useSiteContent } from '@/lib/content';
 import { cn } from '@/lib/utils';
 import { usePageMeta } from '@/hooks/use-page-meta';
+import { pickLocaleCopy, pricingPageCopy } from '@/lib/pageCopy';
 
 const Pricing = () => {
   const { locale, isRTL } = useLocale();
   const { navigation, pricing } = useSiteContent();
   const { orderedServicePricingTracks, softwarePricingSummary } = usePricingContent();
-
-  const copy = locale === 'ar'
-    ? {
-        heroEyebrow: 'الأسعار',
-        viewServices: 'عرض الخدمات',
-        howPricingWorks: 'كيف يعمل التسعير',
-        startWithPackage: 'ابدأ بباقة واضحة أو انتقل مباشرة إلى الخدمة التي تعرف أنك تحتاجها.',
-        scanTracks:
-          'كل فئة خدمة منظمة بالطريقة نفسها حتى تتمكن من مقارنة باقات البداية والخدمات الفردية والعقود المستمرة دون التنقل بين صفحات كثيرة.',
-        managedSoftware: 'برمجيات مُدارة',
-        servicePricing: 'تسعير الخدمات',
-        fullServicePage: 'عرض صفحة الخدمة الكاملة',
-        availableProducts: 'المنتجات المتاحة',
-        availableProductsBody:
-          'نستخدم البرمجيات عندما تحتاج الشركة إلى مساحة تشغيل مضبوطة مع إعداد وهيكل ودعم مستمر حولها.',
-        supportIncludes: 'ما الذي يمكن أن يشمله الإعداد والدعم',
-        finalHeadline: 'اختر الباقة المناسبة.',
-        finalDescription: 'سنساعدك في مقارنة نقاط البداية واختيار أسرع بداية منطقية.',
-      }
-    : {
-        heroEyebrow: 'Pricing',
-        viewServices: 'View services',
-        howPricingWorks: 'How pricing works',
-        startWithPackage:
-          'Start with a contained package or go straight to the service you already know you need.',
-        scanTracks:
-          'Each service category is organized the same way so you can scan starter offers, single-service pricing, and retainers without bouncing between pages.',
-        managedSoftware: 'Managed software',
-        servicePricing: 'Service pricing',
-        fullServicePage: 'See full service page',
-        availableProducts: 'Available products',
-        availableProductsBody:
-          'Use software when the business needs an operating workspace with setup, structure, and ongoing support around it.',
-        supportIncludes: 'What setup and support can include',
-        finalHeadline: 'Choose the right package.',
-        finalDescription: "We'll help you compare entry points and pick the fastest sensible start.",
-      };
+  const copy = pickLocaleCopy(pricingPageCopy, locale);
 
   usePageMeta({
-    title: locale === 'ar' ? 'الأسعار | ADSI' : 'Pricing | ADSI',
+    title: copy.metaTitle,
     description: pricing.hero.subheadline,
   });
 
@@ -130,7 +95,7 @@ const Pricing = () => {
       <section id={softwarePricingSummary.anchor} className="py-16 md:py-24 bg-background scroll-mt-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-14 items-start">
-            <div className="rounded-[30px] bg-plate-astral p-6 md:p-8 text-offwhite border border-white/10 shadow-xl">
+            <div className="rounded-[34px] bg-plate-astral p-6 md:p-8 text-offwhite border border-white/10 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
               <p className="text-xs uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-4">
                 {softwarePricingSummary.eyebrow}
               </p>
@@ -156,7 +121,7 @@ const Pricing = () => {
               </div>
             </div>
 
-            <div className="rounded-[30px] border border-ink/10 bg-card overflow-hidden">
+            <div className="rounded-[34px] border border-ink/10 bg-card overflow-hidden shadow-[0_22px_56px_-48px_rgba(8,15,32,0.16)]">
               <div className="p-6 md:p-8 border-b border-ink/10">
                 <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground font-semibold mb-2">
                   {copy.availableProducts}
@@ -189,7 +154,7 @@ const Pricing = () => {
                     <div
                       key={item}
                       className={cn(
-                        "flex items-start gap-3 rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-foreground",
+                        "flex items-start gap-3 rounded-2xl border border-ink/10 bg-card px-4 py-3 text-sm text-foreground",
                         isRTL && "text-right flex-row-reverse"
                       )}
                     >
@@ -208,9 +173,11 @@ const Pricing = () => {
         headline={copy.finalHeadline}
         description={copy.finalDescription}
         primaryCta={navigation.cta}
-        secondaryCta={{ label: locale === 'ar' ? 'عرض الأسعار' : 'View pricing', href: '/pricing' }}
+        secondaryCta={{ label: copy.viewPricing, href: '/pricing' }}
         visualKey="value-axis"
         variant="dark"
+        className="bg-[hsl(var(--section-coral))]"
+        canvasColor="hsla(359, 78%, 65%, 0.35)"
       />
     </Layout>
   );
