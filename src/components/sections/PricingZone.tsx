@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { Compass, Layers3, Repeat2 } from 'lucide-react';
 import { Reveal } from '@/components/motion/Reveal';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 type PricingZoneVariant = 'recommended' | 'menu' | 'retainer';
 
@@ -55,10 +56,11 @@ export const PricingZone: React.FC<PricingZoneProps> = ({
   sequence = '01',
 }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
   const localizedZoneStyles = {
-    recommended: locale === 'ar' ? 'باقات بنطاق ثابت' : 'Fixed-scope packages',
-    menu: locale === 'ar' ? 'خدمات منفردة' : 'Single-service menu',
-    retainer: locale === 'ar' ? 'دعم مستمر' : 'Ongoing support',
+    recommended: copy.fixedScopePackages,
+    menu: copy.singleServiceMenu,
+    retainer: copy.ongoingSupport,
   };
   const style = zoneStyles[variant];
   const Icon = style.icon;

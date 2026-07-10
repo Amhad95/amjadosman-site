@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { SecondaryButton } from "@/components/shared/SecondaryButton";
-import { useLocale } from "@/lib/locale";
+import { useLocale, type Locale } from "@/lib/locale";
 import type { ResolvedWorkCase } from "@/lib/fallbackContent";
 import { cn } from "@/lib/utils";
 
@@ -9,20 +9,18 @@ interface WorkCaseCardProps {
   item: ResolvedWorkCase;
 }
 
-const serviceLineLabels: Record<string, string> = {
-  brand: "Brand & Growth",
-  ops: "Internal Ops",
-  agents: "Automation",
-  "software-crm": "CRM",
-  "software-accounting": "Accounting",
-  "software-inventory": "Inventory",
-  "software-tasks": "Tasks",
+const serviceLineLabels: Record<Locale, Record<string, string>> = {
+  en: { brand: "Brand & Growth", ops: "Internal Ops", agents: "Automation", "software-crm": "CRM", "software-accounting": "Accounting", "software-inventory": "Inventory", "software-tasks": "Tasks" },
+  ar: { brand: "الهوية والنمو", ops: "العمليات الداخلية", agents: "الأتمتة", "software-crm": "CRM", "software-accounting": "المحاسبة", "software-inventory": "المخزون", "software-tasks": "المهام" },
+  de: { brand: "Marke & Wachstum", ops: "Interne Abläufe", agents: "Automatisierung", "software-crm": "CRM", "software-accounting": "Buchhaltung", "software-inventory": "Inventar", "software-tasks": "Aufgaben" },
+  fr: { brand: "Marque & croissance", ops: "Opérations internes", agents: "Automatisation", "software-crm": "CRM", "software-accounting": "Comptabilité", "software-inventory": "Inventaire", "software-tasks": "Tâches" },
+  bg: { brand: "Бранд и растеж", ops: "Вътрешни операции", agents: "Автоматизация", "software-crm": "CRM", "software-accounting": "Счетоводство", "software-inventory": "Инвентар", "software-tasks": "Задачи" },
 };
 
 export const WorkCaseCard: React.FC<WorkCaseCardProps> = ({ item }) => {
-  const { isRTL } = useLocale();
+  const { locale, isRTL } = useLocale();
   const serviceTags = (item.service_line_ids ?? [])
-    .map((id) => serviceLineLabels[id])
+    .map((id) => serviceLineLabels[locale][id])
     .filter(Boolean);
 
   return (

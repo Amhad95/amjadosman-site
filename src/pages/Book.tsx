@@ -10,7 +10,9 @@ import { usePageMeta } from '@/hooks/use-page-meta';
 const Book = () => {
   const { book } = useSiteContent();
   const { locale } = useLocale();
-  usePageMeta({ title: `${locale === 'ar' ? 'الحجز' : 'Book a Call'} | Amjad Osman`, description: book.hero.subheadline });
+  const pageTitle = { en: 'Book a Call', ar: 'الحجز', de: 'Gespräch buchen', fr: 'Réserver un appel', bg: 'Запишете разговор' }[locale];
+  const eyebrow = { en: 'Booking', ar: 'الحجز', de: 'Buchung', fr: 'Réservation', bg: 'Резервация' }[locale];
+  usePageMeta({ title: `${pageTitle} | Amjad Osman`, description: book.hero.subheadline });
 
   useEffect(() => {
     window.location.replace(BOOKING_URL);
@@ -21,7 +23,7 @@ const Book = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-2xl">
           <SectionHeader
-            eyebrow={locale === 'ar' ? 'الحجز' : 'Booking'}
+            eyebrow={eyebrow}
             headline={book.hero.headline}
             subheadline={book.hero.subheadline}
             variant="poster"

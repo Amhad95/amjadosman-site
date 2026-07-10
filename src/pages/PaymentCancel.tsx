@@ -7,16 +7,20 @@ import { usePageMeta } from "@/hooks/use-page-meta";
 
 const PaymentCancel = () => {
   const { locale } = useLocale();
-  const copy = locale === "ar"
-    ? { title: "لم يكتمل الدفع", body: "لم يتم خصم أي مبلغ. يمكنك العودة إلى الأسعار أو حجز مكالمة لمناقشة البداية.", back: "العودة إلى الأسعار" }
-    : { title: "Checkout cancelled", body: "No payment was taken. Return to pricing or book a call to discuss the right starting point.", back: "Back to pricing" };
+  const copy = {
+    en: { title: "Checkout cancelled", body: "No payment was taken. Return to pricing or book a call to discuss the right starting point.", back: "Back to pricing", eyebrow: "Payment" },
+    ar: { title: "لم يكتمل الدفع", body: "لم يتم خصم أي مبلغ. يمكنك العودة إلى الأسعار أو حجز مكالمة لمناقشة البداية.", back: "العودة إلى الأسعار", eyebrow: "الدفع" },
+    de: { title: "Checkout abgebrochen", body: "Es wurde keine Zahlung vorgenommen. Kehren Sie zu den Preisen zurück oder buchen Sie ein Gespräch.", back: "Zu den Preisen", eyebrow: "Zahlung" },
+    fr: { title: "Paiement annulé", body: "Aucun paiement n'a été débité. Revenez aux tarifs ou réservez un appel pour choisir le bon départ.", back: "Retour aux tarifs", eyebrow: "Paiement" },
+    bg: { title: "Плащането е отменено", body: "Не е извършено плащане. Върнете се към цените или запишете разговор за подходящо начало.", back: "Към цените", eyebrow: "Плащане" },
+  }[locale];
 
   usePageMeta({ title: `${copy.title} | Amjad Osman`, description: copy.body });
 
   return (
     <Layout>
       <Hero
-        eyebrow={locale === "ar" ? "الدفع" : "Payment"}
+        eyebrow={copy.eyebrow}
         headline={copy.title}
         subheadline={copy.body}
         plate="burgundy"

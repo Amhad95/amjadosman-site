@@ -4,6 +4,7 @@ import { ArrowRight, Users, Calculator, Package, ListTodo, LucideIcon } from 'lu
 import { cn } from '@/lib/utils';
 import { RevealGroup } from '@/components/motion/Reveal';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface SuiteProduct {
   id: string;
@@ -35,8 +36,8 @@ const productGradients: Record<string, string> = {
 
 export const PremiumSuiteGrid: React.FC<PremiumSuiteGridProps> = ({ products, exploreLabel, className }) => {
   const { locale, isRTL } = useLocale();
-  const resolvedExploreLabel =
-    exploreLabel ?? (locale === 'ar' ? 'استكشف' : 'Explore');
+  const copy = getUiCopy(locale);
+  const resolvedExploreLabel = exploreLabel ?? copy.explore;
   return (
     <RevealGroup className={cn('grid grid-cols-1 md:grid-cols-2 gap-6', className)} variant="subtle" stagger={70}>
       {products.map((product) => {

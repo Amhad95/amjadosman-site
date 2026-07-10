@@ -11,11 +11,13 @@ import { useSiteContent } from "@/lib/content";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ImageIcon, X } from "lucide-react";
+import { workDetailCopy } from "@/lib/detailPageCopy";
 
 const WorkDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { locale, isRTL } = useLocale();
   const { common } = useSiteContent();
+  const copy = workDetailCopy[locale];
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const workCaseSources = getPublishedWorkCases();
   const fallbackCaseStudy = getWorkCaseBySlug(slug);
@@ -32,9 +34,7 @@ const WorkDetail = () => {
   usePageMeta({
     title: caseStudy
       ? `${caseStudy.title} | Amjad Osman`
-      : locale === "ar"
-        ? "دراسة الحالة | أمجد عثمان"
-        : "Case Study | Amjad Osman",
+      : copy.metaFallback,
     description: caseStudy?.description,
   });
 
@@ -60,7 +60,7 @@ const WorkDetail = () => {
             <Link
               to="/work"
               className={cn(
-                "inline-flex items-center gap-2 rounded-lg border border-mint/45 bg-mint/12 px-3 py-2 text-sm font-semibold text-mint hover:border-mint/70 hover:bg-mint/18 mb-10 transition-colors",
+                "mb-10 inline-flex items-center gap-2 rounded-lg border border-plate-violet bg-plate-violet px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-plate-violet/90",
                 isRTL && "flex-row-reverse"
               )}
             >
@@ -139,15 +139,15 @@ const WorkDetail = () => {
 
           <aside className="lg:sticky lg:top-24 h-fit rounded-[26px] border border-ink/10 bg-muted/40 p-6 shadow-sm">
             <h3 className="font-serif text-heading-sm text-foreground mb-6">
-              {locale === "ar" ? "لمحة عن المشروع" : "Project at a glance"}
+              {copy.glance}
             </h3>
             <dl className="space-y-5">
               {[
-                { label: locale === "ar" ? "الشريك" : "Partner", value: caseStudy.partner },
-                { label: locale === "ar" ? "السنة" : "Year", value: caseStudy.year },
-                { label: locale === "ar" ? "القطاع" : "Sector", value: caseStudy.sector },
-                { label: locale === "ar" ? "الدور" : "Role", value: caseStudy.role },
-                { label: locale === "ar" ? "النتيجة" : "Outcome", value: caseStudy.outcome },
+                { label: copy.partner, value: caseStudy.partner },
+                { label: copy.year, value: caseStudy.year },
+                { label: copy.sector, value: caseStudy.sector },
+                { label: copy.role, value: caseStudy.role },
+                { label: copy.outcome, value: caseStudy.outcome },
               ]
                 .filter((item) => item.value)
                 .map((item) => (
@@ -169,7 +169,7 @@ const WorkDetail = () => {
         <section className="bg-muted py-16 md:py-24 border-t border-ink/5">
           <div className="container mx-auto px-4 md:px-6 max-w-5xl">
             <h2 className="font-serif text-heading-lg text-foreground mb-10 text-center">
-              {locale === "ar" ? "صور المشروع" : "Project gallery"}
+              {copy.gallery}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {caseStudy.gallery_images.map((image, index) => (
@@ -194,7 +194,7 @@ const WorkDetail = () => {
         <section className="bg-background py-16 md:py-24 border-t border-ink/5">
           <div className="container mx-auto px-4 md:px-6 max-w-5xl">
             <h2 className="font-serif text-heading-lg text-foreground mb-8 text-center">
-              {locale === "ar" ? "دراسات مرتبطة من نفس العميل" : "Related cases from this client"}
+              {copy.related}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {relatedCases.map((item) => (
@@ -221,12 +221,10 @@ const WorkDetail = () => {
 
       {/* CTA */}
       <CTABand
-        headline={locale === "ar" ? "حدد عملاً مشابهاً." : "Scope similar work."}
-        description={locale === "ar"
-          ? "سنصمم أول مرحلة حول اختناقك الحالي والجدول الزمني والسعر."
-          : "We'll shape the first engagement around your bottleneck, timeline, and price."}
-        primaryCta={{ label: locale === "ar" ? "احجز مكالمة" : "Book a Call", href: "/book" }}
-        secondaryCta={{ label: locale === "ar" ? "عرض الأسعار" : "View pricing", href: "/pricing" }}
+        headline={copy.ctaHeadline}
+        description={copy.ctaDescription}
+        primaryCta={{ label: copy.bookCall, href: "/book" }}
+        secondaryCta={{ label: copy.viewPricing, href: "/pricing" }}
         visualKey="case-prism"
         variant="dark"
       />

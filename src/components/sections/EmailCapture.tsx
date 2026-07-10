@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface EmailCaptureProps {
   headline: string;
@@ -25,6 +26,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
   className,
 }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -39,12 +41,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
       email: z
         .string()
         .trim()
-        .email({
-          message:
-            locale === 'ar'
-              ? 'يرجى إدخال بريد إلكتروني صالح'
-              : 'Please enter a valid email address',
-        })
+        .email({ message: copy.invalidEmail })
         .max(255),
     });
 
@@ -62,11 +59,11 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
         body: JSON.stringify({ email: result.data.email }),
       });
       const payload = (await response.json().catch(() => null)) as { error?: string; downloadUrl?: string } | null;
-      if (!response.ok) throw new Error(payload?.error ?? 'The download could not be prepared.');
+      if (!response.ok) throw new Error(payload?.error ?? copy.downloadError);
       if (payload?.downloadUrl) setDownloadUrl(payload.downloadUrl);
       setIsSubmitted(true);
     } catch (submissionError) {
-      setError(submissionError instanceof Error ? submissionError.message : 'The download could not be prepared.');
+      setError(submissionError instanceof Error ? submissionError.message : copy.downloadError);
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +113,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder={locale === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email'}
+              placeholder={copy.enterEmail}
               className={cn(
                 'w-full h-12 px-4 rounded-lg',
                 'bg-white/10 text-offwhite placeholder:text-offwhite/50',
@@ -125,7 +122,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
                 error && 'border-magenta',
                 isRTL && 'text-right'
               )}
-              aria-label={locale === 'ar' ? 'البريد الإلكتروني' : 'Email address'}
+              aria-label={copy.emailAddress}
               dir="ltr"
             />
             {error && (
@@ -135,7 +132,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
             )}
           </div>
           <PrimaryButton type="submit" disabled={isLoading}>
-            {isLoading ? (locale === 'ar' ? 'جارٍ الإرسال...' : 'Sending...') : buttonLabel}
+            {isLoading ? copy.sending : buttonLabel}
           </PrimaryButton>
         </form>
       </div>

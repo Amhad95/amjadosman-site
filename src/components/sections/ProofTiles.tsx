@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { ArrowRight, Image as ImageIcon } from 'lucide-react';
 import { RevealGroup } from '@/components/motion/Reveal';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface Tile {
   title: string;
@@ -20,6 +21,7 @@ interface ProofTilesProps {
 
 export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
   return (
     <RevealGroup
       className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6', className)}
@@ -40,7 +42,7 @@ export const ProofTiles: React.FC<ProofTilesProps> = ({ tiles, className }) => {
                 <div className="media-pop-target flex flex-col items-center justify-center text-muted-foreground/50 gap-2">
                   <ImageIcon size={32} strokeWidth={1.5} />
                   <span className="text-xs font-medium uppercase tracking-wider">
-                    {locale === 'ar' ? 'معاينة المشروع' : 'Project Preview'}
+                    {copy.projectPreview}
                   </span>
                 </div>
               )}

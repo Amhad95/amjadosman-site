@@ -5,6 +5,7 @@ import { startCheckout } from '@/lib/stripe';
 import { Check, Clock3, Sparkles } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface RecommendedOfferCardProps {
   name: string;
@@ -26,6 +27,7 @@ export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
   stripePriceId,
 }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
   const handlePay = () => {
     if (stripePriceId) {
       startCheckout(stripePriceId, 'payment');
@@ -38,7 +40,7 @@ export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-ink/12 bg-muted/55 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground mb-4">
             <Sparkles size={13} />
-            <span>{locale === 'ar' ? 'باقة بداية' : 'Starter package'}</span>
+            <span>{copy.starterPackage}</span>
           </div>
           <h4 className="font-serif text-heading-md text-foreground">{name}</h4>
         </div>
@@ -68,11 +70,11 @@ export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
       <div className="mt-auto border-t border-ink/8 pt-5">
         <div className="flex flex-wrap gap-3">
           {stripePriceId ? (
-            <PrimaryButton onClick={handlePay} textColor="ink">{locale === 'ar' ? 'ابدأ هذه الباقة' : 'Start this package'}</PrimaryButton>
+          <PrimaryButton onClick={handlePay} textColor="ink">{copy.startPackage}</PrimaryButton>
           ) : (
-            <PrimaryButton href={payHref} textColor="ink">{locale === 'ar' ? 'ابدأ هذه الباقة' : 'Start this package'}</PrimaryButton>
+          <PrimaryButton href={payHref} textColor="ink">{copy.startPackage}</PrimaryButton>
           )}
-          <SecondaryButton href={bookHref}>{locale === 'ar' ? 'ناقشها معنا' : 'Talk it through'}</SecondaryButton>
+          <SecondaryButton href={bookHref}>{copy.talkItThrough}</SecondaryButton>
         </div>
       </div>
     </div>

@@ -68,6 +68,7 @@ const Work = () => {
   const { locale } = useLocale();
   const copy = pickLocaleCopy(simplePageCopy, locale);
   const filterLabels = workFilterLabels[locale] ?? workFilterLabels.en;
+  const filterAria = { en: 'Filter case studies', ar: 'تصفية دراسات الحالة', de: 'Fallstudien filtern', fr: 'Filtrer les études de cas', bg: 'Филтриране на казусите' }[locale];
   const [activeFilter, setActiveFilter] = useState<(typeof workFilters)[number]['id']>('all');
 
   usePageMeta({
@@ -117,7 +118,7 @@ const Work = () => {
               {copy.workTranslationNotice}
             </div>
           )}
-          <div className="mt-8 flex flex-wrap justify-center gap-2" role="tablist" aria-label="Filter case studies">
+          <div className="mt-8 flex flex-wrap justify-center gap-2" role="tablist" aria-label={filterAria}>
             {workFilters.map((filter) => {
               const isActive = activeFilter === filter.id;
 

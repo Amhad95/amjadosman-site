@@ -11,11 +11,13 @@ import { useLocale } from '@/lib/locale';
 import { useSiteContent } from '@/lib/content';
 import { usePageMeta } from '@/hooks/use-page-meta';
 import { cn } from '@/lib/utils';
+import { articleDetailCopy } from '@/lib/detailPageCopy';
 
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { locale, isRTL } = useLocale();
   const { common } = useSiteContent();
+  const copy = articleDetailCopy[locale];
   const fallbackArticle = fallbackArticles.find((item) => item.slug === slug);
   const resolvedArticle = fallbackArticle ? resolveLocalizedArticle(fallbackArticle, locale) : null;
   const relatedArticles = fallbackArticles
@@ -28,7 +30,7 @@ const ArticleDetail = () => {
     : '';
 
   usePageMeta({
-    title: resolvedArticle ? `${resolvedArticle.title} | Amjad Osman Resources` : locale === 'ar' ? 'المقال | أمجد عثمان' : 'Article | Amjad Osman',
+    title: resolvedArticle ? `${resolvedArticle.title} | Amjad Osman Resources` : copy.metaFallback,
     description: resolvedArticle?.excerpt,
   });
 
@@ -43,15 +45,6 @@ const ArticleDetail = () => {
       </Layout>
     );
   }
-
-  const label = {
-    glance: locale === 'ar' ? 'لمحة عن المقال' : locale === 'de' ? 'Zum Artikel' : locale === 'fr' ? "À propos de l'article" : locale === 'bg' ? 'За статията' : 'Article at a glance',
-    category: locale === 'ar' ? 'التصنيف' : locale === 'de' ? 'Kategorie' : locale === 'fr' ? 'Catégorie' : locale === 'bg' ? 'Категория' : 'Category',
-    published: locale === 'ar' ? 'نُشر' : locale === 'de' ? 'Veröffentlicht' : locale === 'fr' ? 'Publié' : locale === 'bg' ? 'Публикувано' : 'Published',
-    reading: locale === 'ar' ? 'القراءة' : locale === 'de' ? 'Lesezeit' : locale === 'fr' ? 'Lecture' : locale === 'bg' ? 'Четене' : 'Reading time',
-    relatedTools: locale === 'ar' ? 'أدوات مرتبطة' : locale === 'de' ? 'Verwandte Tools' : locale === 'fr' ? 'Outils associés' : locale === 'bg' ? 'Свързани инструменти' : 'Related tools',
-    readNext: locale === 'ar' ? 'اقرأ أيضاً' : locale === 'de' ? 'Weiterlesen' : locale === 'fr' ? 'À lire aussi' : locale === 'bg' ? 'Още' : 'Read next',
-  };
 
   return (
     <Layout>
@@ -76,29 +69,29 @@ const ArticleDetail = () => {
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{resolvedArticle.body}</ReactMarkdown>
             </div>
           ) : (
-            <p className="text-muted-foreground">{locale === 'ar' ? 'هذا الملخص متاح حالياً. تواصل معنا إذا كنت تريد ملاحظات التنفيذ الكاملة.' : 'This article summary is available now. Reach out if you want the full implementation notes.'}</p>
+            <p className="text-muted-foreground">{copy.summaryFallback}</p>
           )}
 
           <aside className="h-fit rounded-[26px] border border-ink/10 bg-muted/40 p-6 shadow-sm lg:sticky lg:top-24">
-            <h2 className="mb-6 font-serif text-heading-sm text-foreground">{label.glance}</h2>
+            <h2 className="mb-6 font-serif text-heading-sm text-foreground">{copy.glance}</h2>
             <dl className="space-y-5">
-              <div><dt className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label.category}</dt><dd className="text-sm font-medium text-foreground">{resolvedArticle.category}</dd></div>
-              <div><dt className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label.published}</dt><dd className="text-sm font-medium text-foreground">{publishedDate}</dd></div>
-              <div><dt className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label.reading}</dt><dd className="text-sm font-medium text-foreground">{readingMinutes} {locale === 'ar' ? 'دقائق' : locale === 'de' ? 'Minuten' : locale === 'fr' ? 'min' : locale === 'bg' ? 'мин' : 'min'}</dd></div>
+              <div><dt className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{copy.category}</dt><dd className="text-sm font-medium text-foreground">{resolvedArticle.category}</dd></div>
+              <div><dt className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{copy.published}</dt><dd className="text-sm font-medium text-foreground">{publishedDate}</dd></div>
+              <div><dt className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{copy.reading}</dt><dd className="text-sm font-medium text-foreground">{readingMinutes} {copy.readingUnit}</dd></div>
             </dl>
             <div className="mt-8 border-t border-border pt-6">
-              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{label.relatedTools}</h3>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{copy.relatedTools}</h3>
               <div className="mt-3 space-y-2">
-                <Link to="/tools/dashboard-builder" className="block rounded-lg border border-plate-violet/20 bg-background px-3 py-2 text-sm font-medium text-foreground hover:border-plate-violet/50">Dashboard Builder</Link>
-                <Link to="/tools/process-mapper" className="block rounded-lg border border-plate-violet/20 bg-background px-3 py-2 text-sm font-medium text-foreground hover:border-plate-violet/50">Process Mapper</Link>
+                <Link to="/tools/dashboard-builder" className="block rounded-lg border border-plate-violet/20 bg-background px-3 py-2 text-sm font-medium text-foreground hover:border-plate-violet/50">{copy.toolLabels.dashboard}</Link>
+                <Link to="/tools/process-mapper" className="block rounded-lg border border-plate-violet/20 bg-background px-3 py-2 text-sm font-medium text-foreground hover:border-plate-violet/50">{copy.toolLabels.process}</Link>
               </div>
             </div>
-            {relatedArticles.length > 0 && <div className="mt-8 border-t border-border pt-6"><h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{label.readNext}</h3><div className="mt-3 space-y-3">{relatedArticles.map((item) => <Link key={item.id} to={`/resources/${item.slug}`} className="block text-sm font-medium leading-relaxed text-foreground hover:text-plate-violet">{item.title}</Link>)}</div></div>}
+            {relatedArticles.length > 0 && <div className="mt-8 border-t border-border pt-6"><h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{copy.readNext}</h3><div className="mt-3 space-y-3">{relatedArticles.map((item) => <Link key={item.id} to={`/resources/${item.slug}`} className="block text-sm font-medium leading-relaxed text-foreground hover:text-plate-violet">{item.title}</Link>)}</div></div>}
           </aside>
         </div>
       </section>
 
-      <CTABand headline={common.resourceCtaHeadline} description={common.resourceCtaDescription} primaryCta={{ label: locale === 'ar' ? 'احجز مكالمة' : 'Book a Call', href: '/book' }} secondaryCta={{ label: locale === 'ar' ? 'عرض الأسعار' : 'View pricing', href: '/pricing' }} visualKey="insight-lens" variant="dark" />
+      <CTABand headline={common.resourceCtaHeadline} description={common.resourceCtaDescription} primaryCta={{ label: copy.bookCall, href: '/book' }} secondaryCta={{ label: copy.viewPricing, href: '/pricing' }} visualKey="insight-lens" variant="dark" />
     </Layout>
   );
 };

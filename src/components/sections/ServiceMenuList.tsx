@@ -5,6 +5,7 @@ import { startCheckout } from '@/lib/stripe';
 import { Layers3 } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface ServiceMenuItem {
   name: string;
@@ -20,6 +21,7 @@ interface ServiceMenuListProps {
 
 export const ServiceMenuList: React.FC<ServiceMenuListProps> = ({ items }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
   return (
     <div className="space-y-3">
       {items.map((item, i) => (
@@ -35,7 +37,7 @@ export const ServiceMenuList: React.FC<ServiceMenuListProps> = ({ items }) => {
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-lavender/24 bg-lavender/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-plate-astral">
                   <Layers3 size={13} />
-                  <span>{locale === 'ar' ? 'خدمة منفردة' : 'Single service'}</span>
+                  <span>{copy.singleService}</span>
                 </div>
               </div>
               <h4 className="font-serif text-xl text-foreground">{item.name}</h4>
@@ -47,11 +49,11 @@ export const ServiceMenuList: React.FC<ServiceMenuListProps> = ({ items }) => {
               </div>
               <div className="flex flex-wrap gap-3">
                 {item.stripePriceId ? (
-                  <PrimaryButton onClick={() => startCheckout(item.stripePriceId!, 'payment')} textColor="ink">{locale === 'ar' ? 'ابدأ الخدمة' : 'Start service'}</PrimaryButton>
+                  <PrimaryButton onClick={() => startCheckout(item.stripePriceId!, 'payment')} textColor="ink">{copy.startService}</PrimaryButton>
                 ) : item.payHref ? (
-                  <PrimaryButton href={item.payHref} textColor="ink">{locale === 'ar' ? 'ابدأ الخدمة' : 'Start service'}</PrimaryButton>
+                  <PrimaryButton href={item.payHref} textColor="ink">{copy.startService}</PrimaryButton>
                 ) : null}
-                <SecondaryButton href={item.bookHref}>{locale === 'ar' ? 'احجز مكالمة' : 'Book a call'}</SecondaryButton>
+                <SecondaryButton href={item.bookHref}>{copy.bookCallLower}</SecondaryButton>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { ChevronDown, LucideIcon } from 'lucide-react';
 import { Reveal, RevealGroup } from '@/components/motion/Reveal';
 import { cn } from '@/lib/utils';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface ServiceDeliveryStep {
   title: string;
@@ -28,13 +29,13 @@ export const ServiceDeliverySection: React.FC<ServiceDeliverySectionProps> = ({
   const headingId = useId();
   const [activeStep, setActiveStep] = useState(0);
   const { locale, isRTL } = useLocale();
-  const deliveryRhythm =
-    locale === 'ar' ? 'النطاق -> التنفيذ -> التسليم' : 'scope -> build -> handover';
+  const copy = getUiCopy(locale);
+  const deliveryRhythm = locale === 'ar' ? 'النطاق -> التنفيذ -> التسليم' : locale === 'de' ? 'Umfang -> Umsetzung -> Übergabe' : locale === 'fr' ? 'cadrage -> réalisation -> passation' : locale === 'bg' ? 'обхват -> изработка -> предаване' : 'scope -> build -> handover';
   const resolvedEyebrow = locale === 'ar' && eyebrow === 'Delivery' ? 'التسليم' : eyebrow;
   const resolvedHeadline =
     locale === 'ar' && headline === 'How the work runs' ? 'كيف يسير العمل' : headline;
-  const stageLabel = locale === 'ar' ? 'المرحلة' : 'Stage';
-  const progressAriaLabel = locale === 'ar' ? 'تقدم التسليم' : 'Delivery progress';
+  const stageLabel = copy.stage;
+  const progressAriaLabel = copy.deliveryProgress;
 
   const resolvedActiveStep =
     steps.length > 0 ? Math.min(activeStep, steps.length - 1) : 0;
@@ -152,7 +153,7 @@ export const ServiceDeliverySection: React.FC<ServiceDeliverySectionProps> = ({
 
                 <div className={cn('flex flex-wrap items-center gap-3', isRTL && 'flex-row-reverse justify-end')}>
                   <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-mint/78">
-                    {stageLabel} {String(resolvedActiveStep + 1).padStart(2, '0')} {locale === 'ar' ? 'من' : 'of'} {String(steps.length).padStart(2, '0')}
+                    {stageLabel} {String(resolvedActiveStep + 1).padStart(2, '0')} {copy.of} {String(steps.length).padStart(2, '0')}
                   </p>
                   {CurrentIcon ? (
                     <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-mint/55 bg-black/10 text-mint">
@@ -273,7 +274,7 @@ export const ServiceDeliverySection: React.FC<ServiceDeliverySectionProps> = ({
                       <div className="overflow-hidden">
                         <div className="rounded-b-2xl border-x-2 border-b-2 border-mint/55 bg-black/10 px-4 pb-4 pt-4">
                           <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-mint/75">
-                            {stageLabel} {String(index + 1).padStart(2, '0')} {locale === 'ar' ? 'من' : 'of'} {String(steps.length).padStart(2, '0')}
+                            {stageLabel} {String(index + 1).padStart(2, '0')} {copy.of} {String(steps.length).padStart(2, '0')}
                           </p>
                           <p className="mt-3 text-body-md text-offwhite/80">
                             {step.description}

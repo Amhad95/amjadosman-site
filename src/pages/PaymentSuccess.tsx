@@ -7,16 +7,20 @@ import { usePageMeta } from "@/hooks/use-page-meta";
 
 const PaymentSuccess = () => {
   const { locale } = useLocale();
-  const copy = locale === "ar"
-    ? { title: "تم استلام الدفع", body: "شكراً لك. سنراجع تفاصيل الخدمة ونتواصل معك بالخطوة التالية.", back: "العودة إلى الصفحة الرئيسية" }
-    : { title: "Payment received", body: "Thank you. I will review the service details and contact you with the next step.", back: "Back to home" };
+  const copy = {
+    en: { title: "Payment received", body: "Thank you. I will review the service details and contact you with the next step.", back: "Back to home", eyebrow: "Payment" },
+    ar: { title: "تم استلام الدفع", body: "شكراً لك. سنراجع تفاصيل الخدمة ونتواصل معك بالخطوة التالية.", back: "العودة إلى الصفحة الرئيسية", eyebrow: "الدفع" },
+    de: { title: "Zahlung erhalten", body: "Vielen Dank. Ich prüfe die Servicedetails und melde mich mit dem nächsten Schritt.", back: "Zur Startseite", eyebrow: "Zahlung" },
+    fr: { title: "Paiement reçu", body: "Merci. Je vérifie les détails du service et vous contacte pour la prochaine étape.", back: "Retour à l'accueil", eyebrow: "Paiement" },
+    bg: { title: "Плащането е получено", body: "Благодаря. Ще прегледам детайлите на услугата и ще се свържа с вас за следващата стъпка.", back: "Към началната страница", eyebrow: "Плащане" },
+  }[locale];
 
   usePageMeta({ title: `${copy.title} | Amjad Osman`, description: copy.body });
 
   return (
     <Layout>
       <Hero
-        eyebrow={locale === "ar" ? "الدفع" : "Payment"}
+        eyebrow={copy.eyebrow}
         headline={copy.title}
         subheadline={copy.body}
         plate="emerald"

@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Check, X, Shield, ShieldCheck } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 type Preset = 'simple' | 'strict';
 
@@ -41,14 +42,9 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
   const [preset, setPreset] = useState<Preset>('simple');
   const [isHovered, setIsHovered] = useState(false);
   const { locale, isRTL } = useLocale();
-  const roleLabels =
-    locale === 'ar'
-      ? { Admin: 'مشرف', Manager: 'مدير', Staff: 'موظف', Viewer: 'مشاهد' }
-      : { Admin: 'Admin', Manager: 'Manager', Staff: 'Staff', Viewer: 'Viewer' };
-  const actionLabels =
-    locale === 'ar'
-      ? ['إنشاء', 'اعتماد', 'تصدير', 'حذف']
-      : actions;
+  const copy = getUiCopy(locale);
+  const roleLabels = { Admin: copy.roleAdmin, Manager: copy.roleManager, Staff: copy.roleStaff, Viewer: copy.roleViewer };
+  const actionLabels = [copy.actionCreate, copy.actionApprove, copy.actionExport, copy.actionDelete];
 
   // Auto-toggle between presets
   useEffect(() => {
@@ -68,7 +64,7 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
       {/* Preset toggle */}
       <div className={cn('flex items-center gap-4 mb-6', isRTL && 'flex-row-reverse justify-end')}>
         <span className="text-sm font-medium text-gray-500">
-          {locale === 'ar' ? 'إعداد الحوكمة:' : 'Governance preset:'}
+          {copy.governancePreset}
         </span>
         <div className="flex rounded-lg overflow-hidden border border-gray-200">
           <button
@@ -81,7 +77,7 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
             )}
           >
             <Shield size={16} />
-            {locale === 'ar' ? 'مبسّط' : 'Simple'}
+            {copy.simple}
           </button>
           <button
             onClick={() => setPreset('strict')}
@@ -93,7 +89,7 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
             )}
           >
             <ShieldCheck size={16} />
-            {locale === 'ar' ? 'صارم' : 'Strict'}
+            {copy.strict}
           </button>
         </div>
       </div>
@@ -103,7 +99,7 @@ export const RolesPermissionsMatrix: React.FC<{ className?: string }> = ({ class
         {/* Header */}
         <div className="grid grid-cols-5 bg-gray-50 border-b border-gray-200">
           <div className="p-4 text-sm font-semibold text-gray-700">
-            {locale === 'ar' ? 'الدور' : 'Role'}
+            {copy.role}
           </div>
           {actionLabels.map((action) => (
             <div key={action} className="p-4 text-sm font-semibold text-gray-700 text-center">

@@ -5,6 +5,7 @@ import { startCheckout } from '@/lib/stripe';
 import { Check, Repeat2, TimerReset } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface RetainerCardProps {
   tier: string;
@@ -26,6 +27,7 @@ export const RetainerCard: React.FC<RetainerCardProps> = ({
   stripePriceId,
 }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
   const handleSubscribe = () => {
     if (stripePriceId) {
       startCheckout(stripePriceId, 'subscription');
@@ -38,7 +40,7 @@ export const RetainerCard: React.FC<RetainerCardProps> = ({
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-ink/12 bg-ink/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground mb-4">
             <Repeat2 size={13} />
-            <span>{locale === 'ar' ? 'دعم مستمر' : 'Retainer'}</span>
+            <span>{copy.retainer}</span>
           </div>
           <h4 className="font-serif text-heading-md text-foreground">{tier}</h4>
         </div>
@@ -67,11 +69,11 @@ export const RetainerCard: React.FC<RetainerCardProps> = ({
       <div className="mt-auto border-t border-ink/8 pt-5">
         <div className="flex flex-wrap gap-3">
           {stripePriceId ? (
-            <PrimaryButton onClick={handleSubscribe} textColor="ink">{locale === 'ar' ? 'ابدأ الدعم' : 'Start retainer'}</PrimaryButton>
+            <PrimaryButton onClick={handleSubscribe} textColor="ink">{copy.startRetainer}</PrimaryButton>
           ) : (
-            <PrimaryButton href={subscribeHref} textColor="ink">{locale === 'ar' ? 'ابدأ الدعم' : 'Start retainer'}</PrimaryButton>
+            <PrimaryButton href={subscribeHref} textColor="ink">{copy.startRetainer}</PrimaryButton>
           )}
-          <SecondaryButton href={bookHref}>{locale === 'ar' ? 'ناقشها معنا' : 'Talk it through'}</SecondaryButton>
+          <SecondaryButton href={bookHref}>{copy.talkItThrough}</SecondaryButton>
         </div>
       </div>
     </div>

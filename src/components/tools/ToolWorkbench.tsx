@@ -173,7 +173,7 @@ export const ToolWorkbench: React.FC<ToolWorkbenchProps> = ({
             </div>
           </aside>
 
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-6">
             <form onSubmit={onSubmit} className="rounded-xl border border-border bg-card shadow-sm">
               <div className={cn("border-b border-border p-5 md:p-6", isRTL && "text-right")}>
                 <div className={cn("flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between", isRTL && "lg:flex-row-reverse")}>

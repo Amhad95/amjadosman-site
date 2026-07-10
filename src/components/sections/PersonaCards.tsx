@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { User, Briefcase, Building2 } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface Persona {
   id: string;
@@ -26,6 +27,7 @@ export const PersonaCards: React.FC<PersonaCardsProps> = ({
   onPersonaSelect,
 }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleSelect = (index: number) => {
@@ -80,11 +82,11 @@ export const PersonaCards: React.FC<PersonaCardsProps> = ({
                   {locale === 'ar' ? persona.title_ar ?? persona.title : persona.title}
                 </h4>
                 <p className="text-sm text-muted-foreground mb-2">
-                  <span className="text-red-600 font-medium">{locale === 'ar' ? 'المشكلة:' : 'Pain:'}</span>{' '}
+                  <span className="text-red-600 font-medium">{copy.pain}</span>{' '}
                   {locale === 'ar' ? persona.pain_ar ?? persona.pain : persona.pain}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  <span className="text-emerald-600 font-medium">{locale === 'ar' ? 'النتيجة:' : 'Payoff:'}</span>{' '}
+                  <span className="text-emerald-600 font-medium">{copy.payoff}</span>{' '}
                   {locale === 'ar' ? persona.payoff_ar ?? persona.payoff : persona.payoff}
                 </p>
               </div>

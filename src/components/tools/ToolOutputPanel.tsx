@@ -14,6 +14,51 @@ const outputCopy = {
   bg: { output: 'Резултат', words: 'думи', minRead: 'мин. четене', sections: 'раздела', generating: 'Генериране...', actions: 'Действия', tables: 'Таблици', resultMap: 'Карта на резултата', mapEmpty: 'Картата ще се попълни с оформянето на резултата.', copied: 'Копирано', copy: 'Копирай' },
 } as const;
 
+type MarkdownElement = React.ReactElement<{ children?: React.ReactNode }>;
+
+const elementChildren = (element: MarkdownElement | null) =>
+  element ? React.Children.toArray(element.props.children).filter(React.isValidElement) as MarkdownElement[] : [];
+
+const MarkdownTable: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+  const groups = React.Children.toArray(children).filter(React.isValidElement) as MarkdownElement[];
+  const headerGroup = groups[0] ?? null;
+  const bodyGroup = groups[1] ?? null;
+  const headerRow = elementChildren(headerGroup)[0] ?? null;
+  const headers = elementChildren(headerRow).map((cell) => cell.props.children);
+  const rows = elementChildren(bodyGroup)
+    .map((row) => elementChildren(row));
+
+  return (
+    <>
+      <div className="mb-6 hidden min-w-0 max-w-full overflow-x-auto rounded-xl border border-border sm:block">
+        <table className="w-full max-w-full table-fixed border-collapse text-left text-[11px] sm:text-sm">{children}</table>
+      </div>
+      <div className="mb-6 space-y-3 sm:hidden">
+        {rows.map((row, rowIndex) => (
+          <article key={rowIndex} className="rounded-xl border border-border bg-background p-3">
+            {row.map((cell, cellIndex) => (
+              <div
+                key={cellIndex}
+                className={cn(
+                  'grid grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] gap-3 border-b border-border py-2.5 text-xs last:border-b-0',
+                  cellIndex === 0 && 'pt-0'
+                )}
+              >
+                <div className="min-w-0 break-words font-semibold text-foreground">
+                  {headers[cellIndex] ?? `Field ${cellIndex + 1}`}
+                </div>
+                <div className="min-w-0 break-words [overflow-wrap:anywhere] text-muted-foreground">
+                  {cell.props.children}
+                </div>
+              </div>
+            ))}
+          </article>
+        ))}
+      </div>
+    </>
+  );
+};
+
 interface ToolOutputPanelProps {
   output: string;
   isStreaming: boolean;
@@ -40,7 +85,7 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
     .filter((line) => /^\s*(?:[-*]|\d+\.)\s+/.test(line))
     .filter((line) => /(fix|build|create|add|remove|track|define|review|connect|update|map|measure|audit|implement|define|plan|fixer|créer|ajouter|supprimer|suivre|définir|réviser|connecter|mesurer|auditer|umsetzen|prüfen|erstellen|hinzufügen|entfernen|messen|definieren|добав|създа|измер|опред|пров|راجع|أضف|حدد|أنشئ)/i.test(line))
     .slice(0, 7);
-  const tableCount = (output.match(/\n\|.+\|\n\|[-:\s|]+\|/g) ?? []).length;
+  const tableCount = (output.match(/(?:^|\n)\|.+\|\n\|[-:\s|]+\|/g) ?? []).length;
 
   const handleCopy = useCallback(() => {
     if (!output) return;
@@ -145,7 +190,7 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
         </div>
       )}
 
-      <div className="grid gap-0 lg:grid-cols-[220px_minmax(0,1fr)]">
+      <div className="grid min-w-0 gap-0 lg:grid-cols-[220px_minmax(0,1fr)]">
         {output && (
           <aside className="border-b border-border bg-muted/20 p-5 lg:border-b-0 lg:border-r">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
@@ -166,7 +211,7 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
           </aside>
         )}
 
-      <div className="p-6 md:p-8">
+      <div className="min-w-0 p-6 md:p-8">
         {isStreaming && !output && (
           <div className="space-y-3">
             <Skeleton className="h-5 w-3/4" />
@@ -194,11 +239,7 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
                 strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
                 code: ({ children }) => <code className="rounded bg-muted px-1.5 py-0.5 text-xs text-foreground">{children}</code>,
                 pre: ({ children }) => <pre className="mb-5 overflow-x-auto rounded-xl border border-border bg-muted p-4 text-sm">{children}</pre>,
-                table: ({ children }) => (
-                  <div className="mb-6 overflow-x-auto rounded-xl border border-border">
-                    <table className="w-full table-fixed border-collapse text-left text-[11px] sm:text-sm">{children}</table>
-                  </div>
-                ),
+                table: ({ children }) => <MarkdownTable>{children}</MarkdownTable>,
                 thead: ({ children }) => <thead className="tool-accent-soft text-foreground">{children}</thead>,
                 th: ({ children }) => <th className="break-words border-b border-border px-2 py-2 font-semibold sm:px-4 sm:py-3">{children}</th>,
                 td: ({ children }) => <td className="break-words [overflow-wrap:anywhere] border-b border-border px-2 py-2 align-top text-muted-foreground last:border-b-0 sm:px-4 sm:py-3">{children}</td>,

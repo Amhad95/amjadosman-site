@@ -10,6 +10,7 @@ import { CyberMario } from "@/components/ui/cyber-mario";
 import { CyberRelay } from "@/components/ui/cyber-relay";
 import { RevealGroup } from "@/components/motion/Reveal";
 import { useLocale } from "@/lib/locale";
+import { getUiCopy } from "@/lib/uiCopy";
 
 interface ServiceCardItem {
   title: string;
@@ -40,6 +41,7 @@ export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
   className,
 }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
 
   return (
     <RevealGroup
@@ -85,7 +87,7 @@ export const ServiceCardGrid: React.FC<ServiceCardGridProps> = ({
                   "mt-auto inline-flex self-start items-center gap-2 text-sm font-medium text-foreground transition-colors group-hover:text-lavender relative z-10"
                 )}
               >
-                {locale === "ar" ? "اعرف المزيد" : "Learn more"}
+                {copy.learnMore}
                 <ArrowRight
                   size={16}
                   className={cn(

@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import { ProductPreviewFrame } from '@/components/shared/ProductPreviewFrame';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface WorkflowStep {
   id: string;
@@ -19,6 +20,7 @@ interface WorkflowStepperProps {
 export const WorkflowStepper: React.FC<WorkflowStepperProps> = ({ steps, className }) => {
   const [activeStep, setActiveStep] = useState(0);
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
 
   return (
     <div className={cn('grid grid-cols-1 lg:grid-cols-2 gap-8', className)}>
@@ -82,7 +84,7 @@ export const WorkflowStepper: React.FC<WorkflowStepperProps> = ({ steps, classNa
       {/* Right: Preview in neutral frame */}
       <ProductPreviewFrame
         variant="browser"
-        title={locale === 'ar' ? 'الإعداد' : 'Configuration'}
+        title={copy.configuration}
       >
         <div className="relative min-h-[300px]">
           {steps.map((step, index) => (

@@ -1,7 +1,7 @@
 import React, {
   createContext,
   useContext,
-  useLayoutEffect,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -65,7 +65,7 @@ export const LocaleProvider: React.FC<LocaleProviderProps> = ({ children }) => {
     return initialLocale;
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     syncDocumentLanguage(locale);
     if (canUseDOM()) {
       window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);

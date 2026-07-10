@@ -4,6 +4,7 @@ import { Check, Palette, Globe, Presentation, FolderTree, FileText, UserPlus, Lu
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { AnimatedIcon } from '@/components/shared/AnimatedIcon';
 import { useLocale } from '@/lib/locale';
+import { getUiCopy } from '@/lib/uiCopy';
 
 interface PackageItem {
   title: string;
@@ -65,6 +66,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
   className,
 }) => {
   const { locale, isRTL } = useLocale();
+  const copy = getUiCopy(locale);
 
   return (
     <div className={cn('space-y-16', className)}>
@@ -162,7 +164,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
               <p className="text-sm text-mint/70 mb-6">{foundation.timeline}</p>
               
               <PrimaryButton href="/book">
-                {locale === 'ar' ? 'احجز مكالمة' : 'Book a Call'}
+                {copy.bookCall}
               </PrimaryButton>
             </div>
           </div>
