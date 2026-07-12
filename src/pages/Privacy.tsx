@@ -13,7 +13,7 @@ const Privacy = () => {
   const legalCopy = pickLocaleCopy(legalPageCopy, locale);
   usePageMeta({ title: `${privacy.title} | Amjad Osman`, description: privacy.subheadline });
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <Hero
         eyebrow={privacy.eyebrow}
         headline={privacy.title}

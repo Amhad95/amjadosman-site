@@ -55,7 +55,7 @@ const DashboardBuilder = () => {
   };
 
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <ToolWorkbench
         tool="dashboard-builder"
         title={copy.title}

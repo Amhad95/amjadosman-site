@@ -52,7 +52,7 @@ const BrandAudit = () => {
   };
 
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <ToolWorkbench
         tool="brand-audit"
         title={copy.title}

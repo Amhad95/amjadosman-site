@@ -53,7 +53,7 @@ const PageCritique = () => {
   };
 
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <ToolWorkbench
         tool="page-critique"
         title={toolCopy.title}

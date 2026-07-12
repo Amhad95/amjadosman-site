@@ -8,14 +8,25 @@ import { useLocale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
 import { useLocation } from 'react-router-dom';
 import { getCurrentPlate } from '@/lib/pagePlate';
+import { Hero } from '@/components/sections/Hero';
+import { ProductHero } from '@/components/sections/ProductHero';
 
 interface LayoutProps {
   children: React.ReactNode;
-  motionLevel?: Exclude<MotionVariant, 'hero'> | 'none';
+  motionLevel?: Exclude<MotionVariant, 'hero'>;
 }
 
+const flattenPageSections = (children: React.ReactNode): React.ReactNode[] =>
+  React.Children.toArray(children).flatMap((child) => {
+    if (React.isValidElement(child) && child.type === React.Fragment) {
+      return flattenPageSections(child.props.children);
+    }
+
+    return [child];
+  });
+
 export const Layout: React.FC<LayoutProps> = ({ children, motionLevel = 'default' }) => {
-  const pageSections = React.Children.toArray(children);
+  const pageSections = flattenPageSections(children);
   const { common } = useSiteContent();
   const { isRTL } = useLocale();
   const location = useLocation();
@@ -34,13 +45,12 @@ export const Layout: React.FC<LayoutProps> = ({ children, motionLevel = 'default
       </a>
       <Header />
       <main id="main-content" className="flex-1">
-        <PageTransitionShell disabled={motionLevel === 'none'}>
+        <PageTransitionShell>
           {pageSections.map((child, index) => {
-            if (index === 0) {
-              return child;
-            }
+            const isIntroHero =
+              React.isValidElement(child) && (child.type === Hero || child.type === ProductHero);
 
-            if (motionLevel === 'none') {
+            if (index === 0 && isIntroHero) {
               return child;
             }
 

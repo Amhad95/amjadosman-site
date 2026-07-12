@@ -13,7 +13,7 @@ const Terms = () => {
   const legalCopy = pickLocaleCopy(legalPageCopy, locale);
   usePageMeta({ title: `${terms.title} | Amjad Osman`, description: terms.subheadline });
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <Hero
         eyebrow={terms.eyebrow}
         headline={terms.title}

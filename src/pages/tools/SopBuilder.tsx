@@ -48,7 +48,7 @@ const SopBuilder = () => {
   };
 
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <ToolWorkbench
         tool="sop-builder"
         title={copy.title}

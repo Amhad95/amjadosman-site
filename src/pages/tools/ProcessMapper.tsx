@@ -48,7 +48,7 @@ const ProcessMapper = () => {
   };
 
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <ToolWorkbench
         tool="process-mapper"
         title={copy.title}

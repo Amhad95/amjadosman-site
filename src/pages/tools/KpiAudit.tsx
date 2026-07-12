@@ -52,7 +52,7 @@ const KpiAudit = () => {
   };
 
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <ToolWorkbench
         tool="kpi-audit"
         title={copy.title}
