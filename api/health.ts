@@ -12,12 +12,16 @@ export default function handler(req: HealthRequest, res: HealthResponse) {
     return;
   }
 
-  const ready = Boolean(
-    (process.env.HF_TOKEN || process.env.HUGGINGFACE_API_KEY)
-    && process.env.STRIPE_SECRET_KEY
-    && process.env.STRIPE_WEBHOOK_SECRET
-  );
+  const missing = [
+    !(process.env.HF_TOKEN || process.env.HUGGINGFACE_API_KEY) && "HF_TOKEN_OR_HUGGINGFACE_API_KEY",
+    !process.env.STRIPE_SECRET_KEY && "STRIPE_SECRET_KEY",
+    !process.env.STRIPE_WEBHOOK_SECRET && "STRIPE_WEBHOOK_SECRET",
+  ].filter(Boolean);
+  const ready = missing.length === 0;
 
   res.setHeader("Cache-Control", "no-store");
-  res.status(ready ? 200 : 503).json({ status: ready ? "ready" : "configuration_required" });
+  res.status(ready ? 200 : 503).json({
+    status: ready ? "ready" : "configuration_required",
+    ...(ready ? {} : { missing }),
+  });
 }
