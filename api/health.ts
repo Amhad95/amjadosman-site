@@ -16,7 +16,6 @@ export default function handler(req: HealthRequest, res: HealthResponse) {
     (process.env.HF_TOKEN || process.env.HUGGINGFACE_API_KEY)
     && process.env.STRIPE_SECRET_KEY
     && process.env.STRIPE_WEBHOOK_SECRET
-    && process.env.SITE_URL
   );
 
   res.setHeader("Cache-Control", "no-store");
