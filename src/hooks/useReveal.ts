@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState, type FC, type ReactNode } from 'react';
+import { createContext, createElement, useContext, useEffect, useRef, useState, type FC, type ReactNode } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface UseRevealOptions {
@@ -22,15 +22,15 @@ export const RevealTimingProvider: FC<RevealTiming & { children: ReactNode }> = 
 }) => {
   const parentTiming = useContext(RevealTimingContext);
 
-  return (
-    <RevealTimingContext.Provider
-      value={{
+  return createElement(
+    RevealTimingContext.Provider,
+    {
+      value: {
         rootMargin: rootMargin ?? parentTiming.rootMargin,
         threshold: threshold ?? parentTiming.threshold,
-      }}
-    >
-      {children}
-    </RevealTimingContext.Provider>
+      },
+    },
+    children
   );
 };
 
