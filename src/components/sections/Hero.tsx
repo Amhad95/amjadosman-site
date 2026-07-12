@@ -54,7 +54,7 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="container mx-auto px-4 md:px-6 pt-6">
         <div
           className={cn(
-            'hero-folder-card relative px-6 md:px-10 lg:px-12 flex items-center',
+            'hero-folder-card colored-surface-shadow relative flex items-center px-6 md:px-10 lg:px-12',
             size === 'compact'
               ? 'min-h-[200px] md:min-h-[220px] lg:min-h-[235px] py-7 md:py-8'
               : 'min-h-[340px] md:min-h-[360px] lg:min-h-[380px] py-10 md:py-12 lg:py-14',

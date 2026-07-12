@@ -16,7 +16,7 @@ export const OutcomesImpactSection: React.FC = () => {
     <section className="py-16 md:py-24 bg-muted" aria-labelledby="outcomes-heading">
       <div className="container mx-auto px-4 md:px-6">
 
-        <Reveal className={cn('max-w-3xl mb-10 md:mb-14', isRTL && 'text-right')}>
+        <Reveal className={cn('section-intro-copy mb-10 md:mb-14', isRTL && 'me-auto text-right')}>
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-4">
             {outcomesImpact.eyebrow}
           </p>
@@ -70,7 +70,7 @@ export const OutcomesImpactSection: React.FC = () => {
         <Reveal
           className={cn(
             'mt-10 md:mt-12 flex flex-col sm:flex-row gap-3 sm:items-center',
-            isRTL && 'sm:flex-row-reverse'
+            isRTL && 'sm:justify-start'
           )}
           variant="subtle"
         >

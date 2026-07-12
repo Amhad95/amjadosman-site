@@ -84,7 +84,7 @@ export const TaskBoardRealistic: React.FC<{ className?: string }> = ({ className
         <div
           key={column.id}
           className={cn(
-            'min-w-0 flex min-h-0 flex-col rounded-lg transition-all duration-300 md:min-w-[140px] md:flex-1',
+            'min-w-0 flex min-h-0 basis-0 flex-col rounded-lg transition-all duration-300 md:flex-1',
             highlightedColumn === column.id ? 'bg-gray-100' : 'bg-gray-50'
           )}
         >

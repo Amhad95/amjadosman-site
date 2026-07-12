@@ -23,13 +23,13 @@ export const siteContentFr: SiteContent = {
       { label: "Agents d'IA et automatisation", href: "/services/agents" },
     ],
     resourcesDropdown: [
-      { label: "Notes et idées", href: "/resources" },
       { label: "Outils d'aide", href: "/tools" },
+      { label: "Analyses", href: "/resources" },
     ],
     cta: { label: "Réserver un appel", href: "/book" },
     footer: [
       { label: "Processus de livraison", href: "/process" },
-      { label: "Notes et idées", href: "/resources" },
+      { label: "Analyses", href: "/resources" },
       { label: "Outils d'aide", href: "/tools" },
       { label: "Contact", href: "/contact" },
       { label: "Confidentialité", href: "/privacy" },
@@ -858,7 +858,7 @@ export const siteContentFr: SiteContent = {
 
   resources: {
     hero: {
-      eyebrow: "Notes et idées",
+      eyebrow: "Analyses",
       headline: "Ressources pratiques pour une livraison plus claire.",
       subheadline:
         "Articles et notes pour les équipes qui améliorent la marque, les opérations, les logiciels et l'automatisation.",

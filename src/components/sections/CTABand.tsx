@@ -51,7 +51,7 @@ export const CTABand: React.FC<CTABandProps> = ({
             'rounded-[34px] px-6 py-10 md:px-10 md:py-12 lg:px-12',
             'flex flex-col gap-8 lg:items-center lg:justify-between',
             variant === 'dark'
-              ? 'bg-[hsl(var(--page-cta-bg))] text-offwhite shadow-[0_24px_64px_-46px_rgba(8,15,32,0.34)]'
+              ? 'colored-surface-shadow bg-[hsl(var(--page-cta-bg))] text-offwhite'
               : 'bg-muted text-foreground border border-ink/8 shadow-[0_20px_54px_-44px_rgba(8,15,32,0.16)]',
             isRTL ? 'lg:flex-row' : 'lg:flex-row',
             size === 'large' ? 'lg:gap-16' : 'lg:gap-12'

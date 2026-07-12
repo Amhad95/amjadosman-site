@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
           className={cn(
             "rounded-[34px] bg-[hsl(var(--page-footer-bg))] text-offwhite px-6 py-10 md:px-10 md:py-12",
             "flex flex-col gap-10",
-            "shadow-[0_24px_64px_-46px_rgba(8,15,32,0.34)]",
+            "colored-surface-shadow",
             isRTL && "text-right"
           )}
         >

@@ -23,8 +23,8 @@ const siteContentEn = {
       { label: "AI Agents and Automation", href: "/services/agents" },
     ],
     resourcesDropdown: [
-      { label: "Insight notes", href: "/resources" },
       { label: "Self-help tools", href: "/tools" },
+      { label: "Insights", href: "/resources" },
     ],
     cta: { label: "Book a Call", href: "/book" },
     footer: [
@@ -858,7 +858,7 @@ const siteContentEn = {
 
   resources: {
     hero: {
-      eyebrow: "Insight notes",
+      eyebrow: "Insights",
       headline: "Practical resources for clearer delivery.",
       subheadline:
         "Articles and notes for teams improving brand, operations, software, and automation.",
@@ -1187,13 +1187,13 @@ const siteContentAr: typeof siteContentEn = {
       { label: "الوكلاء والعمليات المؤتمتة", href: "/services/agents" },
     ],
     resourcesDropdown: [
-      { label: "مقالات وأفكار", href: "/resources" },
       { label: "أدوات مساعدة ذاتية", href: "/tools" },
+      { label: "رؤى", href: "/resources" },
     ],
     cta: { label: "احجز مكالمة", href: "/book" },
     footer: [
       { label: "آلية التسليم", href: "/process" },
-      { label: "مقالات وأفكار", href: "/resources" },
+      { label: "رؤى", href: "/resources" },
       { label: "أدوات مساعدة ذاتية", href: "/tools" },
       { label: "تواصل معنا", href: "/contact" },
       { label: "الخصوصية", href: "/privacy" },
@@ -2003,7 +2003,7 @@ const siteContentAr: typeof siteContentEn = {
 
   resources: {
     hero: {
-      eyebrow: "مقالات وأفكار",
+      eyebrow: "رؤى",
       headline: "موارد عملية لتسليم أوضح.",
       subheadline:
         "مقالات وملاحظات للفرق التي تطور الهوية والعمليات والبرمجيات والأتمتة.",

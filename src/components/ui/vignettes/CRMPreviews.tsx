@@ -55,7 +55,7 @@ interface PipelineColumnProps {
 
 const PipelineColumn: React.FC<PipelineColumnProps> = ({ id, label, count, deals }) => {
   return (
-    <div className="flex-1 min-w-[140px] flex flex-col rounded-lg bg-gray-50">
+    <div className="min-w-0 flex flex-1 flex-col rounded-lg bg-gray-50">
       <div className="flex items-center justify-between px-2 py-2 border-b border-gray-200">
         <span className="text-[11px] font-semibold text-gray-700">{label}</span>
         <span className="px-1.5 py-0.5 text-[10px] bg-gray-200 text-gray-600 rounded-full">
@@ -205,7 +205,7 @@ export const PipelineBoardRealistic: React.FC<{ className?: string }> = ({ class
         <div
           key={column.id}
           className={cn(
-            'min-w-0 flex min-h-0 flex-col rounded-lg transition-all duration-300 md:min-w-[140px] md:flex-1',
+            'min-w-0 flex min-h-0 basis-0 flex-col rounded-lg transition-all duration-300 md:flex-1',
             highlightedColumn === column.id ? 'bg-gray-100' : 'bg-gray-50'
           )}
         >

@@ -23,8 +23,8 @@ export const siteContentDe: SiteContent = {
       { label: "KI-Agenten und Automatisierung", href: "/services/agents" },
     ],
     resourcesDropdown: [
-      { label: "Einblicke", href: "/resources" },
       { label: "Selbsthilfe-Tools", href: "/tools" },
+      { label: "Einblicke", href: "/resources" },
     ],
     cta: { label: "Gespräch buchen", href: "/book" },
     footer: [

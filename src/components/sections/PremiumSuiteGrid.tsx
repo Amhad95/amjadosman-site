@@ -65,7 +65,7 @@ export const PremiumSuiteGrid: React.FC<PremiumSuiteGridProps> = ({ products, ex
             
             <div className={cn('relative z-10 flex flex-col h-full', isRTL && 'text-right')}>
               {/* Header */}
-              <div className={cn('flex items-center gap-4 mb-4', isRTL && 'flex-row-reverse')}>
+              <div className="flex items-center gap-4 mb-4">
                 <div className={cn(
                   'flex-shrink-0 w-14 h-14 rounded-xl',
                   'bg-plate-astral flex items-center justify-center',

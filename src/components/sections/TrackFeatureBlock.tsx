@@ -38,20 +38,17 @@ export const TrackFeatureBlock: React.FC<TrackFeatureBlockProps> = ({
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
-        {/* Label */}
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-4">
-          {label}
-        </p>
-
-        {/* Headline */}
-        <h2 className="font-serif text-poster-lg text-foreground mb-4">
-          {headline}
-        </h2>
-
-        {/* Explainer */}
-        <p className="text-subheadline text-muted-foreground max-w-3xl mb-12">
-          {explainer}
-        </p>
+        <div className="section-intro-copy mb-12">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-4">
+            {label}
+          </p>
+          <h2 className="font-serif text-poster-lg text-foreground mb-4">
+            {headline}
+          </h2>
+          <p className="text-subheadline text-muted-foreground">
+            {explainer}
+          </p>
+        </div>
 
         {/* When this track fits */}
         <div className="mb-12">

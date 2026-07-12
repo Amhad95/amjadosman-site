@@ -204,7 +204,7 @@ export const Header: React.FC = () => {
                     onMouseLeave={handleResourcesDropdownLeave}
                   >
                     <Link
-                      to="/resources"
+                      to="/tools"
                       className={cn(
                         "text-sm transition-all duration-200 inline-flex items-center gap-1",
                         isResourcesActive ? "font-bold" : "font-medium",

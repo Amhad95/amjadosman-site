@@ -55,12 +55,12 @@ const WorkDetail = () => {
       <>
         
         {/* Top Header & Metadata */}
-        <section className="bg-background pt-16 md:pt-24 pb-12">
-          <div className="container mx-auto px-4 md:px-6">
+        <section className="bg-background pt-24 md:pt-28 pb-12">
+          <div className="container mx-auto px-6 md:px-6">
             <Link
               to="/work"
               className={cn(
-                "mb-10 inline-flex items-center gap-2 rounded-lg border border-plate-violet bg-plate-violet px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-plate-violet/90",
+                "mb-10 inline-flex items-center gap-2 rounded-lg border border-plate-emerald/60 bg-plate-emerald/10 px-3 py-2 text-sm font-semibold text-plate-emerald transition-colors hover:border-plate-emerald hover:bg-plate-emerald/15",
                 isRTL && "flex-row-reverse"
               )}
             >
@@ -86,7 +86,7 @@ const WorkDetail = () => {
 
         {/* Cinematic Hero Image */}
         <section className="bg-muted pb-12 pt-8 md:pb-20 md:pt-10">
-          <div className="container mx-auto px-4 md:px-6">
+          <div className="container mx-auto px-6 md:px-6">
             {caseStudy.thumbnail_url ? (
               <div 
                 className="w-full h-[50vh] md:h-[75vh] rounded-[38px] overflow-hidden bg-muted relative shadow-[0_24px_64px_-46px_rgba(8,15,32,0.24)] cursor-zoom-in group"
@@ -108,16 +108,16 @@ const WorkDetail = () => {
         </section>
 
         {/* Markdown Content Area + Sidebar */}
-        <section className="bg-background pb-16 pt-12 md:pb-24 md:pt-16">
-        <div className="container mx-auto px-4 md:px-6 max-w-6xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-12 xl:gap-20">
+        <section className="detail-reading-section bg-background pb-16 pt-12 md:pb-24 md:pt-16">
+        <div className="container mx-auto grid grid-cols-1 gap-12 px-6 md:px-6 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,48rem)_minmax(0,1fr)] xl:gap-20">
           <div 
             className={cn(
-              "prose prose-lg dark:prose-invert max-w-none",
+              "prose prose-lg w-full max-w-[48rem] dark:prose-invert",
               "prose-headings:font-serif prose-headings:font-bold prose-headings:text-foreground",
               "prose-p:text-muted-foreground prose-p:leading-relaxed",
               "prose-a:text-mint hover:prose-a:text-mint/80",
               "prose-img:rounded-[28px] prose-img:shadow-xl",
-              isRTL && "text-right"
+              isRTL && "me-auto text-right"
             )}
             dir={isRTL ? "rtl" : "ltr"}
           >
@@ -137,11 +137,11 @@ const WorkDetail = () => {
             </ReactMarkdown>
           </div>
 
-          <aside className="lg:sticky lg:top-24 h-fit rounded-[26px] border border-ink/10 bg-muted/40 p-6 shadow-sm">
-            <h3 className="font-serif text-heading-sm text-foreground mb-6">
+          <aside className="h-fit rounded-[26px] border border-ink/10 bg-muted/40 p-6 shadow-sm lg:sticky lg:top-24 xl:w-full xl:justify-self-end">
+            <h2 className="mb-6 font-serif text-heading-md text-foreground">
               {copy.glance}
-            </h3>
-            <dl className="space-y-5">
+            </h2>
+            <dl className="divide-y divide-ink/10 border-y border-ink/10">
               {[
                 { label: copy.partner, value: caseStudy.partner },
                 { label: copy.year, value: caseStudy.year },
@@ -151,8 +151,8 @@ const WorkDetail = () => {
               ]
                 .filter((item) => item.value)
                 .map((item) => (
-                  <div key={item.label}>
-                    <dt className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">
+                  <div key={item.label} className="py-5">
+                    <dt className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                       {item.label}
                     </dt>
                     <dd className="text-sm font-medium text-foreground leading-relaxed">{item.value}</dd>

@@ -13,18 +13,24 @@ import { useSiteContent } from '@/lib/content';
 import { OutcomesImpactSection } from '@/components/sections/OutcomesImpactSection';
 import { DeliveryProcessInteractive } from '@/components/sections/DeliveryProcessInteractive';
 import { WorkCaseCard } from '@/components/sections/WorkCaseCard';
-import { resolveLocalizedWorkCase } from '@/lib/fallbackContent';
+import { InsightCard } from '@/components/sections/InsightCard';
+import { fallbackArticles, resolveLocalizedArticle, resolveLocalizedWorkCase } from '@/lib/fallbackContent';
 import { getFeaturedWorkCases } from '@/data/workCasesDatabase';
 import { RevealGroup } from '@/components/motion/Reveal';
 import { useLocale } from '@/lib/locale';
+import { pickLocaleCopy, simplePageCopy } from '@/lib/pageCopy';
 
 
 const Index = () => {
-  const { home } = useSiteContent();
+  const { home, resources, tools } = useSiteContent();
   const { locale } = useLocale();
+  const copy = pickLocaleCopy(simplePageCopy, locale);
   const featuredCases = getFeaturedWorkCases()
     .slice(0, 3)
     .map((item) => resolveLocalizedWorkCase(item, locale));
+  const featuredArticles = fallbackArticles
+    .slice(0, 3)
+    .map((item) => resolveLocalizedArticle(item, locale));
 
   return (
     <Layout>
@@ -86,6 +92,25 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <SectionHeader
+            eyebrow={copy.insightsEyebrow}
+            headline={copy.insightsHeadline}
+            subheadline={resources.hero.subheadline}
+            variant="poster"
+          />
+          <RevealGroup className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3" stagger={78}>
+            {featuredArticles.map((article) => (
+              <InsightCard key={article.id} article={article} />
+            ))}
+          </RevealGroup>
+          <div className="mt-8 text-center">
+            <SecondaryButton href="/resources">{copy.viewInsights}</SecondaryButton>
+          </div>
+        </div>
+      </section>
+
       {/* AI Tools Preview */}
       <section className="relative overflow-hidden py-16 md:py-24 bg-background">
         <MatrixCodeBackground fontSize={19} color="hsla(275, 100%, 50%, 0.16)" speed={0.55} />
@@ -96,7 +121,7 @@ const Index = () => {
             subheadline={home.aiTools.subheadline}
             variant="poster"
           />
-          <ToolList tools={home.aiTools.tools.map(t => ({ title: t.title, description: t.description }))} variant="preview" />
+          <ToolList tools={tools.list} variant="preview" />
           <div className="mt-8 text-center">
             <PrimaryButton href={home.aiTools.cta.href}>
               {home.aiTools.cta.label}
@@ -108,7 +133,7 @@ const Index = () => {
       {/* Pricing Teaser */}
       <section className="py-10 md:py-14 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="rounded-[34px] bg-plate-navy px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
+          <div className="colored-surface-shadow rounded-[34px] bg-plate-navy px-6 py-10 md:px-10 md:py-12 lg:px-12">
           <div className="max-w-2xl">
             <h2 className="font-serif text-poster-lg text-mint mb-4">
               {home.pricingTeaser.headline}

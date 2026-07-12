@@ -54,9 +54,9 @@ const About = () => {
 
       <section className="py-10 md:py-14 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="rounded-[34px] bg-plate-burgundy px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
+          <div className="colored-surface-shadow rounded-[34px] bg-plate-burgundy px-6 py-10 md:px-10 md:py-12 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-[0.92fr_1.08fr] gap-10 lg:gap-14 items-start">
-            <div className="max-w-2xl">
+            <div className="section-intro-copy">
               <p className="text-xs uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-4">
                 {about.drivers.eyebrow}
               </p>

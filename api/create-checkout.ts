@@ -1,32 +1,32 @@
-const ALLOWED_PRICE_IDS = new Set([
-  "price_1T4qCvP5yEvNkfiCUeYfWJsI",
-  "price_1T4qD3P5yEvNkfiCjv2XX6d4",
-  "price_1T4qD4P5yEvNkfiCNbFsNiu1",
-  "price_1T4qD6P5yEvNkfiCJMvK8Vex",
-  "price_1T4qD7P5yEvNkfiCjvHGTmKy",
-  "price_1T4qD7P5yEvNkfiCujJkmCJZ",
-  "price_1T4qD8P5yEvNkfiCuZ5DpLx1",
-  "price_1T4qD9P5yEvNkfiCLKPKRwYD",
-  "price_1T4qDAP5yEvNkfiCMJGREEW5",
-  "price_1T4qDEP5yEvNkfiCUiGO3gcV",
-  "price_1T4qDFP5yEvNkfiCJnD7HOhP",
-  "price_1T4qDHP5yEvNkfiCyqmQV6Qm",
-  "price_1T4qDHP5yEvNkfiCyp9ojoeD",
-  "price_1T4qDIP5yEvNkfiCmPqKDuU3",
-  "price_1T4qDJP5yEvNkfiClyokAJxS",
-  "price_1T4qDLP5yEvNkfiCHyYS2TXG",
-  "price_1T4qDLP5yEvNkfiCJT46UHG0",
-  "price_1T4qDMP5yEvNkfiCPFsMFFia",
-  "price_1T4qDQP5yEvNkfiCPi2osPwd",
-  "price_1T4qDSP5yEvNkfiCQiYuaIMh",
-  "price_1T4qDTP5yEvNkfiC6mAesML3",
-  "price_1T4qDUP5yEvNkfiC71skuIZw",
-  "price_1T4qDVP5yEvNkfiC8sR7ifmJ",
-  "price_1T4qDWP5yEvNkfiCU2ahf3UZ",
-  "price_1T4qDXP5yEvNkfiCxxHKFAb0",
-  "price_1T4qDYP5yEvNkfiCEQY5AaDw",
-  "price_1T4qDZP5yEvNkfiC59H0070s",
-]);
+const PRICE_CATALOG: Record<string, { name: string; mode: "payment" | "subscription" }> = {
+  price_1T4qCvP5yEvNkfiCUeYfWJsI: { name: "Brand System Sprint", mode: "payment" },
+  price_1T4qD3P5yEvNkfiCjv2XX6d4: { name: "Website and CMS Build", mode: "payment" },
+  price_1T4qD4P5yEvNkfiCNbFsNiu1: { name: "Sales Materials Kit", mode: "payment" },
+  price_1T4qD6P5yEvNkfiCJMvK8Vex: { name: "Landing Page Conversion Pass", mode: "payment" },
+  price_1T4qD7P5yEvNkfiCjvHGTmKy: { name: "Brand Template Pack", mode: "payment" },
+  price_1T4qD7P5yEvNkfiCujJkmCJZ: { name: "Pitch Deck Rebuild", mode: "payment" },
+  price_1T4qD8P5yEvNkfiCuZ5DpLx1: { name: "Brand Stewardship Lite", mode: "subscription" },
+  price_1T4qD9P5yEvNkfiCLKPKRwYD: { name: "Brand Stewardship Standard", mode: "subscription" },
+  price_1T4qDAP5yEvNkfiCMJGREEW5: { name: "Brand Stewardship Priority", mode: "subscription" },
+  price_1T4qDEP5yEvNkfiCUiGO3gcV: { name: "Ops Audit", mode: "payment" },
+  price_1T4qDFP5yEvNkfiCJnD7HOhP: { name: "SharePoint Setup", mode: "payment" },
+  price_1T4qDHP5yEvNkfiCyqmQV6Qm: { name: "SOP Library Pack", mode: "payment" },
+  price_1T4qDHP5yEvNkfiCyp9ojoeD: { name: "Permissions Overhaul", mode: "payment" },
+  price_1T4qDIP5yEvNkfiCmPqKDuU3: { name: "SOP Creation", mode: "payment" },
+  price_1T4qDJP5yEvNkfiClyokAJxS: { name: "Template Library Setup", mode: "payment" },
+  price_1T4qDLP5yEvNkfiCHyYS2TXG: { name: "Ops Maintenance Lite", mode: "subscription" },
+  price_1T4qDLP5yEvNkfiCJT46UHG0: { name: "Ops Maintenance Standard", mode: "subscription" },
+  price_1T4qDMP5yEvNkfiCPFsMFFia: { name: "Ops Maintenance Priority", mode: "subscription" },
+  price_1T4qDQP5yEvNkfiCPi2osPwd: { name: "Agent Pilot", mode: "payment" },
+  price_1T4qDSP5yEvNkfiCQiYuaIMh: { name: "Agent Workflow Pack", mode: "payment" },
+  price_1T4qDTP5yEvNkfiC6mAesML3: { name: "Knowledge Agent Setup", mode: "payment" },
+  price_1T4qDUP5yEvNkfiC71skuIZw: { name: "Workflow Triage Agent", mode: "payment" },
+  price_1T4qDVP5yEvNkfiC8sR7ifmJ: { name: "Report Summarization Workflow", mode: "payment" },
+  price_1T4qDWP5yEvNkfiCU2ahf3UZ: { name: "Intake and Routing Workflow", mode: "payment" },
+  price_1T4qDXP5yEvNkfiCxxHKFAb0: { name: "Managed Agents Lite", mode: "subscription" },
+  price_1T4qDYP5yEvNkfiCEQY5AaDw: { name: "Managed Agents Standard", mode: "subscription" },
+  price_1T4qDZP5yEvNkfiC59H0070s: { name: "Managed Agents Priority", mode: "subscription" },
+};
 
 interface CheckoutRequest {
   method?: string;
@@ -63,8 +63,13 @@ export default async function handler(req: CheckoutRequest, res: CheckoutRespons
   const priceId = typeof req.body?.priceId === "string" ? req.body.priceId : "";
   const mode = req.body?.mode === "subscription" ? "subscription" : "payment";
 
-  if (!ALLOWED_PRICE_IDS.has(priceId)) {
+  const price = PRICE_CATALOG[priceId];
+  if (!price) {
     jsonError(res, 400, "That service price is not available.");
+    return;
+  }
+  if (mode !== price.mode) {
+    jsonError(res, 400, "That billing mode does not match the selected service.");
     return;
   }
 
@@ -82,8 +87,16 @@ export default async function handler(req: CheckoutRequest, res: CheckoutRespons
     success_url: `${siteUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${siteUrl}/payment/cancel`,
     billing_address_collection: "auto",
+    "metadata[service_name]": price.name,
+    "metadata[price_id]": priceId,
+    "metadata[source]": "amjadosman-site",
   });
   if (mode === "payment") form.set("customer_creation", "always");
+  if (mode === "subscription") {
+    form.set("subscription_data[metadata][service_name]", price.name);
+    form.set("subscription_data[metadata][price_id]", priceId);
+    form.set("subscription_data[metadata][source]", "amjadosman-site");
+  }
 
   const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

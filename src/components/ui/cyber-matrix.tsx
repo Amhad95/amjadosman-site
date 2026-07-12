@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 
 const W = 60;
 const H = 35;
-const ASCII_CHARS = "010101XYZ<>*+=-:;[]{}";
+const ASCII_CHARS = ["010101XYZ<>*+=", "-", ":", ";", "[", "]", "{", "}"].join("");
 
 const COLOR_MAP: Record<string, string> = {
   mint: "#00FFD9",

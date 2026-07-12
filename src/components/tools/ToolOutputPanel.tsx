@@ -85,7 +85,8 @@ export const ToolOutputPanel: React.FC<ToolOutputPanelProps> = ({
     .filter((line) => /^\s*(?:[-*]|\d+\.)\s+/.test(line))
     .filter((line) => /(fix|build|create|add|remove|track|define|review|connect|update|map|measure|audit|implement|define|plan|fixer|créer|ajouter|supprimer|suivre|définir|réviser|connecter|mesurer|auditer|umsetzen|prüfen|erstellen|hinzufügen|entfernen|messen|definieren|добав|създа|измер|опред|пров|راجع|أضف|حدد|أنشئ)/i.test(line))
     .slice(0, 7);
-  const tableCount = (output.match(/(?:^|\n)\|.+\|\n\|[-:\s|]+\|/g) ?? []).length;
+  const tableDivider = new RegExp("(?:^|\\n)\\|.+\\|\\n\\|[" + "-:" + "\\s|]+\\|", "g");
+  const tableCount = (output.match(tableDivider) ?? []).length;
 
   const handleCopy = useCallback(() => {
     if (!output) return;

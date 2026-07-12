@@ -48,21 +48,21 @@ export const ServiceDeliverySection: React.FC<ServiceDeliverySectionProps> = ({
       className={cn('bg-background py-10 text-offwhite md:py-14', className)}
     >
       <div className="container mx-auto px-4 md:px-6">
-        <div className="rounded-[34px] bg-plate-violet px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
-        <Reveal className="mb-8 max-w-3xl md:mb-10" variant="subtle">
+        <div className="colored-surface-shadow rounded-[34px] bg-plate-violet px-6 py-10 md:px-10 md:py-12 lg:px-12">
+        <Reveal className={cn('section-intro-copy', isRTL && 'me-auto text-right')} variant="subtle">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-offwhite/55">
             {resolvedEyebrow}
           </p>
           <h2 id={headingId} className="mb-4 font-serif text-poster-lg text-mint">
             {resolvedHeadline}
           </h2>
-          <p className="max-w-2xl text-subheadline text-offwhite/80">
+          <p className="text-subheadline text-offwhite/80">
             {subheadline}
           </p>
-          <p className="mt-5 font-mono text-sm font-medium uppercase tracking-[0.18em] text-mint/72">
-            {deliveryRhythm}
-          </p>
         </Reveal>
+        <p className={cn('mt-5 mb-8 font-mono text-sm font-medium uppercase tracking-[0.18em] text-mint/72 md:mb-10', isRTL && 'text-right')}>
+          {deliveryRhythm}
+        </p>
 
         <div className="hidden lg:grid lg:grid-cols-[0.84fr_1.16fr] lg:gap-8">
           <Reveal className="relative" variant="subtle" once>

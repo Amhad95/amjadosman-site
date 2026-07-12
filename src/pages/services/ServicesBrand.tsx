@@ -114,7 +114,7 @@ const ServicesBrand = () => {
               </ul>
             </div>
 
-            <div className={cn('rounded-[30px] bg-plate-navy p-6 md:p-8 text-offwhite border border-mint/20 shadow-xl', isRTL && 'text-right')}>
+            <div className={cn('colored-surface-shadow rounded-[30px] border border-mint/20 bg-plate-navy p-6 text-offwhite md:p-8', isRTL && 'text-right')}>
               <p className="text-xs uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-4">
                 {content.deliverablesSection.title}
               </p>

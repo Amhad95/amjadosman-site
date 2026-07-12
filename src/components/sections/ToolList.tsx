@@ -75,14 +75,14 @@ export const ToolList: React.FC<ToolListProps> = ({
     bg: 'Пробвайте инструмента',
   }[locale];
 
-  // Preview variant: compact 3-column grid for homepage
+  // Preview variant: compact tool-directory grid for the homepage.
   if (variant === 'preview') {
     return (
       <RevealGroup
-        className={cn('grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6', className)}
+        className={cn('grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 md:gap-5', className)}
         stagger={76}
       >
-        {tools.slice(0, 3).map((tool, index) => {
+        {tools.slice(0, 6).map((tool, index) => {
           const illustrationType = tool.illustration || defaultIllustrations[index % defaultIllustrations.length];
           const Illustration = illustrations[illustrationType];
           const cardColor = plateColor || alternatingColors[index % 2];
@@ -91,27 +91,27 @@ export const ToolList: React.FC<ToolListProps> = ({
             <Link
               key={tool.title}
               to={tool.href || '/tools'}
-              className="media-pop-card group relative bg-card rounded-[34px] border border-ink/10 p-4 md:p-5 hover:border-ink/18 hover:shadow-xl shadow-[0_22px_54px_-42px_rgba(8,15,32,0.18)] flex h-full flex-col"
+              className="media-pop-card group relative flex h-full flex-col rounded-[30px] border border-ink/10 bg-card p-3 shadow-[0_20px_48px_-40px_rgba(8,15,32,0.18)] hover:border-ink/18 hover:shadow-xl md:p-4"
             >
               {/* Illustration thumbnail */}
               <div className={cn(
-                "aspect-square rounded-[26px] flex items-center justify-center p-4 overflow-hidden",
+                "aspect-square rounded-[22px] flex items-center justify-center p-3 overflow-hidden",
                 plateClasses[cardColor]
               )}>
-              <div className="media-pop-target w-28 h-28 text-mint">
+              <div className="media-pop-target h-20 w-20 text-mint md:h-24 md:w-24">
                   <Illustration delay={index * 100} />
                 </div>
               </div>
               
               {/* Content */}
-              <div className="px-1 pt-5 pb-1 md:px-2 flex flex-1 flex-col">
-                <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
+              <div className="flex flex-1 flex-col px-1 pb-1 pt-4">
+                <h3 className="mb-2 font-serif text-lg font-semibold text-foreground md:text-xl">
                   {tool.title}
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-5">
+                <p className="mb-4 line-clamp-2 text-xs text-muted-foreground md:text-sm">
                   {tool.description}
                 </p>
-                <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-foreground group-hover:text-lavender transition-colors">
+                <span className="mt-auto inline-flex items-center gap-1 text-xs font-medium text-foreground transition-colors group-hover:text-lavender md:text-sm">
                   {tryLabel}
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </span>

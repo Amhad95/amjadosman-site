@@ -23,8 +23,12 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   motionVariant = variant === 'interface' ? 'subtle' : 'default',
 }) => {
   const { isRTL } = useLocale();
+  const introCopyClassName = [
+    'section-intro-copy',
+    align === 'center' ? 'mx-auto text-center' : isRTL ? 'me-auto text-right' : 'text-left',
+  ].join(' ');
   const headerContent = (
-    <>
+    <div className={introCopyClassName}>
       {eyebrow && (
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-4">
           {eyebrow}
@@ -40,16 +44,15 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         {headline}
       </h2>
       {subheadline && (
-        <p className="text-subheadline text-muted-foreground max-w-3xl">
+        <p className="text-subheadline text-muted-foreground">
           {subheadline}
         </p>
       )}
-    </>
+    </div>
   );
 
   const headerClassName = cn(
     'mb-8 md:mb-12',
-    align === 'center' ? 'text-center' : isRTL && 'text-right',
     className
   );
 

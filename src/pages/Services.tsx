@@ -347,15 +347,17 @@ const Services = () => {
           <div className="container relative z-10 mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-start">
               <div>
-                <p className={`text-xs uppercase tracking-[0.22em] font-semibold mb-4 ${service.accentText}`}>
-                  {service.name}
-                </p>
-                <h2 className="font-serif text-poster-lg text-foreground mb-5">
-                  {service.headline}
-                </h2>
-                <p className="text-subheadline text-muted-foreground max-w-2xl mb-5">
-                  {service.summary}
-                </p>
+                <div className="section-intro-copy">
+                  <p className={`text-xs uppercase tracking-[0.22em] font-semibold mb-4 ${service.accentText}`}>
+                    {service.name}
+                  </p>
+                  <h2 className="font-serif text-poster-lg text-foreground mb-5">
+                    {service.headline}
+                  </h2>
+                  <p className="text-subheadline text-muted-foreground mb-5">
+                    {service.summary}
+                  </p>
+                </div>
                 <p className="text-sm font-semibold text-foreground/70 mb-8">
                   {service.signal}
                 </p>

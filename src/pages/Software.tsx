@@ -124,7 +124,7 @@ const Software = () => {
 
       <section className="py-10 md:py-14 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="rounded-[34px] bg-plate-astral px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
+          <div className="colored-surface-shadow rounded-[34px] bg-plate-astral px-6 py-10 md:px-10 md:py-12 lg:px-12">
           <div className="max-w-xl">
             <p className="text-lg text-mint mb-2">
               {copy.pricingNote}

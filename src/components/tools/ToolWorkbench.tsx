@@ -85,7 +85,7 @@ export const ToolWorkbench: React.FC<ToolWorkbenchProps> = ({
         <div className="container mx-auto px-4 md:px-6 pt-6">
           <div
             className={cn(
-              "hero-folder-card relative min-h-[300px] px-6 py-9 md:min-h-[335px] md:px-10 md:py-11 lg:px-12",
+              "hero-folder-card colored-surface-shadow relative min-h-[300px] px-6 py-9 md:min-h-[335px] md:px-10 md:py-11 lg:px-12",
               plateClasses[plate]
             )}
           >

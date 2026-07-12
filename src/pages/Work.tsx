@@ -111,6 +111,7 @@ const Work = () => {
             eyebrow={copy.selectedWork}
             headline={common.caseStudies}
             subheadline={common.caseStudiesSubheadline}
+            align="center"
             motionVariant="none"
           />
           {copy.workTranslationNotice && (

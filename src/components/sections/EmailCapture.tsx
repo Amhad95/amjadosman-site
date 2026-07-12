@@ -72,7 +72,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
   if (isSubmitted) {
     return (
       <div 
-        className={cn('bg-plate-emerald rounded-[34px] p-8 md:p-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.22)]', className)}
+        className={cn('colored-surface-shadow rounded-[34px] bg-plate-emerald p-8 md:p-12', className)}
         dir={isRTL ? 'rtl' : 'ltr'}
       >
         <div className={cn('text-center', isRTL && 'text-right')}>
@@ -96,7 +96,7 @@ export const EmailCapture: React.FC<EmailCaptureProps> = ({
 
   return (
     <div 
-      className={cn('bg-plate-emerald rounded-[34px] p-8 md:p-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.22)]', className)}
+      className={cn('colored-surface-shadow rounded-[34px] bg-plate-emerald p-8 md:p-12', className)}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       <div className={cn('max-w-xl mx-auto text-center', isRTL && 'text-right')}>

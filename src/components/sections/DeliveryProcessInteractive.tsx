@@ -58,8 +58,8 @@ export const DeliveryProcessInteractive: React.FC = () => {
     >
       <MatrixCodeBackground fontSize={18} color="hsla(275, 100%, 50%, 0.12)" speed={0.45} />
       <div className="container relative z-10 mx-auto px-4 md:px-6">
-        <div className="rounded-[34px] bg-plate-navy px-6 py-10 md:px-10 md:py-12 lg:px-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
-        <div className={cn('max-w-3xl mb-10 md:mb-14', isRTL && 'mr-auto text-right')}>
+        <div className="colored-surface-shadow rounded-[34px] bg-plate-navy px-6 py-10 md:px-10 md:py-12 lg:px-12">
+        <div className={cn('section-intro-copy mb-10 md:mb-14', isRTL && 'me-auto text-right')}>
           <p className="text-xs uppercase tracking-[0.2em] text-mint/60 font-semibold mb-4">
             {deliveryProcess.eyebrow}
           </p>

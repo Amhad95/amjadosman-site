@@ -57,7 +57,7 @@ export const ProductHero: React.FC<ProductHeroProps> = ({
       <div className="container mx-auto px-4 md:px-6 pt-6">
         <div
           className={cn(
-            'hero-folder-card relative min-h-[440px] md:min-h-[500px] lg:min-h-[560px] px-6 md:px-10 lg:px-12 py-10 md:py-12 lg:py-14 flex items-center',
+            'hero-folder-card colored-surface-shadow relative flex min-h-[440px] items-center px-6 py-10 md:min-h-[500px] md:px-10 md:py-12 lg:min-h-[560px] lg:px-12 lg:py-14',
             plateClasses[plate]
           )}
         >

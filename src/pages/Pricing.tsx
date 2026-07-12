@@ -79,7 +79,7 @@ const Pricing = () => {
                 headline={track.name}
                 subheadline={track.summary}
                 variant="poster"
-                className="mb-0"
+                className="mb-0 min-w-0 flex-1"
               />
 
               <div className="flex flex-wrap gap-3">
@@ -95,7 +95,7 @@ const Pricing = () => {
       <section id={softwarePricingSummary.anchor} className="py-16 md:py-24 bg-background scroll-mt-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-14 items-start">
-            <div className="rounded-[34px] bg-plate-astral p-6 md:p-8 text-offwhite border border-white/10 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
+            <div className="colored-surface-shadow rounded-[34px] border border-white/10 bg-plate-astral p-6 text-offwhite md:p-8">
               <p className="text-xs uppercase tracking-[0.22em] text-offwhite/55 font-semibold mb-4">
                 {softwarePricingSummary.eyebrow}
               </p>

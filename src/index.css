@@ -138,6 +138,11 @@
     @apply border-border;
   }
 
+  html,
+  body {
+    overscroll-behavior-y: none;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -207,6 +212,14 @@
   .text-subheadline {
     font-size: clamp(1.2rem, 2vw, 1.375rem);
     line-height: 1.5;
+  }
+
+  .section-intro-copy {
+    width: min(100%, 48rem);
+  }
+
+  .colored-surface-shadow {
+    box-shadow: 0 28px 66px -40px rgba(8, 15, 32, 0.32);
   }
 
   .text-body-lg {
@@ -677,6 +690,11 @@ html[dir="rtl"] .hero-folder-card::before {
 .page-transition-shell > .motion-reveal:has(> section.bg-background) > section,
 .page-transition-shell > .motion-reveal:has(> section.bg-muted) > section {
   background-color: inherit !important;
+}
+
+.page-transition-shell > .detail-reading-section,
+.page-transition-shell > .motion-reveal:has(> .detail-reading-section) > .detail-reading-section {
+  background-color: hsl(var(--background) / 0.94) !important;
 }
 
 .theme-plate-violet {

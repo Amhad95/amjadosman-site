@@ -23,8 +23,8 @@ export const siteContentBg: SiteContent = {
       { label: "AI Агенти и автоматизация", href: "/services/agents" },
     ],
     resourcesDropdown: [
-      { label: "Наблюдения", href: "/resources" },
       { label: "Инструменти за самопомощ", href: "/tools" },
+      { label: "Наблюдения", href: "/resources" },
     ],
     cta: { label: "Запазете среща", href: "/book" },
     footer: [

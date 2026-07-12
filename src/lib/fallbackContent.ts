@@ -4,6 +4,16 @@ import { additionalProjectCases } from "@/data/additionalProjectCases";
 import projectInsurance from "@/assets/project-insurance.jpg";
 import projectSolar from "@/assets/project-solar.jpg";
 import projectStrategy from "@/assets/project-strategy.jpg";
+import insightWebsiteBrief from "@/assets/insights/website-brief.png";
+import insightSopRollout from "@/assets/insights/sop-rollout.jpg";
+import insightAiAutomationStart from "@/assets/insights/ai-automation-start.jpg";
+import insightCrmDataModel from "@/assets/insights/crm-data-model.jpg";
+import insightSopRolloutPlan from "@/assets/insights/sop-rollout-plan.jpg";
+import insightDashboardRequirements from "@/assets/insights/dashboard-requirements.jpg";
+import insightAiReadiness from "@/assets/insights/ai-readiness.jpg";
+import insightSoftwareSelection from "@/assets/insights/software-selection.jpg";
+import insightProposalApproval from "@/assets/insights/proposal-approval.jpg";
+import insightSystemHandover from "@/assets/insights/system-handover.jpg";
 
 export interface FallbackArticle {
   id: string;
@@ -269,7 +279,14 @@ export const resolveLocalizedArticle = (
   thumbnail_url: article.thumbnail_url,
   category: localizedValue(locale, article.category, article.category_ar, article.category_de, article.category_fr, article.category_bg),
   created_at: article.created_at,
-  body: localizedValue(locale, article.body ?? null, article.body_ar, article.body_de, article.body_fr, article.body_bg),
+  body: localizedValue(
+    locale,
+    editorialBodies[article.slug] ?? article.body ?? null,
+    editorialBodiesAr[article.slug] ?? article.body_ar,
+    editorialBodiesDe[article.slug] ?? article.body_de,
+    editorialBodiesFr[article.slug] ?? article.body_fr,
+    editorialBodiesBg[article.slug] ?? article.body_bg
+  ),
 });
 
 export const resolveLocalizedWorkCase = (
@@ -303,6 +320,626 @@ export const resolveLocalizedWorkCase = (
   case_series_order: item.case_series_order ?? null,
 });
 
+const editorialBodies: Record<string, string> = {
+  'website-brief-for-service-firms': `## The approval problem is usually upstream
+
+A website brief is often treated as a document that design needs before it can start. In practice, it is a decision-making device. It has to give a commercial lead, a founder, and the person responsible for delivery a common answer to one question: what must this site make easier for the business?
+
+That question matters because most approval rounds are not really about copy or colour. They are arguments between different jobs the site might do. A founder wants the business to feel established. Sales wants better conversations. Delivery wants fewer unsuitable enquiries. All are reasonable goals, but a page cannot lead with all of them equally.
+
+## Start with the commercial moment
+
+Before discussing a sitemap, define the moment that should change after a visitor lands. It might be a qualified consultation request, a prospect arriving at a sales call with the right context, or a referral partner deciding the business is credible enough to introduce. This gives every later decision a test. If a page, proof point, or interaction does not support that moment, it is supporting something secondary.
+
+The same discipline applies to audiences. Service firms commonly need to speak to buyers, referral sources, candidates, and existing clients. Those groups do not need one blended message. They need their own route through the site, with a clear question answered before they are asked to act.
+
+## Turn opinions into decisions
+
+A good brief records the reason each page exists, the claim it needs to make, and the evidence required to support that claim. It also names the person who can approve each decision. That is what prevents a late-stage request to add another service page, another audience, or another vague promise.
+
+The strongest briefs are not long. They make the difficult choices visible early enough to resolve them while the cost of changing direction is still low.`,
+
+  'sop-rollout-that-gets-used': `## A procedure is not an operating system
+
+Teams often ask for SOPs when they are feeling the cost of inconsistency. A task takes too long when a particular person is away, a client receives a different answer depending on who responds, or a new hire has to reconstruct the process by watching someone work. The understandable reaction is to write everything down.
+
+Writing is useful, but the document alone does not change the work. The process changes when the SOP appears at the moment a task begins, when a person can tell whether the output is acceptable, and when exceptions have somewhere to go. Without those conditions, the document becomes a tidy description of work people still perform from memory.
+
+## Design for the first real use
+
+Start with one live task, not a library. Ask the person who owns it to use the draft while completing the work, with permission to mark every point where they hesitate. That hesitation is the raw material of a useful procedure. It shows where the trigger is vague, where an input is missing, or where an experienced operator is relying on judgement the document has not captured.
+
+Then ask a second person to run the same task. This is the decisive test. If the second person cannot complete it without asking the author what a phrase means, the SOP is not yet transferring knowledge.
+
+## Give the process a home and an owner
+
+An SOP should be linked from the request form, task template, CRM stage, or workspace where the work actually happens. It should also have a named owner, a review date, and a route for proposed changes. Those small controls turn a document into a maintained part of the system.
+
+The goal is not to eliminate judgement. It is to make routine work dependable and make the moments that need judgement obvious.`,
+
+  'ai-automation-where-to-start': `## Start where the cost of being wrong is contained
+
+The most useful first automation is rarely the flashiest one. It is usually a repeated decision that already has a recognisable input, an acceptable output, and a human who can review the edge cases. Think of sorting inbound requests, drafting a first response from approved material, or preparing a handover summary from a known set of records.
+
+These workflows are good candidates because the team can describe what “good enough” looks like. The system does not need to be trusted blindly; it needs to reduce the amount of routine effort required before a person makes the final call.
+
+## Look for friction before technology
+
+Map the work as it happens today. Where does someone copy information between systems? Where does a request wait because a person has to decide who should see it? Where do colleagues repeatedly ask the same question because the approved answer is difficult to find? These points of friction reveal whether the right intervention is an AI step, a deterministic rule, a better form, or clearer documentation.
+
+An AI model is helpful when language or judgement is involved and the output can be checked. It is not a substitute for an absent process. If the source material is contradictory, ownership is unclear, or no one can describe a safe outcome, automation will amplify the uncertainty.
+
+## Treat the first release as assisted work
+
+Run the first version on a narrow sample. Record what was accepted, edited, rejected, and escalated. That record tells you whether the workflow is becoming more reliable, not merely more impressive in a demonstration.
+
+Good automation begins by making a bounded part of the operation easier to run. Expansion comes after the team can explain the controls, not before.`,
+
+  'crm-data-model-for-service-firms': `## A CRM earns its complexity one decision at a time
+
+Service firms do not need a large data model to run a useful pipeline. They need a small number of records that make ownership, progress, and next actions visible. When those fundamentals are missing, more fields only make the system harder to maintain.
+
+Start with the relationships people already recognise: companies, contacts, opportunities, and activities. A company is the commercial account. A contact is a person with a role in the decision. An opportunity represents a possible engagement. An activity is evidence that something happened and what it changed. Projects belong beside the pipeline only when a signed engagement needs its own delivery workflow.
+
+## Make the next action unambiguous
+
+Every opportunity should answer two questions at a glance: who owns it, and what happens next? “Follow up” is not enough. A useful next step names the event, the expected result, and the date. For example, “Send the revised scope after finance confirms the budget on Thursday” gives a manager something they can inspect without reconstructing the conversation.
+
+Stages should describe buyer commitment rather than internal optimism. A stage such as “scope sent” needs an exit rule: recipient, version, value, and review date are recorded. This turns stage reporting from an opinion poll into an operational view.
+
+## Protect the model from decorative fields
+
+A field should either change a decision, support a handoff, or explain a report. If it does none of those things, it belongs in a note or should not exist. Review the last thirty opportunities before introducing new structure. The real pipeline will show what people actually need to know.`,
+
+  'sop-rollout-plan-that-gets-used': `## The rollout starts after the document is written
+
+An SOP can be perfectly clear on paper and still fail in the first week. The usual reason is that the organisation has not changed the environment around the process. The right person has not been named, the task has not been linked to the SOP, and nobody has decided how to handle the exceptions that are inevitable in live work.
+
+Treat the document as a draft of the operating agreement. The rollout is the work of proving that agreement under normal conditions.
+
+## Pilot the routine, then the exception
+
+Ask the process owner to complete the task using the draft on a live case. Capture the places where they leave the documented path. Then ask a second person to run the same routine with the amended version. The first cycle exposes missing context; the second exposes hidden expertise.
+
+The next test should be an exception, not another normal case. What happens when a required input is absent, an approval is delayed, or the output fails a quality check? A useful SOP does not pretend these events will not occur. It names the decision owner and the escalation route so the team does not invent a new process under pressure.
+
+## Make review part of ownership
+
+Link the SOP to the task template or workspace where the work begins. Give it a review date, a change log, and a short control sheet describing the trigger, owner, inputs, definition of done, and known exceptions. Review after the first five uses, then on a predictable rhythm.
+
+That is how a procedure remains useful: it is treated as a living part of delivery, not a completed piece of documentation.`,
+
+  'dashboard-requirements-before-design': `## A dashboard is a decision environment
+
+Teams often begin a dashboard project by collecting charts. That feels productive because charts are visible, but it avoids the question that determines whether the dashboard will be used: what decision should become easier when someone opens it?
+
+Name the audience, the review rhythm, and the decision before choosing a visual. A weekly commercial meeting may need to see whether pipeline coverage is becoming risky. A delivery lead may need to see whether work is accumulating at a particular handoff. Those are different environments, with different measures and different actions.
+
+## Define each number before arranging it
+
+A metric needs a definition, a source, an owner, and a grain. “Pipeline” can mean all open opportunities, only qualified opportunities, or a weighted forecast. “Response time” can mean the average, the median, or the time until a human reply. Without an agreed definition, a clean interface simply makes an unresolved argument easier to look at.
+
+The first screen should reveal whether attention is required. The next layer can help someone diagnose why. Combining every segment, filter, and historical comparison into the opening view makes the urgent signal harder to find.
+
+## Build acceptance into the brief
+
+Before design begins, agree how the dashboard will be checked. The owner should be able to compare a KPI against its source, see when the data was refreshed, understand the date range, and know who acts when a threshold is crossed.
+
+Good reporting does not eliminate conversation. It makes the conversation about what to do next rather than what the numbers mean.`,
+
+  'ai-automation-readiness-check': `## Readiness is a property of the workflow
+
+Whether an operations team is ready for AI automation has less to do with how capable a model appears and more to do with the condition of the work around it. A workflow is ready when its inputs are available, the acceptable result can be described, uncertainty has a reviewer, and a failure can be contained.
+
+This is why the same tool can work well in one team and create confusion in another. One team has current source material, a clear owner, and a defined escalation path. The other has fragmented knowledge and no agreed answer to the question the model is being asked to resolve.
+
+## Check the operating conditions
+
+Look at the input first. Is it structured enough to be interpreted consistently, or does each request require someone to reconstruct missing context? Then look at the output. Can a reviewer explain what makes it acceptable, or is quality purely a matter of personal taste? Finally, look at the consequence of error. A draft that is reviewed before sending is very different from a decision that changes a customer record without a checkpoint.
+
+When those conditions are weak, the right first move may be a better form, a controlled source library, or a clearer SOP. That is not a failure of automation. It is the work that makes automation safe later.
+
+## Pilot with evidence
+
+Use a fixed sample and record accepted, edited, rejected, and escalated results. Measure the handling time and rework against the previous process. The decision after the pilot should be explicit: stop, keep as assisted work, or expand with stronger controls.
+
+AI becomes operational when the team can explain its boundaries as clearly as its benefits.`,
+
+  'operational-software-selection-workflow': `## Software should remove a handoff, not create a new one
+
+Feature comparisons are tempting because they look objective. They are also a poor place to begin. A long list of capabilities tells you very little about whether a team will complete its ordinary work with fewer gaps, fewer duplicate records, and less effort.
+
+Start by tracing one workflow from request to outcome. Record who receives the work, what information they need, which system they use, what decision they make, and what evidence should remain after the step is complete. The weak handoffs become visible quickly: a spreadsheet that must be reconciled, a status nobody owns, or a request that disappears into an inbox.
+
+## Evaluate fit in the context of use
+
+The practical questions are less glamorous than product demos. Can the team complete normal work without inventing a workaround? Does the data model match the business relationships that matter? Can permissions, approvals, and exports be governed? Who will make changes when the workflow evolves? How much training does the daily path require?
+
+Run a pilot around one team, one workflow, and one reporting rhythm. Use a clean starting dataset and decide how duplicates, missing owners, and stale statuses will be handled. Ask what happens when an integration fails or an approval is rejected, not only how the happy path looks.
+
+The right choice is the product that makes the intended work easier to repeat, inspect, and improve. Subscription price is only one part of that operating cost.`,
+
+  'proposal-approval-system-for-service-teams': `## Rewriting is often a system problem
+
+When a service team keeps rewriting the same proposal, the issue is rarely a lack of writing ability. Usually the organisation has not separated reusable proof from deal-specific decisions. Every new opportunity becomes a request to rediscover the company story, rebuild the service scope, and renegotiate the commercial guardrails at the same time.
+
+That makes approval slow because reviewers are not looking at the same kind of decision. Delivery is assessing feasibility while a commercial lead is checking price and a founder is correcting a capability claim.
+
+## Give each review a job
+
+Create a small approved library of evidence: case-study facts, capability descriptions, delivery assumptions, and standard terms. Then keep the individual proposal focused on the buyer’s problem, the intended outcome, scope boundaries, price, timing, and risks.
+
+The review path should reflect that separation. Qualification asks whether there is a real opportunity. Delivery checks whether the work can be performed as described. Commercial review checks price, margin, payment terms, and exposure. The final review checks clarity and readiness to send. Each gate needs an owner, a visible status, and a record of the decision.
+
+## Learn from the revisions
+
+Track why a proposal changed. If a scope question appears repeatedly, the service definition is incomplete. If proof is repeatedly requested, the case-study library is thin. If payment terms keep becoming an exception, the commercial policy is unclear.
+
+The purpose is not to make proposals rigid. It is to make routine quality easier and genuine exceptions visible early.`,
+
+  'operational-system-handover-checklist': `## A handover is the beginning of independent operation
+
+Credentials, links, and a final meeting are not a handover. They are access. A real handover gives the recipient enough understanding to operate the system, recognise when something is wrong, request a sensible change, and recover without waiting for the original builder to return.
+
+That requires more than a walkthrough of the interface. The recipient needs the purpose of the workflow, the records and permissions that support it, the routine that keeps it current, and the boundaries of what the system can safely do.
+
+## Test ownership with real scenarios
+
+The best handover test is recipient-led. Ask the new owner to complete a normal request from start to finish, handle an exception, and correct a deliberate mistake. Their questions reveal whether the gap is training, permission, data quality, or design. Each is a different problem and should be resolved differently.
+
+Leave behind the operating material that makes future changes safe: configuration exports, approved templates, a permission matrix, data-cleanup notes, known limits, an issue list, and a route for change requests. Most importantly, name the person who owns each decision after launch.
+
+## Schedule the first review before leaving
+
+The first week, second week, and first month are where small weaknesses become habits. Review completion, exceptions, duplicate records, unused fields, and work that is still arriving outside the intended route.
+
+A system is handed over when the recipient can run it without live rescue. It is truly complete when the organisation can improve it without the original team.`,
+};
+
+const editorialBodiesAr: Record<string, string> = {
+  'website-brief-for-service-firms': `## مشكلة الاعتماد تبدأ قبل التصميم
+
+لا ينبغي التعامل مع موجز الموقع كوثيقة يحتاجها المصمم فقط، بل كأداة لاتخاذ القرار. عليه أن يمنح المسؤول التجاري والمؤسس ومسؤول التسليم إجابة مشتركة: ما الذي يجب أن يجعل هذا الموقع العمل أسهل؟ كثير من جولات الاعتماد ليست نقاشاً حول النسخ أو الألوان، بل خلافاً بين وظائف مختلفة يريدها كل طرف للموقع.
+
+## ابدأ باللحظة التجارية
+
+حدد قبل خريطة الموقع اللحظة التي يجب أن تتغير بعد الزيارة: طلب استشارة مؤهل، أو عميل يصل إلى مكالمة البيع بسياق صحيح، أو شريك إحالة يقتنع بمصداقية الشركة. ثم اختبر كل صفحة ودليل وتفاعل بهذا الهدف. لكل جمهور مسار واضح وسؤال مجاب عنه قبل أن تطلب منه أي إجراء.
+
+## حوّل الآراء إلى قرارات
+
+يسجل الموجز الجيد سبب وجود كل صفحة، والادعاء الذي يجب أن تثبته، والدليل المطلوب، وصاحب الاعتماد. لا يلزم أن يكون طويلاً؛ قيمته في إظهار الخيارات الصعبة مبكراً، حين يكون تغيير المسار ما زال سهلاً.`,
+  'sop-rollout-that-gets-used': `## الإجراء ليس نظام تشغيل
+
+تطلب الفرق إجراءات تشغيل معيارية حين تصبح كلفة عدم الاتساق واضحة: مهمة تتعطل بغياب شخص، أو عميل يتلقى جواباً مختلفاً، أو موظف جديد يعيد اكتشاف الطريقة. الكتابة مفيدة، لكن الوثيقة وحدها لا تغيّر العمل. يتغير العمل عندما يظهر الإجراء عند بدء المهمة، ويعرف الشخص ما إذا كان الناتج مقبولاً، وتوجد طريقة للتعامل مع الاستثناءات.
+
+## صمّم للاستخدام الحقيقي الأول
+
+ابدأ بمهمة حية واحدة لا بمكتبة. اطلب من مالكها استخدام المسودة أثناء التنفيذ وتسجيل مواضع التردد. ثم دع شخصاً آخر ينفذ المهمة. إذا اضطر إلى سؤال الكاتب عن معنى خطوة ما، فالمعرفة لم تنتقل بعد.
+
+## امنح العملية مكاناً ومالكاً
+
+اربط الإجراء بالنموذج أو المهمة أو مرحلة CRM التي يبدأ فيها العمل. سمِّ مالكاً وتاريخ مراجعة وطريقاً للتغييرات. الهدف ليس إلغاء الحكم المهني، بل جعل الروتين موثوقاً وإظهار اللحظات التي تحتاج حكماً.`,
+  'ai-automation-where-to-start': `## ابدأ حيث تكون كلفة الخطأ محدودة
+
+أفضل أتمتة أولى نادراً ما تكون الأكثر استعراضاً. غالباً هي قرار متكرر له مدخل معروف ومخرج مقبول وشخص يراجع الحالات الطرفية، مثل فرز الطلبات أو إعداد مسودة رد من مواد معتمدة أو تلخيص تسليم من سجلات معروفة. لا يلزم الوثوق بالنظام بلا رقابة؛ المطلوب تقليل الجهد الروتيني قبل القرار النهائي.
+
+## ابحث عن الاحتكاك قبل التقنية
+
+ارسم سير العمل كما يحدث الآن: أين تُنسخ المعلومات؟ أين ينتظر الطلب قراراً؟ وأين يصعب العثور على الجواب المعتمد؟ قد تكشف هذه النقاط أن الحل قاعدة واضحة أو نموذج أفضل أو توثيق، لا نموذج ذكاء اصطناعي. إذا كانت المصادر متناقضة والملكية غامضة، فالأتمتة تضخم الغموض.
+
+## اعتبر الإصدار الأول عملاً مساعداً
+
+جرّب عينة محدودة وسجل ما قُبل وعُدل ورُفض وصُعّد. وسّع النطاق فقط عندما يستطيع الفريق شرح الضوابط بوضوح.`,
+  'crm-data-model-for-service-firms': `## يكتسب CRM تعقيده قراراً بعد قرار
+
+لا تحتاج شركات الخدمات إلى نموذج بيانات ضخم كي تدير مسار مبيعات مفيداً. تحتاج إلى عدد محدود من السجلات يجعل الملكية والتقدم والخطوة التالية مرئية. ابدأ بالعلاقات التي يعرفها الناس: الشركات وجهات الاتصال والفرص والأنشطة. لا تضف المشاريع إلى المسار إلا عندما يتطلب العقد الموقّع سير تسليم مستقلاً.
+
+## اجعل الخطوة التالية واضحة
+
+يجب أن تجيب كل فرصة عن سؤالين: من يملكها، وماذا سيحدث تالياً؟ «متابعة» ليست كافية. الخطوة الجيدة تحدد الحدث والنتيجة والتاريخ. وينبغي أن تصف المراحل التزام المشتري لا تفاؤل الفريق، مع قاعدة خروج قابلة للفحص لكل مرحلة.
+
+## احمِ النموذج من الحقول الزخرفية
+
+الحقل يستحق وجوده إذا غيّر قراراً أو دعم تسليماً أو فسّر تقريراً. راجع آخر ثلاثين فرصة قبل إضافة أي بنية جديدة؛ المسار الحقيقي يبيّن ما يحتاجه الناس فعلاً.`,
+  'sop-rollout-plan-that-gets-used': `## يبدأ الإطلاق بعد كتابة الوثيقة
+
+قد يكون الإجراء واضحاً على الورق ويفشل في أسبوعه الأول لأن البيئة المحيطة به لم تتغير: لا مالك واضح، ولا رابط من المهمة إلى الإجراء، ولا قرار بشأن الاستثناءات. اعتبر الوثيقة مسودة لاتفاق تشغيل؛ الإطلاق هو اختبار الاتفاق في ظروف العمل العادية.
+
+## اختبر الروتين ثم الاستثناء
+
+دع مالك العملية ينفذ حالة حية باستخدام المسودة وسجل أين يخرج عن المسار. ثم دع شخصاً آخر يجرب النسخة المعدلة. بعدها اختبر حالة ناقصة المدخلات أو متأخرة الاعتماد أو فاشلة الجودة. الإجراء المفيد يسمي صاحب القرار ومسار التصعيد بدلاً من افتراض أن الاستثناء لن يحدث.
+
+## اجعل المراجعة جزءاً من الملكية
+
+اربط الإجراء بقالب المهمة، وأضف تاريخ مراجعة وسجل تغيير وورقة تحكم قصيرة. راجعه بعد أول خمس مرات استخدام ثم بإيقاع ثابت.`,
+  'dashboard-requirements-before-design': `## لوحة المعلومات بيئة قرار
+
+تبدأ الفرق غالباً بجمع الرسوم البيانية لأنها مرئية، لكنها تتجاوز السؤال الأهم: أي قرار يجب أن يصبح أسهل عند فتح اللوحة؟ سمِّ الجمهور وإيقاع المراجعة والقرار قبل اختيار الشكل. الاجتماع التجاري الأسبوعي يحتاج شيئاً مختلفاً عن قائد تسليم يراقب تراكم العمل.
+
+## عرّف الرقم قبل ترتيبه
+
+لكل مؤشر تعريف ومصدر ومالك ومستوى تفصيل. «المسار» و«زمن الاستجابة» قد يعنيان أشياء مختلفة تماماً. من دون اتفاق، تجعل الواجهة النظيفة الخلاف غير المحسوم أجمل فقط. يجب أن تكشف الشاشة الأولى ما إذا كان الانتباه مطلوباً، ثم تساعد الطبقات التالية على تفسير السبب.
+
+## ابنِ القبول في الموجز
+
+اتفق مسبقاً على طريقة التحقق: مقارنة KPI بالمصدر، ومعرفة وقت التحديث ونطاق التاريخ ومن يتصرف عند تجاوز عتبة.`,
+  'ai-automation-readiness-check': `## الجاهزية خاصية في سير العمل
+
+جاهزية فريق العمليات لأتمتة الذكاء الاصطناعي لا تتحدد بقدرة النموذج، بل بحالة العمل حوله. يكون المسار جاهزاً حين تتوفر المدخلات، ويمكن وصف النتيجة المقبولة، ويوجد مراجع للغموض، ويمكن احتواء الخطأ. لذلك قد تنجح الأداة نفسها في فريق وتربك آخر.
+
+## افحص شروط التشغيل
+
+هل المدخل منظم بما يكفي؟ هل يستطيع المراجع شرح ما يجعل المخرج مقبولاً؟ وما عاقبة الخطأ؟ مسودة تُراجع قبل الإرسال ليست كقرار يغير سجل عميل بلا نقطة تحقق. حين تضعف هذه الشروط، قد يكون النموذج الأفضل أو مكتبة مصدر مضبوطة أو إجراء أوضح هو الخطوة الأولى الصحيحة.
+
+## جرّب بأدلة
+
+استخدم عينة ثابتة وسجل المقبول والمعدل والمرفوض والمصعّد، وقارن الوقت وإعادة العمل بالعملية السابقة. بعدها قرر بوضوح: أوقف، أبقه عملاً مساعداً، أو وسّعه بضوابط أقوى.`,
+  'operational-software-selection-workflow': `## يجب أن يزيل البرنامج تسليماً لا أن يخلق واحداً
+
+تبدو مقارنة الميزات موضوعية، لكنها بداية ضعيفة. القائمة لا تخبرك إن كان الفريق سينجز عمله المعتاد بفجوات أقل وسجلات مكررة أقل. ابدأ بتتبع سير واحد من الطلب إلى النتيجة: من يستلم العمل، وما المعلومات اللازمة، وأي نظام يستخدم، وأي قرار يتخذ، وما الدليل الذي يجب أن يبقى.
+
+## قيّم الملاءمة في سياق الاستخدام
+
+هل يستطيع الفريق إنجاز العمل الطبيعي بلا حلول ملتوية؟ هل نموذج البيانات يطابق علاقات العمل؟ هل يمكن ضبط الصلاحيات والاعتمادات والتصدير؟ ومن سيغير النظام لاحقاً؟ جرّب فريقاً واحداً ومساراً واحداً وإيقاع تقارير واحداً، وفكّر في فشل التكاملات ورفض الاعتمادات لا في المسار المثالي فقط.
+
+الاختيار الصحيح هو المنتج الذي يجعل العمل المقصود أسهل في التكرار والفحص والتحسين.`,
+  'proposal-approval-system-for-service-teams': `## إعادة الكتابة غالباً مشكلة نظام
+
+عندما يعيد فريق خدمات كتابة العرض نفسه، فالمشكلة نادراً هي مهارة الكتابة. غالباً لم تفصل المنظمة بين الدليل القابل لإعادة الاستخدام والقرارات الخاصة بالصفقة. كل فرصة تصبح محاولة لاكتشاف قصة الشركة والنطاق والضوابط التجارية من جديد، فتتباطأ الاعتمادات لأن المراجعين لا ينظرون إلى القرار نفسه.
+
+## أعطِ كل مراجعة وظيفة
+
+أنشئ مكتبة معتمدة صغيرة للحقائق ودراسات الحالة وافتراضات التسليم والشروط. واجعل العرض يركز على مشكلة المشتري والنتيجة والنطاق والسعر والتوقيت والمخاطر. تؤكد المراجعة التأهيل ثم قابلية التسليم ثم السعر والمخاطر ثم الوضوح. لكل بوابة مالك وحالة وسجل قرار.
+
+## تعلّم من التعديلات
+
+إذا تكرر سؤال نطاق فتعريف الخدمة ناقص، وإذا تكرر طلب دليل فمكتبة الحالات ضعيفة. الهدف هو جعل الجودة الروتينية سهلة والاستثناءات الحقيقية ظاهرة مبكراً.`,
+  'operational-system-handover-checklist': `## التسليم بداية التشغيل المستقل
+
+بيانات الدخول والروابط والاجتماع الأخير ليست تسليماً، بل وصولاً. التسليم الحقيقي يمنح المستلم فهماً لتشغيل النظام واكتشاف الخطأ وطلب تغيير معقول والتعافي من دون انتظار المنشئ. يحتاج إلى غرض سير العمل وسجلاته وصلاحياته وروتين تحديثه وحدوده الآمنة.
+
+## اختبر الملكية بسيناريوهات حقيقية
+
+دع المالك الجديد ينفذ طلباً عادياً من البداية إلى النهاية، ويتعامل مع استثناء، ويصحح خطأ مقصوداً. تكشف أسئلته إن كانت الفجوة تدريباً أو صلاحية أو جودة بيانات أو تصميماً. اترك معه صادرات الإعداد والقوالب المعتمدة ومصفوفة الصلاحيات وملاحظات التنظيف والحدود وطريق طلب التغيير.
+
+## حدّد المراجعة الأولى قبل المغادرة
+
+راجع في الأسبوع الأول والثاني والشهر الأول الإكمال والاستثناءات والتكرارات والحقول غير المستخدمة والعمل الذي يصل خارج المسار. يكتمل التسليم حين يستطيع المستلم تشغيل النظام، ويكتمل العمل حين تستطيع المنظمة تحسينه باستقلال.`,
+};
+
+const editorialBodiesDe: Record<string, string> = {
+  'website-brief-for-service-firms': `## Das Freigabeproblem entsteht meist vorher
+
+Ein Website-Briefing ist nicht nur eine Unterlage fuer das Design, sondern ein Entscheidungsinstrument. Es muss Vertrieb, Gruendung und Delivery auf eine Frage ausrichten: Was soll diese Website dem Unternehmen erleichtern? Viele Freigabeschleifen drehen sich nicht um Text oder Farbe, sondern um unterschiedliche Erwartungen an die Aufgabe der Website.
+
+## Mit dem geschäftlichen Moment beginnen
+
+Definieren Sie vor der Sitemap, was sich nach dem Besuch veraendern soll: eine qualifizierte Anfrage, ein besser vorbereiteter Verkaufstermin oder ein Partner, der das Unternehmen glaubwuerdig genug fuer eine Empfehlung haelt. Jede Seite, jeder Beleg und jede Interaktion wird daran gemessen. Jede Zielgruppe braucht einen eigenen Weg und eine beantwortete Frage, bevor sie handeln soll.
+
+## Meinungen in Entscheidungen verwandeln
+
+Ein gutes Briefing hält fest, warum eine Seite existiert, welche Behauptung sie stuetzen muss, welcher Beleg fehlt und wer entscheidet. Es muss nicht lang sein. Sein Wert liegt darin, schwierige Entscheidungen frueh sichtbar zu machen.`,
+  'sop-rollout-that-gets-used': `## Eine Arbeitsanweisung ist kein Betriebssystem
+
+Teams fragen nach SOPs, wenn die Kosten von Uneinheitlichkeit spuerbar werden: Eine Aufgabe stockt ohne eine bestimmte Person, Kunden erhalten unterschiedliche Antworten oder neue Mitarbeitende muessen Arbeit durch Zuschauen rekonstruieren. Schreiben hilft, doch das Dokument allein veraendert die Arbeit nicht. Sie veraendert sich, wenn die SOP beim Beginn der Aufgabe erscheint, die Qualitaet erkennbar ist und Ausnahmen einen Weg haben.
+
+## Fuer die erste echte Nutzung entwerfen
+
+Beginnen Sie mit einer echten Aufgabe, nicht mit einer Bibliothek. Der Verantwortliche soll den Entwurf bei der Arbeit nutzen und jedes Zoegern markieren. Danach fuehrt eine zweite Person dieselbe Aufgabe aus. Muss sie den Autor nach einer Formulierung fragen, wurde Wissen noch nicht uebertragen.
+
+## Prozess mit Ort und Eigentuemerschaft versehen
+
+Verlinken Sie die SOP aus Formular, Aufgabenvorlage, CRM-Phase oder Workspace. Benennen Sie einen Owner, ein Pruefdatum und einen Aenderungsweg. Das Ziel ist nicht, Urteilskraft zu streichen, sondern Routine verlaesslich und notwendige Entscheidungen sichtbar zu machen.`,
+  'ai-automation-where-to-start': `## Dort beginnen, wo Fehler begrenzt bleiben
+
+Die beste erste Automatisierung ist selten die spektakulaerste. Meist ist es eine wiederkehrende Entscheidung mit erkennbarem Input, akzeptablem Output und einer Person fuer Grenzfaelle: Anfragen sortieren, eine erste Antwort aus freigegebenem Material entwerfen oder eine Uebergabe aus bekannten Datensaetzen zusammenfassen. Das System muss nicht blind vertraut werden; es soll Routinearbeit vor der finalen Entscheidung verringern.
+
+## Reibung vor Technologie suchen
+
+Zeichnen Sie den aktuellen Ablauf nach. Wo werden Informationen kopiert, Anfragen warten gelassen oder freigegebene Antworten gesucht? Das zeigt, ob KI, eine Regel, ein besseres Formular oder klare Dokumentation passt. Widerspruechliche Quellen und unklare Verantwortung werden durch Automatisierung nur verstaerkt.
+
+## Den ersten Release als assistierte Arbeit behandeln
+
+Testen Sie einen begrenzten Ausschnitt und dokumentieren Sie akzeptierte, bearbeitete, abgelehnte und eskalierte Ergebnisse. Erst erweitern, wenn das Team die Kontrollen erklaeren kann.`,
+  'crm-data-model-for-service-firms': `## Ein CRM verdient seine Komplexitaet Entscheidung fuer Entscheidung
+
+Dienstleistungsunternehmen brauchen kein grosses Datenmodell, sondern wenige Datensaetze, die Verantwortung, Fortschritt und naechste Schritte sichtbar machen. Beginnen Sie mit Unternehmen, Kontakten, Chancen und Aktivitaeten. Projekte gehoeren erst dann daneben, wenn ein unterschriebener Auftrag einen eigenen Lieferablauf braucht.
+
+## Den naechsten Schritt eindeutig machen
+
+Jede Chance sollte sofort beantworten: Wer ist verantwortlich, und was passiert als Naechstes? „Nachfassen“ reicht nicht. Ein brauchbarer Schritt benennt Ereignis, erwartetes Ergebnis und Datum. Stufen sollten das Engagement des Kaeufers beschreiben, nicht den Optimismus des Teams, mit einer pruefbaren Austrittsregel.
+
+## Das Modell vor Schmuckfeldern schuetzen
+
+Ein Feld gehoert hinein, wenn es eine Entscheidung veraendert, eine Uebergabe stuetzt oder einen Bericht erklaert. Pruefen Sie die letzten dreissig Chancen, bevor neue Struktur entsteht.`,
+  'sop-rollout-plan-that-gets-used': `## Der Rollout beginnt nach dem Schreiben
+
+Eine SOP kann auf Papier klar sein und dennoch in der ersten Woche scheitern, weil sich das Umfeld nicht veraendert hat: kein Owner, keine Verknuepfung zur Aufgabe und kein Umgang mit Ausnahmen. Das Dokument ist ein Entwurf der Betriebsvereinbarung; der Rollout beweist sie im normalen Betrieb.
+
+## Erst Routine, dann Ausnahme testen
+
+Der Prozessowner soll einen echten Fall mit dem Entwurf ausfuehren und Abweichungen markieren. Dann testet eine zweite Person die ueberarbeitete Version. Danach folgt ein fehlender Input, eine verspaetete Freigabe oder ein Qualitaetsfehler. Eine brauchbare SOP benennt Entscheider und Eskalationsweg statt Ausnahmen zu ignorieren.
+
+## Review zur Ownership machen
+
+Verlinken Sie die SOP in der Aufgabenvorlage und geben Sie ihr Pruefdatum, Change-Log und ein kurzes Kontrollblatt. Nach den ersten fuenf Nutzungen und danach regelmaessig pruefen.`,
+  'dashboard-requirements-before-design': `## Ein Dashboard ist eine Entscheidungsumgebung
+
+Teams sammeln oft zuerst Charts, weil sie sichtbar sind. Die entscheidende Frage bleibt: Welche Entscheidung soll beim Oeffnen leichter werden? Benennen Sie Publikum, Review-Rhythmus und Entscheidung vor dem Visual. Ein woechentliches Vertriebsmeeting braucht etwas anderes als eine Delivery-Leitung mit wartenden Uebergaben.
+
+## Jede Zahl vor dem Layout definieren
+
+Jede Kennzahl braucht Definition, Quelle, Owner und Granularitaet. „Pipeline“ und „Reaktionszeit“ koennen Verschiedenes bedeuten. Ohne Einigung macht eine saubere Oberflaeche einen offenen Streit nur besser sichtbar. Die erste Ansicht soll zeigen, ob Aufmerksamkeit noetig ist; danach folgt die Diagnose.
+
+## Abnahme ins Briefing aufnehmen
+
+Vor dem Design festlegen, wie KPIs mit ihrer Quelle, Aktualisierung, Zeitraum und einer Schwelle mit klarem Owner geprueft werden.`,
+  'ai-automation-readiness-check': `## Reife ist eine Eigenschaft des Workflows
+
+Ob ein Operations-Team fuer KI bereit ist, haengt weniger von der Modellfaehigkeit als vom Zustand der Arbeit ab. Ein Workflow ist bereit, wenn Inputs verfuegbar sind, ein akzeptables Ergebnis beschreibbar ist, Unsicherheit einen Reviewer hat und Fehler begrenzt werden koennen.
+
+## Betriebsbedingungen pruefen
+
+Sind die Inputs konsistent genug? Kann ein Reviewer erklaeren, was akzeptabel ist? Und welche Folge hat ein Fehler? Ein Entwurf mit Freigabe ist etwas anderes als eine ungepruefte Aenderung am Kundendatensatz. Bei schwachen Bedingungen sind ein besseres Formular, eine kontrollierte Quelle oder eine klarere SOP oft der richtige erste Schritt.
+
+## Mit Belegen pilotieren
+
+Nutzen Sie eine feste Stichprobe und erfassen Sie akzeptierte, bearbeitete, abgelehnte und eskalierte Ergebnisse. Vergleichen Sie Zeit und Nacharbeit mit dem bisherigen Ablauf. Dann klar entscheiden: stoppen, assistiert weiterfuehren oder mit staerkeren Kontrollen erweitern.`,
+  'operational-software-selection-workflow': `## Software soll eine Uebergabe entfernen, nicht erzeugen
+
+Feature-Vergleiche wirken objektiv, sind aber ein schlechter Anfang. Sie sagen wenig darueber, ob gewoehnliche Arbeit mit weniger Luecken, Duplikaten und Aufwand gelingt. Verfolgen Sie einen Ablauf von der Anfrage bis zum Ergebnis: Empfaenger, benoetigte Information, System, Entscheidung und verbleibender Nachweis.
+
+## Passung im Nutzungskontext bewerten
+
+Kann das Team normale Arbeit ohne Workaround erledigen? Passt das Datenmodell zu relevanten Beziehungen? Lassen sich Rechte, Freigaben und Exporte steuern? Wer aendert das System spaeter? Pilotieren Sie ein Team, einen Ablauf und einen Reporting-Rhythmus. Fragen Sie auch nach Integrationsfehlern und abgelehnten Freigaben.
+
+Die richtige Wahl erleichtert das Wiederholen, Pruefen und Verbessern der beabsichtigten Arbeit.`,
+  'proposal-approval-system-for-service-teams': `## Wiederholtes Umschreiben ist oft ein Systemproblem
+
+Wenn ein Team denselben Vorschlag immer wieder schreibt, fehlt selten Schreibfaehigkeit. Meist sind wiederverwendbare Belege und fallspezifische Entscheidungen nicht getrennt. Jede Chance wird zur erneuten Suche nach Unternehmensgeschichte, Scope und kommerziellen Leitplanken. Freigaben werden langsam, weil jeder Reviewer etwas anderes prueft.
+
+## Jeder Pruefung eine Aufgabe geben
+
+Bauen Sie eine kleine freigegebene Bibliothek mit Fallfakten, Faehigkeiten, Delivery-Annahmen und Standardbedingungen. Der konkrete Vorschlag bleibt bei Problem, Ergebnis, Grenzen, Preis, Zeit und Risiko. Qualifikation, Delivery, Commercial und finaler Versand brauchen jeweils Owner, Status und Entscheidung.
+
+## Aus Revisionen lernen
+
+Wiederkehrende Scope-Fragen zeigen eine unklare Leistung. Wiederkehrende Beleganfragen zeigen eine duenne Case-Library. Ziel sind einfache Routinequalitaet und frueh sichtbare Ausnahmen.`,
+  'operational-system-handover-checklist': `## Eine Uebergabe ist der Beginn selbststaendigen Betriebs
+
+Zugaenge, Links und ein Abschlusstermin sind keine Uebergabe, sondern Zugriff. Eine echte Uebergabe befaehigt Empfaenger, das System zu betreiben, Fehler zu erkennen, sinnvolle Aenderungen anzufordern und ohne den Erbauer zu reagieren. Sie umfasst Zweck, Datensaetze, Rechte, Pflegeroutine und sichere Grenzen.
+
+## Ownership mit realen Szenarien testen
+
+Der neue Owner soll einen normalen Fall durchfuehren, eine Ausnahme bearbeiten und einen absichtlichen Fehler korrigieren. Seine Fragen zeigen, ob Training, Berechtigung, Datenqualitaet oder Design fehlt. Hinterlassen Sie Konfigurationsexporte, Vorlagen, Rechte-Matrix, Bereinigungsnotizen, bekannte Grenzen und einen Change-Weg.
+
+## Erste Review vor dem Verlassen planen
+
+Pruefen Sie nach einer, zwei und vier Wochen Abschluesse, Ausnahmen, Duplikate, ungenutzte Felder und Arbeit ausserhalb des vorgesehenen Wegs. Vollstaendig ist die Arbeit, wenn die Organisation selbst verbessern kann.`,
+};
+
+const editorialBodiesFr: Record<string, string> = {
+  'website-brief-for-service-firms': `## Le probleme d'approbation commence souvent en amont
+
+Un brief de site n'est pas seulement un document pour le design : c'est un outil de decision. Il doit donner au commercial, au fondateur et au responsable de delivery une reponse commune : que doit rendre ce site plus facile pour l'entreprise ? La plupart des tours d'approbation ne portent pas vraiment sur le texte ou la couleur, mais sur des attentes differentes quant au role du site.
+
+## Commencer par le moment commercial
+
+Avant le plan du site, definissez ce qui doit changer apres une visite : une demande qualifiee, un prospect mieux prepare a l'appel commercial, ou un partenaire qui juge l'entreprise suffisamment credible pour la recommander. Testez chaque page, preuve et interaction contre cet objectif. Chaque public a besoin de son propre parcours et d'une question resolue avant d'agir.
+
+## Transformer les avis en decisions
+
+Un bon brief indique la raison d'etre de chaque page, l'affirmation qu'elle doit soutenir, les preuves necessaires et la personne qui approuve. Il n'a pas besoin d'etre long. Sa valeur est de rendre les choix difficiles visibles assez tot.`,
+  'sop-rollout-that-gets-used': `## Une procedure n'est pas un systeme d'exploitation
+
+Les equipes demandent des SOP lorsque le cout de l'incoherence devient evident : une tache ralentit sans une personne precise, un client recoit des reponses differentes, ou une nouvelle recrue doit reconstituer le travail en regardant les autres. Ecrire aide, mais le document seul ne change pas le travail. Il change lorsque la SOP apparait au debut de la tache, que le resultat acceptable est visible et que les exceptions ont un chemin.
+
+## Concevoir pour le premier usage reel
+
+Commencez par une tache active, pas par une bibliotheque. Le responsable doit utiliser le brouillon pendant l'execution et noter chaque hesitation. Puis une seconde personne realise la meme tache. Si elle doit demander a l'auteur le sens d'une phrase, la connaissance n'a pas encore ete transmise.
+
+## Donner un lieu et un proprietaire au processus
+
+Liez la SOP au formulaire, au modele de tache, a l'etape CRM ou a l'espace de travail ou le travail commence. Nommez un responsable, une date de revue et une voie de changement.`,
+  'ai-automation-where-to-start': `## Commencer la ou le cout de l'erreur est limite
+
+La premiere automatisation utile est rarement la plus spectaculaire. C'est souvent une decision repetee avec une entree reconnaissable, une sortie acceptable et une personne capable de revoir les cas limites : trier des demandes, preparer une premiere reponse a partir de contenu approuve ou resumer une passation depuis des enregistrements connus. Le systeme ne doit pas etre cru aveuglement ; il doit reduire l'effort avant la decision finale.
+
+## Chercher la friction avant la technologie
+
+Cartographiez le travail actuel. Ou copie-t-on l'information ? Ou une demande attend-elle une decision ? Ou une reponse approuvee est-elle difficile a trouver ? Ces frictions indiquent si la bonne reponse est l'IA, une regle, un meilleur formulaire ou une documentation claire. Des sources contradictoires et une responsabilite floue seront amplifiees par l'automatisation.
+
+## Traiter la premiere version comme un travail assiste
+
+Testez un echantillon limite et consignez les resultats acceptes, modifies, rejetes et escalades. Elargissez seulement quand l'equipe peut expliquer les controles.`,
+  'crm-data-model-for-service-firms': `## Un CRM gagne sa complexite decision apres decision
+
+Les entreprises de services n'ont pas besoin d'un grand modele de donnees pour gerer un pipeline utile. Elles ont besoin de quelques enregistrements qui rendent visibles le responsable, l'avancement et la prochaine action : entreprises, contacts, opportunites et activites. Les projets n'arrivent a cote du pipeline que lorsqu'un engagement signe exige son propre flux de delivery.
+
+## Rendre la prochaine action sans ambiguite
+
+Chaque opportunite doit repondre immediatement a deux questions : qui la possede et que se passe-t-il ensuite ? « Relancer » ne suffit pas. Une action utile nomme l'evenement, le resultat attendu et la date. Les etapes doivent decrire l'engagement de l'acheteur, non l'optimisme interne, avec une regle de sortie verificable.
+
+## Proteger le modele des champs decoratifs
+
+Un champ doit changer une decision, soutenir une passation ou expliquer un rapport. Examinez les trente dernieres opportunites avant d'ajouter de la structure.`,
+  'sop-rollout-plan-that-gets-used': `## Le deploiement commence apres la redaction
+
+Une SOP peut etre parfaite sur le papier et echouer la premiere semaine parce que son environnement n'a pas change : aucun responsable nomme, aucun lien depuis la tache, aucune decision sur les exceptions. Le document est le brouillon de l'accord operationnel ; le deploiement le prouve en conditions normales.
+
+## Tester la routine puis l'exception
+
+Demandez au responsable d'executer un cas reel avec le brouillon et de noter les sorties du parcours. Une seconde personne teste ensuite la version amendee. Puis testez une entree manquante, une approbation tardive ou un echec de qualite. Une SOP utile nomme le decideur et la voie d'escalade au lieu de faire semblant que l'exception n'existera pas.
+
+## Faire de la revue une partie de la responsabilite
+
+Liez la SOP au modele de tache et ajoutez une date de revue, un journal de changements et une fiche de controle courte. Revoyez-la apres les cinq premiers usages, puis a un rythme prevu.`,
+  'dashboard-requirements-before-design': `## Un tableau de bord est un environnement de decision
+
+Les equipes commencent souvent par reunir des graphiques parce qu'ils sont visibles. Elles evitent alors la question essentielle : quelle decision doit devenir plus simple quand quelqu'un ouvre le tableau ? Nommez le public, le rythme de revue et la decision avant de choisir le visuel. Une reunion commerciale hebdomadaire et un responsable de delivery ne vivent pas dans le meme environnement.
+
+## Definir chaque chiffre avant de le placer
+
+Chaque indicateur a besoin d'une definition, d'une source, d'un responsable et d'un niveau de detail. « Pipeline » et « temps de reponse » peuvent vouloir dire des choses tres differentes. Sans accord, une interface propre rend seulement un desaccord plus agreable a regarder. Le premier ecran doit signaler si une attention est requise ; la suite aide a comprendre pourquoi.
+
+## Integrer l'acceptation au brief
+
+Avant le design, convenez de la verification : comparaison du KPI a sa source, date de mise a jour, plage de dates et personne qui agit lorsqu'un seuil est franchi.`,
+  'ai-automation-readiness-check': `## La preparation est une propriete du workflow
+
+La preparation d'une equipe operations a l'automatisation IA depend moins des capacites du modele que de l'etat du travail autour de lui. Un workflow est pret lorsque les entrees sont disponibles, que le resultat acceptable peut etre decrit, qu'un relecteur traite l'incertitude et qu'une erreur peut etre contenue.
+
+## Verifier les conditions d'exploitation
+
+Les entrees sont-elles assez coherentes ? Un relecteur peut-il expliquer ce qui rend une sortie acceptable ? Quelle est la consequence d'une erreur ? Un brouillon revu avant envoi est different d'une modification de fiche client sans controle. Si ces conditions sont faibles, un meilleur formulaire, une bibliotheque de sources controlee ou une SOP plus claire est souvent le meilleur premier pas.
+
+## Piloter avec des preuves
+
+Utilisez un echantillon fixe et consignez les resultats acceptes, modifies, rejetes et escalades. Comparez le temps et la reprise avec le processus precedent, puis decidez clairement : arreter, garder le travail assiste ou etendre avec plus de controles.`,
+  'operational-software-selection-workflow': `## Un logiciel doit supprimer une passation, pas en creer une autre
+
+Les comparaisons de fonctionnalites semblent objectives mais constituent un mauvais point de depart. Elles disent peu sur la capacite d'une equipe a faire son travail ordinaire avec moins de lacunes, de doublons et d'effort. Suivez plutot un workflow de la demande au resultat : qui recoit le travail, quelle information est necessaire, quel systeme est utilise, quelle decision est prise et quelle preuve reste.
+
+## Evaluer l'adequation dans le contexte d'usage
+
+L'equipe peut-elle accomplir le travail normal sans contournement ? Le modele de donnees correspond-il aux relations importantes ? Les permissions, approbations et exports sont-ils gouvernables ? Qui fera evoluer le systeme ? Pilotez une equipe, un workflow et un rythme de reporting, en examinant aussi les integrations en echec et les validations refusees.
+
+Le bon choix facilite la repetition, l'inspection et l'amelioration du travail vise.`,
+  'proposal-approval-system-for-service-teams': `## La reecriture est souvent un probleme de systeme
+
+Lorsqu'une equipe reecrit sans cesse la meme proposition, le probleme est rarement la capacite d'ecriture. L'organisation n'a pas separe les preuves reutilisables des decisions propres a l'affaire. Chaque opportunite oblige a redécouvrir l'histoire de l'entreprise, le perimetre et les garde-fous commerciaux. Les validations ralentissent car les relecteurs n'examinent pas le meme type de decision.
+
+## Donner un role a chaque revue
+
+Constituez une petite bibliotheque approuvee de faits, capacites, hypotheses de delivery et conditions standard. La proposition reste concentree sur le probleme acheteur, le resultat, les limites, le prix, le calendrier et les risques. Qualification, delivery, commercial et envoi final ont chacun un responsable, un statut et une trace de decision.
+
+## Apprendre des revisions
+
+Une question de perimetre recurrente revele une offre incomplete. Une demande de preuve recurrente revele une bibliotheque de cas trop mince. L'objectif est une qualite de routine simple et des exceptions reelles visibles tot.`,
+  'operational-system-handover-checklist': `## Une passation est le debut d'une exploitation autonome
+
+Des identifiants, des liens et une derniere reunion ne sont pas une passation : ce sont des acces. Une vraie passation permet au destinataire d'exploiter le systeme, de reconnaitre un probleme, de demander un changement raisonnable et de se remettre sans attendre le constructeur. Elle couvre le but du workflow, les enregistrements, les permissions, la routine d'entretien et les limites sures.
+
+## Tester la responsabilite avec des scenarios reels
+
+Demandez au nouveau responsable de traiter une demande normale, une exception et une erreur volontaire. Ses questions indiquent si le manque est la formation, l'autorisation, la qualite des donnees ou le design. Laissez exports de configuration, modeles approuves, matrice de permissions, notes de nettoyage, limites connues et voie de changement.
+
+## Planifier la premiere revue avant de partir
+
+Apres une semaine, deux semaines et un mois, examinez les completions, exceptions, doublons, champs inutilises et travail arrivant hors du parcours. Le travail est vraiment termine lorsque l'organisation peut l'ameliorer seule.`,
+};
+
+const editorialBodiesBg: Record<string, string> = {
+  'website-brief-for-service-firms': `## Проблемът с одобрението обикновено започва по-рано
+
+Заданието за уебсайт не е само документ за дизайна, а инструмент за вземане на решения. То трябва да даде на търговския ръководител, основателя и отговорния за изпълнението общ отговор: какво трябва да направи сайтът по-лесно за бизнеса? Повечето кръгове по одобрение не са спор за текст или цвят, а за различни роли, които сайтът трябва да изпълнява.
+
+## Започнете с търговския момент
+
+Преди картата на сайта определете какво трябва да се промени след посещението: квалифицирана заявка, по-добре подготвен клиент за разговор или партньор, който намира бизнеса за достатъчно надежден. Проверявайте всяка страница, доказателство и взаимодействие спрямо тази цел. Всяка аудитория има нужда от собствен път и ясен отговор преди призив за действие.
+
+## Превърнете мненията в решения
+
+Доброто задание записва защо съществува всяка страница, какво твърдение подкрепя, какво доказателство е нужно и кой одобрява. Не е нужно да е дълго; важно е трудните избори да станат видими рано.`,
+  'sop-rollout-that-gets-used': `## Процедурата не е операционна система
+
+Екипите търсят SOP, когато цената на непоследователността стане осезаема: задача се забавя без конкретен човек, клиент получава различен отговор или нов служител възстановява процеса, наблюдавайки другите. Писането помага, но самият документ не променя работата. Тя се променя, когато SOP се появява при започване на задачата, приемливият резултат е ясен и изключенията имат път.
+
+## Проектирайте за първата реална употреба
+
+Започнете с една жива задача, не с библиотека. Нека собственикът използва черновата при работа и отбележи всяко колебание. После втори човек изпълнява същата задача. Ако трябва да пита автора какво означава стъпка, знанието още не е предадено.
+
+## Дайте място и собственик на процеса
+
+Свържете SOP с формуляра, шаблона на задачата, CRM етапа или работното пространство. Посочете собственик, дата за преглед и път за промени.`,
+  'ai-automation-where-to-start': `## Започнете там, където цената на грешката е ограничена
+
+Най-полезната първа автоматизация рядко е най-ефектната. Обикновено това е повтарящо се решение с разпознаваем вход, приемлив изход и човек за граничните случаи: сортиране на заявки, първи отговор от одобрени материали или обобщение при предаване от известни записи. Не е нужно системата да бъде приемана безусловно; тя трябва да намали рутинния труд преди крайното решение.
+
+## Търсете триенето преди технологията
+
+Картографирайте работата както се случва днес. Къде се копира информация, къде чака заявка и къде трудно се намира одобрен отговор? Това показва дали е нужна AI стъпка, правило, по-добър формуляр или ясна документация. Противоречиви източници и неясна отговорност се усилват от автоматизацията.
+
+## Приемете първата версия като подпомогната работа
+
+Тествайте ограничена извадка и записвайте приети, редактирани, отхвърлени и ескалирани резултати. Разширявайте едва когато екипът може да обясни контролите.`,
+  'crm-data-model-for-service-firms': `## CRM заслужава своята сложност решение по решение
+
+На фирмите за услуги не им трябва голям модел на данни, а малко записи, които правят видими собствеността, напредъка и следващите действия. Започнете с компании, контакти, възможности и дейности. Проекти добавяйте до pipeline-а само когато подписаният ангажимент има собствен поток за изпълнение.
+
+## Направете следващата стъпка еднозначна
+
+Всяка възможност трябва да отговаря веднага: кой я притежава и какво следва? „Проследи“ не е достатъчно. Полезната стъпка назовава събитието, очаквания резултат и дата. Етапите трябва да описват ангажимента на купувача, а не оптимизма на екипа, с проверимо правило за изход.
+
+## Пазете модела от декоративни полета
+
+Поле трябва да променя решение, да подкрепя предаване или да обяснява отчет. Прегледайте последните тридесет възможности преди да добавяте структура.`,
+  'sop-rollout-plan-that-gets-used': `## Внедряването започва след написването
+
+SOP може да е напълно ясна на хартия и пак да се провали през първата седмица, защото средата около процеса не се е променила: няма посочен собственик, няма връзка от задачата към процедурата и няма решение за изключенията. Документът е чернова на оперативното споразумение; внедряването го доказва в нормални условия.
+
+## Тествайте рутината, после изключението
+
+Нека собственикът изпълни реален случай с черновата и отбележи отклоненията. Втори човек тества поправената версия. После проверете липсващ вход, забавено одобрение или провал в качеството. Полезната SOP назовава вземащия решение и пътя за ескалация.
+
+## Направете прегледа част от собствеността
+
+Свържете SOP с шаблона на задачата и добавете дата за преглед, дневник на промените и кратък контролен лист. Преглеждайте след първите пет употреби и след това регулярно.`,
+  'dashboard-requirements-before-design': `## Таблото е среда за решения
+
+Екипите често започват, като събират графики, защото са видими. Така се избягва основният въпрос: кое решение трябва да стане по-лесно, когато някой отвори таблото? Назовете аудиторията, ритъма на прегледа и решението преди визуализацията. Седмична търговска среща има различни нужди от ръководител на изпълнението.
+
+## Определете всяко число преди подреждането
+
+Всеки показател се нуждае от дефиниция, източник, собственик и ниво на детайл. „Pipeline“ и „време за отговор“ могат да означават различни неща. Без съгласие чистият интерфейс само прави нерешения спор по-приятен за гледане. Първият екран трябва да покаже дали е нужно внимание, а следващият да обясни защо.
+
+## Включете приемането в заданието
+
+Преди дизайна договорете как KPI се сравнява с източника си, кога е обновен, какъв е периодът и кой действа при преминаване на праг.`,
+  'ai-automation-readiness-check': `## Готовността е свойство на работния поток
+
+Готовността на оперативен екип за AI автоматизация зависи по-малко от способностите на модела и повече от състоянието на работата около него. Потокът е готов, когато входовете са налични, приемливият резултат може да се опише, несигурността има проверяващ и грешката може да бъде ограничена.
+
+## Проверете условията за работа
+
+Достатъчно последователни ли са входовете? Може ли проверяващ да обясни какво е приемливо? Каква е последицата от грешка? Чернова, проверена преди изпращане, е различна от промяна в клиентски запис без контролна точка. При слаби условия по-добър формуляр, контролирана библиотека от източници или по-ясна SOP често са правилната първа стъпка.
+
+## Пилотирайте с доказателства
+
+Използвайте фиксирана извадка и записвайте приети, редактирани, отхвърлени и ескалирани резултати. Сравнете време и преработка с предишния процес, после решете ясно: спрете, оставете като подпомогната работа или разширете с по-силни контроли.`,
+  'operational-software-selection-workflow': `## Софтуерът трябва да премахва предаване, не да създава ново
+
+Сравненията на функции изглеждат обективни, но са слаб старт. Те казват малко за това дали екипът ще изпълнява обичайната работа с по-малко пропуски, дублирания и усилие. Проследете един поток от заявката до резултата: кой получава работата, каква информация е нужна, коя система се използва, какво решение се взема и какво доказателство остава.
+
+## Оценявайте съответствието в контекста на употребата
+
+Може ли екипът да върши нормална работа без заобикаляне? Съвпада ли моделът на данни с важните отношения? Могат ли да се управляват права, одобрения и експорти? Кой ще прави промени? Пилотирайте един екип, един поток и един ритъм за отчети, включително при проблемни интеграции и отхвърлени одобрения.
+
+Правилният избор улеснява повторението, проверката и подобрението на желаната работа.`,
+  'proposal-approval-system-for-service-teams': `## Постоянното пренаписване често е системен проблем
+
+Когато екипът за услуги пренаписва едно и също предложение, проблемът рядко е в умението за писане. Обикновено организацията не е отделила повторно използваемите доказателства от решенията по конкретната сделка. Всяка възможност става ново откриване на историята на компанията, обхвата и търговските рамки. Одобренията се забавят, защото проверяващите гледат различни решения.
+
+## Дайте задача на всеки преглед
+
+Създайте малка одобрена библиотека с факти, възможности, допускания за изпълнение и стандартни условия. Конкретното предложение остава фокусирано върху проблема, резултата, границите, цената, времето и риска. Квалификацията, изпълнението, търговският преглед и финалното изпращане имат свой собственик, статус и запис на решение.
+
+## Учете се от редакциите
+
+Повтарящите се въпроси за обхват показват непълна услуга; повтарящите се искания за доказателства показват слаба библиотека от случаи.`,
+  'operational-system-handover-checklist': `## Предаването е начало на самостоятелната работа
+
+Достъпите, връзките и последната среща не са предаване, а само достъп. Истинското предаване дава на получателя разбиране да управлява системата, да разпознава проблем, да иска разумна промяна и да се възстановява без да чака първоначалния създател. То включва целта на потока, записите, правата, рутината за поддръжка и безопасните граници.
+
+## Тествайте собствеността с реални сценарии
+
+Нека новият собственик изпълни нормална заявка, обработи изключение и поправи умишлена грешка. Въпросите му показват дали липсват обучение, разрешение, качество на данните или дизайн. Оставете конфигурационни експорти, одобрени шаблони, матрица на правата, бележки за почистване, известни ограничения и път за промяна.
+
+## Планирайте първия преглед преди да си тръгнете
+
+След една седмица, две седмици и месец преглеждайте завършените задачи, изключенията, дублиранията, неизползваните полета и работата извън предвидения поток. Работата е завършена, когато организацията може сама да я подобрява.`,
+};
+
 export const fallbackArticles: FallbackArticle[] = [
   {
     id: "resource-website-brief",
@@ -319,7 +956,7 @@ export const fallbackArticles: FallbackArticle[] = [
     excerpt_de: "Eine praktische Struktur, um verstreute Meinungen von Stakeholdern in ein Website-Briefing mit klaren Prioritäten, Seiten und Konversionszielen zu verwandeln.",
     excerpt_fr: "Une structure pratique pour transformer les opinions dispersées des parties prenantes en un brief de site web avec des priorités, des pages et des objectifs de conversion clairs.",
     excerpt_bg: "Практична структура за превръщане на разпръснатите мнения на заинтересованите страни в задание за уебсайт с ясни приоритети, страници и цели за реализация.",
-    thumbnail_url: null,
+    thumbnail_url: insightWebsiteBrief,
     category: "Website Strategy",
     category_ar: "استراتيجية المواقع",
     category_de: "Website-Strategie",
@@ -674,7 +1311,7 @@ Nous sommes généralement appelés lorsque l'entreprise sait déjà qu'elle a b
     title_de: "Wie man SOPs einführt, ohne einen weiteren Dokumentenfriedhof zu schaffen",
     title_fr: "Comment lancer des procédures opérationnelles standard sans créer un autre cimetière de documents",
     title_bg: "Как да стартирате СОП без да създавате поредното гробище за документи",
-    slug: "launch-sops-that-get-used",
+    slug: "sop-rollout-that-gets-used",
     excerpt:
       "A rollout pattern for SOP libraries that improves adoption, ownership, and updates instead of producing a folder full of ignored PDFs.",
     excerpt_ar:
@@ -682,7 +1319,7 @@ Nous sommes généralement appelés lorsque l'entreprise sait déjà qu'elle a b
     excerpt_de: "Ein Einführungsmodell für SOP-Bibliotheken, das die Akzeptanz, Verantwortlichkeit und Aktualisierungen verbessert, anstatt einen Ordner voller ignorierter PDFs zu produzieren.",
     excerpt_fr: "Un modèle de déploiement pour les bibliothèques de procédures opérationnelles standard qui améliore l'adoption, l'appropriation et les mises à jour au lieu de produire un dossier rempli de PDF ignorés.",
     excerpt_bg: "Модел за внедряване на библиотеки със СОП, който подобрява приемането, собствеността и актуализациите, вместо да произвежда папка, пълна с игнорирани PDF файлове.",
-    thumbnail_url: null,
+    thumbnail_url: insightSopRollout,
     category: "Operations",
     category_ar: "العمليات",
     category_de: "Betrieb",
@@ -814,14 +1451,26 @@ The goal is for managers to stop repeating instructions, for new hires to ramp f
     id: "resource-ai-automation",
     title: "Where AI agents save time first in service businesses",
     title_ar: "أين يوفّر وكلاء الذكاء الاصطناعي الوقت أولاً في شركات الخدمات",
-    slug: "where-ai-agents-save-time-first",
+    title_de: "Wo KI-Agenten in Dienstleistungsunternehmen zuerst Zeit sparen",
+    title_fr: "Où les agents IA font gagner du temps en premier dans les entreprises de services",
+    title_bg: "Къде AI агентите спестяват време първо в компаниите за услуги",
+    slug: "ai-automation-where-to-start",
     excerpt:
       "A simple way to find high-value automation opportunities without handing sensitive judgment calls to an unproven workflow.",
     excerpt_ar:
       "طريقة بسيطة لاكتشاف فرص أتمتة عالية القيمة دون تسليم القرارات الحساسة إلى سير عمل غير مُثبت.",
-    thumbnail_url: null,
+    excerpt_de:
+      "Ein einfacher Weg, wertvolle Automatisierungschancen zu finden, ohne sensible Entscheidungen einem unerprobten Workflow zu überlassen.",
+    excerpt_fr:
+      "Une approche simple pour identifier des automatisations à forte valeur sans confier des décisions sensibles à un workflow non éprouvé.",
+    excerpt_bg:
+      "Лесен начин да откриете възможности за автоматизация с висока стойност, без да поверявате чувствителни решения на непроверен процес.",
+    thumbnail_url: insightAiAutomationStart,
     category: "AI Automation",
     category_ar: "أتمتة الذكاء الاصطناعي",
+    category_de: "KI-Automatisierung",
+    category_fr: "Automatisation par IA",
+    category_bg: "AI автоматизация",
     created_at: "2026-03-10T09:00:00.000Z",
     body: `## Start with repetitive decisions, not big promises
 
@@ -955,7 +1604,7 @@ That is why strong AI delivery is usually as much about approvals, logging, and 
     excerpt_de: "Eine praktische CRM-Struktur für klare Verantwortlichkeiten, verlässliches Follow-up und belastbares Reporting.",
     excerpt_fr: "Une structure CRM pratique pour clarifier les responsables, le suivi et le reporting.",
     excerpt_bg: "Практична CRM структура за ясна отговорност, надежден follow-up и отчетност.",
-    thumbnail_url: null,
+    thumbnail_url: insightCrmDataModel,
     category: "Operations Systems",
     category_ar: "أنظمة العمليات",
     category_de: "Operations-Systeme",
@@ -1012,7 +1661,7 @@ A small model with disciplined usage will outperform a large CRM full of fields 
     excerpt_de: "Ein Einführungsmodell, das eine SOP mit Verantwortlichen, Aufgaben, Qualitätsprüfung und Review-Termin verbindet.",
     excerpt_fr: "Une méthode qui relie la SOP à un responsable, une tâche, un contrôle et une date de revue.",
     excerpt_bg: "Модел за внедряване, който свързва SOP със собственик, задача, проверка и дата за преглед.",
-    thumbnail_url: null,
+    thumbnail_url: insightSopRolloutPlan,
     category: "Operations Systems",
     category_ar: "أنظمة العمليات",
     category_de: "Operations-Systeme",
@@ -1058,7 +1707,7 @@ An SOP earns its place through observed use. The rollout should produce evidence
     excerpt_de: "Die Fragen vor der Chart-Auswahl, damit ein Dashboard Entscheidungen unterstützt.",
     excerpt_fr: "Les questions à traiter avant les graphiques pour faire du dashboard un outil de décision.",
     excerpt_bg: "Въпросите преди избора на графики, за да подпомага таблото решения.",
-    thumbnail_url: null,
+    thumbnail_url: insightDashboardRequirements,
     category: "Data and Reporting",
     category_ar: "البيانات والتقارير",
     category_de: "Daten und Reporting",
@@ -1112,7 +1761,7 @@ Design comes after these decisions. A clean chart cannot repair an undefined met
     excerpt_de: "Ein belastbarer Weg, um zwischen KI-Schritt, Regelwerk und besserer Dokumentation zu entscheiden.",
     excerpt_fr: "Une méthode concrète pour choisir entre une étape IA, des règles ou une meilleure documentation.",
     excerpt_bg: "Практичен начин да решите между AI стъпка, правила или по-добра документация.",
-    thumbnail_url: null,
+    thumbnail_url: insightAiReadiness,
     category: "Automation",
     category_ar: "الأتمتة",
     category_de: "Automatisierung",
@@ -1156,7 +1805,7 @@ Document allowed sources, sensitive-data exclusions, model and prompt version, r
     excerpt_de: "Ein Auswahlrahmen für CRM, Buchhaltung, Inventar und Aufgabenmanagement, der beim Arbeitsablauf beginnt.",
     excerpt_fr: "Une méthode de choix pour CRM, comptabilité, stock et tâches qui part du workflow réel.",
     excerpt_bg: "Метод за избор на CRM, счетоводство, склад и задачи, започващ от реалния процес.",
-    thumbnail_url: null,
+    thumbnail_url: insightSoftwareSelection,
     category: "Managed Software",
     category_ar: "البرمجيات المُدارة",
     category_de: "Managed Software",
@@ -1194,7 +1843,7 @@ Choose the option that makes the intended workflow easier to repeat, inspect, an
     excerpt_de: "Ein schlanker Angebotsprozess mit verbindlicher Quelle, Review-Gates und wiederverwendbaren Belegen.",
     excerpt_fr: "Un workflow léger avec source de référence, validations et blocs de preuve réutilisables.",
     excerpt_bg: "Лек процес за предложения с единен източник, контролни точки и повторно използваеми доказателства.",
-    thumbnail_url: null,
+    thumbnail_url: insightProposalApproval,
     category: "Commercial Systems",
     category_ar: "الأنظمة التجارية",
     category_de: "Vertriebssysteme",
@@ -1233,7 +1882,7 @@ Before sending, verify that the outcome is specific, deliverables have boundarie
     excerpt_de: "Was eine gute Übergabe neben Zugangsdaten braucht: Verantwortung, Änderungsregeln, Datenchecks und Review-Rhythmus.",
     excerpt_fr: "Ce qu'une bonne passation exige au-delà des accès : responsables, règles, contrôles et rythme de revue.",
     excerpt_bg: "Какво включва доброто предаване освен достъпи: собственост, промени, проверки, обучение и ритъм.",
-    thumbnail_url: null,
+    thumbnail_url: insightSystemHandover,
     category: "Delivery Systems",
     category_ar: "أنظمة التسليم",
     category_de: "Übergabesysteme",

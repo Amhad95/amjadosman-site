@@ -133,7 +133,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
 
       {foundation && (
         <section id={foundation.id} className="scroll-mt-24">
-          <div className="bg-plate-violet rounded-[34px] p-8 md:p-12 shadow-[0_22px_56px_-44px_rgba(8,15,32,0.24)]">
+          <div className="colored-surface-shadow rounded-[34px] bg-plate-violet p-8 md:p-12">
             <div className={cn('max-w-3xl', isRTL && 'text-right')}>
               <h2 className="font-serif text-heading-lg text-mint mb-2">
                 {foundation.title}

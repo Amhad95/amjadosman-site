@@ -16,9 +16,9 @@ type LocalHandler = (req: LocalRequest, res: ServerResponse) => Promise<void>;
 const localApiFunctions = () => ({
   name: "local-api-functions",
   configureServer(server: import("vite").ViteDevServer) {
-    const mount = (route: string, handler: LocalHandler) => {
+    const mount = (route: string, handler: LocalHandler, methods = ["POST"]) => {
       server.middlewares.use(route, async (req, res, next) => {
-        if (req.method !== "POST") return next();
+        if (!methods.includes(req.method ?? "")) return next();
         try { await handler(req, res); } catch (error) {
           res.statusCode = 500;
           res.setHeader("Content-Type", "application/json");
@@ -67,6 +67,14 @@ const localApiFunctions = () => ({
       });
     });
 
+    mount("/api/checkout-session", async (req, res) => {
+      const { default: handler } = await import("./api/checkout-session");
+      await handler({ method: req.method, url: req.url }, {
+        setHeader: (name: string, value: string) => res.setHeader(name, value),
+        status: (code: number) => ({ json: (payload: unknown) => { res.statusCode = code; res.setHeader("Content-Type", "application/json"); res.end(JSON.stringify(payload)); } }),
+      });
+    }, ["GET"]);
+
     mount("/api/email-capture", async (req, res) => {
       const { default: handler } = await import("./api/email-capture");
       const body = await readRequestBody(req);
@@ -83,14 +91,26 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    hmr: {
-      overlay: false,
-    },
+    hmr: mode === "development" ? { overlay: false } : false,
   },
   plugins: [react(), mode === "development" && localApiFunctions()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return undefined;
+          if (id.includes("react-markdown") || id.includes("remark-") || id.includes("micromark") || id.includes("mdast") || id.includes("hast")) return "markdown";
+          if (id.includes("recharts") || id.includes("d3-") || id.includes("victory-vendor")) return "charts";
+          if (id.includes("@radix-ui")) return "radix";
+          if (id.includes("react") || id.includes("scheduler") || id.includes("@tanstack")) return "framework";
+          return "vendor";
+        },
+      },
     },
   },
 }));
