@@ -10,8 +10,9 @@ interface UseRevealOptions {
 
 export const useReveal = ({
   once = true,
-  rootMargin = '0px 0px -12% 0px',
-  threshold = 0.14,
+  // Reveal content as it approaches the viewport so wide screens do not expose an empty section edge.
+  rootMargin = '0px 0px 25% 0px',
+  threshold = 0.01,
   disabled = false,
 }: UseRevealOptions = {}) => {
   const reducedMotion = useReducedMotion();

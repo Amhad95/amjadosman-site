@@ -399,12 +399,12 @@ html[dir="rtl"] .hero-folder-card::before {
   will-change: auto;
 }
 
-.page-section-reveal:not(.is-visible) > * > * {
+.page-section-reveal:not(.is-visible) > section > :not(canvas) {
   opacity: 0;
   transform: translate3d(0, var(--motion-distance, 24px), 0);
 }
 
-.page-section-reveal.is-visible > * > * {
+.page-section-reveal.is-visible > section > :not(canvas) {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   transition: opacity var(--motion-duration, 0.54s) cubic-bezier(0.22, 1, 0.36, 1),

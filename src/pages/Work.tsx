@@ -12,6 +12,7 @@ import { usePageMeta } from '@/hooks/use-page-meta';
 import { WorkCaseCard } from '@/components/sections/WorkCaseCard';
 import { cn } from '@/lib/utils';
 import { pickLocaleCopy, simplePageCopy } from '@/lib/pageCopy';
+import { RevealGroup } from '@/components/motion/Reveal';
 
 const workFilters = [
   { id: 'all', label: 'All', serviceIds: [] },
@@ -95,7 +96,7 @@ const Work = () => {
   }, [activeFilter, cases]);
 
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <Hero
         eyebrow={copy.workEyebrow}
         headline={work.hero.headline}
@@ -112,7 +113,6 @@ const Work = () => {
             headline={common.caseStudies}
             subheadline={common.caseStudiesSubheadline}
             align="center"
-            motionVariant="none"
           />
           {copy.workTranslationNotice && (
             <div className="mt-6 rounded-2xl border border-ink/10 bg-muted px-5 py-4 text-sm text-muted-foreground">
@@ -142,11 +142,11 @@ const Work = () => {
               );
             })}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+          <RevealGroup className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10" stagger={78}>
             {filteredCases.map((item) => (
               <WorkCaseCard key={item.id} item={item} />
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 

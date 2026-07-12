@@ -391,6 +391,8 @@ export const simplePageCopy = {
   en: {
     bookCall: "Book a Call",
     viewPricing: "View pricing",
+    homeTitle: "Home | Amjad Osman",
+    aboutTitle: "About | Amjad Osman",
     workTitle: "Work | Amjad Osman",
     workEyebrow: "Case studies",
     workStrip: "Real projects. Clear deliverables. Practical implementation lessons.",
@@ -413,6 +415,8 @@ export const simplePageCopy = {
   ar: {
     bookCall: "احجز مكالمة",
     viewPricing: "عرض الأسعار",
+    homeTitle: "الرئيسية | أمجد عثمان",
+    aboutTitle: "من نحن | أمجد عثمان",
     workTitle: "الأعمال | أمجد عثمان",
     workEyebrow: "دراسات الحالة",
     workStrip: "مشاريع حقيقية. مخرجات واضحة. دروس تنفيذ عملية.",
@@ -435,6 +439,8 @@ export const simplePageCopy = {
   de: {
     bookCall: "Call buchen",
     viewPricing: "Preise ansehen",
+    homeTitle: "Startseite | Amjad Osman",
+    aboutTitle: "Über mich | Amjad Osman",
     workTitle: "Arbeit | Amjad Osman",
     workEyebrow: "Fallstudien",
     workStrip: "Echte Projekte. Klare Ergebnisse. Praktische Umsetzungslektionen.",
@@ -458,6 +464,8 @@ export const simplePageCopy = {
   fr: {
     bookCall: "Réserver un appel",
     viewPricing: "Voir les tarifs",
+    homeTitle: "Accueil | Amjad Osman",
+    aboutTitle: "À propos | Amjad Osman",
     workTitle: "Réalisations | Amjad Osman",
     workEyebrow: "Études de cas",
     workStrip: "Projets réels. Livrables clairs. Leçons pratiques d’implémentation.",
@@ -481,6 +489,8 @@ export const simplePageCopy = {
   bg: {
     bookCall: "Резервирайте разговор",
     viewPricing: "Вижте цените",
+    homeTitle: "Начало | Amjad Osman",
+    aboutTitle: "За мен | Amjad Osman",
     workTitle: "Проекти | Amjad Osman",
     workEyebrow: "Казуси",
     workStrip: "Реални проекти. Ясни резултати. Практични уроци от изпълнението.",

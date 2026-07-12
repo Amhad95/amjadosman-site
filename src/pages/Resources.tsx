@@ -29,7 +29,7 @@ const Resources = () => {
   const hasArticles = resolvedArticles.length > 0;
 
   return (
-    <Layout motionLevel="none">
+    <Layout>
       <Hero
         eyebrow={resources.hero.eyebrow}
         headline={resources.hero.headline}

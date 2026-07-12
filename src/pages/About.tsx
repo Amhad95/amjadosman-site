@@ -8,11 +8,13 @@ import { useSiteContent } from '@/lib/content';
 import { CyberHeart } from '@/components/ui/cyber-heart';
 import { usePageMeta } from '@/hooks/use-page-meta';
 import { useLocale } from '@/lib/locale';
+import { pickLocaleCopy, simplePageCopy } from '@/lib/pageCopy';
 
 const About = () => {
   const { about } = useSiteContent();
   const { locale } = useLocale();
-  usePageMeta({ title: `${about.hero.headline} | Amjad Osman`, description: about.hero.subheadline });
+  const copy = pickLocaleCopy(simplePageCopy, locale);
+  usePageMeta({ title: copy.aboutTitle, description: about.hero.subheadline });
 
   return (
     <Layout>

@@ -19,12 +19,14 @@ import { getFeaturedWorkCases } from '@/data/workCasesDatabase';
 import { RevealGroup } from '@/components/motion/Reveal';
 import { useLocale } from '@/lib/locale';
 import { pickLocaleCopy, simplePageCopy } from '@/lib/pageCopy';
+import { usePageMeta } from '@/hooks/use-page-meta';
 
 
 const Index = () => {
   const { home, resources, tools } = useSiteContent();
   const { locale } = useLocale();
   const copy = pickLocaleCopy(simplePageCopy, locale);
+  usePageMeta({ title: copy.homeTitle, description: home.hero.subheadline });
   const featuredCases = getFeaturedWorkCases()
     .slice(0, 3)
     .map((item) => resolveLocalizedWorkCase(item, locale));
