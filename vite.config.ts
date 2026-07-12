@@ -99,18 +99,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (!id.includes("node_modules")) return undefined;
-          if (id.includes("react-markdown") || id.includes("remark-") || id.includes("micromark") || id.includes("mdast") || id.includes("hast")) return "markdown";
-          if (id.includes("recharts") || id.includes("d3-") || id.includes("victory-vendor")) return "charts";
-          if (id.includes("@radix-ui")) return "radix";
-          if (id.includes("react") || id.includes("scheduler") || id.includes("@tanstack")) return "framework";
-          return "vendor";
-        },
-      },
-    },
-  },
 }));
