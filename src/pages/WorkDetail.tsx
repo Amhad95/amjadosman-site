@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { Layout } from "@/components/layout/Layout";
 import { CTABand } from "@/components/sections/CTABand";
 import { SecondaryButton } from "@/components/shared/SecondaryButton";
 import { resolveLocalizedWorkCase } from "@/lib/fallbackContent";
-import { getPublishedWorkCases, getWorkCaseBySlug } from "@/data/workCasesDatabase";
+import { getCanonicalWorkSlug, getPublishedWorkCases, getWorkCaseBySlug } from "@/data/workCasesDatabase";
 import { useLocale } from "@/lib/locale";
 import { useSiteContent } from "@/lib/content";
 import { usePageMeta } from "@/hooks/use-page-meta";
@@ -15,6 +15,7 @@ import { workDetailCopy } from "@/lib/detailPageCopy";
 
 const WorkDetail = () => {
   const { slug } = useParams<{ slug: string }>();
+  const canonicalSlug = getCanonicalWorkSlug(slug);
   const { locale, isRTL } = useLocale();
   const { common } = useSiteContent();
   const copy = workDetailCopy[locale];
@@ -48,6 +49,10 @@ const WorkDetail = () => {
         </div>
       </Layout>
     );
+  }
+
+  if (canonicalSlug && canonicalSlug !== slug) {
+    return <Navigate to={`/work/${canonicalSlug}`} replace />;
   }
 
   return (

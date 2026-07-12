@@ -1,25 +1,25 @@
 export const additionalProjectCases = [
   {
-    id: "case-asd-brand-2026",
-    title: "ASD Solutions: building a credible fintech group brand before market entry",
-    partner: "ASD Solutions",
+    id: "case-sudanese-fintech-brand-2026",
+    title: "A Sudanese fintech company: building a credible group brand before market entry",
+    partner: "A Sudanese fintech company",
     year: "2026",
     sector: "FinTech",
     summary:
       "A brand and communications system for a new digital payments group that needed to look credible before banks, regulators, and partners met the product.",
     outcome: "A reusable brand, stationery, profile, and presentation system",
     role: "Brand and Communications Lead",
-    slug: "asd-solutions-building-a-credible-fintech-group-brand-before-market-entry",
+    slug: "sudanese-fintech-company-building-a-credible-group-brand-before-market-entry",
     cover_image_url: null,
     featured: true,
     created_at: "2026-06-20T00:00:00.000Z",
     updated_at: "2026-06-20T00:00:00.000Z",
-    client_group: "ASD and SDD",
+    client_group: "Sudanese fintech company and SDD",
     service_line_ids: ["brand"],
     case_series_order: 1,
     category: "Brand & Communications",
     gallery_images: [],
-    content: `ASD Solutions needed to enter serious rooms before the market had enough direct experience with the company. Banks, public-sector stakeholders, and technology partners were not only judging the idea. They were judging whether the company looked governed, prepared, and capable of carrying financial infrastructure work.
+    content: `The Sudanese fintech company needed to enter serious rooms before the market had enough direct experience with the company. Banks, public-sector stakeholders, and technology partners were not only judging the idea. They were judging whether the company looked governed, prepared, and capable of carrying financial infrastructure work.
 
 ### Context and scope
 
@@ -31,7 +31,7 @@ I shaped the brand around institutional confidence: clear marks, restrained typo
 
 ### Design choices
 
-The important decision was to keep the identity system practical. A fintech brand in this context has to survive PowerPoint, printed letters, scanned PDFs, WhatsApp forwarding, and government meeting rooms. I kept layouts modular, made cover systems reusable, and treated profile pages as evidence containers rather than brochure decoration. The writing stayed direct: what ASD does, who it serves, what risks it controls, and what kind of partnership it is asking for.
+The important decision was to keep the identity system practical. A fintech brand in this context has to survive PowerPoint, printed letters, scanned PDFs, WhatsApp forwarding, and government meeting rooms. I kept layouts modular, made cover systems reusable, and treated profile pages as evidence containers rather than brochure decoration. The writing stayed direct: what the company does, who it serves, what risks it controls, and what kind of partnership it is asking for.
 
 ### What changed
 
@@ -39,29 +39,29 @@ The company could show up with materials that felt like one organization. Propos
 
 ### Takeaway
 
-For early-stage infrastructure businesses, brand is not a finishing layer. It is part of credibility. The ASD work created a disciplined communication base that made later product, operations, and investor materials feel connected instead of scattered.`,
+For early-stage infrastructure businesses, brand is not a finishing layer. It is part of credibility. The work created a disciplined communication base that made later product, operations, and investor materials feel connected instead of scattered.`,
   },
   {
-    id: "case-asd-web-cms-2026",
-    title: "ASD Solutions: a website and CMS structure for institutional buyers",
-    partner: "ASD Solutions",
+    id: "case-sudanese-fintech-web-cms-2026",
+    title: "A Sudanese fintech company: a website and CMS structure for institutional buyers",
+    partner: "A Sudanese fintech company",
     year: "2026",
     sector: "FinTech",
     summary:
-      "A website and CMS plan that translated ASD's financial infrastructure offer into a clearer public-facing structure for banks, government entities, and partners.",
+      "A website and CMS plan that translated the company's financial infrastructure offer into a clearer public-facing structure for banks, government entities, and partners.",
     outcome: "Website PRD, content structure, and CMS-ready page logic",
     role: "Website Strategy and CMS Lead",
-    slug: "asd-solutions-a-website-and-cms-structure-for-institutional-buyers",
+    slug: "sudanese-fintech-company-a-website-and-cms-structure-for-institutional-buyers",
     cover_image_url: null,
     featured: false,
     created_at: "2026-06-20T00:00:00.000Z",
     updated_at: "2026-06-20T00:00:00.000Z",
-    client_group: "ASD and SDD",
+    client_group: "Sudanese fintech company and SDD",
     service_line_ids: ["brand"],
     case_series_order: 2,
     category: "Web & CMS",
     gallery_images: [],
-    content: `The ASD website needed to do more than announce a company. It had to explain a complex financial-infrastructure offer to people who would arrive with different questions: banks evaluating partnership risk, public institutions looking for payment modernization, and private partners trying to understand where ASD fits in the ecosystem.
+    content: `The company's website needed to do more than announce a company. It had to explain a complex financial-infrastructure offer to people who would arrive with different questions: banks evaluating partnership risk, public institutions looking for payment modernization, and private partners trying to understand where the company fits in the ecosystem.
 
 ### Context and scope
 
@@ -69,7 +69,7 @@ The source material included old-site notes, new-site planning, visual direction
 
 ### What I built
 
-I defined the page logic around buyer questions: what ASD does, where it operates, which financial problems it solves, how the technology and governance work, and how a bank or public entity can engage. The CMS structure separated evergreen company content from changeable proof: solutions, profiles, news, proposals, and sector pages. That made it possible to keep the public story stable while letting the business publish new materials as partnerships evolved.
+I defined the page logic around buyer questions: what the company does, where it operates, which financial problems it solves, how the technology and governance work, and how a bank or public entity can engage. The CMS structure separated evergreen company content from changeable proof: solutions, profiles, news, proposals, and sector pages. That made it possible to keep the public story stable while letting the business publish new materials as partnerships evolved.
 
 ### Design choices
 
@@ -77,33 +77,33 @@ The site structure avoided a generic tech-company pattern. A payments company se
 
 ### What changed
 
-ASD gained a web plan that matched how the business actually sells: through credibility, structured explanation, and specific partnership scenarios. The CMS logic reduced the risk of every update becoming a mini-redesign. It also made the website a home for the same language used in profiles and pitch decks, which kept the brand system coherent.
+The company gained a web plan that matched how the business actually sells: through credibility, structured explanation, and specific partnership scenarios. The CMS logic reduced the risk of every update becoming a mini-redesign. It also made the website a home for the same language used in profiles and pitch decks, which kept the brand system coherent.
 
 ### Takeaway
 
-For institutional services, a website is a decision-support system. The ASD web and CMS work turned scattered materials into a public structure that could grow with the company without losing the plot.`,
+For institutional services, a website is a decision-support system. The company's web and CMS work turned scattered materials into a public structure that could grow with the company without losing the plot.`,
   },
   {
-    id: "case-asd-ops-2026",
-    title: "ASD Solutions: turning a new digital company into an operating system",
-    partner: "ASD Solutions",
+    id: "case-sudanese-fintech-ops-2026",
+    title: "A Sudanese fintech company: turning a new digital company into an operating system",
+    partner: "A Sudanese fintech company",
     year: "2026",
     sector: "FinTech",
     summary:
       "An internal operating baseline covering structure, roles, policies, HR templates, service agreements, and workflow tools for a growing digital-payments company.",
     outcome: "Management system, policy set, templates, and workflow baseline",
     role: "Internal Operations Systems Lead",
-    slug: "asd-solutions-turning-a-new-digital-company-into-an-operating-system",
+    slug: "sudanese-fintech-company-turning-a-new-digital-company-into-an-operating-system",
     cover_image_url: null,
     featured: false,
     created_at: "2026-06-20T00:00:00.000Z",
     updated_at: "2026-06-20T00:00:00.000Z",
-    client_group: "ASD and SDD",
+    client_group: "Sudanese fintech company and SDD",
     service_line_ids: ["ops", "software-tasks"],
     case_series_order: 3,
     category: "Internal Operations",
     gallery_images: [],
-    content: `ASD was not only building a market-facing story. It also needed the internal discipline to operate like a serious technology and financial-services company. That meant roles, policies, approvals, templates, and workflows had to be defined early, before habits hardened around informal workarounds.
+    content: `The Sudanese fintech company was not only building a market-facing story. It also needed the internal discipline to operate like a serious technology and financial-services company. That meant roles, policies, approvals, templates, and workflows had to be defined early, before habits hardened around informal workarounds.
 
 ### Context and scope
 
@@ -119,11 +119,11 @@ The operating system had to be strong enough for financial infrastructure work w
 
 ### What changed
 
-ASD gained a clearer internal backbone. People could point to roles, templates, and rules instead of negotiating every step from scratch. The same structure also supported external credibility: when banks or partners asked about governance, security, or service commitments, the company had documents and routines to stand behind the conversation.
+The company gained a clearer internal backbone. People could point to roles, templates, and rules instead of negotiating every step from scratch. The same structure also supported external credibility: when banks or partners asked about governance, security, or service commitments, the company had documents and routines to stand behind the conversation.
 
 ### Takeaway
 
-Internal operations are part of the product when a company sells trust. ASD's management system helped turn a promising digital-payments venture into an organization with visible discipline behind the pitch.`,
+Internal operations are part of the product when a company sells trust. The management system helped turn a promising digital-payments venture into an organization with visible discipline behind the pitch.`,
   },
   {
     id: "case-sdd-ux-launch-2026",
@@ -140,12 +140,12 @@ Internal operations are part of the product when a company sells trust. ASD's ma
     featured: true,
     created_at: "2026-06-20T00:00:00.000Z",
     updated_at: "2026-06-20T00:00:00.000Z",
-    client_group: "ASD and SDD",
+    client_group: "Sudanese fintech company and SDD",
     service_line_ids: ["brand", "software-crm", "software-tasks"],
     case_series_order: 4,
     category: "Product UX & GTM",
     gallery_images: [],
-    content: `SDD sat at the center of ASD's market story: a digital-payments product that had to feel usable to customers and credible to banks. The challenge was to make the app, pitch, and launch materials speak the same language. A nice interface would not be enough if the partner story, rollout plan, and trust signals were missing.
+    content: `SDD sat at the center of the fintech company's market story: a digital-payments product that had to feel usable to customers and credible to banks. The challenge was to make the app, pitch, and launch materials speak the same language. A nice interface would not be enough if the partner story, rollout plan, and trust signals were missing.
 
 ### Context and scope
 
@@ -182,7 +182,7 @@ For fintech products, UX and go-to-market cannot be separated too neatly. The sc
     featured: false,
     created_at: "2026-06-20T00:00:00.000Z",
     updated_at: "2026-06-20T00:00:00.000Z",
-    client_group: "ASD and SDD",
+    client_group: "Sudanese fintech company and SDD",
     service_line_ids: ["brand", "software-accounting"],
     case_series_order: 5,
     category: "Strategy & Financial Model",
