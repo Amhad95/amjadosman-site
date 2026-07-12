@@ -3,6 +3,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { PageTransitionShell } from '@/components/motion/PageTransitionShell';
 import { Reveal, MotionVariant } from '@/components/motion/Reveal';
+import { RevealTimingProvider } from '@/hooks/useReveal';
 import { useSiteContent } from '@/lib/content';
 import { useLocale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
@@ -49,6 +50,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, motionLevel = 'default
           {pageSections.map((child, index) => {
             const isIntroHero =
               React.isValidElement(child) && (child.type === Hero || child.type === ProductHero);
+            const isFirstPostHeaderSection = index === 1;
 
             if (index === 0 && isIntroHero) {
               return child;
@@ -58,9 +60,17 @@ export const Layout: React.FC<LayoutProps> = ({ children, motionLevel = 'default
               <Reveal
                 key={React.isValidElement(child) && child.key != null ? child.key : `layout-section-${index}`}
                 variant={motionLevel}
+                rootMargin={isFirstPostHeaderSection ? '0px 0px 20% 0px' : undefined}
+                threshold={isFirstPostHeaderSection ? 0.01 : undefined}
                 className="page-section-reveal"
               >
-                {child}
+                {isFirstPostHeaderSection ? (
+                  <RevealTimingProvider rootMargin="0px 0px 20% 0px" threshold={0.01}>
+                    {child}
+                  </RevealTimingProvider>
+                ) : (
+                  child
+                )}
               </Reveal>
             );
           })}

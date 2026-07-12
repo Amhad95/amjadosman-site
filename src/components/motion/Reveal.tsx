@@ -21,6 +21,8 @@ interface RevealProps {
 
 interface RevealGroupProps extends Omit<RevealProps, 'delay'> {
   stagger?: number;
+  rowStagger?: number;
+  columnStagger?: number;
 }
 
 export const Reveal: React.FC<RevealProps> = ({
@@ -62,6 +64,8 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
   threshold,
   disabled,
   stagger = 72,
+  rowStagger = 150,
+  columnStagger = 46,
 }) => {
   const { ref, visible } = useReveal({ once, rootMargin, threshold, disabled });
 
@@ -89,6 +93,45 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
     });
   });
 
+  React.useEffect(() => {
+    const group = ref.current;
+    if (!group) return;
+
+    const measureRows = () => {
+      const items = Array.from(group.children).filter((child) =>
+        child.classList.contains('motion-reveal-item')
+      ) as HTMLElement[];
+      const rowTops: number[] = [];
+
+      items.forEach((item) => {
+        const top = Math.round(item.getBoundingClientRect().top);
+        let rowIndex = rowTops.findIndex((rowTop) => Math.abs(rowTop - top) <= 2);
+
+        if (rowIndex === -1) {
+          rowTops.push(top);
+          rowIndex = rowTops.length - 1;
+        }
+
+        const columnIndex = items
+          .slice(0, items.indexOf(item))
+          .filter((previousItem) => Math.abs(Math.round(previousItem.getBoundingClientRect().top) - top) <= 2)
+          .length;
+
+        item.style.setProperty('--motion-row', String(rowIndex));
+        item.style.setProperty('--motion-column', String(columnIndex));
+      });
+    };
+
+    const frame = window.requestAnimationFrame(measureRows);
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measureRows);
+    observer?.observe(group);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer?.disconnect();
+    };
+  }, [ref, resolvedChildren.length]);
+
   return React.createElement(
     as,
     {
@@ -102,6 +145,8 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
       style: {
         ...style,
         '--motion-stagger': `${stagger}ms`,
+        '--motion-row-stagger': `${rowStagger}ms`,
+        '--motion-column-stagger': `${columnStagger}ms`,
       },
     },
     resolvedChildren

@@ -371,8 +371,8 @@ html[dir="rtl"] .hero-folder-card::before {
     opacity var(--motion-duration) cubic-bezier(0.22, 1, 0.36, 1),
     transform var(--motion-duration) cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay:
-    calc(var(--motion-index, 0) * var(--motion-stagger)),
-    calc(var(--motion-index, 0) * var(--motion-stagger));
+    calc(var(--motion-row, var(--motion-index, 0)) * var(--motion-row-stagger, var(--motion-stagger)) + var(--motion-column, 0) * var(--motion-column-stagger, 46ms)),
+    calc(var(--motion-row, var(--motion-index, 0)) * var(--motion-row-stagger, var(--motion-stagger)) + var(--motion-column, 0) * var(--motion-column-stagger, 46ms));
   will-change: opacity, transform;
 }
 
