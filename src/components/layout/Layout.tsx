@@ -48,6 +48,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, motionLevel = 'default
               <Reveal
                 key={React.isValidElement(child) && child.key != null ? child.key : `layout-section-${index}`}
                 variant={motionLevel}
+                className="page-section-reveal"
               >
                 {child}
               </Reveal>

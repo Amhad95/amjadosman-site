@@ -391,6 +391,26 @@ html[dir="rtl"] .hero-folder-card::before {
   --motion-duration: 0.34s;
 }
 
+/* Keep each section canvas present while its inner content reveals. */
+.page-transition-shell > .page-section-reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+
+.page-section-reveal:not(.is-visible) > * > * {
+  opacity: 0;
+  transform: translate3d(0, var(--motion-distance, 24px), 0);
+}
+
+.page-section-reveal.is-visible > * > * {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity var(--motion-duration, 0.54s) cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--motion-duration, 0.54s) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
