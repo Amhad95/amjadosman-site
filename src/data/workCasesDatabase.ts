@@ -12,6 +12,8 @@ const legacyWorkSlugRedirects: Record<string, string> = {
     "sudanese-fintech-company-a-website-and-cms-structure-for-institutional-buyers",
   "asd-solutions-turning-a-new-digital-company-into-an-operating-system":
     "sudanese-fintech-company-turning-a-new-digital-company-into-an-operating-system",
+  "kendah-energy-brand-and-tender-readiness-system-for-an-energy-company":
+    "kendah-energy-company-profile-and-tender-system-for-an-energy-business",
 };
 
 export const getPublishedWorkCases = () => workCasesDatabase;

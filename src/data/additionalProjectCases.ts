@@ -1,3 +1,14 @@
+import aljebaliProfilePage from "@/assets/projects/aljebali/profile-page-01.png";
+import aljebaliGroupBoard from "@/assets/projects/aljebali/group-board.png";
+import palmaeDetailOne from "@/assets/projects/palmae/detail-1.png";
+import palmaeDetailTwo from "@/assets/projects/palmae/detail-2.png";
+import palmaeDetailThree from "@/assets/projects/palmae/detail-3.png";
+import palmaeDetailFour from "@/assets/projects/palmae/detail-4.png";
+import kendahProfileDetailOne from "@/assets/projects/kendah-profile/detail-01.png";
+import kendahProfileDetailZero from "@/assets/projects/kendah-profile/detail-0.png";
+import kendahProfileDetailThree from "@/assets/projects/kendah-profile/detail-3.png";
+import kendahProfileDetailFour from "@/assets/projects/kendah-profile/detail-4.png";
+
 export const additionalProjectCases = [
   {
     id: "case-sudanese-fintech-brand-2026",
@@ -229,6 +240,48 @@ A fintech model is not just finance work. It is a strategy document with formula
     case_series_order: 1,
     category: "Brand & Communications",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `Aljebali Group needed a brand system that could hold together a mining company, an industrial processing subsidiary, and the parent group behind them. The risk was fragmentation: each company could easily look unrelated, or the subsidiaries could lose the specificity they needed for technical and commercial audiences.
+
+### Context and scope
+
+The work covered group and subsidiary marks, brand guidelines, stationery, ID tags, document covers, profile templates, mockups, and visual systems inspired by mining, processing, and industrial precision. The system needed to work in Arabic and English, across formal documents, site materials, presentations, and digital channels.`,
+      },
+      {
+        type: "image",
+        src: aljebaliProfilePage,
+        alt: "Aljebali Mining company profile cover in Arabic and English",
+        caption: "A profile-page direction that connects industrial capability with a clear bilingual presentation.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I shaped a brand architecture that gave the parent group a clear institutional identity while allowing Aljebali Mining and JISCO to carry their own operational signals. The guidelines defined logo usage, color, typography, layout behavior, patterns, document structure, and practical production rules. Stationery and ID assets made the system usable in daily work, not just in a guideline PDF.`,
+      },
+          {
+            type: "image",
+            src: aljebaliGroupBoard,
+            alt: "Aljebali Group merchandise and physical applications board",
+            caption: "A wider application board showing how the identity travels across merchandise, apparel, signage, and physical materials.",
+          },
+      {
+        type: "text",
+        content: `### Design choices
+
+The design direction had to balance strength with control. Mining brands can quickly become visually heavy, so I used structure, spacing, and restrained industrial cues instead of relying only on aggressive imagery. The subsidiary marks were designed to feel related without becoming duplicates. Document templates were especially important because proposals, profiles, and internal regulations would become the brand's most frequent touchpoints.
+
+### What changed
+
+The group gained a coherent visual language that could support investor, partner, regulator, and employee-facing material. Instead of each deliverable inventing its own look, the brand system created a recognizable family across companies and use cases.
+
+### Takeaway
+
+Portfolio brand architecture is most useful when it clarifies relationships. For Aljebali, the system made the parent group feel established while giving each operating company enough distinction to speak to its own market.`,
+      },
+    ],
     content: `Aljebali Group needed a brand system that could hold together a mining company, an industrial processing subsidiary, and the parent group behind them. The risk was fragmentation: each company could easily look unrelated, or the subsidiaries could lose the specificity they needed for technical and commercial audiences.
 
 ### Context and scope
@@ -378,16 +431,16 @@ JISCO gained a clearer blueprint for software-enabled operations. Instead of jum
 Operational software should start from the movement of value, not from a menu of features. For JISCO, the value-stream plan created the bridge between internal regulations and a practical management platform.`,
   },
   {
-    id: "case-kendah-energy-brand-tender-2025",
-    title: "Kendah Energy: brand and tender-readiness system for an energy company",
+    id: "case-kendah-energy-profile-tender-2025",
+    title: "Kendah Energy: a company profile and tender system for an energy business",
     partner: "Kendah Energy",
     year: "2025",
     sector: "Energy",
     summary:
-      "A brand, stationery, company-profile, and RFP collateral system that helped Kendah Energy present itself with more discipline in sales and tender contexts.",
-    outcome: "Brand guide, stationery set, company profile, and RFP-ready materials",
-    role: "Brand and Tender Communications Lead",
-    slug: "kendah-energy-brand-and-tender-readiness-system-for-an-energy-company",
+      "A company-profile and RFP system that helped Kendah Energy explain its capabilities, projects, and relevance clearly in sales and tender contexts.",
+    outcome: "Company profile, RFP narrative, proposal structure, and tender-ready materials",
+    role: "Profile and Tender Systems Lead",
+    slug: "kendah-energy-company-profile-and-tender-system-for-an-energy-business",
     cover_image_url: null,
     featured: false,
     created_at: "2026-06-20T00:00:00.000Z",
@@ -395,29 +448,132 @@ Operational software should start from the movement of value, not from a menu of
     client_group: "Kendah Energy",
     service_line_ids: ["brand"],
     case_series_order: 1,
-    category: "Brand & Communications",
+    category: "Profiles & Tender Systems",
     gallery_images: [],
-    content: `Kendah Energy had the material of a serious energy company, but it needed a more coherent public system. In tender and partnership settings, buyers judge the work before they ever visit a project site. The profile, stationery, covers, and visual language had to raise confidence quickly.
+    content_blocks: [
+      {
+        type: "text",
+        content: `Kendah Energy had the material of a serious energy company, but its capability was spread across profiles, project references, proposal files, and RFP material. In tender and partnership settings, buyers judge the work before they ever visit a project site. The company needed a clear way to explain what it does, where it can deliver, and why its experience matters.
 
 ### Context and scope
 
-The folder evidence showed a full brand and collateral package: logo assets, brand guide, company profiles, RFP profile, proposal assets, stationery, ID tags, business cards, envelopes, letterheads, jacket folders, QR codes, and branded merchandise mockups. The challenge was to make these assets work as a system rather than a collection of one-off files.
+The source material included company information, project references, capability notes, company-profile drafts, RFP profile material, proposal assets, supporting imagery, and tender-facing documents. The challenge was to turn that evidence into a decision-ready narrative rather than another generic company brochure.`,
+      },
+      {
+        type: "image",
+        src: kendahProfileDetailOne,
+        alt: "Kendah Energy company profile table of contents and about page",
+        caption: "The profile opens with a clear route through the company story and its operating context.",
+      },
+      {
+        type: "text",
+        content: `### What I built
 
-### What I built
+I structured the profile around the questions a buyer or tender reviewer needs answered: who Kendah is, what capabilities it holds, which sectors and projects it understands, how delivery is organized, and what makes the company relevant to the opportunity. The RFP and proposal materials then reused that logic through modular sections for credentials, services, team structure, project experience, and the specific response to a tender.`,
+      },
+      {
+        type: "media-row",
+        items: [
+          {
+            type: "image",
+            src: kendahProfileDetailZero,
+            alt: "Kendah Energy quality, safety, compliance, and risk documentation profile spread",
+            caption: "Operational credibility expressed through quality, safety, compliance, and risk documentation.",
+          },
+          {
+            type: "image",
+            src: kendahProfileDetailThree,
+            alt: "Kendah Energy profile pages covering values, promise, geography, and services",
+            caption: "The profile connects values and promise to where Kendah operates and what it delivers.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        content: `### Design choices
 
-I shaped a brand foundation with a practical guideline, then extended it into the materials Kendah would use most often: company profile, sales profile, RFP covers, stationery, ID tags, and proposal documents. The design system gave the team a consistent way to present credentials, capabilities, team structure, and project relevance.
+The profile had to feel technically capable without becoming dense. I treated every page as evidence: a clear claim, the supporting detail, and the context needed to trust it. The layout system made long technical material easier to scan while keeping enough room for project photography, diagrams, and formal company information.`,
+      },
+      {
+        type: "image",
+        src: kendahProfileDetailFour,
+        alt: "Kendah Energy profile pages showing partnerships, governance, and service applications",
+        caption: "Later profile sections turn the company story into concrete partnerships, governance, and service applications.",
+      },
+      {
+        type: "text",
+        content: `### What changed
 
-### Design choices
-
-Energy-sector communication has to feel technically capable without becoming visually cold. I used a disciplined layout structure, industrial-supporting graphics, and clear document hierarchy. The stationery and ID assets were treated as operational brand moments, because they appear in daily interactions with vendors, partners, and site teams.
-
-### What changed
-
-Kendah gained a cleaner tender-readiness layer. Sales and proposal material could be assembled faster, and the company profile had a stronger visual and narrative baseline. The brand system made formal communication feel more consistent across documents, events, and staff-facing materials.
+Kendah gained a stronger tender-readiness layer. The company could assemble profiles and responses from a shared narrative instead of rebuilding its credentials for every opportunity. Sales conversations also started with clearer material because the profile explained the business before the meeting had to do all the work.
 
 ### Takeaway
 
-Tender readiness is partly operational and partly visual. Kendah's system helped the company show up with the discipline buyers expect before the technical conversation even starts.`,
+Tender readiness starts with a credible explanation of capability. For Kendah, the profile and RFP system made the technical conversation easier to enter because the evidence, structure, and ask were already organized.`,
+      },
+    ],
+    content: `Kendah Energy had the material of a serious energy company, but its capability was spread across profiles, project references, proposal files, and RFP material. In tender and partnership settings, buyers judge the work before they ever visit a project site. The company needed a clear way to explain what it does, where it can deliver, and why its experience matters.
+
+### Context and scope
+
+The source material included company information, project references, capability notes, company-profile drafts, RFP profile material, proposal assets, supporting imagery, and tender-facing documents. The challenge was to turn that evidence into a decision-ready narrative rather than another generic company brochure.
+
+### What I built
+
+I structured the profile around the questions a buyer or tender reviewer needs answered: who Kendah is, what capabilities it holds, which sectors and projects it understands, how delivery is organized, and what makes the company relevant to the opportunity. The RFP and proposal materials then reused that logic through modular sections for credentials, services, team structure, project experience, and the specific response to a tender.
+
+### Design choices
+
+The profile had to feel technically capable without becoming dense. I treated every page as evidence: a clear claim, the supporting detail, and the context needed to trust it. The layout system made long technical material easier to scan while keeping enough room for project photography, diagrams, and formal company information.
+
+### What changed
+
+Kendah gained a stronger tender-readiness layer. The company could assemble profiles and responses from a shared narrative instead of rebuilding its credentials for every opportunity. Sales conversations also started with clearer material because the profile explained the business before the meeting had to do all the work.
+
+### Takeaway
+
+Tender readiness starts with a credible explanation of capability. For Kendah, the profile and RFP system made the technical conversation easier to enter because the evidence, structure, and ask were already organized.`,
+  },
+  {
+    id: "case-kendah-energy-brand-stationery-2025",
+    title: "Kendah Energy: a practical brand and stationery system for daily use",
+    partner: "Kendah Energy",
+    year: "2025",
+    sector: "Energy",
+    summary:
+      "A practical identity and stationery system that gave Kendah Energy a consistent visual language across everyday documents, staff materials, and physical touchpoints.",
+    outcome: "Brand guide, stationery set, ID assets, and physical application system",
+    role: "Brand Systems Lead",
+    slug: "kendah-energy-brand-and-stationery-system-for-daily-use",
+    cover_image_url: null,
+    featured: false,
+    created_at: "2026-06-20T00:00:00.000Z",
+    updated_at: "2026-06-20T00:00:00.000Z",
+    client_group: "Kendah Energy",
+    service_line_ids: ["brand"],
+    case_series_order: 2,
+    category: "Brand Systems",
+    gallery_images: [],
+    content: `Kendah Energy needed a visual foundation that could survive ordinary working life. The identity would appear on letters, business cards, envelopes, folders, ID tags, proposal covers, QR codes, and branded merchandise long after a presentation had been approved. The system had to be recognizable without making every touchpoint feel overdesigned.
+
+### Context and scope
+
+The material included logo assets, brand-guide references, color and typography decisions, stationery, ID tags, business cards, envelopes, letterheads, jacket folders, QR codes, and branded merchandise mockups. The challenge was to make these assets feel related and production-ready rather than like a collection of isolated exports.
+
+### What I built
+
+I shaped a practical brand foundation and extended it into the materials Kendah would use most often. The guide established the rules for logo use, color, typography, layout behavior, and supporting graphics. The stationery set translated those rules into letters, cards, envelopes, folders, and staff-facing identification. Physical applications gave the system a useful test: it had to remain clear when printed, handled, photographed, or viewed at a distance.
+
+### Design choices
+
+Energy-sector branding has to communicate capability without becoming visually cold or needlessly aggressive. I used a disciplined structure and restrained industrial cues so the identity could feel confident in a boardroom, on a site, or in a supplier exchange. Repetition was deliberate. When the same visual logic appears on a letterhead, ID tag, folder, and proposal cover, the company starts to feel organized before anyone explains the organization.
+
+### What changed
+
+Kendah gained a visual system that could be used by staff, suppliers, and proposal teams without inventing a new solution each time. Everyday communications became more consistent, and the brand had a clearer baseline for future profiles, tenders, events, and site materials.
+
+### Takeaway
+
+A brand system proves itself in routine use. Kendah's identity work connected formal communication with the physical materials people encounter every day, giving the company a more credible presence across both public and internal touchpoints.`,
   },
   {
     id: "case-jastar-market-entry-2025",
@@ -565,6 +721,67 @@ A training center is a service system. The Radiance pilot design made curriculum
     case_series_order: 1,
     category: "Packaging Design",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `Palmae was a focused packaging project: turn a skincare line into a set of products that could feel coherent on shelf and survive print production. The work needed both aesthetic judgment and production discipline.
+
+### Context and scope
+
+The material included product research, color references, skincare packaging benchmarks, product information documents, typography exploration, mockups, dielines, bottle and jar files, box files, final print folders, and exported product visuals. The product set included items such as vitamin C, azelaic acid, glycolic acid, salicylic acid, brightening products, jars, bottles, and boxes.`,
+      },
+      {
+        type: "image",
+        src: palmaeDetailOne,
+        alt: "Palmae azelaic acid booster bottle with dropper",
+        caption: "A single-product view used to check hierarchy, finish, and label legibility.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I translated the research into a packaging direction that balanced softness, clarity, and product differentiation. Each product needed to feel part of the Palmae family while still being easy to identify. The production work included dielines, label systems, box artwork, mockups, and final print exports.`,
+      },
+      {
+        type: "media-row",
+        items: [
+          {
+            type: "image",
+            src: palmaeDetailTwo,
+            alt: "Palmae advanced brightening jar and packaging box",
+            caption: "Packaging and product presented together.",
+          },
+          {
+            type: "image",
+            src: palmaeDetailThree,
+            alt: "Palmae skincare tubes and box on a pink background",
+            caption: "A coordinated product family view.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+Skincare packaging lives in small details: hierarchy, ingredient legibility, color coding, finish expectations, and how products look together in a set. I kept the system clean enough for a beauty brand but structured enough for real packaging constraints. The dieline and print files were treated as core deliverables, because a beautiful mockup is not finished until production can use it.`,
+      },
+      {
+        type: "image",
+        src: palmaeDetailFour,
+        alt: "Palmae skincare collection arranged on a mint platform",
+        caption: "A wider collection composition for reviewing the range as one system.",
+      },
+      {
+        type: "text",
+        content: `### What changed
+
+Palmae gained a practical packaging system, not only a visual direction. The product family could be presented in mockups, reviewed as a line, and handed toward print with clearer artwork and structure.
+
+### Takeaway
+
+Packaging design is where brand meets manufacturing. The Palmae project carried the idea from moodboard and product research into print-ready files that could actually become products.`,
+      },
+    ],
     content: `Palmae was a focused packaging project: turn a skincare line into a set of products that could feel coherent on shelf and survive print production. The work needed both aesthetic judgment and production discipline.
 
 ### Context and scope

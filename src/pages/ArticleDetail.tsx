@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ArrowLeft, BarChart3, Bot, ClipboardList, Database, FileCheck2, LayoutTemplate, MonitorCog, Workflow } from 'lucide-react';
+import { ArrowLeft, BarChart3, Bot, ClipboardList, Database, FileCheck2, LayoutTemplate, Maximize2, MonitorCog, Workflow } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { CTABand } from '@/components/sections/CTABand';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
@@ -12,6 +12,7 @@ import { useSiteContent } from '@/lib/content';
 import { usePageMeta } from '@/hooks/use-page-meta';
 import { cn } from '@/lib/utils';
 import { articleDetailCopy } from '@/lib/detailPageCopy';
+import { MediaAsset, MediaLightbox } from '@/components/shared/MediaLightbox';
 
 const articleLeadIcons = {
   'Website Strategy': LayoutTemplate,
@@ -30,6 +31,7 @@ const ArticleDetail = () => {
   const { locale, isRTL } = useLocale();
   const { common } = useSiteContent();
   const copy = articleDetailCopy[locale];
+  const [lightboxMedia, setLightboxMedia] = useState<MediaAsset | null>(null);
   const fallbackArticle = fallbackArticles.find((item) => item.slug === slug);
   const resolvedArticle = fallbackArticle ? resolveLocalizedArticle(fallbackArticle, locale) : null;
   const relatedArticles = fallbackArticles
@@ -75,25 +77,28 @@ const ArticleDetail = () => {
         </div>
       </section>
 
-      <section className="bg-muted pb-12 pt-8 md:pb-20 md:pt-10">
-        <div className="container mx-auto px-6 md:px-6">
-          <div
-            className={cn(
-              'relative flex aspect-[16/7] min-h-[260px] items-center justify-center overflow-hidden rounded-[38px] colored-surface-shadow md:min-h-[360px]',
-              resolvedArticle.thumbnail_url ? 'bg-muted' : 'bg-plate-emerald p-8 text-mint md:p-12'
-            )}
-          >
-            {resolvedArticle.thumbnail_url ? (
-              <img src={resolvedArticle.thumbnail_url} alt={resolvedArticle.title} className="absolute inset-0 h-full w-full object-cover" />
-            ) : (
-              <div className="relative flex flex-col items-center text-center">
-                <LeadIcon className="mb-6 h-20 w-20 md:h-28 md:w-28" strokeWidth={1.25} />
-                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-mint/75">
-                  {resolvedArticle.category}
-                </span>
-              </div>
-            )}
-          </div>
+      <section className="bg-muted">
+        <div className="relative min-h-[260px] overflow-hidden md:min-h-[440px]">
+          {resolvedArticle.thumbnail_url ? (
+            <button
+              type="button"
+              className="group relative block min-h-[260px] w-full cursor-zoom-in overflow-hidden md:min-h-[440px]"
+              onClick={() => setLightboxMedia({ type: 'image', src: resolvedArticle.thumbnail_url!, alt: resolvedArticle.title })}
+              aria-label={`Open ${resolvedArticle.title} cover image`}
+            >
+              <img src={resolvedArticle.thumbnail_url} alt={resolvedArticle.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.015]" />
+              <span className="absolute bottom-5 right-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/50 bg-ink/55 text-white opacity-0 backdrop-blur transition-opacity group-hover:opacity-100">
+                <Maximize2 className="h-4 w-4" />
+              </span>
+            </button>
+          ) : (
+            <div className="flex min-h-[260px] flex-col items-center justify-center bg-plate-emerald p-8 text-center text-mint md:min-h-[440px] md:p-12">
+              <LeadIcon className="mb-6 h-20 w-20 md:h-28 md:w-28" strokeWidth={1.25} />
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-mint/75">
+                {resolvedArticle.category}
+              </span>
+            </div>
+          )}
         </div>
       </section>
 
@@ -101,7 +106,38 @@ const ArticleDetail = () => {
         <div className="container mx-auto grid grid-cols-1 gap-12 px-6 md:px-6 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,48rem)_minmax(0,1fr)] xl:gap-20">
           {resolvedArticle.body ? (
             <div className={cn('prose prose-lg w-full max-w-[48rem] prose-headings:font-serif prose-headings:font-bold prose-headings:text-foreground prose-p:leading-relaxed prose-p:text-muted-foreground prose-a:text-plate-violet prose-strong:text-foreground prose-li:leading-relaxed prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-pre:border prose-pre:border-border prose-pre:bg-muted prose-blockquote:border-l-4 prose-blockquote:border-border prose-blockquote:text-muted-foreground', isRTL && 'me-auto text-right')}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{resolvedArticle.body}</ReactMarkdown>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  img: ({ node, ...props }) => {
+                    const media = {
+                      type: 'image' as const,
+                      src: props.src || '',
+                      alt: props.alt || resolvedArticle.title,
+                    };
+
+                    return (
+                      <span className="my-8 block">
+                        <button
+                          type="button"
+                          className="block w-full cursor-zoom-in text-left"
+                          onClick={() => setLightboxMedia(media)}
+                          aria-label={`Open ${media.alt}`}
+                        >
+                          <img
+                            {...props}
+                            src={media.src}
+                            alt={media.alt}
+                            className="block h-auto max-h-[38rem] w-full object-contain transition-transform duration-500 hover:scale-[1.005]"
+                          />
+                        </button>
+                      </span>
+                    );
+                  },
+                }}
+              >
+                {resolvedArticle.body}
+              </ReactMarkdown>
             </div>
           ) : (
             <p className="text-muted-foreground">{copy.summaryFallback}</p>
@@ -155,6 +191,7 @@ const ArticleDetail = () => {
       )}
 
       <CTABand headline={common.resourceCtaHeadline} description={common.resourceCtaDescription} primaryCta={{ label: copy.bookCall, href: '/book' }} secondaryCta={{ label: copy.viewPricing, href: '/pricing' }} visualKey="insight-lens" variant="dark" />
+      <MediaLightbox media={lightboxMedia} onOpenChange={setLightboxMedia} />
     </Layout>
   );
 };

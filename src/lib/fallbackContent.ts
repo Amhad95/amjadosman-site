@@ -14,6 +14,17 @@ import insightAiReadiness from "@/assets/insights/ai-readiness.jpg";
 import insightSoftwareSelection from "@/assets/insights/software-selection.jpg";
 import insightProposalApproval from "@/assets/insights/proposal-approval.jpg";
 import insightSystemHandover from "@/assets/insights/system-handover.jpg";
+import palmaeCover from "@/assets/projects/palmae/cover.png";
+import aljebaliCover from "@/assets/projects/aljebali/cover.png";
+import kendahProfileCover from "@/assets/projects/kendah-profile/cover.png";
+import temporaryElsafwaCover from "@/assets/projects/temporary-covers/elsafwa.png";
+import temporaryOroomaCover from "@/assets/projects/temporary-covers/orooma.jpg";
+import temporaryAssetFleetCover from "@/assets/projects/temporary-covers/asset-fleet-management.png";
+import temporaryTadmeenProCover from "@/assets/projects/temporary-covers/tadmeenpro.png";
+import temporaryT2meenCover from "@/assets/projects/temporary-covers/t2meen.jpg";
+import temporaryTalyaCover from "@/assets/projects/temporary-covers/talya.jpeg";
+import temporaryTradeA4Cover from "@/assets/projects/temporary-covers/trade-a4-group.png";
+import temporaryRadianceCover from "@/assets/projects/temporary-covers/radiance.jpg";
 
 export interface FallbackArticle {
   id: string;
@@ -41,6 +52,20 @@ export interface FallbackArticle {
   body_fr?: string | null;
   body_bg?: string | null;
 }
+
+export type CaseStudyMedia = {
+  type: "image" | "video";
+  src: string;
+  alt?: string;
+  poster?: string;
+  caption?: string;
+};
+
+export type CaseStudyContentBlock =
+  | { type: "text"; content: string }
+  | ({ type: "image" } & Omit<CaseStudyMedia, "type">)
+  | ({ type: "video" } & Omit<CaseStudyMedia, "type">)
+  | { type: "media-row"; items: CaseStudyMedia[] };
 
 export interface FallbackWorkCase {
   id: string;
@@ -90,6 +115,11 @@ export interface FallbackWorkCase {
   content_de?: string | null;
   content_fr?: string | null;
   content_bg?: string | null;
+  content_blocks?: CaseStudyContentBlock[];
+  content_blocks_ar?: CaseStudyContentBlock[] | null;
+  content_blocks_de?: CaseStudyContentBlock[] | null;
+  content_blocks_fr?: CaseStudyContentBlock[] | null;
+  content_blocks_bg?: CaseStudyContentBlock[] | null;
   gallery_images?: string[];
   featured?: boolean;
   clientProfile: string;
@@ -134,6 +164,7 @@ export interface ResolvedWorkCase {
   role?: string | null;
   outcome?: string | null;
   content?: string | null;
+  content_blocks: CaseStudyContentBlock[];
   gallery_images?: string[];
   featured?: boolean;
   clientProfile: string;
@@ -221,6 +252,11 @@ interface LocalizedWorkCaseSource {
   content_de?: string | null;
   content_fr?: string | null;
   content_bg?: string | null;
+  content_blocks?: CaseStudyContentBlock[];
+  content_blocks_ar?: CaseStudyContentBlock[] | null;
+  content_blocks_de?: CaseStudyContentBlock[] | null;
+  content_blocks_fr?: CaseStudyContentBlock[] | null;
+  content_blocks_bg?: CaseStudyContentBlock[] | null;
   gallery_images?: string[];
   featured?: boolean;
   clientProfile: string;
@@ -308,6 +344,14 @@ export const resolveLocalizedWorkCase = (
   role: localizedValue(locale, item.role, item.role_ar, item.role_de, item.role_fr, item.role_bg),
   outcome: localizedValue(locale, item.outcome, item.outcome_ar, item.outcome_de, item.outcome_fr, item.outcome_bg),
   content: localizedValue(locale, item.content, item.content_ar, item.content_de, item.content_fr, item.content_bg),
+  content_blocks: localizedValue(
+    locale,
+    item.content_blocks ?? [],
+    item.content_blocks_ar,
+    item.content_blocks_de,
+    item.content_blocks_fr,
+    item.content_blocks_bg
+  ),
   gallery_images: item.gallery_images ?? [],
   featured: item.featured ?? false,
   clientProfile: localizedValue(locale, item.clientProfile, item.clientProfile_ar, item.clientProfile_de, item.clientProfile_fr, item.clientProfile_bg),
@@ -1941,6 +1985,11 @@ interface LegacyProjectCase {
   content_de?: string | null;
   content_fr?: string | null;
   content_bg?: string | null;
+  content_blocks?: CaseStudyContentBlock[];
+  content_blocks_ar?: CaseStudyContentBlock[] | null;
+  content_blocks_de?: CaseStudyContentBlock[] | null;
+  content_blocks_fr?: CaseStudyContentBlock[] | null;
+  content_blocks_bg?: CaseStudyContentBlock[] | null;
   gallery_images: string[];
   category: string | null;
   category_ar?: string | null;
@@ -1968,6 +2017,20 @@ const localProjectImages: Record<string, string> = {
   "elsafwa-group-volkswagen-sudan-from-a-weak-presence-to-a-credible-brand-system": projectStrategy,
   "asset-and-fleet-management-platform-with-a4-group-for-a-confidential-government-client": projectInsurance,
   "national-trade-facilitation-platform-with-a4-group-for-a-confidential-authority": projectSolar,
+  "palmae-packaging-a-skincare-line-from-research-moodboards-to-print-ready-production": palmaeCover,
+  "aljebali-group-brand-architecture-for-a-mining-and-industrial-portfolio": aljebaliCover,
+  "kendah-energy-company-profile-and-tender-system-for-an-energy-business": kendahProfileCover,
+};
+
+const temporaryProjectCovers: Record<string, string> = {
+  "elsafwa-group-volkswagen-sudan-from-a-weak-presence-to-a-credible-brand-system": temporaryElsafwaCover,
+  "orooma-building-sudans-first-digital-recruitment-platform-in-a-low-trust-market": temporaryOroomaCover,
+  "asset-and-fleet-management-platform-with-a4-group-for-a-confidential-government-client": temporaryAssetFleetCover,
+  "tadmeenpro-an-operations-core-for-insurers-that-is-ready-for-ai": temporaryTadmeenProCover,
+  "t2meen-a-central-issuance-system-for-third-party-motor-insurance-in-sudan": temporaryT2meenCover,
+  "talya-properties-steering-a-real-estate-business-through-a-cooling-market": temporaryTalyaCover,
+  "national-trade-facilitation-platform-with-a4-group-for-a-confidential-authority": temporaryTradeA4Cover,
+  "radiance-co-ltd-solar-power-for-health-facilities-in-red-sea-and-kassala": temporaryRadianceCover,
 };
 
 const firstParagraph = (content: string) =>
@@ -2002,7 +2065,7 @@ export const fallbackWorkCases: FallbackWorkCase[] = ([
     description_de: project.summary_de,
     description_fr: project.summary_fr,
     description_bg: project.summary_bg,
-    thumbnail_url: localProjectImages[project.slug] ?? project.thumbnail_url ?? null,
+    thumbnail_url: temporaryProjectCovers[project.slug] ?? localProjectImages[project.slug] ?? project.thumbnail_url ?? null,
     category: project.category,
     category_ar: project.category_ar,
     category_de: project.category_de,
@@ -2036,6 +2099,11 @@ export const fallbackWorkCases: FallbackWorkCase[] = ([
     content_de: project.content_de,
     content_fr: project.content_fr,
     content_bg: project.content_bg,
+    content_blocks: project.content_blocks,
+    content_blocks_ar: project.content_blocks_ar,
+    content_blocks_de: project.content_blocks_de,
+    content_blocks_fr: project.content_blocks_fr,
+    content_blocks_bg: project.content_blocks_bg,
     gallery_images: (project.gallery_images ?? []).filter(isLocalAssetUrl),
     featured: project.featured,
     clientProfile: [project.partner, project.sector, project.year].filter(Boolean).join(" • "),
@@ -2135,6 +2203,31 @@ const stringOrFallback = (value: unknown, fallback: string | null | undefined) =
 const stringArrayOrFallback = (value: unknown, fallback: string[] | undefined) =>
   Array.isArray(value) && value.every((item) => typeof item === "string") ? value : fallback ?? [];
 
+const isCaseStudyMedia = (value: unknown): value is CaseStudyMedia => {
+  if (!value || typeof value !== "object") return false;
+  const media = value as Record<string, unknown>;
+  return (
+    (media.type === "image" || media.type === "video") &&
+    typeof media.src === "string" &&
+    (!media.alt || typeof media.alt === "string") &&
+    (!media.poster || typeof media.poster === "string") &&
+    (!media.caption || typeof media.caption === "string")
+  );
+};
+
+const isCaseStudyContentBlock = (value: unknown): value is CaseStudyContentBlock => {
+  if (!value || typeof value !== "object") return false;
+  const block = value as Record<string, unknown>;
+  if (block.type === "text") return typeof block.content === "string";
+  if (block.type === "image" || block.type === "video") return isCaseStudyMedia(block);
+  return block.type === "media-row" && Array.isArray(block.items) && block.items.every(isCaseStudyMedia);
+};
+
+const contentBlocksOrFallback = (
+  value: unknown,
+  fallback: CaseStudyContentBlock[] | undefined
+) => (Array.isArray(value) && value.every(isCaseStudyContentBlock) ? value : fallback ?? []);
+
 export const mergeRemoteWorkCases = (
   remoteCases: Array<Record<string, unknown>> | null | undefined
 ): FallbackWorkCase[] => {
@@ -2200,6 +2293,11 @@ export const mergeRemoteWorkCases = (
         content_de: stringOrFallback(remote.content_de, fallback?.content_de),
         content_fr: stringOrFallback(remote.content_fr, fallback?.content_fr),
         content_bg: stringOrFallback(remote.content_bg, fallback?.content_bg),
+        content_blocks: contentBlocksOrFallback(remote.content_blocks, fallback?.content_blocks),
+        content_blocks_ar: contentBlocksOrFallback(remote.content_blocks_ar, fallback?.content_blocks_ar),
+        content_blocks_de: contentBlocksOrFallback(remote.content_blocks_de, fallback?.content_blocks_de),
+        content_blocks_fr: contentBlocksOrFallback(remote.content_blocks_fr, fallback?.content_blocks_fr),
+        content_blocks_bg: contentBlocksOrFallback(remote.content_blocks_bg, fallback?.content_blocks_bg),
         gallery_images: Array.isArray(remote.gallery_images) ? (remote.gallery_images as string[]) : fallback?.gallery_images ?? [],
         featured: typeof remote.featured === "boolean" ? remote.featured : fallback?.featured ?? false,
         clientProfile: fallback?.clientProfile ?? [remote.partner, remote.sector, remote.year].filter(Boolean).join(" • "),

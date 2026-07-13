@@ -4,14 +4,19 @@ import ReactMarkdown from "react-markdown";
 import { Layout } from "@/components/layout/Layout";
 import { CTABand } from "@/components/sections/CTABand";
 import { SecondaryButton } from "@/components/shared/SecondaryButton";
-import { resolveLocalizedWorkCase } from "@/lib/fallbackContent";
 import { getCanonicalWorkSlug, getPublishedWorkCases, getWorkCaseBySlug } from "@/data/workCasesDatabase";
 import { useLocale } from "@/lib/locale";
 import { useSiteContent } from "@/lib/content";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ImageIcon, X } from "lucide-react";
+import { ArrowLeft, ImageIcon, Maximize2 } from "lucide-react";
 import { workDetailCopy } from "@/lib/detailPageCopy";
+import {
+  CaseStudyContentBlock,
+  CaseStudyMedia,
+  resolveLocalizedWorkCase,
+} from "@/lib/fallbackContent";
+import { InlineMedia, MediaAsset, MediaLightbox } from "@/components/shared/MediaLightbox";
 
 const WorkDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -19,7 +24,7 @@ const WorkDetail = () => {
   const { locale, isRTL } = useLocale();
   const { common } = useSiteContent();
   const copy = workDetailCopy[locale];
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [lightboxMedia, setLightboxMedia] = useState<MediaAsset | null>(null);
   const workCaseSources = getPublishedWorkCases();
   const fallbackCaseStudy = getWorkCaseBySlug(slug);
   const caseStudy = fallbackCaseStudy
@@ -31,6 +36,77 @@ const WorkDetail = () => {
         .sort((a, b) => (a.case_series_order ?? 999) - (b.case_series_order ?? 999))
         .map((item) => resolveLocalizedWorkCase(item, locale))
     : [];
+
+  const toMediaAsset = (media: CaseStudyMedia): MediaAsset => ({
+    type: media.type,
+    src: media.src,
+    alt: media.alt || caseStudy?.title || "Case study media",
+    poster: media.poster,
+    caption: media.caption,
+  });
+
+  const renderMarkdown = (content: string) => (
+    <ReactMarkdown
+      components={{
+        img: ({ node, ...props }) => {
+          const media = {
+            type: "image" as const,
+            src: props.src || "",
+            alt: props.alt || caseStudy.title,
+          };
+
+          return (
+            <span className="my-8 block">
+              <button
+                type="button"
+                className="block w-full cursor-zoom-in text-left"
+                onClick={() => setLightboxMedia(media)}
+                aria-label={`Open ${media.alt}`}
+              >
+                <img
+                  {...props}
+                  src={media.src}
+                  alt={media.alt}
+                  className="block h-auto max-h-[38rem] w-full object-contain transition-transform duration-500 hover:scale-[1.005]"
+                />
+              </button>
+            </span>
+          );
+        },
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+  );
+
+  const renderContentBlock = (block: CaseStudyContentBlock, index: number) => {
+    if (block.type === "text") {
+      return <React.Fragment key={`text-${index}`}>{renderMarkdown(block.content)}</React.Fragment>;
+    }
+
+    if (block.type === "media-row") {
+      return (
+        <div key={`row-${index}`} className="my-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {block.items.map((media, mediaIndex) => (
+            <InlineMedia
+              key={`${media.src}-${mediaIndex}`}
+              media={toMediaAsset(media)}
+              onOpen={setLightboxMedia}
+              className="my-0"
+            />
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <InlineMedia
+        key={`${block.type}-${block.src}-${index}`}
+        media={toMediaAsset(block)}
+        onOpen={setLightboxMedia}
+      />
+    );
+  };
 
   usePageMeta({
     title: caseStudy
@@ -90,22 +166,26 @@ const WorkDetail = () => {
         </section>
 
         {/* Cinematic Hero Image */}
-        <section className="bg-muted pb-12 pt-8 md:pb-20 md:pt-10">
-          <div className="container mx-auto px-6 md:px-6">
+        <section className="bg-muted">
+          <div className="relative min-h-[50vh] overflow-hidden md:min-h-[75vh]">
             {caseStudy.thumbnail_url ? (
-              <div 
-                className="w-full h-[50vh] md:h-[75vh] rounded-[38px] overflow-hidden bg-muted relative shadow-[0_24px_64px_-46px_rgba(8,15,32,0.24)] cursor-zoom-in group"
-                onClick={() => setLightboxImage(caseStudy.thumbnail_url!)}
+              <button
+                type="button"
+                className="group relative block h-[50vh] w-full cursor-zoom-in overflow-hidden md:h-[75vh]"
+                onClick={() => setLightboxMedia({ type: "image", src: caseStudy.thumbnail_url!, alt: caseStudy.title })}
+                aria-label={`Open ${caseStudy.title} cover image`}
               >
                 <img
                   src={caseStudy.thumbnail_url}
                   alt={caseStudy.title}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.015]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
-              </div>
+                <span className="absolute bottom-5 right-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/50 bg-ink/55 text-white opacity-0 backdrop-blur transition-opacity group-hover:opacity-100">
+                  <Maximize2 className="h-4 w-4" />
+                </span>
+              </button>
             ) : (
-              <div className="w-full h-[50vh] rounded-[38px] bg-muted flex items-center justify-center text-muted-foreground border border-ink/10">
+              <div className="flex min-h-[50vh] items-center justify-center bg-muted text-muted-foreground md:min-h-[75vh]">
                 <ImageIcon className="h-12 w-12 opacity-50" />
               </div>
             )}
@@ -126,20 +206,9 @@ const WorkDetail = () => {
             )}
             dir={isRTL ? "rtl" : "ltr"}
           >
-            <ReactMarkdown
-              components={{
-                img: ({ node, ...props }) => (
-                  <img
-                    {...props}
-                    className="cursor-zoom-in hover:opacity-95 transition-opacity"
-                    onClick={() => setLightboxImage(props.src || null)}
-                    alt={props.alt || "Case study graphic"}
-                  />
-                ),
-              }}
-            >
-              {caseStudy.content || ''}
-            </ReactMarkdown>
+            {caseStudy.content_blocks.length > 0
+              ? caseStudy.content_blocks.map(renderContentBlock)
+              : renderMarkdown(caseStudy.content || "")}
           </div>
 
           <aside className="h-fit rounded-[26px] border border-ink/10 bg-muted/40 p-6 shadow-sm lg:sticky lg:top-24 xl:w-full xl:justify-self-end">
@@ -181,7 +250,7 @@ const WorkDetail = () => {
                 <div 
                   key={image} 
                   className="aspect-[4/3] overflow-hidden rounded-[30px] bg-card border border-ink/10 shadow-sm cursor-zoom-in group"
-                  onClick={() => setLightboxImage(image)}
+                  onClick={() => setLightboxMedia({ type: "image", src: image, alt: `${caseStudy.title} ${index + 1}` })}
                 >
                   <img
                     src={image}
@@ -235,24 +304,7 @@ const WorkDetail = () => {
       />
 
       {/* Lightbox Modal */}
-      {lightboxImage && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 sm:p-8 backdrop-blur-md cursor-zoom-out animate-in fade-in duration-200"
-          onClick={() => setLightboxImage(null)}
-        >
-          <button 
-            className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
-            onClick={(e) => { e.stopPropagation(); setLightboxImage(null); }}
-          >
-            <X className="h-8 w-8" />
-          </button>
-          <img 
-            src={lightboxImage} 
-            className="max-w-full max-h-full object-contain rounded-xl shadow-2xl animate-in zoom-in-95 duration-300" 
-            alt="Fullscreen preview" 
-          />
-        </div>
-      )}
+      <MediaLightbox media={lightboxMedia} onOpenChange={setLightboxMedia} />
     </Layout>
   );
 };
