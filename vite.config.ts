@@ -83,6 +83,15 @@ const localApiFunctions = () => ({
         status: (code: number) => ({ json: (payload: unknown) => { res.statusCode = code; res.setHeader("Content-Type", "application/json"); res.end(JSON.stringify(payload)); } }),
       });
     });
+
+    mount("/api/contact", async (req, res) => {
+      const { default: handler } = await import("./api/contact");
+      const body = await readRequestBody(req);
+      await handler({ method: req.method, body }, {
+        setHeader: (name: string, value: string) => res.setHeader(name, value),
+        status: (code: number) => ({ json: (payload: unknown) => { res.statusCode = code; res.setHeader("Content-Type", "application/json"); res.end(JSON.stringify(payload)); } }),
+      });
+    });
   },
 });
 

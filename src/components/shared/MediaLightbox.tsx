@@ -56,7 +56,12 @@ interface InlineMediaProps {
 
 export const InlineMedia: React.FC<InlineMediaProps> = ({ media, onOpen, className }) => (
   <figure className={cn("my-10", className)}>
-    <div className="group relative">
+    <div
+      className={cn(
+        "group relative",
+        media.type === "image" && "aspect-video overflow-hidden rounded-[24px]"
+      )}
+    >
       {media.type === "video" ? (
         <video
           className="block max-h-[38rem] w-full object-contain"
@@ -69,14 +74,14 @@ export const InlineMedia: React.FC<InlineMediaProps> = ({ media, onOpen, classNa
       ) : (
         <button
           type="button"
-          className="block w-full cursor-zoom-in text-left"
+          className="block h-full w-full cursor-zoom-in text-left"
           onClick={() => onOpen(media)}
           aria-label={`Open ${media.alt}`}
         >
           <img
             src={media.src}
             alt={media.alt}
-            className="block h-auto max-h-[38rem] w-full object-contain transition-transform duration-500 group-hover:scale-[1.005]"
+            className="!m-0 block h-full w-full !rounded-none object-cover !shadow-none transition-transform duration-500 group-hover:scale-[1.005]"
           />
         </button>
       )}

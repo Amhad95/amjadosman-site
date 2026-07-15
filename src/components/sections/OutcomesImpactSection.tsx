@@ -6,6 +6,16 @@ import { useLocale } from '@/lib/locale';
 import { useSiteContent } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
+const OUTCOME_ASCII = ['[✓]', 'o─o', '▁▃▆↗', '<↻>', '»»', '{*}'] as const;
+const OUTCOME_ASCII_MOTION = [
+  'outcome-float-y-soft',
+  'outcome-float-x',
+  'outcome-float-y',
+  'outcome-rotate-slow',
+  'outcome-float-x',
+  'outcome-pulse-soft',
+] as const;
+
 export const OutcomesImpactSection: React.FC = () => {
   const { isRTL } = useLocale();
   const {
@@ -13,64 +23,75 @@ export const OutcomesImpactSection: React.FC = () => {
   } = useSiteContent();
 
   return (
-    <section className="py-16 md:py-24 bg-muted" aria-labelledby="outcomes-heading">
+    <section
+      id="outcomes"
+      className="scroll-mt-32 bg-[hsl(var(--section-coral))] py-16 md:py-24"
+      aria-labelledby="outcomes-heading"
+    >
       <div className="container mx-auto px-4 md:px-6">
-
-        <Reveal className={cn('section-intro-copy mb-10 md:mb-14', isRTL && 'me-auto text-right')}>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-4">
+        <Reveal className={cn('max-w-5xl', isRTL && 'me-auto text-right')}>
+          <p className="mb-4 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-foreground/65">
             {outcomesImpact.eyebrow}
           </p>
-          <h2 id="outcomes-heading" className="font-serif text-poster-lg text-foreground mb-4">
+          <h2 id="outcomes-heading" className="mb-5 font-serif text-poster-lg text-foreground">
             {outcomesImpact.headline}
           </h2>
-          <p className="text-subheadline text-muted-foreground">
+          <p className="max-w-3xl text-subheadline text-muted-foreground">
             {outcomesImpact.subheadline}
           </p>
         </Reveal>
 
-        <RevealGroup className="divide-y divide-foreground/8" stagger={78}>
-          {outcomesImpact.items.map((outcome, index) => (
-            <div
-              key={outcome.title}
-              className="group grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-3 md:gap-10 py-7 md:py-8 hover:bg-foreground/[0.02] transition-colors duration-150 -mx-4 px-4 md:-mx-6 md:px-6"
-              dir={isRTL ? 'rtl' : undefined}
-            >
-              <div
+        <RevealGroup
+          className="mt-10 divide-y divide-foreground/20 border-y border-foreground/20 md:mt-12"
+          stagger={64}
+        >
+          {outcomesImpact.items.map((outcome, index) => {
+            const titleWords = outcome.title.trim().split(/\s+/);
+            const finalWord = titleWords.pop() ?? outcome.title;
+            const leadingWords = titleWords.join(' ');
+
+            return (
+              <article
+                key={outcome.title}
                 className={cn(
-                  'flex items-start gap-4',
-                  isRTL && 'w-full text-right'
+                  'outcome-motion outcome-motion-card grid grid-cols-[2.75rem_minmax(0,1fr)] gap-x-4 gap-y-4 py-7 md:grid-cols-[3.5rem_minmax(0,1.35fr)_minmax(0,1fr)] md:items-start md:gap-x-8 md:py-8',
+                  isRTL && 'text-right'
                 )}
+                dir={isRTL ? 'rtl' : 'ltr'}
               >
-                <span className="font-mono text-base text-foreground/40 mt-1 flex-shrink-0 select-none">
+                <span className="pt-1 font-mono text-sm text-foreground/45" aria-hidden="true">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3
-                  className={cn(
-                    'font-serif text-heading-md text-foreground leading-snug',
-                    isRTL && 'flex-1 text-right'
-                  )}
-                  dir={isRTL ? 'rtl' : undefined}
-                >
-                  {outcome.title}
+
+                <h3 className="font-serif text-heading-md font-normal leading-snug text-foreground">
+                  {leadingWords ? `${leadingWords} ` : null}
+                  <span className="inline-flex whitespace-nowrap items-baseline">
+                    <span>{finalWord}</span>
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        'ms-[0.26em] inline-block font-mono text-[0.78em] leading-none tracking-normal text-plate-violet md:text-[0.82em]',
+                        OUTCOME_ASCII_MOTION[index]
+                      )}
+                      style={{ animationDelay: `${index * -0.43}s` }}
+                    >
+                      {OUTCOME_ASCII[index]}
+                    </span>
+                  </span>
                 </h3>
-              </div>
-              <p
-                className={cn(
-                  'text-body-lg text-muted-foreground leading-relaxed md:pt-0.5',
-                  isRTL ? 'md:text-right pr-8 md:pr-0' : 'pl-8 md:pl-0'
-                )}
-                dir={isRTL ? 'rtl' : undefined}
-              >
-                {outcome.body}
-              </p>
-            </div>
-          ))}
+
+                <p className="col-start-2 text-body-lg leading-relaxed text-muted-foreground md:col-start-3 md:pt-0.5">
+                  {outcome.body}
+                </p>
+              </article>
+            );
+          })}
         </RevealGroup>
 
         <Reveal
           className={cn(
-            'mt-10 md:mt-12 flex flex-col sm:flex-row gap-3 sm:items-center',
-            isRTL && 'sm:justify-start'
+            'mt-10 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-12',
+            isRTL && 'sm:flex-row-reverse sm:justify-end'
           )}
           variant="subtle"
         >

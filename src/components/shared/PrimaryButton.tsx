@@ -24,6 +24,7 @@ interface PrimaryButtonProps {
   disabled?: boolean;
   size?: 'default' | 'lg';
   textColor?: PlateColor;
+  'aria-busy'?: boolean;
 }
 
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
@@ -35,6 +36,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   disabled = false,
   size = 'default',
   textColor = 'ink',
+  'aria-busy': ariaBusy,
 }) => {
   const sizeStyles = size === 'lg'
     ? 'h-14 px-8 text-lg'
@@ -85,6 +87,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       onClick={onClick}
       className={baseStyles}
       disabled={disabled}
+      aria-busy={ariaBusy}
     >
       {children}
     </button>

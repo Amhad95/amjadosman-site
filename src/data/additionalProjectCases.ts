@@ -8,6 +8,29 @@ import kendahProfileDetailOne from "@/assets/projects/kendah-profile/detail-01.p
 import kendahProfileDetailZero from "@/assets/projects/kendah-profile/detail-0.png";
 import kendahProfileDetailThree from "@/assets/projects/kendah-profile/detail-3.png";
 import kendahProfileDetailFour from "@/assets/projects/kendah-profile/detail-4.png";
+import kendahBrandDetailOne from "@/assets/projects/kendah-brand/detail-1.png";
+import kendahBrandDetailTwo from "@/assets/projects/kendah-brand/detail-2.png";
+import kendahBrandDetailThree from "@/assets/projects/kendah-brand/detail-3.png";
+import kendahBrandDetailFour from "@/assets/projects/kendah-brand/detail-4.png";
+import aljebaliProfilesDetailOne from "@/assets/projects/aljebali-profiles/detail-1.png";
+import aljebaliProfilesDetailTwo from "@/assets/projects/aljebali-profiles/detail-2.png";
+import aljebaliProfilesDetailThree from "@/assets/projects/aljebali-profiles/detail-3.png";
+import aljebaliInternalDetailOne from "@/assets/projects/aljebali-internal-operations/detail-1.png";
+import aljebaliInternalDetailTwo from "@/assets/projects/aljebali-internal-operations/detail-2.png";
+import aljebaliInternalDetailThree from "@/assets/projects/aljebali-internal-operations/detail-3.png";
+import aljebaliInternalDetailFour from "@/assets/projects/aljebali-internal-operations/detail-4.png";
+import jastarMarketEntryDetailOne from "@/assets/projects/jastar-market-entry/detail-1.png";
+import jastarMarketEntryDetailTwo from "@/assets/projects/jastar-market-entry/detail-2.png";
+import jiscoValueStreamDetailOne from "@/assets/projects/jisco-value-stream/detail-1.png";
+import jiscoValueStreamDetailTwo from "@/assets/projects/jisco-value-stream/detail-2.png";
+import jiscoValueStreamDetailThree from "@/assets/projects/jisco-value-stream/detail-3.png";
+import radianceTrainingDetailOne from "@/assets/projects/radiance-training-center/detail-1.png";
+import radianceTrainingDetailTwo from "@/assets/projects/radiance-training-center/detail-2.png";
+import sudaneseFintechWebDetailOne from "@/assets/projects/sudanese-fintech-web-cms/detail-1.png";
+import sudaneseFintechWebDetailTwo from "@/assets/projects/sudanese-fintech-web-cms/detail-2.png";
+import sudaneseFintechWebDetailThree from "@/assets/projects/sudanese-fintech-web-cms/detail-3.png";
+import upoAdvocacyDetailOne from "@/assets/projects/upo-advocacy/detail-1.png";
+import upoAdvocacyDetailTwo from "@/assets/projects/upo-advocacy/detail-2.png";
 
 export const additionalProjectCases = [
   {
@@ -72,6 +95,59 @@ For early-stage infrastructure businesses, brand is not a finishing layer. It is
     case_series_order: 2,
     category: "Web & CMS",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `The company's website needed to do more than announce a company. It had to explain a complex financial-infrastructure offer to people who would arrive with different questions: banks evaluating partnership risk, public institutions looking for payment modernization, and private partners trying to understand where the company fits in the ecosystem.
+
+### Context and scope
+
+The source material included old-site notes, new-site planning, visual direction, company profiles, proposal material, and sector-specific decks. The challenge was to turn that into a clean site architecture instead of copying a proposal onto the web. The site needed a CMS structure so the team could add use cases, partner materials, and updates without breaking the narrative every time.`,
+      },
+      {
+        type: "image",
+        src: sudaneseFintechWebDetailOne,
+        alt: "SDD national payment platform page within the fintech website system",
+        caption: "The website gives SDD a dedicated product narrative, translating national-payment infrastructure into an understandable institutional and customer proposition.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I defined the page logic around buyer questions: what the company does, where it operates, which financial problems it solves, how the technology and governance work, and how a bank or public entity can engage. The CMS structure separated evergreen company content from changeable proof: solutions, profiles, news, proposals, and sector pages. That made it possible to keep the public story stable while letting the business publish new materials as partnerships evolved.`,
+      },
+      {
+        type: "media-row",
+        items: [
+          {
+            type: "image",
+            src: sudaneseFintechWebDetailTwo,
+            alt: "Fintech website solution architecture for finance, government, and business",
+            caption: "The CMS-ready solution architecture separates fintech, GovTech, and business offers so buyers can evaluate each pathway without losing the group story.",
+          },
+          {
+            type: "image",
+            src: sudaneseFintechWebDetailThree,
+            alt: "Fintech website payment user journeys for transfers, merchants, and bills",
+            caption: "User-journey content turns payment flows into clear, scannable explanations that can support demos, partner discussions, and future CMS updates.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+The site structure avoided a generic tech-company pattern. A payments company serving institutional stakeholders needs clarity before personality. Pages were arranged around trust, use cases, and implementation readiness. I kept room for SDD as a product/platform story without making the parent company disappear behind a single app. The content model also supported bilingual presentation, because formal stakeholders often move between Arabic and English during evaluation.
+
+### What changed
+
+The company gained a web plan that matched how the business actually sells: through credibility, structured explanation, and specific partnership scenarios. The CMS logic reduced the risk of every update becoming a mini-redesign. It also made the website a home for the same language used in profiles and pitch decks, which kept the brand system coherent.
+
+### Takeaway
+
+For institutional services, a website is a decision-support system. The company's web and CMS work turned scattered materials into a public structure that could grow with the company without losing the plot.`,
+      },
+    ],
     content: `The company's website needed to do more than announce a company. It had to explain a complex financial-infrastructure offer to people who would arrive with different questions: banks evaluating partnership risk, public institutions looking for payment modernization, and private partners trying to understand where the company fits in the ecosystem.
 
 ### Context and scope
@@ -324,6 +400,59 @@ Portfolio brand architecture is most useful when it clarifies relationships. For
     case_series_order: 2,
     category: "Web & CMS",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `Aljebali and JISCO needed profiles and web content that could do a difficult job: explain technical, operational, and commercial capability without becoming a dense internal document. The audience included buyers, partners, government stakeholders, and people evaluating whether the companies had the discipline to operate in a sensitive sector.
+
+### Context and scope
+
+The material included group-profile content, Aljebali Mining profile drafts, JISCO profile versions, website content, corrections, comments, and proposal assets. The task was to turn a wide set of facts into a clear story: who the group is, what each company does, what capabilities exist, and why the operating model is trustworthy.`,
+      },
+      {
+        type: "image",
+        src: aljebaliProfilesDetailOne,
+        alt: "Aljebali Mining and JISCO company profiles presented together",
+        caption: "The profile system gives the group and its operating companies a clear, credible introduction for external readers.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I structured the profiles around capability, governance, assets, safety, production logic, and partnership value. The group profile gave the portfolio context. The mining profile focused on extraction and field operations. JISCO's material emphasized processing, quality control, and industrial value creation. Website content was shaped for scanning, with sections that could become CMS pages rather than static brochure spreads.`,
+      },
+      {
+        type: "media-row",
+        items: [
+          {
+            type: "image",
+            src: aljebaliProfilesDetailTwo,
+            alt: "Aljebali and JISCO profile pages in an open printed booklet",
+            caption: "The editorial system turns operational material into a readable, buyer-facing sequence.",
+          },
+          {
+            type: "image",
+            src: aljebaliProfilesDetailThree,
+            alt: "Aljebali and JISCO profile spread showing mining operations and technical content",
+            caption: "Technical evidence is paired with structured explanation so the profiles support real evaluation.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+The writing had to stay credible. I avoided overclaiming and kept the narrative close to practical capabilities: operations, quality, safety, compliance, workforce, supply chain, and customer value. The profiles used the brand system's structure so that technical content still felt polished and organized. Arabic-language material was treated as primary, not as an afterthought.
+
+### What changed
+
+The companies gained clearer external material for meetings, proposals, and digital presence. The group could explain itself without collapsing everything into one company, while JISCO and Aljebali Mining each had room to present their own strengths.
+
+### Takeaway
+
+Technical buyers need clarity before flourish. The Aljebali and JISCO profile work turned complex operational material into a structured communication system that makes the portfolio easier to understand and trust.`,
+      },
+    ],
     content: `Aljebali and JISCO needed profiles and web content that could do a difficult job: explain technical, operational, and commercial capability without becoming a dense internal document. The audience included buyers, partners, government stakeholders, and people evaluating whether the companies had the discipline to operate in a sensitive sector.
 
 ### Context and scope
@@ -366,6 +495,67 @@ Technical buyers need clarity before flourish. The Aljebali and JISCO profile wo
     case_series_order: 3,
     category: "Internal Operations",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `Mining operations need rules that people can actually use. Aljebali Group's internal system had to cover the formal side of governance while staying practical enough for field sites, camps, contractors, procurement, security, and production routines.
+
+### Context and scope
+
+The work included a large SOP and regulation package across governance, HR, finance, procurement, HSE, chemicals, environmental responsibility, security, operations, quality, maintenance, stores, contractors, communications, document control, audit, risk, and compliance. It also included employee-facing material such as a playbook, code of conduct, HSE field manual, and camp-life handbook.`,
+      },
+      {
+        type: "image",
+        src: aljebaliInternalDetailOne,
+        alt: "JISCO worker in safety clothing at a mining processing site",
+        caption: "Field-facing material has to connect formal rules with the people, equipment, and conditions where work actually happens.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I organized the regulations into a controlled library with codes, scopes, responsibilities, procedures, approval logic, and record expectations. The employee-facing documents translated the formal rules into daily behavior: how people work on site, how incidents are escalated, how documents are controlled, what conduct is expected, and how safety routines are applied.`,
+      },
+      {
+        type: "media-row",
+        items: [
+          {
+            type: "image",
+            src: aljebaliInternalDetailTwo,
+            alt: "Mining truck loading material at an open site",
+            caption: "Operational procedures need to remain legible around active extraction, hauling, and material movement.",
+          },
+          {
+            type: "image",
+            src: aljebaliInternalDetailThree,
+            alt: "Excavator operating at a mining site",
+            caption: "Equipment, roles, and site conditions give the field manuals their practical context.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+The main design problem was usability. A regulation that nobody can navigate becomes theater. I kept the structure repeatable across documents so managers could find roles, procedures, forms, and escalation paths quickly. The Arabic formatting and right-to-left layout mattered because these documents would be used in real organizational settings, not just stored as compliance artifacts.`,
+      },
+      {
+        type: "image",
+        src: aljebaliInternalDetailFour,
+        alt: "Mining loader and field crew working in a desert site",
+        caption: "The system is designed for the full operating environment, from equipment and crews to site logistics and field controls.",
+      },
+      {
+        type: "text",
+        content: `### What changed
+
+Aljebali gained a more complete operating baseline. Managers had reference points for approvals and responsibilities. Staff had clearer expectations. Sensitive areas such as gold handling, procurement, security, fuel, maintenance, and HSE were documented with more discipline.
+
+### Takeaway
+
+In high-risk sectors, internal documentation is an operating control. The Aljebali package turned scattered expectations into a structured system that can support training, audits, management decisions, and safer field routines.`,
+      },
+    ],
     content: `Mining operations need rules that people can actually use. Aljebali Group's internal system had to cover the formal side of governance while staying practical enough for field sites, camps, contractors, procurement, security, and production routines.
 
 ### Context and scope
@@ -408,6 +598,59 @@ In high-risk sectors, internal documentation is an operating control. The Aljeba
     case_series_order: 4,
     category: "Software & Workflows",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `JISCO's operational challenge was not just documentation. A processing business also needs visibility across the value stream: what enters the system, where it moves, who handled it, which controls apply, and how management sees performance without waiting for manual compilation.
+
+### Context and scope
+
+The work sat between operations design and software requirements. It drew from the wider Aljebali governance package, JISCO profile material, and dedicated software notes. The aim was to shape a management system that could support intake, processing, quality checks, inventory, maintenance, approvals, exceptions, and reporting.`,
+      },
+      {
+        type: "image",
+        src: jiscoValueStreamDetailOne,
+        alt: "Visual representing controlled stages in JISCO's gold-processing value stream",
+        caption: "The value-stream blueprint begins with traceable movement through process stages, so intake, handling, quality status, and exceptions can be captured as one operational record.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I framed the system around operational records rather than generic tasks. Each critical movement or decision needed an owner, timestamp, status, evidence, and escalation path. The value-stream concept linked materials, process stages, quality controls, maintenance dependencies, and management reporting. The goal was to make daily work visible enough to control without asking teams to duplicate every action in separate spreadsheets.`,
+      },
+      {
+        type: "media-row",
+        items: [
+          {
+            type: "image",
+            src: jiscoValueStreamDetailTwo,
+            alt: "Visual representing ownership and accountability in JISCO's operating workflow",
+            caption: "Role ownership, timestamps, approvals, and maintenance dependencies were designed into the workflow so operational accountability stays visible.",
+          },
+          {
+            type: "image",
+            src: jiscoValueStreamDetailThree,
+            alt: "Visual representing process evidence and quality controls in JISCO's value stream",
+            caption: "The system concept links process evidence and quality controls to management reporting, making performance and exceptions easier to inspect.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+The system had to respect field reality. Some work happens away from ideal connectivity and under time pressure. That pushed the design toward simple capture, controlled code lists, clear stages, and exception reporting. Inventory and task logic were treated as connected: a material issue, maintenance delay, or missing approval should show up where it affects the flow.
+
+### What changed
+
+JISCO gained a clearer blueprint for software-enabled operations. Instead of jumping straight to screens, the work defined what the system must control and why. That makes future implementation safer because workflows, records, and accountability are anchored in the actual value stream.
+
+### Takeaway
+
+Operational software should start from the movement of value, not from a menu of features. For JISCO, the value-stream plan created the bridge between internal regulations and a practical management platform.`,
+      },
+    ],
     content: `JISCO's operational challenge was not just documentation. A processing business also needs visibility across the value stream: what enters the system, where it moves, who handled it, which controls apply, and how management sees performance without waiting for manual compilation.
 
 ### Context and scope
@@ -553,6 +796,67 @@ Tender readiness starts with a credible explanation of capability. For Kendah, t
     case_series_order: 2,
     category: "Brand Systems",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `Kendah Energy needed a visual foundation that could survive ordinary working life. The identity would appear on letters, business cards, envelopes, folders, ID tags, proposal covers, QR codes, and branded merchandise long after a presentation had been approved. The system had to be recognizable without making every touchpoint feel overdesigned.
+
+### Context and scope
+
+The material included logo assets, brand-guide references, color and typography decisions, stationery, ID tags, business cards, envelopes, letterheads, jacket folders, QR codes, and branded merchandise mockups. The challenge was to make these assets feel related and production-ready rather than like a collection of isolated exports.`,
+      },
+      {
+        type: "image",
+        src: kendahBrandDetailOne,
+        alt: "Kendah Energy brand guidelines showing applications, stationery, and visual language",
+        caption: "The wider guideline system shows how the identity moves from core rules into applications and everyday materials.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I shaped a practical brand foundation and extended it into the materials Kendah would use most often. The guide established the rules for logo use, color, typography, layout behavior, and supporting graphics. The stationery set translated those rules into letters, cards, envelopes, folders, and staff-facing identification. Physical applications gave the system a useful test: it had to remain clear when printed, handled, photographed, or viewed at a distance.`,
+      },
+      {
+        type: "media-row",
+        items: [
+          {
+            type: "image",
+            src: kendahBrandDetailTwo,
+            alt: "Kendah Energy letterhead and DL envelope brand-guideline spread",
+            caption: "Letterhead and envelope applications make the identity useful in routine correspondence.",
+          },
+          {
+            type: "image",
+            src: kendahBrandDetailThree,
+            alt: "Kendah Energy C4 envelope and presentation folder brand-guideline spread",
+            caption: "Folders and envelopes extend the same logic into proposal and document handling.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+Energy-sector branding has to communicate capability without becoming visually cold or needlessly aggressive. I used a disciplined structure and restrained industrial cues so the identity could feel confident in a boardroom, on a site, or in a supplier exchange. Repetition was deliberate. When the same visual logic appears on a letterhead, ID tag, folder, and proposal cover, the company starts to feel organized before anyone explains the organization.`,
+      },
+      {
+        type: "image",
+        src: kendahBrandDetailFour,
+        alt: "Kendah Energy logo and logo application guidelines",
+        caption: "The logo system is documented with enough clarity to keep everyday applications consistent.",
+      },
+      {
+        type: "text",
+        content: `### What changed
+
+Kendah gained a visual system that could be used by staff, suppliers, and proposal teams without inventing a new solution each time. Everyday communications became more consistent, and the brand had a clearer baseline for future profiles, tenders, events, and site materials.
+
+### Takeaway
+
+A brand system proves itself in routine use. Kendah's identity work connected formal communication with the physical materials people encounter every day, giving the company a more credible presence across both public and internal touchpoints.`,
+      },
+    ],
     content: `Kendah Energy needed a visual foundation that could survive ordinary working life. The identity would appear on letters, business cards, envelopes, folders, ID tags, proposal covers, QR codes, and branded merchandise long after a presentation had been approved. The system had to be recognizable without making every touchpoint feel overdesigned.
 
 ### Context and scope
@@ -595,6 +899,48 @@ A brand system proves itself in routine use. Kendah's identity work connected fo
     case_series_order: 1,
     category: "Brand & Communications",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `JASTAR needed to enter Sudan with material that could carry credibility across language, sector, and institutional context. The company was not only introducing itself. It was presenting a serious energy and construction proposition to stakeholders who would expect formal communication, localized framing, and clear project logic.
+
+### Context and scope
+
+The work included an Arabic company profile, official cover letters, a Sudan power-ship proposal, supporting image direction, company information material, and press-style references. The task was to make the company understandable and credible without overcomplicating the story.`,
+      },
+      {
+        type: "image",
+        src: jastarMarketEntryDetailOne,
+        alt: "JASTAR market-entry website explaining the contractor's delivery proposition",
+        caption: "The market-entry website turned capability, delivery speed, and institutional fit into a clear reason for Sudanese stakeholders to engage.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I shaped the communication package around formal market entry: who JASTAR is, what it can deliver, why the proposed power solution matters, and what kind of official engagement is being requested. The Arabic profile and letters translated the company into the tone expected by Sudanese stakeholders. The proposal material connected energy need, delivery model, and company capability.`,
+      },
+      {
+        type: "image",
+        src: jastarMarketEntryDetailTwo,
+        alt: "JASTAR website sector portfolio for energy, construction, supply, healthcare, and property support",
+        caption: "The sector architecture organized energy, construction, industrial supply, healthcare equipment, and real-estate support into a scannable market-entry offer.",
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+The language had to be respectful, direct, and locally legible. I avoided a generic international-contractor tone and focused on the practical concerns of energy stakeholders: reliability, implementation, partnership structure, and institutional fit. Visual assets supported the story without overwhelming formal documents.
+
+### What changed
+
+JASTAR gained a more coherent entry package for Sudan-facing conversations. The company could introduce itself, request meetings, and present the power-ship concept through materials that felt prepared for the local context.
+
+### Takeaway
+
+Market-entry communication is translation in the broadest sense. The JASTAR work translated capability, tone, and proposal logic into a package that could travel through formal stakeholder channels.`,
+      },
+    ],
     content: `JASTAR needed to enter Sudan with material that could carry credibility across language, sector, and institutional context. The company was not only introducing itself. It was presenting a serious energy and construction proposition to stakeholders who would expect formal communication, localized framing, and clear project logic.
 
 ### Context and scope
@@ -637,6 +983,51 @@ Market-entry communication is translation in the broadest sense. The JASTAR work
     case_series_order: 1,
     category: "Advocacy & Communications",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `UPO's communication work sits in a sensitive space. Humanitarian and civil-society organizations need visibility, but they also need consent, protection, dignity, donor alignment, and operational discipline. The goal was to make communications clearer without making vulnerable communities into campaign material.
+
+### Context and scope
+
+The folder included advocacy and communication toolkits, social media posts, workshop and success-story material, consent forms, shooting guides, website assets, annual-report visuals, job-post templates, donor and partner references, and program areas such as WASH, shelter, protection, food security, education, women empowerment, and disability inclusion.
+
+### What I built
+
+I shaped the system around governance: what can be published, how consent is handled, how stories are collected, how photography is guided, how partner visibility is respected, and how program achievements are translated into public content. Templates gave the team repeatable formats for social posts, presentations, certificates, reports, and campaign material.`,
+      },
+      {
+        type: "media-row",
+        items: [
+          {
+            type: "image",
+            src: upoAdvocacyDetailOne,
+            alt: "UPO advocacy toolkit, communications procedures, and editorial style guide",
+            caption: "The governance package brings the advocacy toolkit, communications SOPs, and editorial rules into one controlled system for field teams and reviewers.",
+          },
+          {
+            type: "image",
+            src: upoAdvocacyDetailTwo,
+            alt: "UPO advocacy toolkit pages covering planning methods and campaign controls",
+            caption: "Inside the toolkit, practical methods turn advocacy planning into repeatable work—from problem and stakeholder analysis to indicators, activity selection, and risk management.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+The main design principle was dignity. Communications had to be understandable and useful without flattening people into symbols. I kept guidance practical: story structure, image selection, consent checks, partner crediting, caption tone, and review steps. The system also had to support field teams who may not have design or communications training.
+
+### What changed
+
+UPO gained a more controlled communications baseline. Content could move faster because the rules were clearer. Field teams had better guidance on what to capture and what to avoid. Advocacy work could stay aligned with program goals instead of drifting into disconnected campaign posts.
+
+### Takeaway
+
+For humanitarian organizations, communication is a duty of care. UPO's system helped turn advocacy, visibility, and storytelling into a more disciplined practice.`,
+      },
+    ],
     content: `UPO's communication work sits in a sensitive space. Humanitarian and civil-society organizations need visibility, but they also need consent, protection, dignity, donor alignment, and operational discipline. The goal was to make communications clearer without making vulnerable communities into campaign material.
 
 ### Context and scope
@@ -679,27 +1070,73 @@ For humanitarian organizations, communication is a duty of care. UPO's system he
     case_series_order: 1,
     category: "Learning Systems",
     gallery_images: [],
+    content_blocks: [
+      {
+        type: "text",
+        content: `Radiance Training Center needed to turn a training idea into a pilot that could be evaluated, funded, and operated. The audience was not only learners. It included implementation partners, funders, trainers, and managers who needed to understand how a six-month center would actually work.
+
+### Context and scope
+
+The source package included a sustainable livelihood capacity center proposal, a six-month pilot budget, an implementation plan, and a syllabus and training guide. The broader concept included program design, budgeting, a learning-management system, and a Souq platform designed to connect graduates to customers, employers, and practical market opportunities.`,
+      },
+      {
+        type: "image",
+        src: radianceTrainingDetailOne,
+        alt: "Radiance Training Center syllabus and six-month pilot implementation plan",
+        caption: "The syllabus, training guide, and six-month implementation plan turn the center into a fundable, teachable operating model.",
+      },
+      {
+        type: "text",
+        content: `### What I built
+
+I structured the pilot around learning outcomes, modules, schedules, trainer responsibilities, participant flow, operating costs, and implementation milestones. The syllabus and training guide translated the idea into teachable units. The budget gave the pilot a practical financial frame. The implementation plan connected people, activities, and timing so the center could be managed as a program rather than an aspiration.
+
+The digital delivery layer included the LMS we developed for structured course access, learner progress, assessments, and trainer administration. Alongside it, the Souq platform was designed as the bridge from graduation to the market, helping participants connect with customers, employers, contracts, and livelihood opportunities.`,
+      },
+      {
+        type: "image",
+        src: radianceTrainingDetailTwo,
+        alt: "Radiance learning-management system and graduate Souq platform on two laptops",
+        caption: "The digital delivery layer combines the LMS we developed for structured learning and progress tracking with the Souq platform, which connects graduates to customers, employers, and market opportunities.",
+      },
+      {
+        type: "text",
+        content: `### Design choices
+
+Training programs often fail when curriculum, budget, and operations are written separately. I kept them connected. If a module required materials, trainer time, or platform support, the operating plan had to reflect that. If the pilot promised employability or livelihood outcomes, the syllabus and Souq pathway had to support practical application rather than only classroom content.
+
+### What changed
+
+Radiance gained a pilot package that could be discussed with partners and funders in operational terms. The program had a clearer path from proposal to delivery, with the first six months framed as a testable model and the LMS and Souq platform extending that path from learning through market access.
+
+### Takeaway
+
+A training center is a service system. The Radiance pilot design made curriculum, budget, delivery, digital learning, and graduate-to-market access part of the same operating story.`,
+      },
+    ],
     content: `Radiance Training Center needed to turn a training idea into a pilot that could be evaluated, funded, and operated. The audience was not only learners. It included implementation partners, funders, trainers, and managers who needed to understand how a six-month center would actually work.
 
 ### Context and scope
 
-The source package included a sustainable livelihood capacity center proposal, a six-month pilot budget, an implementation plan, and a syllabus and training guide. The broader concept included program design, budgeting, learning-management logic, and a souq-style platform idea for connecting training to practical opportunity.
+The source package included a sustainable livelihood capacity center proposal, a six-month pilot budget, an implementation plan, and a syllabus and training guide. The broader concept included program design, budgeting, a learning-management system, and a Souq platform designed to connect graduates to customers, employers, and practical market opportunities.
 
 ### What I built
 
 I structured the pilot around learning outcomes, modules, schedules, trainer responsibilities, participant flow, operating costs, and implementation milestones. The syllabus and training guide translated the idea into teachable units. The budget gave the pilot a practical financial frame. The implementation plan connected people, activities, and timing so the center could be managed as a program rather than an aspiration.
 
+The digital delivery layer included the LMS we developed for structured course access, learner progress, assessments, and trainer administration. Alongside it, the Souq platform was designed as the bridge from graduation to the market, helping participants connect with customers, employers, contracts, and livelihood opportunities.
+
 ### Design choices
 
-Training programs often fail when curriculum, budget, and operations are written separately. I kept them connected. If a module required materials, trainer time, or platform support, the operating plan had to reflect that. If the pilot promised employability or livelihood outcomes, the syllabus had to include practical application rather than only classroom content.
+Training programs often fail when curriculum, budget, and operations are written separately. I kept them connected. If a module required materials, trainer time, or platform support, the operating plan had to reflect that. If the pilot promised employability or livelihood outcomes, the syllabus and Souq pathway had to support practical application rather than only classroom content.
 
 ### What changed
 
-Radiance gained a pilot package that could be discussed with partners and funders in operational terms. The program had a clearer path from proposal to delivery, with the first six months framed as a testable model.
+Radiance gained a pilot package that could be discussed with partners and funders in operational terms. The program had a clearer path from proposal to delivery, with the first six months framed as a testable model and the LMS and Souq platform extending that path from learning through market access.
 
 ### Takeaway
 
-A training center is a service system. The Radiance pilot design made curriculum, budget, delivery, and platform logic part of the same operating story.`,
+A training center is a service system. The Radiance pilot design made curriculum, budget, delivery, digital learning, and graduate-to-market access part of the same operating story.`,
   },
   {
     id: "case-palmae-packaging-2025",

@@ -79,7 +79,7 @@ const formatAmount = (amount: number | undefined, currency: string | undefined) 
 
 const sendPaymentEmail = async (event: { id: string; type: string; data?: { object?: StripeObject } }) => {
   const apiKey = process.env.RESEND_API_KEY;
-  const recipient = process.env.PAYMENT_NOTIFICATION_EMAIL || "hello@adsi.io";
+  const recipient = process.env.PAYMENT_NOTIFICATION_EMAIL || "hello@amjadosman.com";
   const sender = process.env.PAYMENT_FROM_EMAIL || "Amjad Osman Payments <payments@adsi.io>";
   if (!apiKey) return false;
 
@@ -88,7 +88,8 @@ const sendPaymentEmail = async (event: { id: string; type: string; data?: { obje
   const service = object.metadata?.service_name || "Stripe payment activity";
   const customerEmail = object.customer_details?.email || object.customer_email || "Not supplied by Stripe";
   const customerName = object.customer_details?.name || "Not supplied by Stripe";
-  const stripeUrl = object.id ? `https://dashboard.stripe.com/test/search?query=${encodeURIComponent(object.id)}` : "https://dashboard.stripe.com/test";
+  const dashboardMode = process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_") ? "test" : "live";
+  const stripeUrl = object.id ? `https://dashboard.stripe.com/${dashboardMode}/search?query=${encodeURIComponent(object.id)}` : `https://dashboard.stripe.com/${dashboardMode}`;
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",

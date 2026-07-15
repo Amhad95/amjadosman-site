@@ -495,7 +495,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
     },
     outcomesSection: {
       eyebrow: "What improves",
-      headline: "What changes when automation is built around the real workflow",
+      headline: "What changes when automation is built around how work gets done",
       subheadline:
         "This service is for teams that want automation to save time, support decisions, and stay visible enough to trust in day-to-day use.",
       items: [
@@ -535,7 +535,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
       items: [
         {
           title: "Workflow automation",
-          body: "Intake, routing, drafting, summaries, and repeatable operational tasks designed around the real workflow instead of a demo scenario.",
+          body: "Intake, routing, drafting, summaries, and repeatable operational tasks designed around your operating process instead of a demo scenario.",
         },
         {
           title: "Knowledge support",
@@ -567,7 +567,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
         },
         {
           title: "Safer failure handling",
-          body: "Uncertain cases escalate instead of pretending to know the answer, which is usually what makes a pilot workable in the real world.",
+          body: "Uncertain cases escalate instead of pretending to know the answer, which makes a pilot workable in day-to-day operations.",
         },
       ],
     },
@@ -592,7 +592,7 @@ const servicePageContentEn: Record<ServiceDetailId, ServiceDetailContent> = {
         {
           title: "Build the pilot",
           description:
-            "The workflow is implemented and tested in a controlled way so its real operating behavior is visible.",
+            "The workflow is implemented and tested in a controlled way so its operating behavior is visible.",
         },
         {
           title: "Launch carefully",

@@ -1,7 +1,7 @@
 import React from 'react';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
-import { startCheckout } from '@/lib/stripe';
+import { CheckoutButton } from '@/components/shared/CheckoutButton';
 import { Layers3 } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
@@ -49,7 +49,7 @@ export const ServiceMenuList: React.FC<ServiceMenuListProps> = ({ items }) => {
               </div>
               <div className="flex flex-wrap gap-3">
                 {item.stripePriceId ? (
-                  <PrimaryButton onClick={() => startCheckout(item.stripePriceId!, 'payment')} textColor="ink">{copy.startService}</PrimaryButton>
+                  <CheckoutButton priceId={item.stripePriceId} textColor="ink">{copy.startService}</CheckoutButton>
                 ) : item.payHref ? (
                   <PrimaryButton href={item.payHref} textColor="ink">{copy.startService}</PrimaryButton>
                 ) : null}

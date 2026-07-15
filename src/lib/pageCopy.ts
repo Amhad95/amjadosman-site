@@ -14,7 +14,7 @@ export const legalPageCopy = {
     contact: "Contact",
     privacyScope: "Website, bookings, free tools, enquiries, and service communication.",
     termsScope: "Website use, free tools, project conversations, and paid-work boundaries.",
-    contactValue: "hello@adsi.io",
+    contactValue: "hello@amjadosman.com",
   },
   ar: {
     overview: "نظرة عامة",
@@ -24,7 +24,7 @@ export const legalPageCopy = {
     contact: "التواصل",
     privacyScope: "الموقع والحجوزات والأدوات المجانية والاستفسارات وتواصل الخدمات.",
     termsScope: "استخدام الموقع والأدوات المجانية ومحادثات المشاريع وحدود العمل المدفوع.",
-    contactValue: "hello@adsi.io",
+    contactValue: "hello@amjadosman.com",
   },
   de: {
     overview: "Überblick",
@@ -34,7 +34,7 @@ export const legalPageCopy = {
     contact: "Kontakt",
     privacyScope: "Website, Buchungen, kostenlose Tools, Anfragen und Servicekommunikation.",
     termsScope: "Website-Nutzung, kostenlose Tools, Projektgespräche und Grenzen bezahlter Arbeit.",
-    contactValue: "hello@adsi.io",
+    contactValue: "hello@amjadosman.com",
   },
   fr: {
     overview: "Aperçu",
@@ -44,7 +44,7 @@ export const legalPageCopy = {
     contact: "Contact",
     privacyScope: "Site, réservations, outils gratuits, demandes et communication de service.",
     termsScope: "Utilisation du site, outils gratuits, conversations de projet et limites du travail payé.",
-    contactValue: "hello@adsi.io",
+    contactValue: "hello@amjadosman.com",
   },
   bg: {
     overview: "Преглед",
@@ -54,7 +54,7 @@ export const legalPageCopy = {
     contact: "Контакт",
     privacyScope: "Сайт, резервации, безплатни инструменти, запитвания и комуникация по услуги.",
     termsScope: "Използване на сайта, безплатни инструменти, проектни разговори и граници на платена работа.",
-    contactValue: "hello@adsi.io",
+    contactValue: "hello@amjadosman.com",
   },
 } satisfies LocaleMap<Record<string, string>>;
 
@@ -395,7 +395,7 @@ export const simplePageCopy = {
     aboutTitle: "About | Amjad Osman",
     workTitle: "Work | Amjad Osman",
     workEyebrow: "Case studies",
-    workStrip: "Real projects. Clear deliverables. Practical implementation lessons.",
+    workStrip: "Selected work. Clear deliverables. Practical implementation lessons.",
     selectedWork: "Selected work",
     workTranslationNotice: "",
     resourcesTitle: "Resources | Amjad Osman",
@@ -419,7 +419,7 @@ export const simplePageCopy = {
     aboutTitle: "من نحن | أمجد عثمان",
     workTitle: "الأعمال | أمجد عثمان",
     workEyebrow: "دراسات الحالة",
-    workStrip: "مشاريع حقيقية. مخرجات واضحة. دروس تنفيذ عملية.",
+    workStrip: "أعمال مختارة. مخرجات واضحة. دروس تنفيذ عملية.",
     selectedWork: "الأعمال المختارة",
     workTranslationNotice: "",
     resourcesTitle: "الموارد | أمجد عثمان",
@@ -443,7 +443,7 @@ export const simplePageCopy = {
     aboutTitle: "Über mich | Amjad Osman",
     workTitle: "Arbeit | Amjad Osman",
     workEyebrow: "Fallstudien",
-    workStrip: "Echte Projekte. Klare Ergebnisse. Praktische Umsetzungslektionen.",
+    workStrip: "Ausgewählte Arbeit. Klare Ergebnisse. Praktische Umsetzungslektionen.",
     selectedWork: "Ausgewählte Arbeit",
     workTranslationNotice:
       "Hinweis: Die Fallstudien-Daten werden derzeit abschnittsweise übersetzt. Einige Projektbeschreibungen erscheinen vorübergehend auf Englisch.",
@@ -468,7 +468,7 @@ export const simplePageCopy = {
     aboutTitle: "À propos | Amjad Osman",
     workTitle: "Réalisations | Amjad Osman",
     workEyebrow: "Études de cas",
-    workStrip: "Projets réels. Livrables clairs. Leçons pratiques d’implémentation.",
+    workStrip: "Travaux sélectionnés. Livrables clairs. Leçons pratiques d’implémentation.",
     selectedWork: "Travaux sélectionnés",
     workTranslationNotice:
       "Note : les données des études de cas sont en cours de traduction section par section. Certaines descriptions de projet peuvent encore apparaître en anglais.",
@@ -493,7 +493,7 @@ export const simplePageCopy = {
     aboutTitle: "За мен | Amjad Osman",
     workTitle: "Проекти | Amjad Osman",
     workEyebrow: "Казуси",
-    workStrip: "Реални проекти. Ясни резултати. Практични уроци от изпълнението.",
+    workStrip: "Избрана работа. Ясни резултати. Практични уроци от изпълнението.",
     selectedWork: "Избрани проекти",
     workTranslationNotice:
       "Бележка: данните за казусите се превеждат поетапно. Някои проектни описания временно може да останат на английски.",

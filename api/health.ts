@@ -17,11 +17,15 @@ export default function handler(req: HealthRequest, res: HealthResponse) {
     !process.env.STRIPE_SECRET_KEY && "STRIPE_SECRET_KEY",
     !process.env.STRIPE_WEBHOOK_SECRET && "STRIPE_WEBHOOK_SECRET",
   ].filter(Boolean);
+  const warnings = [
+    !process.env.RESEND_API_KEY && "RESEND_API_KEY (owner payment notifications)",
+  ].filter(Boolean);
   const ready = missing.length === 0;
 
   res.setHeader("Cache-Control", "no-store");
   res.status(ready ? 200 : 503).json({
     status: ready ? "ready" : "configuration_required",
     ...(ready ? {} : { missing }),
+    ...(warnings.length ? { warnings } : {}),
   });
 }

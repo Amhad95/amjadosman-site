@@ -1,7 +1,7 @@
 import React from 'react';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
-import { startCheckout } from '@/lib/stripe';
+import { CheckoutButton } from '@/components/shared/CheckoutButton';
 import { Check, Clock3, Sparkles } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
@@ -28,12 +28,6 @@ export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
 }) => {
   const { locale, isRTL } = useLocale();
   const copy = getUiCopy(locale);
-  const handlePay = () => {
-    if (stripePriceId) {
-      startCheckout(stripePriceId, 'payment');
-    }
-  };
-
   return (
     <div className={cn('h-full rounded-[28px] border border-ink/12 bg-card p-6 md:p-7 shadow-[0_24px_54px_-42px_rgba(8,15,32,0.16)] transition-all duration-300 hover:-translate-y-1 hover:border-ink/22 flex flex-col', isRTL && 'text-right')}>
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
@@ -70,9 +64,9 @@ export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
       <div className="mt-auto border-t border-ink/8 pt-5">
         <div className="flex flex-wrap gap-3">
           {stripePriceId ? (
-          <PrimaryButton onClick={handlePay} textColor="ink">{copy.startPackage}</PrimaryButton>
+            <CheckoutButton priceId={stripePriceId} textColor="ink">{copy.startPackage}</CheckoutButton>
           ) : (
-          <PrimaryButton href={payHref} textColor="ink">{copy.startPackage}</PrimaryButton>
+            <PrimaryButton href={payHref} textColor="ink">{copy.startPackage}</PrimaryButton>
           )}
           <SecondaryButton href={bookHref}>{copy.talkItThrough}</SecondaryButton>
         </div>

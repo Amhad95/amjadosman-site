@@ -47,7 +47,7 @@ export const Hero: React.FC<HeroProps> = ({
     <section
       className={cn(
         'relative bg-background',
-        size === 'compact' ? 'pt-20 md:pt-24 pb-0' : 'pt-24 md:pt-28 pb-8 md:pb-12',
+        size === 'compact' ? 'pt-24 md:pt-28 pb-8 md:pb-12' : 'pt-24 md:pt-28 pb-8 md:pb-12',
         className
       )}
     >

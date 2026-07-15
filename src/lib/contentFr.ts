@@ -28,6 +28,11 @@ export const siteContentFr: SiteContent = {
     ],
     cta: { label: "Réserver un appel", href: "/book" },
     footer: [
+      { label: "Services", href: "/services" },
+      { label: "Logiciel", href: "/software" },
+      { label: "Réalisations", href: "/work" },
+      { label: "Tarifs", href: "/pricing" },
+      { label: "À propos", href: "/about" },
       { label: "Processus de livraison", href: "/process" },
       { label: "Analyses", href: "/resources" },
       { label: "Outils d'aide", href: "/tools" },
@@ -46,6 +51,7 @@ export const siteContentFr: SiteContent = {
     tagline:
       "Amjad Osman conçoit des systèmes de marque, d'opérations, de logiciels et d'IA qui aident les équipes en croissance à avancer avec plus de clarté.",
     pagesLabel: "Pages",
+    moreLabel: "Plus",
     legalLabel: "Légal",
     copyright: "Tous droits réservés.",
   },
@@ -60,7 +66,7 @@ export const siteContentFr: SiteContent = {
     caseStudyUnavailable: "L'étude de cas que vous avez demandée n'est pas disponible pour le moment.",
     readArticle: "Lire l'article",
     caseStudies: "Études de cas",
-    caseStudiesSubheadline: "Projets réels, résultats et leçons d'implémentation.",
+    caseStudiesSubheadline: "Le problème de départ, la réalisation et ce qui a changé.",
     lastUpdatedLabel: "Dernière mise à jour",
     workSectionHeadline: "Ce que nous avons construit",
     workApproachLabel: "Approche",
@@ -103,7 +109,7 @@ export const siteContentFr: SiteContent = {
         {
           title: "Applications de flux de travail",
           description:
-            "Portails clients, tableaux de bord et outils opérationnels façonnés autour des flux de travail réels.",
+            "Portails clients, tableaux de bord et outils opérationnels adaptés à la façon dont votre équipe travaille.",
         },
         {
           title: "Opérations internes",
@@ -125,33 +131,33 @@ export const siteContentFr: SiteContent = {
     },
     outcomesImpact: {
       eyebrow: "Résultats",
-      headline: "Ce que travailler ensemble produit réellement",
+      headline: "Une entreprise plus claire pour vos clients et votre équipe",
       subheadline:
-        "Six choses avec lesquelles les clients repartent systématiquement — que l'engagement concerne la marque, les opérations, le web ou l'IA.",
+        "Le travail doit rendre l'entreprise plus facile à comprendre, à piloter et à améliorer.",
       items: [
         {
-          title: "Vous savez exactement ce que vous obtenez",
-          body: 'Un brief d\'une page par engagement — aucune ambiguïté sur la portée, le calendrier ou ce que "terminé" signifie.',
+          title: "Les clients comprennent votre offre",
+          body: "Votre positionnement, vos services et la prochaine étape restent cohérents sur le site, les propositions et les supports commerciaux.",
         },
         {
-          title: "Votre marque tient le coup sous pression",
-          body: "Identité, messages et normes visuelles qui ne s'effondrent pas lorsqu'un nouveau membre rejoint l'équipe.",
+          title: "Chaque point de contact renforce la confiance",
+          body: "La marque, le site et les supports de présentation donnent aux prospects une raison cohérente de vous faire confiance et d'engager la conversation.",
         },
         {
-          title: "Votre site justifie son coût",
-          body: "Une présence web qui convertit les visiteurs en conversations, et pas seulement une brochure numérique.",
+          title: "Le périmètre est défini avant le début",
+          body: "Chaque mission précise le résultat attendu, les livrables, le responsable et le calendrier, pour éviter que les décisions ne dérivent en cours de route.",
         },
         {
-          title: "Votre équipe arrête de réexpliquer les choses",
-          body: "Procédures opérationnelles (SOP), gouvernance et modèles que les nouvelles personnes peuvent assimiler sans être tenues par la main.",
+          title: "L'équipe peut suivre le processus",
+          body: "Les flux de travail, procédures, modèles et passations clés sont documentés pour que la livraison ne dépende pas de la mémoire d'une seule personne.",
         },
         {
-          title: "Les décisions sont prises plus rapidement",
-          body: "Tableaux de bord et briefs qui coupent la boucle des opinions et donnent de la clarté aux responsables quand ça compte.",
+          title: "Les responsables voient ce qui demande leur attention",
+          body: "Des rapports utiles rendent visibles les priorités, les blocages et les prochaines actions sans devoir relancer toute l'équipe.",
         },
         {
-          title: "Des outils d'IA que votre équipe utilise vraiment",
-          body: "Flux de travail avec des garde-fous et des leviers d'adoption — pas d'automatisation pour le simple plaisir de l'automatisation.",
+          title: "Plus de capacité, moins de tâches répétitives",
+          body: "Les logiciels, l'automatisation et l'IA prennent en charge les tâches répétitives avec des contrôles clairs, afin que l'équipe se concentre sur le travail qui demande du jugement.",
         },
       ],
       primaryCta: { label: "Réserver un appel de 20 minutes", href: "/book" },
@@ -246,9 +252,9 @@ export const siteContentFr: SiteContent = {
       cta: { label: "Voir comment fonctionne la livraison", href: "/process" },
     },
     proofTiles: {
-      headline: "Études de cas que vous pouvez évaluer rapidement.",
+      headline: "Une sélection de travaux, avec leur contexte.",
       subheadline:
-        "Sélection de projets réels de stratégie, systèmes, produits et travaux de livraison.",
+        "Découvrez le défi, la réalisation et les changements apportés dans la stratégie, les systèmes, les produits et les opérations.",
       eyebrow: "Travail",
       tiles: [
         {
@@ -628,9 +634,9 @@ export const siteContentFr: SiteContent = {
 
   work: {
     hero: {
-      headline: "Des études de cas que vous pouvez évaluer.",
+      headline: "Des réalisations conçues autour de problèmes métier.",
       subheadline:
-        "Des projets réels en matière de stratégie, systèmes, produits et livraison. Passez en revue le travail avant de vous engager.",
+        "Découvrez le défi, la réalisation et les changements apportés dans la stratégie, les systèmes, les produits et les opérations.",
     },
     tiles: [
       {
@@ -897,7 +903,7 @@ export const siteContentFr: SiteContent = {
     },
     directEmail: {
       label: "Vous préférez l'e-mail ?",
-      email: "hello@adsi.io",
+      email: "hello@amjadosman.com",
     },
   },
 
@@ -913,7 +919,7 @@ export const siteContentFr: SiteContent = {
       {
         title: "Responsable du traitement",
         body: [
-          "Ce site est exploité par Amjad Osman / ADSI en tant que prestataire indépendant basé dans l’Union européenne, sauf si une proposition ou un contrat indique une autre entité contractante. Pour toute question de confidentialité, demande d’accès ou suppression, écrivez à hello@adsi.io.",
+          "Ce site est exploité par Amjad Osman / ADSI en tant que prestataire indépendant basé dans l’Union européenne, sauf si une proposition ou un contrat indique une autre entité contractante. Pour toute question de confidentialité, demande d’accès ou suppression, écrivez à hello@amjadosman.com.",
           "Pour les demandes reçues via le site, les réservations, les discussions de projet et la communication courante, je décide des données collectées et de leur usage. Pour les systèmes, documents ou jeux de données traités dans une mission payée, le périmètre signé ou les conditions de traitement peuvent définir un autre rôle, y compris sous-traitant.",
         ],
       },
@@ -1011,14 +1017,14 @@ export const siteContentFr: SiteContent = {
         body: [
           "Selon votre localisation, vous pouvez demander l’accès, la rectification, la suppression, la limitation, l’opposition ou une copie de vos données. Les utilisateurs UE/EEE disposent aussi des droits RGPD, y compris le droit de saisir une autorité de contrôle.",
           "Les lois de protection des données du GCC, notamment aux Émirats arabes unis et en Arabie saoudite, reconnaissent aussi des principes de transparence et des droits individuels dans certains contextes.",
-          "Pour exercer un droit, écrivez à hello@adsi.io. Une vérification d’identité peut être nécessaire. Lorsque le RGPD s’applique, je vise une réponse sous un mois, sauf complexité ou délai légal différent.",
+          "Pour exercer un droit, écrivez à hello@amjadosman.com. Une vérification d’identité peut être nécessaire. Lorsque le RGPD s’applique, je vise une réponse sous un mois, sauf complexité ou délai légal différent.",
         ],
       },
       {
         title: "Sécurité",
         body: [
           "J’utilise des mesures techniques et organisationnelles raisonnables : accès contrôlé, prestataires fiables, bonnes pratiques de sécurité des comptes et contrôles projet lorsque nécessaire.",
-          "Aucun site, e-mail ou service cloud n’est totalement sécurisé. Si vous pensez qu’une information a été envoyée par erreur ou qu’un problème de sécurité existe, contactez hello@adsi.io rapidement.",
+          "Aucun site, e-mail ou service cloud n’est totalement sécurisé. Si vous pensez qu’une information a été envoyée par erreur ou qu’un problème de sécurité existe, contactez hello@amjadosman.com rapidement.",
         ],
       },
       {

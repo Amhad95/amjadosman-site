@@ -87,11 +87,20 @@ export default async function handler(req: CheckoutRequest, res: CheckoutRespons
     success_url: `${siteUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${siteUrl}/payment/cancel`,
     billing_address_collection: "auto",
+    "custom_text[submit][message]": "You will receive a payment confirmation and invoice or receipt by email.",
+    "custom_text[after_submit][message]": "Payment received. We will confirm the next step with you shortly.",
     "metadata[service_name]": price.name,
     "metadata[price_id]": priceId,
     "metadata[source]": "amjadosman-site",
   });
-  if (mode === "payment") form.set("customer_creation", "always");
+  if (mode === "payment") {
+    form.set("customer_creation", "always");
+    form.set("invoice_creation[enabled]", "true");
+    form.set("payment_intent_data[description]", `${price.name} — amjadosman.com`);
+    form.set("payment_intent_data[metadata][service_name]", price.name);
+    form.set("payment_intent_data[metadata][price_id]", priceId);
+    form.set("payment_intent_data[metadata][source]", "amjadosman-site");
+  }
   if (mode === "subscription") {
     form.set("subscription_data[metadata][service_name]", price.name);
     form.set("subscription_data[metadata][price_id]", priceId);

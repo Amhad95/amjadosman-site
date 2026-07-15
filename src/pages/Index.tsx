@@ -28,7 +28,7 @@ const Index = () => {
   const copy = pickLocaleCopy(simplePageCopy, locale);
   usePageMeta({ title: copy.homeTitle, description: home.hero.subheadline });
   const featuredCases = getFeaturedWorkCases()
-    .slice(0, 3)
+    .slice(0, 6)
     .map((item) => resolveLocalizedWorkCase(item, locale));
   const featuredArticles = fallbackArticles
     .slice(0, 3)

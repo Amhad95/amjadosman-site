@@ -16,7 +16,10 @@ import insightProposalApproval from "@/assets/insights/proposal-approval.jpg";
 import insightSystemHandover from "@/assets/insights/system-handover.jpg";
 import palmaeCover from "@/assets/projects/palmae/cover.png";
 import aljebaliCover from "@/assets/projects/aljebali/cover.png";
+import aljebaliProfilesCover from "@/assets/projects/aljebali-profiles/cover.png";
+import aljebaliInternalOperationsCover from "@/assets/projects/aljebali-internal-operations/cover.png";
 import kendahProfileCover from "@/assets/projects/kendah-profile/cover.png";
+import kendahBrandCover from "@/assets/projects/kendah-brand/cover.png";
 import temporaryElsafwaCover from "@/assets/projects/temporary-covers/elsafwa.png";
 import temporaryOroomaCover from "@/assets/projects/temporary-covers/orooma.jpg";
 import temporaryAssetFleetCover from "@/assets/projects/temporary-covers/asset-fleet-management.png";
@@ -25,6 +28,14 @@ import temporaryT2meenCover from "@/assets/projects/temporary-covers/t2meen.jpg"
 import temporaryTalyaCover from "@/assets/projects/temporary-covers/talya.jpeg";
 import temporaryTradeA4Cover from "@/assets/projects/temporary-covers/trade-a4-group.png";
 import temporaryRadianceCover from "@/assets/projects/temporary-covers/radiance.jpg";
+import jastarMarketEntryCover from "@/assets/projects/jastar-market-entry/cover.png";
+import jiscoValueStreamCover from "@/assets/projects/jisco-value-stream/cover.png";
+import radianceTrainingCenterCover from "@/assets/projects/radiance-training-center/cover.png";
+import sudaneseFintechWebCmsCover from "@/assets/projects/sudanese-fintech-web-cms/cover.png";
+import upoAdvocacyCover from "@/assets/projects/upo-advocacy/cover.png";
+import sddInvestorPackCover from "@/assets/projects/sdd-investor-pack/cover.png";
+import sudaneseFintechOperationsCover from "@/assets/projects/sudanese-fintech-operations/cover.png";
+import sddUxLaunchCover from "@/assets/projects/sdd-ux-launch/cover.png";
 
 export interface FallbackArticle {
   id: string;
@@ -2019,7 +2030,18 @@ const localProjectImages: Record<string, string> = {
   "national-trade-facilitation-platform-with-a4-group-for-a-confidential-authority": projectSolar,
   "palmae-packaging-a-skincare-line-from-research-moodboards-to-print-ready-production": palmaeCover,
   "aljebali-group-brand-architecture-for-a-mining-and-industrial-portfolio": aljebaliCover,
+  "aljebali-and-jisco-company-profiles-and-web-content-for-technical-buyers": aljebaliProfilesCover,
+  "aljebali-group-internal-regulations-and-field-manuals-for-a-high-risk-operating-environment": aljebaliInternalOperationsCover,
   "kendah-energy-company-profile-and-tender-system-for-an-energy-business": kendahProfileCover,
+  "kendah-energy-brand-and-stationery-system-for-daily-use": kendahBrandCover,
+  "jastar-market-entry-communications-for-a-turkish-energy-contractor-in-sudan": jastarMarketEntryCover,
+  "jisco-shaping-a-value-stream-management-system-for-gold-processing-operations": jiscoValueStreamCover,
+  "radiance-training-center-designing-a-six-month-livelihoods-training-pilot": radianceTrainingCenterCover,
+  "sudanese-fintech-company-a-website-and-cms-structure-for-institutional-buyers": sudaneseFintechWebCmsCover,
+  "upo-advocacy-and-communications-governance-for-a-humanitarian-ngo": upoAdvocacyCover,
+  "sdd-financial-model-and-investor-pack-for-a-five-year-fintech-rollout": sddInvestorPackCover,
+  "sudanese-fintech-company-turning-a-new-digital-company-into-an-operating-system": sudaneseFintechOperationsCover,
+  "sdd-ux-ui-and-launch-materials-for-a-digital-payments-app": sddUxLaunchCover,
 };
 
 const temporaryProjectCovers: Record<string, string> = {

@@ -8,6 +8,13 @@ import { cn } from "@/lib/utils";
 export const Footer: React.FC = () => {
   const { navigation, footer } = useSiteContent();
   const { isRTL } = useLocale();
+  const primaryHrefs = new Set(['/services', '/software', '/work', '/pricing', '/about']);
+  const legalHrefs = new Set(['/privacy', '/terms']);
+  const primaryLinks = navigation.footer.filter((item) => primaryHrefs.has(item.href));
+  const moreLinks = navigation.footer.filter(
+    (item) => !primaryHrefs.has(item.href) && !legalHrefs.has(item.href)
+  );
+  const legalLinks = navigation.footer.filter((item) => legalHrefs.has(item.href));
 
   return (
     <footer className="site-footer-shell pt-8 pb-6 md:pt-12 md:pb-8">
@@ -32,17 +39,26 @@ export const Footer: React.FC = () => {
               <p className="text-offwhite/60 text-sm leading-relaxed">{footer.tagline}</p>
             </div>
 
-            <nav
-              className={cn(
-                "flex flex-wrap gap-x-12 gap-y-4",
-                isRTL && "md:flex-row-reverse"
-              )}
-            >
+            <nav className={cn("grid gap-10 sm:grid-cols-3", isRTL && "text-right")}>
               <div className="flex flex-col gap-3">
                 <span className="text-xs font-medium text-offwhite/40 uppercase tracking-wider">
                   {footer.pagesLabel}
                 </span>
-                {navigation.footer.slice(0, 4).map((item) => (
+                {primaryLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className="text-sm text-offwhite/70 hover:text-mint transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+              <div className="flex flex-col gap-3">
+                <span className="text-xs font-medium text-offwhite/40 uppercase tracking-wider">
+                  {footer.moreLabel}
+                </span>
+                {moreLinks.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
@@ -56,7 +72,7 @@ export const Footer: React.FC = () => {
                 <span className="text-xs font-medium text-offwhite/40 uppercase tracking-wider">
                   {footer.legalLabel}
                 </span>
-                {navigation.footer.slice(4).map((item) => (
+                {legalLinks.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}

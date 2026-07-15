@@ -42,7 +42,7 @@ describe("Arabic homepage sections", () => {
   it("renders localized outcomes and delivery sections without the old English leak strings", () => {
     renderArabic(<Index />);
 
-    expect(screen.getByText("ما الذي ينتج فعلاً عن العمل معنا")).toBeInTheDocument();
+    expect(screen.getByText("عمل أوضح لعملائك وفريقك")).toBeInTheDocument();
     expect(screen.getByText("احجز فحص ملاءمة لمدة 20 دقيقة")).toBeInTheDocument();
     expect(screen.getByText("تسليم منظم واجتماعات أقل")).toBeInTheDocument();
     expect(screen.getByText("ما الذي يمكن توقعه")).toBeInTheDocument();

@@ -28,6 +28,11 @@ const siteContentEn = {
     ],
     cta: { label: "Book a Call", href: "/book" },
     footer: [
+      { label: "Services", href: "/services" },
+      { label: "Software", href: "/software" },
+      { label: "Work", href: "/work" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "About", href: "/about" },
       { label: "Delivery Process", href: "/process" },
       { label: "Insights", href: "/resources" },
       { label: "Self-help tools", href: "/tools" },
@@ -46,6 +51,7 @@ const siteContentEn = {
     tagline:
       "Amjad Osman designs brand, operations, software, and AI systems that help growing teams move with more clarity.",
     pagesLabel: "Pages",
+    moreLabel: "More",
     legalLabel: "Legal",
     copyright: "All rights reserved.",
   },
@@ -60,7 +66,7 @@ const siteContentEn = {
     caseStudyUnavailable: "The case study you requested is not available right now.",
     readArticle: "Read article",
     caseStudies: "Case studies",
-    caseStudiesSubheadline: "Real projects, outcomes, and implementation lessons.",
+    caseStudiesSubheadline: "The challenge, the delivery, and what changed.",
     lastUpdatedLabel: "Last updated",
     workSectionHeadline: "What we built",
     workApproachLabel: "Approach",
@@ -103,7 +109,7 @@ const siteContentEn = {
         {
           title: "Workflow Apps",
           description:
-            "Client portals, dashboards, and operational tools shaped around real workflows.",
+            "Client portals, dashboards, and operational tools shaped around how your team works.",
         },
         {
           title: "Internal Operations",
@@ -125,33 +131,33 @@ const siteContentEn = {
     },
     outcomesImpact: {
       eyebrow: "Outcomes",
-      headline: "What working together actually produces",
+      headline: "A clearer business for customers and your team",
       subheadline:
-        "Six things clients consistently walk away with — regardless of whether the engagement is brand, operations, web, or AI.",
+        "The work should make the business easier to understand, easier to run, and easier to improve.",
       items: [
         {
-          title: "You know exactly what you're getting",
-          body: 'A one-page brief per engagement — no ambiguity about scope, timeline, or what "done" means.',
+          title: "Customers understand what you offer",
+          body: "Your positioning, services, and next step stay consistent across the website, proposals, and sales materials.",
         },
         {
-          title: "Your brand holds together under pressure",
-          body: "Identity, messaging, and visual standards that don't fall apart when a new team member joins.",
+          title: "Every customer touchpoint builds confidence",
+          body: "Brand, web, and presentation materials give prospects a coherent reason to trust you and start a conversation.",
         },
         {
-          title: "Your site earns its keep",
-          body: "A web presence that converts visitors into conversations, not just a digital brochure.",
+          title: "Work is scoped before it starts",
+          body: "Each engagement has a defined outcome, deliverables, owner, and timeline, so decisions do not drift after the work begins.",
         },
         {
-          title: "Your team stops re-explaining things",
-          body: "SOPs, governance, and templates that new people can pick up without hand-holding.",
+          title: "The team can follow the process",
+          body: "Key workflows, SOPs, templates, and handoffs are documented so delivery does not depend on one person remembering everything.",
         },
         {
-          title: "Decisions get made faster",
-          body: "Dashboards and briefs that cut the opinions loop and give leads clarity when it counts.",
+          title: "Leaders can see what needs attention",
+          body: "Useful reporting makes priorities, bottlenecks, and next actions visible without pulling updates from everyone.",
         },
         {
-          title: "AI tools your team actually uses",
-          body: "Workflows with guardrails and adoption hooks — not automation for its own sake.",
+          title: "More capacity without more busywork",
+          body: "Software, automation, and AI handle repeatable tasks with clear controls, leaving people focused on work that needs judgment.",
         },
       ],
       primaryCta: { label: "Book a 20-minute fit check", href: "/book" },
@@ -246,9 +252,9 @@ const siteContentEn = {
       cta: { label: "See how delivery works", href: "/process" },
     },
     proofTiles: {
-      headline: "Case studies you can evaluate quickly.",
+      headline: "Selected work, with the context behind it.",
       subheadline:
-        "Selected real projects from strategy, systems, product, and delivery work.",
+        "See the challenge, the delivery, and what changed across strategy, systems, product, and operations.",
       eyebrow: "Work",
       tiles: [
         {
@@ -628,9 +634,9 @@ const siteContentEn = {
 
   work: {
     hero: {
-      headline: "Case studies you can evaluate.",
+      headline: "Work shaped around business problems.",
       subheadline:
-        "Real projects across strategy, systems, product, and delivery. Review the work before you commit.",
+        "Review the challenge, the delivery, and what changed across strategy, systems, product, and operations.",
     },
     tiles: [
       {
@@ -897,7 +903,7 @@ const siteContentEn = {
     },
     directEmail: {
       label: "Prefer email?",
-      email: "hello@adsi.io",
+      email: "hello@amjadosman.com",
     },
   },
 
@@ -913,7 +919,7 @@ const siteContentEn = {
       {
         title: "Who is responsible for your data",
         body: [
-          "This website is operated by Amjad Osman / ADSI as an EU-based independent service provider, unless a specific proposal or contract names a different contracting entity. For privacy questions, requests, or deletion enquiries, contact hello@adsi.io.",
+          "This website is operated by Amjad Osman / ADSI as an EU-based independent service provider, unless a specific proposal or contract names a different contracting entity. For privacy questions, requests, or deletion enquiries, contact hello@amjadosman.com.",
           "For normal website enquiries, project discussions, bookings, and delivery communication, I act as the controller of the personal data I decide to collect and use. For client systems, documents, or datasets handled inside a paid engagement, the signed scope or data processing terms may define a different role, including processor or subcontractor.",
         ],
       },
@@ -1011,14 +1017,14 @@ const siteContentEn = {
         body: [
           "Depending on where you are located, you may have rights to access, correct, delete, restrict, object to, or receive a copy of your personal data. EU/EEA users also have GDPR rights, including the right to complain to a supervisory authority.",
           "GCC privacy laws, including frameworks such as the UAE Personal Data Protection Law and Saudi Arabia’s Personal Data Protection Law, also recognise transparency and individual rights in various contexts. If those laws apply to your data, I will handle requests in line with the applicable project and legal context.",
-          "To make a request, email hello@adsi.io. I may need to verify your identity before acting on the request. I aim to respond within one month where GDPR applies, unless the request is complex or the law allows more time.",
+          "To make a request, email hello@amjadosman.com. I may need to verify your identity before acting on the request. I aim to respond within one month where GDPR applies, unless the request is complex or the law allows more time.",
         ],
       },
       {
         title: "Security",
         body: [
           "I use reasonable technical and organisational measures to protect personal data, including controlled access, reputable hosting and cloud providers, account security practices, and project-specific access controls where needed.",
-          "No website, email system, or cloud service can be guaranteed completely secure. If you believe information has been sent to me by mistake or there is a security issue, contact hello@adsi.io promptly.",
+          "No website, email system, or cloud service can be guaranteed completely secure. If you believe information has been sent to me by mistake or there is a security issue, contact hello@amjadosman.com promptly.",
         ],
       },
       {
@@ -1192,6 +1198,11 @@ const siteContentAr: typeof siteContentEn = {
     ],
     cta: { label: "احجز مكالمة", href: "/book" },
     footer: [
+      { label: "الخدمات", href: "/services" },
+      { label: "البرمجيات", href: "/software" },
+      { label: "أعمالنا", href: "/work" },
+      { label: "الأسعار", href: "/pricing" },
+      { label: "من نحن", href: "/about" },
       { label: "آلية التسليم", href: "/process" },
       { label: "رؤى", href: "/resources" },
       { label: "أدوات مساعدة ذاتية", href: "/tools" },
@@ -1210,6 +1221,7 @@ const siteContentAr: typeof siteContentEn = {
     tagline:
       "يصمم أمجد عثمان أنظمة الهوية والعمليات والبرمجيات والذكاء الاصطناعي التي تساعد الفرق المتنامية على التحرك بوضوح أكبر.",
     pagesLabel: "الصفحات",
+    moreLabel: "المزيد",
     legalLabel: "قانوني",
     copyright: "جميع الحقوق محفوظة.",
   },
@@ -1224,7 +1236,7 @@ const siteContentAr: typeof siteContentEn = {
     caseStudyUnavailable: "دراسة الحالة المطلوبة غير متاحة حالياً.",
     readArticle: "اقرأ المقال",
     caseStudies: "دراسات حالة",
-    caseStudiesSubheadline: "مشاريع حقيقية ونتائج ودروس تنفيذية.",
+    caseStudiesSubheadline: "التحدي، وما تم تسليمه، وما الذي تغيّر.",
     lastUpdatedLabel: "آخر تحديث",
     workSectionHeadline: "ما الذي قمنا ببنائه",
     workApproachLabel: "المنهج",
@@ -1267,7 +1279,7 @@ const siteContentAr: typeof siteContentEn = {
         {
           title: "تطبيقات سير العمل",
           description:
-            "بوابات عملاء ولوحات تحكم وأدوات تشغيل مصممة حول سير العمل الحقيقي.",
+            "بوابات للعملاء ولوحات وأدوات تشغيلية مصممة وفق طريقة عمل فريقك.",
         },
         {
           title: "العمليات الداخلية",
@@ -1289,33 +1301,33 @@ const siteContentAr: typeof siteContentEn = {
     },
     outcomesImpact: {
       eyebrow: "النتائج",
-      headline: "ما الذي ينتج فعلاً عن العمل معنا",
+      headline: "عمل أوضح لعملائك وفريقك",
       subheadline:
-        "ستة أمور يخرج بها العملاء باستمرار، سواء كان العمل متعلقاً بالهوية أو العمليات أو الويب أو الذكاء الاصطناعي.",
+        "ينبغي أن يجعل العمل فهم نشاطك وإدارته وتحسينه أسهل.",
       items: [
         {
-          title: "تعرف بالضبط ما الذي ستحصل عليه",
-          body: "موجز من صفحة واحدة لكل مشروع، من دون غموض حول النطاق أو الجدول أو معنى اكتمال العمل.",
+          title: "يفهم العملاء ما تقدمه",
+          body: "تبقى رسالتك وخدماتك والخطوة التالية متسقة عبر الموقع والعروض ومواد المبيعات.",
         },
         {
-          title: "تحافظ الهوية على تماسكها تحت الضغط",
-          body: "هوية ورسائل ومعايير بصرية لا تنهار كلما انضم شخص جديد إلى الفريق.",
+          title: "كل نقطة تواصل تعزز الثقة",
+          body: "تمنح الهوية والموقع ومواد العرض العملاء المحتملين سبباً واضحاً للثقة وبدء محادثة.",
         },
         {
-          title: "يصبح للموقع دور فعلي",
-          body: "حضور ويب يحول الزوار إلى محادثات، لا مجرد كتيب رقمي.",
+          title: "يتحدد نطاق العمل قبل البدء",
+          body: "لكل مشروع نتيجة ومخرجات ومسؤول وموعد محدد، فلا تنحرف القرارات بعد بدء التنفيذ.",
         },
         {
-          title: "يتوقف الفريق عن إعادة شرح كل شيء",
-          body: "إجراءات وحوكمة وقوالب يستطيع القادمون الجدد استخدامها دون اعتماد دائم على أحد.",
+          title: "يستطيع الفريق اتباع العملية",
+          body: "توثّق سير العمل وإجراءات التشغيل والقوالب وعمليات التسليم، فلا يعتمد التنفيذ على ذاكرة شخص واحد.",
         },
         {
-          title: "تُتخذ القرارات أسرع",
-          body: "لوحات وموجزات تقلل دوامة الآراء وتمنح القادة وضوحاً حين يكون الوقت مهماً.",
+          title: "يرى القادة ما يحتاج إلى انتباه",
+          body: "تجعل التقارير المفيدة الأولويات والاختناقات والخطوات التالية واضحة من دون مطاردة التحديثات من الجميع.",
         },
         {
-          title: "أدوات AI يستخدمها الفريق فعلاً",
-          body: "تدفقات عمل مع ضوابط وعناصر تبنٍ حقيقي، لا أتمتة من أجل الأتمتة فقط.",
+          title: "قدرة أكبر وأعمال روتينية أقل",
+          body: "تتولى البرمجيات والأتمتة والذكاء الاصطناعي المهام المتكررة بضوابط واضحة، ويبقى تركيز الفريق على العمل الذي يحتاج إلى حكم بشري.",
         },
       ],
       primaryCta: { label: "احجز فحص ملاءمة لمدة 20 دقيقة", href: "/book" },
@@ -1410,9 +1422,9 @@ const siteContentAr: typeof siteContentEn = {
       cta: { label: "شاهد كيف يتم التسليم", href: "/process" },
     },
     proofTiles: {
-      headline: "دراسات حالة يمكنك تقييمها بسرعة.",
+      headline: "أعمال مختارة مع سياقها.",
       subheadline:
-        "مشاريع حقيقية مختارة من أعمال الاستراتيجية والأنظمة والمنتجات والتنفيذ.",
+        "تعرّف على التحدي والتنفيذ وما تغيّر عبر الاستراتيجية والأنظمة والمنتجات والعمليات.",
       eyebrow: "الأعمال",
       tiles: [
         { title: "Radiance Co. Ltd.", description: "أنظمة طاقة شمسية لمرافق صحية في البحر الأحمر وكسلا." },
@@ -1778,9 +1790,9 @@ const siteContentAr: typeof siteContentEn = {
 
   work: {
     hero: {
-      headline: "دراسات حالة يمكنك تقييمها.",
+      headline: "أعمال مصممة حول مشكلات العمل.",
       subheadline:
-        "مشاريع حقيقية في الاستراتيجية والأنظمة والمنتجات والتنفيذ. راجع العمل قبل أن تلتزم.",
+        "راجع التحدي والتنفيذ وما تغيّر عبر الاستراتيجية والأنظمة والمنتجات والعمليات.",
     },
     tiles: [
       {
@@ -2042,7 +2054,7 @@ const siteContentAr: typeof siteContentEn = {
     },
     directEmail: {
       label: "تفضل البريد المباشر؟",
-      email: "hello@adsi.io",
+      email: "hello@amjadosman.com",
     },
   },
 
@@ -2058,7 +2070,7 @@ const siteContentAr: typeof siteContentEn = {
       {
         title: "من المسؤول عن بياناتك",
         body: [
-          "يتم تشغيل هذا الموقع بواسطة أمجد عثمان / ADSI كمقدم خدمات مستقل مقره في الاتحاد الأوروبي، ما لم يذكر عرض أو عقد محدد جهة تعاقد مختلفة. للاستفسارات المتعلقة بالخصوصية أو الحذف أو الوصول إلى البيانات، راسل hello@adsi.io.",
+          "يتم تشغيل هذا الموقع بواسطة أمجد عثمان / ADSI كمقدم خدمات مستقل مقره في الاتحاد الأوروبي، ما لم يذكر عرض أو عقد محدد جهة تعاقد مختلفة. للاستفسارات المتعلقة بالخصوصية أو الحذف أو الوصول إلى البيانات، راسل hello@amjadosman.com.",
           "في استفسارات الموقع والحجوزات ومناقشات المشاريع والتواصل المعتاد، أتعامل مع البيانات الشخصية بصفتي الجهة التي تحدد سبب استخدامها وطريقة استخدامها. أما بيانات العملاء داخل مشروع مدفوع فقد يحدد نطاق العمل أو اتفاق معالجة البيانات دوراً مختلفاً، مثل معالج بيانات أو متعاقد فرعي.",
         ],
       },
@@ -2156,14 +2168,14 @@ const siteContentAr: typeof siteContentEn = {
         body: [
           "بحسب موقعك، قد يكون لك حق الوصول إلى بياناتك أو تصحيحها أو حذفها أو تقييدها أو الاعتراض على استخدامها أو الحصول على نسخة منها. لمستخدمي الاتحاد الأوروبي والمنطقة الاقتصادية الأوروبية حقوق بموجب GDPR، بما في ذلك حق الشكوى إلى جهة رقابية.",
           "تتضمن أطر الخصوصية في دول مجلس التعاون، مثل قانون حماية البيانات الشخصية في الإمارات ونظام حماية البيانات الشخصية في السعودية، مبادئ للشفافية وحقوق الأفراد في سياقات مختلفة.",
-          "لتقديم طلب، راسل hello@adsi.io. قد أحتاج إلى التحقق من هويتك قبل تنفيذ الطلب. أهدف للرد خلال شهر عندما ينطبق GDPR، ما لم يكن الطلب معقداً أو يسمح القانون بمدة أطول.",
+          "لتقديم طلب، راسل hello@amjadosman.com. قد أحتاج إلى التحقق من هويتك قبل تنفيذ الطلب. أهدف للرد خلال شهر عندما ينطبق GDPR، ما لم يكن الطلب معقداً أو يسمح القانون بمدة أطول.",
         ],
       },
       {
         title: "الأمان",
         body: [
           "أستخدم إجراءات تقنية وتنظيمية معقولة لحماية البيانات، مثل تقييد الوصول واستخدام مزودين موثوقين وممارسات أمان الحسابات وضوابط خاصة بالمشروع عند الحاجة.",
-          "لا يمكن ضمان أمان أي موقع أو بريد أو خدمة سحابية بالكامل. إذا اعتقدت أن معلومات أُرسلت بالخطأ أو توجد مشكلة أمنية، راسل hello@adsi.io فوراً.",
+          "لا يمكن ضمان أمان أي موقع أو بريد أو خدمة سحابية بالكامل. إذا اعتقدت أن معلومات أُرسلت بالخطأ أو توجد مشكلة أمنية، راسل hello@amjadosman.com فوراً.",
         ],
       },
       {

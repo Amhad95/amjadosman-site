@@ -28,6 +28,11 @@ export const siteContentDe: SiteContent = {
     ],
     cta: { label: "Gespräch buchen", href: "/book" },
     footer: [
+      { label: "Services", href: "/services" },
+      { label: "Software", href: "/software" },
+      { label: "Arbeiten", href: "/work" },
+      { label: "Preise", href: "/pricing" },
+      { label: "Über mich", href: "/about" },
       { label: "Lieferprozess", href: "/process" },
       { label: "Einblicke", href: "/resources" },
       { label: "Selbsthilfe-Tools", href: "/tools" },
@@ -46,6 +51,7 @@ export const siteContentDe: SiteContent = {
     tagline:
       "Amjad Osman entwickelt Marken-, Betriebs-, Software- und KI-Systeme, die wachsenden Teams helfen, mit mehr Klarheit zu agieren.",
     pagesLabel: "Seiten",
+    moreLabel: "Mehr",
     legalLabel: "Rechtliches",
     copyright: "Alle Rechte vorbehalten.",
   },
@@ -60,7 +66,7 @@ export const siteContentDe: SiteContent = {
     caseStudyUnavailable: "Die angeforderte Fallstudie ist derzeit nicht verfügbar.",
     readArticle: "Artikel lesen",
     caseStudies: "Fallstudien",
-    caseStudiesSubheadline: "Echte Projekte, Ergebnisse und Lektionen aus der Umsetzung.",
+    caseStudiesSubheadline: "Die Herausforderung, die Umsetzung und was sich verändert hat.",
     lastUpdatedLabel: "Zuletzt aktualisiert",
     workSectionHeadline: "Was wir gebaut haben",
     workApproachLabel: "Ansatz",
@@ -103,7 +109,7 @@ export const siteContentDe: SiteContent = {
         {
           title: "Workflow-Apps",
           description:
-            "Kundenportale, Dashboards und operative Tools, die um echte Workflows herum gestaltet sind.",
+            "Kundenportale, Dashboards und operative Werkzeuge, abgestimmt auf die Arbeitsweise Ihres Teams.",
         },
         {
           title: "Interne Abläufe",
@@ -125,33 +131,33 @@ export const siteContentDe: SiteContent = {
     },
     outcomesImpact: {
       eyebrow: "Ergebnisse",
-      headline: "Was die Zusammenarbeit tatsächlich bewirkt",
+      headline: "Ein klareres Unternehmen für Kunden und Team",
       subheadline:
-        "Sechs Dinge, die Kunden konsequent mitnehmen — unabhängig davon, ob es sich um Marke, Betrieb, Web oder KI handelt.",
+        "Die Arbeit soll das Unternehmen verständlicher, leichter zu führen und leichter zu verbessern machen.",
       items: [
         {
-          title: "Sie wissen genau, was Sie bekommen",
-          body: 'Ein einseitiges Briefing pro Engagement — keine Unklarheiten über Umfang, Zeitplan oder was "erledigt" bedeutet.',
+          title: "Kunden verstehen Ihr Angebot",
+          body: "Positionierung, Leistungen und nächster Schritt bleiben auf der Website, in Angeboten und Vertriebsmaterialien konsistent.",
         },
         {
-          title: "Ihre Marke hält unter Druck stand",
-          body: "Identität, Botschaften und visuelle Standards, die nicht zusammenbrechen, wenn ein neues Teammitglied beitritt.",
+          title: "Jeder Kundenkontakt schafft Vertrauen",
+          body: "Marke, Website und Präsentationsmaterial geben Interessenten einen stimmigen Grund, Ihnen zu vertrauen und das Gespräch zu beginnen.",
         },
         {
-          title: "Ihre Website verdient ihr Geld",
-          body: "Eine Webpräsenz, die Besucher in Gespräche verwandelt, nicht nur eine digitale Broschüre.",
+          title: "Der Arbeitsumfang steht vor dem Start fest",
+          body: "Jedes Engagement hat ein definiertes Ergebnis, Liefergegenstände, eine verantwortliche Person und einen Zeitplan, damit Entscheidungen nicht nach Beginn abdriften.",
         },
         {
-          title: "Ihr Team hört auf, Dinge neu zu erklären",
-          body: "SOPs, Governance und Vorlagen, die neue Mitarbeiter ohne Händchenhalten übernehmen können.",
+          title: "Das Team kann dem Prozess folgen",
+          body: "Wichtige Abläufe, SOPs, Vorlagen und Übergaben sind dokumentiert, sodass die Lieferung nicht vom Gedächtnis einer einzelnen Person abhängt.",
         },
         {
-          title: "Entscheidungen werden schneller getroffen",
-          body: "Dashboards und Briefings, die die Meinungsschleife unterbrechen und Führungskräften Klarheit verschaffen, wenn es darauf ankommt.",
+          title: "Führungskräfte sehen, worum es sich zu kümmern gilt",
+          body: "Nützliche Berichte machen Prioritäten, Engpässe und nächste Schritte sichtbar, ohne Updates von allen einzeln einzufordern.",
         },
         {
-          title: "KI-Tools, die Ihr Team tatsächlich nutzt",
-          body: "Workflows mit Leitplanken und Adoptionshilfen — keine Automatisierung um der Automatisierung willen.",
+          title: "Mehr Kapazität ohne mehr Routinearbeit",
+          body: "Software, Automatisierung und KI übernehmen wiederholbare Aufgaben mit klaren Kontrollen, damit Menschen sich auf Arbeit konzentrieren, die Urteilskraft braucht.",
         },
       ],
       primaryCta: { label: "20-Minuten-Passungsprüfung buchen", href: "/book" },
@@ -246,9 +252,9 @@ export const siteContentDe: SiteContent = {
       cta: { label: "Sehen Sie, wie die Lieferung funktioniert", href: "/process" },
     },
     proofTiles: {
-      headline: "Fallstudien, die Sie schnell auswerten können.",
+      headline: "Ausgewählte Arbeit mit dem Kontext dahinter.",
       subheadline:
-        "Ausgewählte echte Projekte aus den Bereichen Strategie, Systeme, Produkt und Lieferung.",
+        "Sehen Sie Herausforderung, Umsetzung und Veränderung aus Strategie, Systemen, Produkt und Operations.",
       eyebrow: "Arbeit",
       tiles: [
         {
@@ -628,9 +634,9 @@ export const siteContentDe: SiteContent = {
 
   work: {
     hero: {
-      headline: "Fallstudien, die Sie auswerten können.",
+      headline: "Arbeit rund um geschäftliche Probleme.",
       subheadline:
-        "Echte Projekte aus Strategie, Systemen, Produkt und Lieferung. Überprüfen Sie die Arbeit, bevor Sie sich verpflichten.",
+        "Sehen Sie Herausforderung, Umsetzung und Veränderung aus Strategie, Systemen, Produkt und Operations.",
     },
     tiles: [
       {
@@ -897,7 +903,7 @@ export const siteContentDe: SiteContent = {
     },
     directEmail: {
       label: "Bevorzugen Sie E-Mail?",
-      email: "hello@adsi.io",
+      email: "hello@amjadosman.com",
     },
   },
 
@@ -913,7 +919,7 @@ export const siteContentDe: SiteContent = {
       {
         title: "Verantwortliche Stelle",
         body: [
-          "Diese Website wird von Amjad Osman / ADSI als unabhängiger Dienstleister mit Sitz in der EU betrieben, sofern ein Angebot oder Vertrag keine andere Vertragspartei nennt. Für Datenschutzfragen, Auskunft oder Löschung schreiben Sie an hello@adsi.io.",
+          "Diese Website wird von Amjad Osman / ADSI als unabhängiger Dienstleister mit Sitz in der EU betrieben, sofern ein Angebot oder Vertrag keine andere Vertragspartei nennt. Für Datenschutzfragen, Auskunft oder Löschung schreiben Sie an hello@amjadosman.com.",
           "Bei Website-Anfragen, Buchungen, Projektgesprächen und normaler Kommunikation entscheide ich über Zweck und Mittel der Datenverarbeitung. Bei Kundensystemen, Dokumenten oder Datensätzen in einem bezahlten Projekt kann der unterschriebene Umfang oder eine Datenverarbeitungsvereinbarung eine andere Rolle festlegen, auch als Auftragsverarbeiter oder Subunternehmer.",
         ],
       },
@@ -1011,14 +1017,14 @@ export const siteContentDe: SiteContent = {
         body: [
           "Je nach Standort können Sie Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch oder eine Kopie Ihrer Daten verlangen. EU/EWR-Nutzer haben DSGVO-Rechte, einschließlich Beschwerde bei einer Aufsichtsbehörde.",
           "Datenschutzgesetze im GCC, etwa in den VAE und Saudi-Arabien, erkennen in verschiedenen Kontexten ebenfalls Transparenz und individuelle Rechte an.",
-          "Anfragen senden Sie an hello@adsi.io. Ich kann eine Identitätsprüfung benötigen. Wenn die DSGVO gilt, strebe ich eine Antwort innerhalb eines Monats an, außer der Antrag ist komplex oder das Gesetz erlaubt mehr Zeit.",
+          "Anfragen senden Sie an hello@amjadosman.com. Ich kann eine Identitätsprüfung benötigen. Wenn die DSGVO gilt, strebe ich eine Antwort innerhalb eines Monats an, außer der Antrag ist komplex oder das Gesetz erlaubt mehr Zeit.",
         ],
       },
       {
         title: "Sicherheit",
         body: [
           "Ich nutze angemessene technische und organisatorische Maßnahmen, etwa kontrollierte Zugriffe, seriöse Hosting- und Cloud-Anbieter, Konto-Sicherheitspraktiken und projektspezifische Kontrollen.",
-          "Keine Website, E-Mail oder Cloud kann vollständig sicher garantiert werden. Wenn Informationen versehentlich gesendet wurden oder Sie ein Sicherheitsproblem vermuten, kontaktieren Sie hello@adsi.io zeitnah.",
+          "Keine Website, E-Mail oder Cloud kann vollständig sicher garantiert werden. Wenn Informationen versehentlich gesendet wurden oder Sie ein Sicherheitsproblem vermuten, kontaktieren Sie hello@amjadosman.com zeitnah.",
         ],
       },
       {

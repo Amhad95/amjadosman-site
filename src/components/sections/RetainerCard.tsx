@@ -1,7 +1,7 @@
 import React from 'react';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { SecondaryButton } from '@/components/shared/SecondaryButton';
-import { startCheckout } from '@/lib/stripe';
+import { CheckoutButton } from '@/components/shared/CheckoutButton';
 import { Check, Repeat2, TimerReset } from 'lucide-react';
 import { useLocale } from '@/lib/locale';
 import { cn } from '@/lib/utils';
@@ -28,12 +28,6 @@ export const RetainerCard: React.FC<RetainerCardProps> = ({
 }) => {
   const { locale, isRTL } = useLocale();
   const copy = getUiCopy(locale);
-  const handleSubscribe = () => {
-    if (stripePriceId) {
-      startCheckout(stripePriceId, 'subscription');
-    }
-  };
-
   return (
     <div className={cn('h-full rounded-[28px] border border-ink/12 bg-card p-6 md:p-7 shadow-[0_22px_52px_-42px_rgba(8,15,32,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-ink/20 flex flex-col', isRTL && 'text-right')}>
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
@@ -69,7 +63,7 @@ export const RetainerCard: React.FC<RetainerCardProps> = ({
       <div className="mt-auto border-t border-ink/8 pt-5">
         <div className="flex flex-wrap gap-3">
           {stripePriceId ? (
-            <PrimaryButton onClick={handleSubscribe} textColor="ink">{copy.startRetainer}</PrimaryButton>
+            <CheckoutButton priceId={stripePriceId} mode="subscription" textColor="ink">{copy.startRetainer}</CheckoutButton>
           ) : (
             <PrimaryButton href={subscribeHref} textColor="ink">{copy.startRetainer}</PrimaryButton>
           )}
