@@ -63,7 +63,7 @@ export const RetainerCard: React.FC<RetainerCardProps> = ({
       <div className="mt-auto border-t border-ink/8 pt-5">
         <div className="flex flex-wrap gap-3">
           {stripePriceId ? (
-            <CheckoutButton priceId={stripePriceId} mode="subscription" textColor="ink">{copy.startRetainer}</CheckoutButton>
+            <CheckoutButton priceId={stripePriceId} mode="subscription" serviceName={tier} textColor="ink">{copy.startRetainer}</CheckoutButton>
           ) : (
             <PrimaryButton href={subscribeHref} textColor="ink">{copy.startRetainer}</PrimaryButton>
           )}

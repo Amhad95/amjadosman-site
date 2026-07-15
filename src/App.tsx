@@ -28,6 +28,7 @@ import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
+import PaymentComingSoon from "./pages/PaymentComingSoon";
 // Tool pages
 import SopBuilder from "./pages/tools/SopBuilder";
 import PageCritique from "./pages/tools/PageCritique";
@@ -64,6 +65,7 @@ export const AppRoutes = () => (
           <Route path="/book" element={<Book />} />
           <Route path="/payment/success" element={<PaymentSuccess />} />
           <Route path="/payment/cancel" element={<PaymentCancel />} />
+          <Route path="/payment/coming-soon" element={<PaymentComingSoon />} />
           <Route path="/process" element={<Process />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/resources/:slug" element={<ArticleDetail />} />

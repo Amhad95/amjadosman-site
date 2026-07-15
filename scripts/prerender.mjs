@@ -11,7 +11,7 @@ const staticPaths = [
   "/", "/services", "/services/brand", "/services/ops", "/services/agents",
   "/software", "/software/crm", "/software/accounting", "/software/inventory", "/software/tasks",
   "/tools", "/tools/sop-builder", "/tools/page-critique", "/tools/brand-audit", "/tools/process-mapper", "/tools/dashboard-builder", "/tools/kpi-audit",
-  "/work", "/pricing", "/about", "/book", "/process", "/resources", "/contact", "/privacy", "/terms", "/payment/success", "/payment/cancel",
+  "/work", "/pricing", "/about", "/book", "/process", "/resources", "/contact", "/privacy", "/terms", "/payment/success", "/payment/cancel", "/payment/coming-soon",
 ];
 
 const escapeHtml = (value) => String(value ?? "")
@@ -37,6 +37,7 @@ const pageMeta = (path, article, workCase) => {
     "/contact": ["Contact | Amjad Osman", "Start a focused conversation about brand, operations, software, or automation work."],
     "/privacy": ["Privacy | Amjad Osman", "Plain-language privacy information for this website, bookings, tools, and enquiries."],
     "/terms": ["Terms | Amjad Osman", "Plain-language terms for website use, free tools, project conversations, and paid work."],
+    "/payment/coming-soon": ["Payments opening soon | Amjad Osman", "Online payments are temporarily paused while live payment setup is completed."],
   };
   const [title, description] = known[path] ?? ["Amjad Osman", "Brand, operations, software, and practical automation systems."];
   return { title, description };

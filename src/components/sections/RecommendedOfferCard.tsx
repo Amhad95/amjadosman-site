@@ -64,7 +64,7 @@ export const RecommendedOfferCard: React.FC<RecommendedOfferCardProps> = ({
       <div className="mt-auto border-t border-ink/8 pt-5">
         <div className="flex flex-wrap gap-3">
           {stripePriceId ? (
-            <CheckoutButton priceId={stripePriceId} textColor="ink">{copy.startPackage}</CheckoutButton>
+            <CheckoutButton priceId={stripePriceId} serviceName={name} textColor="ink">{copy.startPackage}</CheckoutButton>
           ) : (
             <PrimaryButton href={payHref} textColor="ink">{copy.startPackage}</PrimaryButton>
           )}

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PrimaryButton } from '@/components/shared/PrimaryButton';
 import { startCheckout } from '@/lib/stripe';
+import { isPublicCheckoutEnabled } from '@/lib/paymentAvailability';
 import { useLocale } from '@/lib/locale';
 import { getUiCopy } from '@/lib/uiCopy';
 
@@ -9,6 +11,7 @@ interface CheckoutButtonProps {
   priceId: string;
   mode?: 'payment' | 'subscription';
   textColor?: React.ComponentProps<typeof PrimaryButton>['textColor'];
+  serviceName?: string;
 }
 
 export const CheckoutButton: React.FC<CheckoutButtonProps> = ({
@@ -16,14 +19,22 @@ export const CheckoutButton: React.FC<CheckoutButtonProps> = ({
   priceId,
   mode = 'payment',
   textColor = 'ink',
+  serviceName,
 }) => {
   const { locale } = useLocale();
   const copy = getUiCopy(locale);
+  const navigate = useNavigate();
   const [isStarting, setIsStarting] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   const handleClick = async () => {
     if (isStarting) return;
+
+    if (!isPublicCheckoutEnabled) {
+      const query = serviceName ? `?service=${encodeURIComponent(serviceName)}` : '';
+      navigate(`/payment/coming-soon${query}`);
+      return;
+    }
 
     setIsStarting(true);
     setHasError(false);

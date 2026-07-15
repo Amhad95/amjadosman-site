@@ -49,7 +49,7 @@ export const ServiceMenuList: React.FC<ServiceMenuListProps> = ({ items }) => {
               </div>
               <div className="flex flex-wrap gap-3">
                 {item.stripePriceId ? (
-                  <CheckoutButton priceId={item.stripePriceId} textColor="ink">{copy.startService}</CheckoutButton>
+                  <CheckoutButton priceId={item.stripePriceId} serviceName={item.name} textColor="ink">{copy.startService}</CheckoutButton>
                 ) : item.payHref ? (
                   <PrimaryButton href={item.payHref} textColor="ink">{copy.startService}</PrimaryButton>
                 ) : null}
